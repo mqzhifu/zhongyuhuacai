@@ -1,0 +1,15 @@
+.idea
+storage/log/*
+storage/session/*
+storage/view_c/*
+storage/product_tb/*
+
+doc/
+
+configcenter/api/env/local
+configcenter/instantplayadmin/env/local
+
+
+static/upload/
+
+kernel/plugins/structure/testData

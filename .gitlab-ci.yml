@@ -1,0 +1,259 @@
+variables:
+  CN_DEV_HOST: 10.10.7.211
+  CN_PROD_HOST_1: 10.10.7.6
+  CN_PROD_HOST_2: 10.10.7.127
+  CN_PROD_HOST_3: 10.10.7.138
+  CN_PRE_HOST: 10.10.7.60
+  EN_DEV_HOST: 10.13.4.16 
+  EN_PROD_HOST_1: 10.13.4.6
+  EN_PROD_HOST_2: 10.13.4.3
+  TARGET_WORK_DIR: /data0/www/kxgame/
+  LOG_DIR: /data0/www/kxgame/log
+  LINK_NAME: master
+  APP_NAME_1: instantplay
+  APP_NAME_2: instantplayadmin
+  APP_NAME_3: open
+  APP_NAME_4: game
+  APP_NAME_5: quizadmin
+  APP_NAME_6: gameadmin
+  APP_NAME_7: instantplayadminnew
+  APP_NAME_8: instantplay_new
+  APP_NAME_10: adsystemadmin
+
+before_script:
+  
+  - export CI_COMMIT_TIME=$(git show -s --format=%ct $CI_COMMIT_SHA)
+  - export CI_COMMIT_TIME_FORMATTED=`TZ='WAUST-8WAUDT' date -d @"$CI_COMMIT_TIME" "+%Y%m%dT%H%M%S"`
+  - export APP_NAME_FULL="$LINK_NAME-$CI_COMMIT_TIME_FORMATTED-$CI_COMMIT_SHORT_SHA"
+  - echo $APP_NAME_FULL
+  - pwd
+  - ls -l
+  - env
+  - mkdir -p /root/.ssh
+  - echo "$KNOWN_HOST_DEV" > /root/.ssh/known_hosts
+  - echo "$KNOWN_HOST_CN_PRE" >> /root/.ssh/known_hosts
+  - echo "$KNOWN_HOST_CN_PRO_1" >> /root/.ssh/known_hosts
+  - echo "$KNOWN_HOST_CN_PRO_2" >> /root/.ssh/known_hosts
+  - echo "$KNOWN_HOST_CN_PRO_3" >> /root/.ssh/known_hosts
+  
+  
+  - echo "$KNOWN_HOST_EN_PRO_1" >> /root/.ssh/known_hosts
+  - echo "$KNOWN_HOST_EN_PRO_2" >> /root/.ssh/known_hosts
+  - echo "$KNOWN_HOST_EN_DEV" >> /root/.ssh/known_hosts
+  
+  - echo "$PRIVATE_KEY_FOR_DEPLOY" > /root/.ssh/id_rsa
+  
+  - chmod 600 /root/.ssh/id_rsa && chmod 700 /root/.ssh
+  - cat /root/.ssh/id_rsa
+  - cat /root/.ssh/known_hosts
+
+
+stages:
+  - deploy
+
+api_cn_dev:
+  stage: deploy
+  only:
+    - developer
+  script:
+    - export APP_ENV=dev
+    - export AREA=cn
+    - echo $TARGET_WORK_DIR/$LINK_NAME
+    
+    - ssh root@"$CN_DEV_HOST" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+    - scp -r "$CI_PROJECT_DIR" root@"$CN_DEV_HOST":"$TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    
+    - ssh root@"$CN_DEV_HOST" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$CN_DEV_HOST" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+ 
+    - ssh root@"$CN_DEV_HOST" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$CN_DEV_HOST" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+    
+    - ssh root@"$CN_DEV_HOST" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+    
+    - ssh root@"$CN_DEV_HOST" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/sw_server_ctrl.sh"
+    - ssh root@"$CN_DEV_HOST" "echo stop swoole websocket; $TARGET_WORK_DIR/$APP_NAME_FULL/sw_server_ctrl.sh stop ws instantplay /soft/php/bin/php; echo sleep;sleep 2    "
+    - ssh root@"$CN_DEV_HOST" "echo start swoole websocket; $TARGET_WORK_DIR/$APP_NAME_FULL/sw_server_ctrl.sh start ws instantplay /soft/php/bin/php; "
+    - ssh root@"$CN_DEV_HOST" "ps aux|grep dev"
+    - echo 'done.'
+  
+api_cn_pre:
+  stage: deploy
+  when: manual
+  only:
+    - pre-release
+  script:
+    - export APP_ENV=pre
+    - export AREA=cn
+    - echo $TARGET_WORK_DIR/$LINK_NAME
+    
+    - ssh root@"$CN_PRE_HOST" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+    - scp -r "$CI_PROJECT_DIR" root@"$CN_PRE_HOST":"$TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    
+    - ssh root@"$CN_PRE_HOST" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$CN_PRE_HOST" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+ 
+    - ssh root@"$CN_PRE_HOST" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$CN_PRE_HOST" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+    
+    - ssh root@"$CN_PRE_HOST" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+
+    
+    - echo 'done.'
+    
+    
+api_en_dev:
+  stage: deploy
+  when: manual
+  only: 
+    - developer
+  script:
+    - export APP_ENV=dev
+    - export AREA=en
+    - echo $TARGET_WORK_DIR/$LINK_NAME
+    
+    - ssh root@"$EN_DEV_HOST" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+    - rsync -az $CI_PROJECT_DIR/* 49.51.252.214::kxgame/$APP_NAME_FULL
+    
+    - ssh root@"$EN_DEV_HOST" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$EN_DEV_HOST" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+ 
+    - ssh root@"$EN_DEV_HOST" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$EN_DEV_HOST" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+
+    - ssh root@"$EN_DEV_HOST" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+    
+    
+    - ssh root@"$CN_DEV_HOST" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/sw_server_ctrl.sh"
+    - ssh root@"$CN_DEV_HOST" "echo stop swoole websocket; $TARGET_WORK_DIR/$APP_NAME_FULL/sw_server_ctrl.sh stop ws instantplay /usr/local/php7/bin/php; echo sleep;sleep 2    "
+    - ssh root@"$CN_DEV_HOST" "echo start swoole websocket; $TARGET_WORK_DIR/$APP_NAME_FULL/sw_server_ctrl.sh start ws instantplay /usr/local/php7/bin/php; "
+    - ssh root@"$CN_DEV_HOST" "ps aux|grep dev"
+
+    
+api_cn_pro:
+  stage: deploy
+  when: manual
+  only:
+    - master
+  script:
+    - export APP_ENV=release
+    - export AREA=cn
+
+    - echo $TARGET_WORK_DIR/$LINK_NAME
+    
+    
+    - ssh root@"$CN_PROD_HOST_1" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+
+    - scp -r "$CI_PROJECT_DIR" root@"$CN_PROD_HOST_1":"$TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    - ssh root@"$CN_PROD_HOST_1" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$CN_PROD_HOST_1" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    - ssh root@"$CN_PROD_HOST_1" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$CN_PROD_HOST_1" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+    
+    - ssh root@"$CN_PROD_HOST_1" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+    
+    - echo "done 1"
+ 
+    - echo "start rsync 2"
+    
+    - ssh root@"$CN_PROD_HOST_2" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+
+    - scp -r "$CI_PROJECT_DIR" root@"$CN_PROD_HOST_2":"$TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    
+    - ssh root@"$CN_PROD_HOST_2" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$CN_PROD_HOST_2" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    - ssh root@"$CN_PROD_HOST_2" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$CN_PROD_HOST_2" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+    
+    - ssh root@"$CN_PROD_HOST_2" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+
+    - echo "done 2,finish"
+
+api_cn_pro_admin:
+  stage: deploy
+  when: manual
+  only:
+    - master
+  script:
+    - export APP_ENV=release
+    - export AREA=cn
+
+    - echo $TARGET_WORK_DIR/$LINK_NAME
+    
+    
+    - ssh root@"$CN_PROD_HOST_3" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+
+    - scp -r "$CI_PROJECT_DIR" root@"$CN_PROD_HOST_3":"$TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    - ssh root@"$CN_PROD_HOST_3" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$CN_PROD_HOST_3" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    - ssh root@"$CN_PROD_HOST_3" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$CN_PROD_HOST_3" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+    
+
+
+    - ssh root@"$CN_PROD_HOST_3" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+
+    
+    - echo "done 3"
+    
+    
+api_en_pro:
+  stage: deploy
+  when: manual
+  only: 
+    - master
+  script:
+    - export APP_ENV=release
+    - export AREA=en
+
+    - echo $TARGET_WORK_DIR/$LINK_NAME
+    
+    
+    - ssh root@"$EN_PROD_HOST_1" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+
+    - rsync -az $CI_PROJECT_DIR/* 170.106.73.200::kxgame/$APP_NAME_FULL
+    
+    - ssh root@"$EN_PROD_HOST_1" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$EN_PROD_HOST_1" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    - ssh root@"$EN_PROD_HOST_1" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$EN_PROD_HOST_1" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+    
+    - ssh root@"$EN_PROD_HOST_1" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+ 
+    
+    - echo "done 1"
+ 
+    - echo "start rsync 2"
+    
+    - ssh root@"$EN_PROD_HOST_2" "if [ -f $TARGET_WORK_DIR/$APP_NAME_FULL ]; then mv $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$APP_NAME_FULL.`date '+%Y%m%d%H%M%S'`; fi;"
+    - rm -rf $CI_PROJECT_DIR/.git
+
+    - rsync -az $CI_PROJECT_DIR/* 49.51.244.163::kxgame/$APP_NAME_FULL
+    
+    
+    - ssh root@"$EN_PROD_HOST_2" "chmod 777 $TARGET_WORK_DIR/$APP_NAME_FULL/init.sh"
+    - ssh root@"$EN_PROD_HOST_2" "$TARGET_WORK_DIR/$APP_NAME_FULL/init.sh $APP_ENV $AREA $TARGET_WORK_DIR/$APP_NAME_FULL"
+    
+    - ssh root@"$EN_PROD_HOST_2" "rm -f $TARGET_WORK_DIR/$LINK_NAME"
+    - ssh root@"$EN_PROD_HOST_2" "ln -s $TARGET_WORK_DIR/$APP_NAME_FULL $TARGET_WORK_DIR/$LINK_NAME"
+    
+    - ssh root@"$EN_PROD_HOST_2" "ln -s $LOG_DIR $TARGET_WORK_DIR/$APP_NAME_FULL/log"
+
+    
+    - echo "done 2,finish"
