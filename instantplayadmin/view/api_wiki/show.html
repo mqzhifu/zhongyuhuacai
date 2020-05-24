@@ -1,0 +1,573 @@
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+
+
+
+
+
+
+
+
+            <div class="row margin-top-20">
+                <div class="col-md-12">
+                    <!-- BEGIN PROFILE SIDEBAR -->
+                    <!-- END BEGIN PROFILE SIDEBAR -->
+                    <!-- BEGIN PROFILE CONTENT -->
+                    <div class="profile-content">
+                        {for $i=0;$i<=count($moduleArr)-1;$i++}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <!-- BEGIN PORTLET -->
+                                <div class="portlet light ">
+                                    <div class="portlet-title">
+                                        <div class="caption caption-md">
+                                            <i class="icon-bar-chart theme-font hide"></i>
+                                            <span class="caption-subject font-blue-madison bold uppercase">{$moduleArr[$map[$i]]['title']}</span>
+                                            <span class="caption-helper hide">weekly stats...</span>
+                                        </div>
+                                        <div class="actions">
+                                            <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                                <label class="btn btn-transparent grey-salsa btn-circle btn-sm">
+                                                    <input type="radio" name="options" class="toggle" id="option1">接口名</label>
+                                                <label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
+                                                    <input type="radio" name="options" class="toggle" id="option2">{$map[$i]}</label>
+                                                <!--<label class="btn btn-transparent grey-salsa btn-circle btn-sm">-->
+                                                    <!--<input type="radio" name="options" class="toggle" id="option2">Month</label>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+
+                                            <!-- BEGIN SAMPLE TABLE PORTLET-->
+                                        <div class="portlet box yellow">
+                                                <div class="portlet-title">
+                                                    <div class="caption">
+                                                        <i class="fa fa-comments"></i>请求参数
+                                                    </div>
+                                                    <div class="tools">
+                                                        <a href="javascript:;" class="collapse">
+                                                        </a>
+                                                        <a href="javascript:;" class="remove">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="portlet-body">
+                                                    <div class="table-scrollable">
+                                                        <table class="table table-striped table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        #
+                                                                    </th>
+                                                                    <th>
+                                                                        参数名
+                                                                    </th>
+                                                                    <th>
+                                                                        类型
+                                                                    </th>
+                                                                    <th>
+                                                                        描述
+                                                                    </th>
+                                                                    <th>
+                                                                        必填
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {if $moduleArr[$map[$i]]['request']}
+                                                                {INC1|$j=0}
+                                                                {foreach ($moduleArr[$map[$i]]['request'] as  $k=>$v)  }
+                                                                <tr>
+                                                                    <td>{INC1|$j++}{$j}</td>
+                                                                    <td>
+                                                                        {$k}
+                                                                    </td>
+                                                                    <td>
+                                                                        {$v['type']}
+                                                                    </td>
+                                                                    <td>
+                                                                        {$v['title']}
+                                                                    </td>
+                                                                    <td>
+                                                                        {$v['must']}
+                                                                    </td>
+                                                                </tr>
+                                                                {/foreach}
+                                                            {else}
+                                                            <tr><td>无</td></tr>
+                                                            {/if}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <div class="portlet box green">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="fa fa-comments"></i>返回参数
+                                                </div>
+                                                <div class="tools">
+                                                    <a href="javascript:;" class="collapse">
+                                                    </a>
+                                                    <a href="javascript:;" class="remove">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-striped table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>
+                                                                #
+                                                            </th>
+                                                            <th>
+                                                                键值
+                                                            </th>
+                                                            <th>
+                                                                类型
+                                                            </th>
+                                                            <th>
+                                                                描述
+                                                            </th>
+                                                            <th>
+                                                                必填
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        {if $moduleArr[$map[$i]]['return']}
+                                                        {INC1|$j=0}
+                                                        {foreach ($moduleArr[$map[$i]]['return'] as  $k=>$v)  }
+
+                                                            {if ($k =='scalar') }
+                                                                <tr><td>描述</td><td>基本数据类型</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                <tr>
+                                                                        <td>{INC1|$j++}{$j}</td>
+                                                                        <td>
+                                                                            无
+                                                                        </td>
+
+                                                                        <td>
+                                                                            {$v['type']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {$v['title']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {$v['must']}
+                                                                        </td>
+                                                                </tr>
+                                                            {elseif ($k == 'array_key_number_one' )}
+                                                                <tr><td>描述</td><td>一维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                {foreach ($v['list'] as $k4=>$v4) }
+                                                                    <tr>
+                                                                        <td>{INC1|$j++}{$j}</td>
+                                                                        <td>{$k4}</td>
+                                                                        <td>{$v4['type']}</td>
+                                                                        <td>{$v4['title']}</td>
+                                                                        <td>{$v4['must']}</td>
+                                                                    </tr>
+                                                                {/foreach}
+
+
+                                                            {elseif (  $k == 'array_key_number_two')}
+                                                                <tr><td>描述</td><td>二维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                {foreach ($v['list'] as $k4=>$v4) }
+
+                                                                    <tr>
+                                                                        <td>{INC1|$j++}{$j}</td>
+                                                                        <td>{$k4}</td>
+                                                                        <td>{$v4['type']}</td>
+                                                                        <td>{$v4['title']}</td>
+                                                                        <td>{$v4['must']}</td>
+                                                                    </tr>
+                                                                {/foreach}
+                                                        {elseif  arrKeyIssetAndExist($v,'type')}
+                                                                <tr><td>描述</td><td>基本数据类型</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                <tr>
+                                                                    <td>{INC1|$j++}{$j}</td>
+                                                                    <td>{$k}</td>
+                                                                    <td>{$v['type']}</td>
+                                                                    <td>{$v['title']}</td>
+                                                                    <td>{$v['must']}</td>
+                                                                </tr>
+                                                            {else}
+                                                                <tr>
+                                                                    <td>{INC1|$j++}{$j}</td>
+                                                                    <td>{$k}</td>
+                                                                    <td>
+                                                                        <table>
+                                                                            <tr>
+                                                                            {if ($v['array_type'] == 'array_key_number_one' )}
+                                                                            <tr><td>描述</td><td>一维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                            {elseif (  $v['array_type'] == 'array_key_number_two')}
+                                                                            <tr><td>描述</td><td>二维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                            {/if}
+                                                                            </tr>
+                                                                            {foreach ($v['list'] as $k4=>$v4) }
+                                                                            <tr>
+                                                                                <td>{$k4}</td>
+                                                                                <td>{$v4['type']}</td>
+                                                                                <td>{$v4['title']}</td>
+                                                                                <td>{$v4['must']}</td>
+                                                                            </tr>
+                                                                            {/foreach}
+                                                                        </table>
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+
+                                                                </tr>
+                                                            {/if}
+
+                                                        {/foreach}
+                                                        {else}
+                                                        <tr><td>无</td></tr>
+                                                        {/if}
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="general-item-list">
+                                            <div class="item">
+                                                <div class="item-head">
+                                                    <div class="item-details">
+                                                        <!--<img class="item-pic" src="../../assets/admin/layout3/img/avatar4.jpg">-->
+                                                        <a href="" class="item-name primary-link">WebSocket接口号</a>
+                                                        <!--<span class="item-label">3 hrs ago</span>-->
+                                                    </div>
+                                                    <span class="item-status"><span class="badge badge-empty badge-success"></span> Open</span>
+                                                </div>
+                                                <div class="item-body">
+                                                    {$moduleArr[$map[$i]]['ws']['request_code']}/{$moduleArr[$map[$i]]['ws']['response_code']}
+                                                </div>
+                                            </div>
+
+                                            <div class="item">
+                                                <div class="item-head">
+                                                    <div class="item-details">
+                                                        <!--<img class="item-pic" src="../../assets/admin/layout3/img/avatar4.jpg">-->
+                                                        <a href="" class="item-name primary-link">请求URL样例</a>
+                                                        <!--<span class="item-label">3 hrs ago</span>-->
+                                                    </div>
+                                                    <span class="item-status"><span class="badge badge-empty badge-success"></span> Open</span>
+                                                </div>
+                                                <div class="item-body">
+                                                    {$requestUrl[$i]}
+                                                </div>
+                                            </div>
+
+                                            <div class="item">
+                                                <div class="item-head">
+                                                    <div class="item-details">
+                                                        <!--<img class="item-pic" src="../../assets/admin/layout3/img/avatar4.jpg">-->
+                                                        <a href="" class="item-name primary-link">json返回DEMO</a>
+                                                        <!--<span class="item-label">3 hrs ago</span>-->
+                                                    </div>
+                                                    <span class="item-status"><span class="badge badge-empty badge-success"></span> Open</span>
+                                                </div>
+                                                <div class="item-body">
+                                                    <textarea>#json#</textarea>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                            <!-- END SAMPLE TABLE PORTLET-->
+                                        </div>
+                                </div>
+                                <!-- END PORTLET -->
+                            </div>
+                            {INC1|$i++}
+                            {if isset($map[$i])}
+                            <div class="col-md-6">
+                                <!-- BEGIN PORTLET -->
+                                <div class="portlet light ">
+                                    <div class="portlet-title">
+                                        <div class="caption caption-md">
+                                            <i class="icon-bar-chart theme-font hide"></i>
+                                            <span class="caption-subject font-blue-madison bold uppercase">{$moduleArr[$map[$i]]['title']}</span>
+                                            <span class="caption-helper hide">weekly stats...</span>
+                                        </div>
+                                        <div class="actions">
+                                            <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                                <label class="btn btn-transparent grey-salsa btn-circle btn-sm">
+                                                    <input type="radio" name="options" class="toggle" id="option1">接口名</label>
+                                                <label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
+                                                    <input type="radio" name="options" class="toggle" id="option2">{$map[$i]}</label>
+                                                <!--<label class="btn btn-transparent grey-salsa btn-circle btn-sm">-->
+                                                <!--<input type="radio" name="options" class="toggle" id="option2">Month</label>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+
+                                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                                        <div class="portlet box yellow">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="fa fa-comments"></i>请求参数
+                                                </div>
+                                                <div class="tools">
+                                                    <a href="javascript:;" class="collapse">
+                                                    </a>
+                                                    <a href="javascript:;" class="remove">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-striped table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>
+                                                                #
+                                                            </th>
+                                                            <th>
+                                                                参数名
+                                                            </th>
+                                                            <th>
+                                                                类型
+                                                            </th>
+                                                            <th>
+                                                                描述
+                                                            </th>
+                                                            <th>
+                                                                必填
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {if $moduleArr[$map[$i]]['request']}
+                                                        {INC1|$j=0}
+                                                        {foreach ($moduleArr[$map[$i]]['request'] as  $k=>$v)  }
+                                                        <tr>
+                                                            <td>{INC1|$j++}{$j}</td>
+                                                            <td>
+                                                                {$k}
+                                                            </td>
+                                                            <td>
+                                                                {$v['type']}
+                                                            </td>
+                                                            <td>
+                                                                {$v['title']}
+                                                            </td>
+                                                            <td>
+                                                                {$v['must']}
+                                                            </td>
+                                                        </tr>
+                                                        {/foreach}
+                                                        {else}
+                                                        <tr><td>无</td></tr>
+                                                        {/if}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="portlet box green">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="fa fa-comments"></i>返回参数
+                                                </div>
+                                                <div class="tools">
+                                                    <a href="javascript:;" class="collapse">
+                                                    </a>
+                                                    <a href="javascript:;" class="remove">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-striped table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>
+                                                                #
+                                                            </th>
+                                                            <th>
+                                                                键值
+                                                            </th>
+                                                            <th>
+                                                                类型
+                                                            </th>
+                                                            <th>
+                                                                描述
+                                                            </th>
+                                                            <th>
+                                                                必填
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        {if $moduleArr[$map[$i]]['return']}
+                                                        {INC1|$j=0}
+                                                        {foreach ($moduleArr[$map[$i]]['return'] as  $k=>$v)  }
+
+                                                        {if ($k =='scalar') }
+                                                        <tr><td>描述</td><td>基本数据类型</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                        <tr>
+                                                            <td>{INC1|$j++}{$j}</td>
+                                                            <td>
+                                                                无
+                                                            </td>
+
+                                                            <td>
+                                                                {$v['type']}
+                                                            </td>
+                                                            <td>
+                                                                {$v['title']}
+                                                            </td>
+                                                            <td>
+                                                                {$v['must']}
+                                                            </td>
+                                                        </tr>
+                                                        {elseif ($k == 'array_key_number_one' )}
+                                                        <tr><td>描述</td><td>一维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                        {foreach ($v['list'] as $k4=>$v4) }
+                                                        <tr>
+                                                            <td>{INC1|$j++}{$j}</td>
+                                                            <td>{$k4}</td>
+                                                            <td>{$v4['type']}</td>
+                                                            <td>{$v4['title']}</td>
+                                                            <td>{$v4['must']}</td>
+                                                        </tr>
+                                                        {/foreach}
+
+
+                                                        {elseif (  $k == 'array_key_number_two')}
+                                                        <tr><td>描述</td><td>二维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                        {foreach ($v['list'] as $k4=>$v4) }
+
+                                                        <tr>
+                                                            <td>{INC1|$j++}{$j}</td>
+                                                            <td>{$k4}</td>
+                                                            <td>{$v4['type']}</td>
+                                                            <td>{$v4['title']}</td>
+                                                            <td>{$v4['must']}</td>
+                                                        </tr>
+                                                        {/foreach}
+                                                        {else}
+                                                        <tr>
+                                                            <td>{INC1|$j++}{$j}</td>
+                                                            <td>{$k}</td>
+                                                            <td>
+                                                                <table>
+                                                                    <tr>
+                                                                        {if ($v['array_type'] == 'array_key_number_one' )}
+                                                                    <tr><td>描述</td><td>一维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                    {elseif (  $v['array_type'] == 'array_key_number_two')}
+                                                                    <tr><td>描述</td><td>二维数组</td><td>{if ($v['must'])}必填{else}可以为空{/if}</td></tr>
+                                                                    {/if}
+                                                                    </tr>
+                                                                    {foreach ($v['list'] as $k4=>$v4) }
+                                                                    <tr>
+                                                                        <td>{$k4}</td>
+                                                                        <td>{$v4['type']}</td>
+                                                                        <td>{$v4['title']}</td>
+                                                                        <td>{$v4['must']}</td>
+                                                                    </tr>
+                                                                    {/foreach}
+                                                                </table>
+                                                            </td>
+                                                            <td></td>
+                                                            <td></td>
+
+                                                        </tr>
+                                                        {/if}
+
+                                                        {/foreach}
+                                                        {else}
+                                                        <tr><td>无</td></tr>
+                                                        {/if}
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="general-item-list">
+                                            <div class="item">
+                                                <div class="item-head">
+                                                    <div class="item-details">
+                                                        <!--<img class="item-pic" src="../../assets/admin/layout3/img/avatar4.jpg">-->
+                                                        <a href="" class="item-name primary-link">WebSocket接口号</a>
+                                                        <!--<span class="item-label">3 hrs ago</span>-->
+                                                    </div>
+                                                    <span class="item-status"><span class="badge badge-empty badge-success"></span> Open</span>
+                                                </div>
+                                                <div class="item-body">
+                                                    {$moduleArr[$map[$i]]['ws']['request_code']}/{$moduleArr[$map[$i]]['ws']['response_code']}
+                                                </div>
+                                            </div>
+
+                                            <div class="item">
+                                                <div class="item-head">
+                                                    <div class="item-details">
+                                                        <!--<img class="item-pic" src="../../assets/admin/layout3/img/avatar4.jpg">-->
+                                                        <a href="" class="item-name primary-link">请求URL样例</a>
+                                                        <!--<span class="item-label">3 hrs ago</span>-->
+                                                    </div>
+                                                    <span class="item-status"><span class="badge badge-empty badge-success"></span> Open</span>
+                                                </div>
+                                                <div class="item-body">
+                                                    {$requestUrl[$i]}
+                                                </div>
+                                            </div>
+
+                                            <div class="item">
+                                                <div class="item-head">
+                                                    <div class="item-details">
+                                                        <!--<img class="item-pic" src="../../assets/admin/layout3/img/avatar4.jpg">-->
+                                                        <a href="" class="item-name primary-link">json返回DEMO</a>
+                                                        <!--<span class="item-label">3 hrs ago</span>-->
+                                                    </div>
+                                                    <span class="item-status"><span class="badge badge-empty badge-success"></span> Open</span>
+                                                </div>
+                                                <div class="item-body">
+                                                    <textarea>#json#</textarea>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <!-- END SAMPLE TABLE PORTLET-->
+                                    </div>
+                                </div>
+                                <!-- END PORTLET -->
+                            </div>
+                            {/if}
+                        </div>
+                        {/for}
+                    </div>
+                    <!-- END PROFILE CONTENT -->
+                </div>
+            </div>
+
+
+
+
+
+
+
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>

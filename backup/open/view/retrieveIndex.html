@@ -1,0 +1,114 @@
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/retrieve.css">
+		<div class="mainBox">
+			<img class="main-head" src="{CONST|H_STATIC_URL}assets/open/img/step1.png" />
+			<div class="mainInner">
+				<dl>
+					<dt>手机</dt>
+					<dd>
+						<select>
+			                <option>中国大陆</option>
+			            </select>
+			            <span class="phoneNum">0086</span>
+			            <input type="text" placeholder="请输入手机号" name="" maxlength="11" oninput="value=value.replace(/[^\d]/g,'')" class="user_phone">
+					</dd>
+				</dl>
+				<dl>
+					<dt>验证</dt>
+					<dd>
+						<div class="yz-btn verify-btn">
+							<div class="verBox">
+								<div id="imgVer" onselectstart="return false">
+								</div>
+							</div>
+							<img src="{CONST|H_STATIC_URL}assets/open/img/verify.png" />
+							点击按钮进行验证
+						</div>
+						<div class="yz-btn success-btn"><img src="{CONST|H_STATIC_URL}assets/open/img/success.png" />验证成功</div>
+					</dd>
+				</dl>
+				<div class="btn-clup">
+					<div class="next-step">下一步</div>
+					<div class="prev-step">返回</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<script>
+			var verifySucc = false;
+			imgVer({
+	            el:'$("#imgVer")',
+	            width:'260',
+	            height:'116',
+	            img:[
+	                '{CONST|H_STATIC_URL}assets/open/img/ver-1.png',
+	                '{CONST|H_STATIC_URL}assets/open/img/ver-2.png',
+	                '{CONST|H_STATIC_URL}assets/open/img/ver-3.png'
+	            ],
+	            success:function () {
+	                verifySucc = true;
+	                setTimeout(function(){
+	                	$(".verBox").empty();
+	                	$(".verify-btn").hide();
+	                	$(".success-btn").show();
+	                },500)
+	            },
+	            error:function () {
+	                //layer.alert('错误什么都不执行')
+	            }
+	        });
+	        $(function(){
+	        	$(".verify-btn").click(function(){
+	        		$(".verBox").show();
+	        	});
+	        	$(document).on("click",".close-ver",function(){	        		
+	        		$(".re-btn a").click();
+	        		$(".verBox").hide();
+	        	});
+	        	$(".next-step").click(function(){
+	        		var phone = $(".user_phone").val();
+	        		if (!(/^1([38]\d|5[0-35-9]|7[3678])\d{8}$/).test(phone)){
+		                layer.alert('请输入正确的手机号');
+		                return;
+		            }
+	        		
+		            if(!verifySucc) {
+		                layer.alert('请进行拼图验证');
+		                return;
+		            }  
+	                $.ajax({
+	                    type: "POST",
+	                    url: "/forgetPs/verifyUser/",
+	                    data: {
+	                        phone: phone,
+	                    },
+	                    dataType:'json',
+	                    success: function(data) {
+	                        if (data.code == 200) {
+	                        	localStorage.setItem("phone",phone);
+	                            location.href="/forgetPs/verify/";
+	                        } else {
+	                            //错误信息
+	                            layer.alert(data.message);
+	                        }
+	                    }
+	                });
+	        		// window.location.href='retrieveVerify.html';
+	        	});
+	        	$(".prev-step").click(function(){
+	        		window.history.go(-1);
+	        	});
+	        })
+		</script>
+	</body>
+</html>

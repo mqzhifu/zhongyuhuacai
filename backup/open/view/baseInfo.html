@@ -1,0 +1,352 @@
+{include /layout/left_manager.html}
+
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/developerProfile.css" />
+
+			<div class="iframeBox">
+				<div class="section">
+					<ul class="statisticsTitle">
+						<li {if $this->ctrl == 'developer' && $this->ac == 'base'}class="active"{/if}><a href="/developer/base/">基本设置</a></li>
+						<li {if $this->ctrl == 'developer' && $this->ac == 'account'}class="active"{/if}><a href="/developer/account/">账号信息</a></li>
+						<li {if $this->ctrl == 'developer' && $this->ac == 'finance'}class="active"{/if}><a href="/developer/finance/">财务信息</a></li>
+					</ul>
+				</div>
+				<div class="section">
+					<div class="grandTotal">
+						<table class="table">
+							<thead>
+								<tr>
+									<td>基本信息</td>
+									<td>说明</td>
+									<td>操作</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><i>账号类别</i><span id="type"></span></td>
+									<td></td>
+									<td>修改请联系客服</td>
+								</tr>
+								<tr>
+									<td><i>开发者名称</i><span id="company"></span></td>
+									<td></td>
+									<td>修改请联系客服</td>
+								</tr>
+								<tr>
+									<td><i>联系地址</i><span id="address"></span></td>
+									<td></td>
+									<td>请到账号信息内修改</td>
+								</tr>
+								<tr>
+									<td><i>联系人</i><span id="contact"></span></td>
+									<td></td>
+									<td>请到账号信息内修改</td>
+								</tr>
+								<tr>
+									<td><i>联系电话</i><span id="phone"></span></td>
+									<td></td>
+									<td>请到账号信息内修改</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="section">
+					<div class="grandTotal">
+						<table class="table table2">
+							<thead>
+								<tr>
+									<td>基本信息</td>
+									<td>说明</td>
+									<td>操作</td>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><i>用户ID</i><span id="uid"></span></td>
+									<td></td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><i>昵称</i><span id="nickname"></span></td>
+									<td>用户昵称</td>
+									<td><em class="usernameClick">修改</em></td>
+								</tr>
+								<tr>
+									<td>
+										<i>头像</i>
+										<span><div class="deImg" style="background-image: url(img/game_img.png);"></div></span>
+									</td>
+									<td>用户头像</td>
+									<td>
+										<input id="fileInput" type="file" accept="image/*" />
+										<label for="fileInput" id="flieBtn">
+											<em>修改</em>
+						                </label>
+									</td>
+								</tr>
+								<tr>
+									<td><i>性别</i><span id="sex"></span></td>
+									<td>用户性别</td>
+									<td><em class="genderClick">修改</em></td>
+								</tr>
+								{if !isset($foreign) || !$foreign}
+								<tr>
+									<td><i>登录密码</i><span></span></td>
+									<td>可以修改你的登录密码</td>
+									<td><em class="passClick">修改</em></td>
+								</tr>
+								{/if}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<div class="warn-outBox usernameWin">
+			<div class="winbg"></div>
+			<div class="warn-inner" style="height: 270px;">
+				<div class="del_head">修改昵称</div>
+				<div class="del_main">
+					<div class="passwordBox">
+						<input class="pas_input" type="text" name="" id="name_input" value="" />
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button id="usernameSub" type="button" class="btn-modal-yes">保存</button>
+				</div>
+			</div>
+		</div>
+		<div class="warn-outBox genderWin">
+			<div class="winbg"></div>
+			<div class="warn-inner" style="height: 270px;">
+				<div class="del_head">修改性别</div>
+				<div class="del_main">
+					<div class="passwordBox">
+						<span class="radioBox">
+							<input type="radio" class="input_check radioH" id="radio2_1" name="direction" value="1" checked="">
+							<label for="radio2_1">男</label>
+						</span>
+						<span class="radioBox">
+							<input type="radio" class="input_check radioV" id="radio2_2" name="direction" value="2">
+							<label for="radio2_2">女</label>
+						</span>
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button id="sexSub" type="button" class="btn-modal-yes">保存</button>
+				</div>
+			</div>
+		</div>
+		<div class="warn-outBox passWin">
+			<div class="winbg"></div>
+			<div class="warn-inner" style="height: 424px;">
+				<div class="del_head">修改登录密码</div>
+				<div class="del_main">
+					<div class="passwordBox">
+						<input class="pas_input" type="password" name="" id="oldps" value="" placeholder="请输入原密码" />
+						<input class="pas_input" type="password" name="" id="newps" value="" placeholder="请输入新密码" />
+						<input class="pas_input" type="password" name="" id="confirmps" value="" placeholder="请再次输入新密码" />
+						<a class="frogetPass" href="/forgetPs/index/">忘记密码</a>
+						<div class="clearfix"></div>
+						<button type="button" class="btn-modal-no">取消</button>
+						<button id="psSub" type="button" class="btn-modal-yes">保存</button>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+
+			  	$(".usernameClick").click(function(){
+			  		$("#name_input").val("");
+			  		$(".usernameWin").show();
+			  	});
+			  	$(".genderClick").click(function(){
+			  		$(".genderWin").show();
+			  	});
+			  	$(".passClick").click(function(){
+			  		$("#oldps").val("");
+					$("#newps").val("");
+					$("#confirmps").val("");
+			  		$(".passWin").show();
+			  	})
+			   	/*关闭弹窗*/
+			   	$(".btn-modal-no").click(function() {
+					$(".warn-outBox").hide()
+				});
+
+				$("#fileInput").on("change", function(e) {
+					var file = e.target.files[0];
+
+					if(!file.type.match("image.*")) {
+						return false;
+					}
+
+					var data =  new FormData();
+      				data.append('avatar', file);
+
+      				$.ajax({
+						url: '/developer/modifyBaseInfo/',
+						type: "post",
+						data: data,
+						dataType:"json",
+						cache: false,
+						contentType: false,
+						processData: false,
+						success: function(data) {
+							if (data.code == 1) {
+								layer.alert("修改成功！", 
+				                    {title:'提示'}, 
+				                    function(){
+				                        location.reload();
+				                	}
+				                );
+							} else {
+								layer.alert("修改失败，请重试！");
+							}
+						}
+					});
+					
+				});
+
+				$.ajax({
+					type:'post',
+					dataType:"json",
+					url:"/developer/getInfo/",
+					success:function(info){
+						data = info.data;
+						$('#type').html(data.type);
+						$('#company').html(data.company);
+						$('#contact').html(data.contact);
+						$('#phone').html(data.phone);
+						$('#address').html(data.address);
+
+						$('#nickname').html(data.nickname);
+						$('#sex').html(data.sex);
+						$('#uid').html(data.uid);
+						$(".deImg").attr("style", "background-image: url(" + data.avatar + ")");
+
+					}
+
+				});
+
+				$("#usernameSub").click(function() {
+					var name = $("#name_input").val().trimSpace();
+					if (name == '') {
+						layer.alert("请输入昵称");
+						return;
+					}
+					$.ajax({
+						url: '/developer/modifyBaseInfo/',
+						type: "post",
+						data: {nickname:name},
+						dataType:"json",
+						success: function(data) {
+							if (data.code == 1) {
+								layer.alert("修改成功！", 
+				                    {title:'提示'}, 
+				                    function(){
+				                        location.reload();
+				                	}
+				                );
+							} else {
+								layer.alert("修改失败，请重试！");
+							}
+						}
+					});
+					$(".warn-outBox").hide();
+				});
+
+				$("#sexSub").click(function() {
+					var sex = 0;
+					$(".input_check").each(function(){
+						if ($(this).prop("checked") == true) {
+							sex = $(this).val();
+						}
+					});
+
+					if (!sex) {
+						layer.alert("请选择性别");
+						return;
+					}
+					
+					$.ajax({
+						url: '/developer/modifyBaseInfo/',
+						type: "post",
+						data: {sex:sex},
+						dataType:"json",
+						success: function(data) {
+							if (data.code == 1) {
+								layer.alert("修改成功！");
+								if (sex == 1) {
+									$('#sex').html('男');
+								} else if (sex == 2) {
+									$('#sex').html('女');
+								}
+							} else {
+								layer.alert("修改失败，请重试！");
+							}
+						}
+					});
+					$(".warn-outBox").hide();
+				});
+
+				$("#psSub").click(function() {
+					var oldps = $("#oldps").val().trimSpace();
+					var newps = $("#newps").val().trimSpace();
+					var confirmps = $("#confirmps").val().trimSpace();
+
+					if (oldps == '' || newps=='' || confirmps=='') {
+						layer.alert("请输入密码");
+						return;
+					}
+					if (newps != confirmps) {
+						layer.alert("两次输入不一致");
+						return;
+					}
+					
+					$.ajax({
+						url: '/developer/modifyBaseInfo/',
+						type: "post",
+						data: {old_ps:oldps,ps:newps,confirm_ps:confirmps},
+						dataType:"json",
+						success: function(data) {
+							if (data.code == 1) {
+								layer.alert("修改成功！");
+							} else {
+								layer.alert(data.message);
+							}
+						}
+					});
+
+					$(".warn-outBox").hide();
+				});
+
+				
+			});
+
+		</script>
+	</body>
+
+</html>

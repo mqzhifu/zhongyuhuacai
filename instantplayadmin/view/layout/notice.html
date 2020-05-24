@@ -1,0 +1,32 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+                    <!--<div class="note note-success">-->
+                        <!--<p>-->
+                            <!--Please click &nbsp;&nbsp;<i class="icon-logout"></i>&nbsp;&nbsp; icon on the header's right top to toggle the quick sidebar.-->
+                        <!--</p>-->
+                    <!--</div>-->
+
+                    <div class="alert alert-danger">
+                        <strong>Error!</strong>{$msg} ,<a href="{$backUrl}">后退</a>
+                    </div>
+
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

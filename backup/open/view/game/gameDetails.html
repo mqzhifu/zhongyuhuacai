@@ -1,0 +1,215 @@
+{include /layout/left_game.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/gameDetails.css" />
+
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">小游戏基本信息</div>
+					<a href="/game/edit/?gameid={$gameid}" class="editBtn"><img src="{CONST|H_STATIC_URL}assets/open/img/editBtn.png" />编辑</a>
+					<ul class="basicMessage">
+						<li>
+							<span>游戏编号</span>
+							<div>{$gameid}</div>
+						</li>
+						<li>
+							<span>应用秘钥</span>
+							<div>
+								<input class="disabled" disabled="" id="appSecret" readonly="" type="text" value="●●●●●●●●" />
+								<img class="secretBtn" src="{CONST|H_STATIC_URL}assets/open/img/eye.png" />
+							</div>
+						</li>
+						<li>
+							<span>类别</span>
+							<div>
+							{foreach ($gameCategory as $k=>$v)}
+								{if ($gameInfo['category'] == $k)}
+									{$v}
+								{/if}
+							{/foreach}
+							-
+							{foreach ($paintStyleDesc as $k=>$v)}
+								{if ($gameInfo['paint_style'] == $k)}
+									{$v}
+								{/if}
+							{/foreach}
+							</div>
+						</li>
+						<li>
+							<span>简介</span>
+							<div>{$gameInfo['summary']}</div>
+						</li>
+						<li>
+							<span>屏幕方向</span>
+							<div>{if $gameInfo['screen']==1}横屏{else}竖屏{/if}</div>
+						</li>
+						{if $power_link||$power_wechat}
+						<li>
+							<span>启动类型</span>
+							<div>{foreach ($urlTypeDesc as $k=>$v)}{if $gameInfo['url_type']==$k}{$v}{/if}{/foreach}</div>
+						</li>
+						{if $gameInfo['url_type']==2}
+						<li>
+							<span>外链</span>
+							<div>{$gameInfo['link_url']}</div>
+						</li>
+						{/if}
+						{if $gameInfo['url_type']==3}
+						<li>
+							<span>原始id</span>
+							<div>{$gameInfo['wx_userName']}</div>
+						</li>
+						<li>
+							<span>小程序路径</span>
+							<div>{$gameInfo['wx_path']}</div>
+						</li>
+						<li>
+							<span>版本类型</span>
+							<div>{foreach ($wechat_program_desc as $k=>$v)}{if $gameInfo['wx_miniprogramType']==$k}{$v}{/if}{/foreach}</div>
+						</li>
+						{/if}
+						{/if}
+					</ul>
+				</div>
+				<div class="section">
+					<div class="title">图片资源</div>
+					<div class="imgBox">
+						<div class="fl">
+							<div class="img-title">应用图标（256 x 256）</div>
+							<label for="icon_256" id="icon_256_label" style="margin-right: 75px;">
+			                    <div id="icon_256_preview" class="img-i1-1" style="background-image: url({if $gameInfo['icon_256_url'] != ''}{$gameInfo['icon_256_url']}{/if});"></div>
+			                    <div id="background_color_1" class="img-i1-2" style="{if ($gameInfo['background_color'] != '')}background-color: {$gameInfo['background_color']}{/if}"></div>
+			                </label>
+							<!-- <div class="colorPicker">
+								<div id="background_color_2" class="img-color-box">请选择色卡颜色</div>
+								<div id="triangle-down" class="img-color-icon"></div>							
+							</div> -->
+							
+						</div>
+						<div class="fc">
+							<div class="img-title">应用图标 (128 x 128)</div>
+							<label for="icon_128" id="icon_128_label">
+			                    <div id="icon_128_preview" class="img-i2-1" style="background-image: url({if $gameInfo['icon_128_url'] != ''}{$gameInfo['icon_128_url']}{/if});"></div>
+			                </label>
+						</div>
+						<div class="fr">
+							<div class="img-title">游戏启动页（1080 x 1920）</div>
+							<label for="startup" id="startup_label">
+			                    <div id="startup_preview" class="img-i3-1" style="background-image: url({if $gameInfo['startup_url'] != ''}{$gameInfo['startup_url']}{/if});"></div>
+			                </label>
+						</div>
+						<ul class="warnUl">
+							<li>图像内容不允许涉及政治敏感与色情;</li>
+							<li>图片格式必须为：png,bmp,jpeg,jpg,gif；不可大于2M；建议使用png格式图片，以保持最佳效果</li>
+						</ul>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<div class="warn-outBox secretWin">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head">请重新输入密码</div>
+				<div class="del_main">
+					<div class="game_name">为保护你的帐户安全，请重新输入密码后再继续操作。</div>
+					<div class="passwordBox">
+						<input class="pas_input" type="password" name="" id="" value="" /><a href="/forgetPs/index/">忘记密码？</a>
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button type="button" id="checkAuthBtn" class="btn-modal-yes">提交</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				var gameid = "{$gameInfo['id']}";
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*添加游戏*/
+				$(".add_game,.game_add").click(function() {
+					$(".add_win").show();
+				});
+				/*删除游戏*/
+				$(document).on("click", ".del_game", function() {
+					$(".del_win").show();
+				});
+				$(".btn-modal-no").click(function() {
+					$(".warn-outBox").hide()
+				});
+				/*查看秘钥*/
+				$(".secretBtn").click(function(){
+					{if isset($foreign) && $foreign==true}
+					$.ajax({
+		                url: "/game/detailAuth/",
+		                type: "POST",
+		                data:{gameid:gameid},
+		                success: function (res) {
+                            $(".secretBtn").hide();
+                            $("#appSecret").val(res.data.appSecret);
+                            resetToken = res.data.resetToken;
+		                }
+		            });
+		            {else}
+					$(".secretWin").show();
+					{/if}
+
+				});
+				$(".btn-modal-no , .btn-modal-yes").click(function(){
+					$(".secretWin").hide();
+				})
+				
+
+				// 校验身份，显示密钥
+		        $("#checkAuthBtn").on("click", function() {
+		            var formData = new FormData();
+		            var password = $(".pas_input").val();
+		            formData.append("gameid", gameid);
+		            formData.append("password", password);
+		            $.ajax({
+		                url: "/game/detailAuth/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function (res) {
+		                    layer.alert(res.message, 
+		                        {title:'提示'}, 
+		                        function(index){
+		                            $("#myModal").modal("hide");
+		                            if (res.code === 0) {
+		                                $(".secretBtn").hide();
+		                                $("#appSecret").val(res.data.appSecret);
+		                                resetToken = res.data.resetToken;
+		                            }
+		                            layer.close(index);
+		                            $(".secretWin").hide();
+		                    	}
+		                    );
+		                    
+		                }
+		            });
+		        });
+			})
+		</script>
+	</body>
+
+</html>

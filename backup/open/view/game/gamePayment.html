@@ -1,0 +1,132 @@
+{include /layout/left_game.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/gamePayment.css" />
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">游戏商品信息<div class="add_Pro">添加新商品</div></div>
+					<ul class="paymentTitle">
+						<li><p>OSID</p><span>(安卓填1、IOS填2)</span></li>
+						<li><p>商品价格</p><span>{if isset($foreign) && $foreign==true}（美元）{else}（元）{/if}</span></li>
+						<li><p>商品名称</p><span>(用户实际收到商品，如100钻石)</span></li>
+						<li><p>商品ID</p><span>(生成商品ID)</span></li>
+					</ul>
+					<ul class="paymentMain">
+					</ul>
+					<ul class="addUl">
+						<li><input class="addInput" type="text" maxlength="1" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-2]{0,1}/g,'')}else{this.value=this.value.replace(/[^1-2]{0,1}/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-2]{0,1}/g,'')}else{this.value=this.value.replace(/[^1-2]{0,1}/g,'')}" /></li>
+						<li><input class="addInput2" type="text" maxlength="9" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" /></li>
+						<li><input class="addInput3" maxlength="11" type="text" /></li>
+						<li><button class="sureBtn">保存</button><button class="closeBtn">取消</button></li>
+					</ul>
+				</div>
+				
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			var gameid = {$gameid};
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*添加游戏*/
+				$(".add_Pro").click(function() {
+					$(".addUl").show();
+				});
+
+				var sent = false;
+
+				var money = "{if isset($foreign) && $foreign==true}${else}￥{/if}";
+
+				$(".sureBtn").click(function(){
+					if (sent === true) {
+						return;
+					}
+					var ios_type = $.trim($(".addUl li .addInput").val());
+					var price = parseInt($.trim($(".addUl li .addInput2").val()));
+					var goods_name = $.trim($(".addUl li .addInput3").val());
+					if(ios_type!=='' && price!=='' && goods_name!==''){
+						var formdata = new FormData();
+					    formdata.append('gameid', gameid);
+					    formdata.append('ios_type', ios_type);
+					    formdata.append('price', price);
+					    formdata.append('goods_name', goods_name);
+					    $.ajax({
+					            url: '/payment/addGoodsItem/',
+					            type: "post",
+					            data: formdata,
+					            dataType:"json",
+					            cache: false,
+					            contentType: false,
+					            processData: false,
+					            beforeSend: function() {
+					            	sent = true;
+					            },
+					            success: function(data) {
+					            	sent = false;
+					                if(data.code == 1){
+					                	var html="<li><span>"+ios_type+"</span>"+
+											"<span>"+money+price+"</span>"+
+											"<span>"+goods_name+"</span>"+
+											"<span>"+data.data+"</span></li>"
+										$(".paymentMain").append(html);
+										hideAddUl();
+					                }else{
+					                  layer.alert(data.message);
+					                }
+					            }
+					        });
+						
+					}else{
+						layer.alert("请将商品信息补充完整");
+					}
+				});
+				$(".closeBtn").click(function(){
+					hideAddUl();
+				});
+
+				
+				$.ajax({
+	                url: "/payment/getGoods/",
+	                type: "GET",
+	                data: {gameid:gameid},
+	                dataType: "json",
+	                success: function (data) {
+	                	var list = data.data;
+	                	var html="";
+	                	for (var i = 0; i < list.length; i++) {
+	                		html += '<li><span>'+list[i].iostype+'</span><span>'+money+list[i].price+'</span><span>'+list[i].goods_name+'</span><span>'+list[i].id+'</span></li>';
+	                	}
+	                	$(".paymentMain").html(html);
+	                }
+	            });
+			})
+
+			function hideAddUl()
+			{
+				$(".addUl li .addInput").val("");
+				$(".addUl li .addInput2").val("");
+				$(".addUl li .addInput3").val("");
+				$(".addUl").hide();
+			}
+		</script>
+	</body>
+
+</html>

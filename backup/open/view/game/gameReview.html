@@ -1,0 +1,393 @@
+{include /layout/left_game.html}
+			<div class="iframeBox">
+				<div class="section" style="height: auto;">
+					<div class="title">版本管理</div>
+					<div class="explanation dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"></div>
+					<div class="dropdown-menu explanationMx" aria-labelledby="dropdownMenu1">
+						<p>在游戏托管中，可将代码上传到平台进行托管。 </p>
+						<span>开发版本 </span>
+						<p>点击提交审核，可将代码提交审核。
+开发版可以设置成测试版，开发版本可删除，不影响线上版本和审核中版本的代码。
+                        </p>
+						<span>审核中版本 </span>
+						<p>只能有一份代码处于审核中。有审核结果后可以发布到线上，也可直接重新提交审核，覆盖原审核版本。</p>
+						<span>线上版本 </span>
+						<p>线上所有用户使用的代码版本，该版本代码在新版本代码发布后被覆盖更新。 </p>
+					</div>
+				</div>
+				<div class="section">
+					<div class="section-title">线上版本 </div>
+					{if (empty($production))}
+					<div class="empty">尚未提交线上版本</div>
+					{else}
+					<div class="on-line">
+						<p>版本号：{$production["version"]}</p>
+						<p>提交时间：{$production["created_at_date"]}</p>
+						<p>描述：{$production["uname"]} 在 {$production["created_at_date2"]} 提交上传</p>
+					</div>
+					<div class="on-linefr">
+						<button class="rollback">版本回退</button>
+						<div class="bottom">
+							<div class="testDownload" data-id="{$production['id']}" onclick="download1(this)"></div>
+						</div>
+					</div>
+
+					{/if}
+				</div>
+				<div class="section">
+					<div class="section-title">审核版本 </div>
+					{if empty($audit)}
+					<div class="empty">你暂无提交审核的版本或者版本已发布上线</div>
+					{else}
+					<div class="review">
+						<p>版本号：{$audit["version"]}
+							{if ($audit["status"] == 3)}
+							<em style="background-color: #EF4D57;">审核不通过</em>
+							{elseif ($audit["status"] == 4)}
+							<em style="background-color: #7B6CD5;">审核已通过</em>
+							{elseif ($audit["status"] == 5)}
+							<em style="background-color: #33CD9C;">审核中</em>
+							{/if}
+						</p>
+						<p>提交时间：{$audit["created_at_date"]}</p>
+						<p>描述：{$audit["uname"]} 在 {$audit["created_at_date2"]} 提交上传</p>
+					</div>
+					{/if}
+					<div class="reviewfr">
+						<div class="switchWin">
+							<div class="top">
+								<p>您确定要将版本1.0 提交审核吗？</p>
+								<i></i>
+							</div>
+							<button type="button" class="btn-modal-no">取消</button>
+  							<button type="button" class="btn-modal-yes">确认</button>
+						</div>
+						{if ($audit["status"] == 4)}
+						<button class="onlineBtn">设为上线版本</button>
+						{/if}
+						{if !empty($audit)}
+						<div class="bottom">
+							<div class="testDownload" data-id="{$audit['id']}" onclick="download1(this)"></div>
+							<img class="del" onclick="delOne(this)" data-id="{$audit['id']}" src="{CONST|H_STATIC_URL}assets/open/img/del.png">
+						</div>
+						{/if}
+					</div>
+				</div>
+				{if (empty($developments))}
+				<div class="section">
+					<div class="section-title">开发版本 </div>
+					
+					<div class="empty">尚未提交开发版本</div>
+				</div>
+				{else}
+				{foreach ($developments as $development)}
+				<div class="section">
+					<div class="section-title">开发版本 </div>
+					<div class="develop">
+						<p>版本号：{$development["version"]}
+							{if ($development["status"] != 1)}
+							<em class="testStatus" style="background-color: #FFA73B;">测试版</em>
+							{/if}
+						</p>
+						<p>提交时间：{$development["created_at_date"]}</p>
+						<p>描述：{$development["uname"]} 在 {$development["created_at_date2"]} 提交上传</p>
+					</div>
+					<div class="developfr">
+						<button class="reviewBtn" value = "{$development['id']}">提交审核</button>
+						{if ($development["status"] == 1)}
+						<button class="testBtn" value = "{$development['id']}">设为测试中</button>
+						{else}
+						<button class="testQx" value = "{$development['id']}">取消测试状态</button>
+						{/if}
+						<div class="bottom">
+							<div class="testDownload" data-id="{$development['id']}" onclick="download1(this)"></div>
+							<img class="del" onclick="delOne(this)" data-id="{$development['id']}" src="{CONST|H_STATIC_URL}assets/open/img/del.png">
+						</div>
+					</div>
+				</div>
+				{/foreach}
+        		{/if}
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<!--上线-->
+		<div class="warn-outBox proWin">
+			<div class="winbg"></div>
+			<div class="warn-inner" style="height: 315px">
+				<div class="del_head">请输入密码</div>
+				<div class="del_main">
+					<div class="game_name">为保护你的帐户安全，请重新输入密码后再继续操作。</div>
+					<div class="passwordBox">
+						<input class="pas_input" type="password" name="" id="pro_ps" value="" /><a href="/forgetPs/index/">忘记密码？</a>
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button type="button" id="onProductionBtn" class="btn-modal-yes">提交</button>
+				</div>
+			</div>
+		</div>
+		<!--回滚-->
+		<div class="warn-outBox secretWin">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head">请选择要回滚的版本</div>
+				<div class="versionBox">
+					{foreach ($rollback as $key => $value)}
+					<input type="radio" class="input_check" value="{$value['id']}" id="memberC{$key}" name="version" />
+					<label for="memberC{$key}">
+						<i>版本号：{$value["version"]}</i>
+						<em>{$value["created_at_date"]}</em>
+					</label>
+					{/foreach}
+				</div>
+				<div class="del_main">
+					<div class="game_name">为保护你的帐户安全，请重新输入密码后再继续操作。</div>
+					<div class="passwordBox">
+						<input class="pas_input" type="password" name="" id="roll_ps" value="" /><a href="/forgetPs/index/">忘记密码？</a>
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button type="button" id="onRollbackBtn" class="btn-modal-yes">提交</button>
+				</div>
+			</div>
+		</div>
+		<!--回滚成功-->
+		<div class="warn-outBox setSuccessWin">
+			<div class="winbg"></div>
+			<div class="warn-inner" style="height: 432px;">
+				<img class="closeWin" src="{CONST|H_STATIC_URL}assets/open/img/closeBtn.png">
+				<img class="icon-img" src="{CONST|H_STATIC_URL}assets/open/img/info-success.png"/>
+				<span>版本回退成功</span>
+				<p>当前版本号</p>
+				<button type="button" class="btn-modal-yes">我知道了</button>
+			</div>
+		</div>
+		<!--审核-->
+		<div class="warn-outBox reviewWin">
+			<div class="winbg"></div>
+			<div class="warn-inner" style="height: 513px;">
+				<img class="closeWin" src="{CONST|H_STATIC_URL}assets/open/img/closeBtn.png">
+				<img class="icon-img" src="{CONST|H_STATIC_URL}assets/open/img/un-done.png"/>
+				<span>确认提交审核？</span>
+				<p class="developP">提交审核前，请确保：
+
+• 提交的小游戏功能完整，可正常打开和运行，而不是测试版本或Demo，小程序的调用和预览可在“开心小游戏”客户端中进行。多次提交测试内容或者Demo，将收到相关处罚。
+
+• 已仔细阅读<a href="/developer/openProtocolIndex/" target="_blank">《开心小游戏开放平台服务协议》</a></p>
+				<button type="button" id="jumpAuditBtn" class="btn-modal-yes">我知道了</button>
+			</div>
+		</div>
+		
+		<script>
+			$(function(){
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				
+				/*提交审核*/
+				$(".section").on("click",".reviewBtn",function(){
+					submitPageHostId = $(this).attr("value");
+					$(".reviewWin").show();
+				});
+				$(".btn-modal-yes,.closeWin").click(function(){
+					$(".reviewWin").hide();
+				});
+				/*设为上线*/
+				$(".section").on("click",".onlineBtn",function(){
+					{if isset($foreign) && $foreign==true}
+					layer.alert("确定要设置上线吗", 
+                        {title:'提示'}, 
+                        function(index){
+                			var formData = new FormData();
+				            formData.append("gameid", gameid);
+				            formData.append("type", "production");
+				            formData.append("gameHostingId", auditId);
+				            changeVersionStatus(formData);
+                            layer.close(index);
+                    });
+					{else}
+					$(".proWin").show();
+					{/if}
+					
+				});
+				$(".proWin .btn-modal-no").click(function(){
+					$(".proWin").hide();
+				});
+				
+				/*设置成功关闭*/
+				$(".setSuccessWin .btn-modal-yes,.setSuccessWin .closeWin").click(function(){
+					location.reload();
+				});
+				/*版本回滚*/
+				$(".section").on("click",".rollback",function(){
+					{if empty($rollback)}
+					layer.alert("无可回退版本");
+					{else}
+					$(".secretWin").show();
+					{/if}
+				});
+				$(".secretWin .btn-modal-no,.secretWin .btn-modal-yes").click(function(){
+					$(".secretWin").hide();
+				});
+				$(".secretWin .btn-modal-yes").click(function(){
+					
+				});
+
+				// 游戏ID
+		        var gameid = '{$gameid}';
+		        // 开发版本ID
+		        // var developmentId = '{if (isset($development["id"]))}{$development["id"]}{else}0{/if}';
+		        var developmentId = 0;
+
+		        var submitPageHostId = 0;
+		        // 审核版ID
+		        var auditId = '{if (isset($audit["id"]))}{$audit["id"]}{else}0{/if}';
+		        // 设置版本状态
+		        var changeVersionStatus = function(formData, func) {
+		            $.ajax({
+		                url: "/game/auditChangeStatus/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function(res) {
+		                    if (res.code == 0 && func !== undefined) {
+		                        func();
+		                    } else {
+		                        layer.alert(res.message, 
+		                            {title:'提示'}, 
+		                            function(){
+		                            location.reload();
+		                        });
+		                    }
+		                }
+		            });
+		        };
+
+		        // 设置测试中按钮
+		        $(".section").on("click", ".testBtn", function (e) {
+		            var gameHostingId = $(this).attr('value');
+		            layer.confirm('将该版本设置为测试版？',{
+		                title:'提示'
+		                },function(index){
+		                    var formData = new FormData();
+		                    formData.append("gameid", gameid);
+		                    formData.append("type", "test")
+		                    formData.append("gameHostingId", gameHostingId);
+		                    changeVersionStatus(formData);
+		                },function(index){
+		                    layer.close(index);
+		            });
+		        });
+		        // 设置取消测试按钮
+		        $(".section").on("click",".testQx",function(e){
+		            var gameHostingId = $(this).attr('value');
+		            layer.confirm('取消该版本测试状态？',{
+		                title:'提示'
+		                },function(index){
+		                    var formData = new FormData();
+		                    formData.append("gameid", gameid);
+		                    formData.append("type", "development")
+		                    formData.append("gameHostingId", gameHostingId);
+		                    changeVersionStatus(formData);
+		                },function(index){
+		                    layer.close(index);
+		            });
+		        });
+
+		        // 跳转到审核页面
+		        $("#jumpAuditBtn").on("click", function () {
+		            location.href = "/game/auditDetail/?gameid=" + gameid + "&id=" + submitPageHostId;
+		        });
+
+		        // 设置上线按钮 - 校验身份
+		        $("#onProductionBtn").on("click", function() {
+		            var formData = new FormData();
+		            var password = $("#pro_ps").val();
+		            formData.append("gameid", gameid);
+		            formData.append("password", password);
+		            formData.append("type", "production");
+		            formData.append("gameHostingId", auditId);
+		            changeVersionStatus(formData);
+		        });
+		        
+		        $("#onRollbackBtn").on("click", function () {
+		            var formData = new FormData();
+		            var password = $("#roll_ps").val();
+		            formData.append("gameid", gameid);
+		            formData.append("password", password);
+		            formData.append("type", "production");
+		            var rollbackId = $("[name=version]:checked").val();
+		            formData.append("gameHostingId", rollbackId);
+		            changeVersionStatus(formData, function() {
+		                $(".setSuccessWin").show();
+		            });
+		        });
+
+			});
+
+			function delOne(obj){
+		        layer.confirm('确定删除此版本？',{
+		            title:'提示'
+		            },function(index){
+		                var id = obj.getAttribute('data-id');
+		                var formData = new FormData();
+		                formData.append('id', id);
+		                formData.append('gameid', '{$gameid}');
+		                $.ajax({
+		                    url: "/game/delOne/",
+		                    type: "POST",
+		                    data: formData,
+		                    processData: false,
+		                    contentType: false,
+		                    success: function(res) {
+		                        if (res.code == 0 && func !== undefined) {
+		                            func();
+		                        } else {
+		                            // layer.alert(res.message);
+		                            location.reload();
+		                        }
+		                    }
+		                });
+		            },function(index){
+		                layer.close(index);
+		        });
+		            
+		    }
+
+		    function download1(obj){
+		        var id = obj.getAttribute('data-id');
+		        var haveForm = $("#downloadfileform");
+		        if(haveForm){
+		            $("#downloadfileform").remove();
+		        }
+		        var $eleForm = $("<form id='downloadfileform' method='get' target='_blank'><input id='input_data' name='data' type='hidden'>" +
+		                "<input id='pSize' name='id' value='"+id+"' type='hidden'>"+
+		                "<input id='pNum' name='gameid' value='{$gameid}' type='hidden'>"+
+		                "</form>");
+		        $eleForm.attr("action","/game/download/");
+
+		        $(document.body).append($eleForm);
+		        //提交表单，实现下载
+		        $eleForm.submit();
+		    }
+		</script>
+	</body>
+
+</html>

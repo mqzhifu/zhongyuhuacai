@@ -1,0 +1,398 @@
+{include /layout/left_game.html}
+			<div class="iframeBox">
+				<input type="hidden" name="id" value="{$rule['id']}">
+				<div class="section" style="padding: 0;">
+					<div class="title">创建发送规则
+						<span>（关闭小游戏后，给玩家发送消息规则）</span>
+					</div>
+					<button class="delRul">删除</button>
+				</div>
+				<div class="section">
+					<ul class="form-ul">
+						<li>
+							<div class="fl">规则名称</div>
+							<div class="fr">
+								<input class="li-input file-input" name="name" value="{$rule['name']}" type="text" />
+							</div>
+						</li>
+						<li>
+							<div class="fl">消息模版</div>
+							<div class="fr">
+								<select  name="template_type" class="li-select">
+									<option value="0">--请选择--</option>
+					                {foreach ($templateTypes as $key => $value)}
+					                    {if ($rule['template_type'] == $key)}
+					                    <option selected value="{$key}">{$value}</option>
+					                    {else}
+					                <option value="{$key}">{$value}</option>
+					                    {/if}
+					                {/foreach}
+								</select>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="section">
+					<ul class="form-ul">
+						<li>
+							<div class="fl">文案一标题</div>
+							<div class="fr">
+								<input  name="copywritings[0][title]" class="li-input file-input" value="{$rule['copywritings'][0]['title']}" type="text" placeholder="输入文案一标题" />
+							</div>
+						</li>
+						<li>
+							<div class="fl">文案一副标题</div>
+							<div class="fr">
+								<input class="li-input file-input"  name="copywritings[0][subtitle]" value="{$rule['copywritings'][0]['subtitle']}" type="text" placeholder="输入文案一副标题" />
+							</div>
+						</li>
+						<li>
+							<div class="fl">文案一图片地址</div>
+							<div class="fr">
+								<input class="li-input file-input" name="copywritings[0][image_url]"  value="{$rule['copywritings'][0]['image_url']}" type="text" placeholder="输入文案一图片地址" />
+							</div>
+						</li>
+						<li>
+							<div class="fl">文案二标题</div>
+							<div class="fr">
+								<input class="li-input file-input" name="copywritings[1][title]" value="{$rule['copywritings'][1]['title']}"  type="text" placeholder="输入文案二副标题" />
+							</div>
+						</li>
+						<li>
+							<div class="fl">文案二副标题</div>
+							<div class="fr">
+								<input class="li-input file-input" name="copywritings[1][subtitle]" type="text" value="{$rule['copywritings'][1]['subtitle']}" placeholder="输入文案二图片地址" />
+							</div>
+						</li>
+						<li>
+							<div class="fl">文案二图片地址</div>
+							<div class="fr">
+								<input class="li-input file-input" name="copywritings[1][image_url]"  value="{$rule['copywritings'][1]['image_url']}" type="text" placeholder="输入文案一图片地址" />
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="section">
+					<ul class="form-ul">
+						<li>
+							<div class="fl">规则类型</div>
+							<div class="fr">
+								<select id="send_rule_select" name="type"  class="li-select">
+									<option value="0">--请选择--</option>
+					                {foreach ($sendRules as $key => $value)}
+					                    {if ($rule['type'] == $key)}
+					                    <option selected value="{$key}">{$value}</option>
+					                    {else}
+					                    <option value="{$key}">{$value}</option>
+					                    {/if}
+					                {/foreach}
+								</select>
+							</div>
+						</li>
+						<li>
+							<div class="fl">说明</div>
+							<div class="fr">
+								<p>关闭时长：
+关闭游戏后，定点时间发送；可配置触发天数与触发时间; 示例：配置触发天数为2，触发时间为12:00。则用户在退出游戏的第二天的12:00将收到此消息。
+                      			</p>		
+                      			<p>定时任务：
+关闭游戏后，每天定点时间发送；可配置触发时间；实例：配置触发时间为12:00，则在用户退出游戏后的每个12:00将发送此消息。
+                        </p>
+                      			<p>关闭延时：
+关闭游戏后，延时时间发送；可配置触发时间；实例：配置触发时间为01:10，则用户在退出游戏后的1个小时10分会收到此消息。
+                        </p>
+                      			<p>关闭定时：
+关闭游戏后，每天在关闭游戏时间点发送；实例：假设用户12:00退出游戏，则用户从退出游戏的第二天开始每天的12:00将发送此消息。
+                        </p>
+                      			<p>补充说明：
+在用户退出游戏的十天内只能给用户发送5条消息；关闭时长，关闭延时任务只会发送一条消息；定时任务与关闭定时会动态的补全5条消息。
+                        </p>
+							</div>
+						</li>
+						<li id="trigger_day_li" style="display: none;">
+							<div class="fl">触发天数</div>
+							<div class="fr">
+								<div class="days">
+									<input type="button" value="-" class="jian">
+									<span class="daysNum" name="trigger_day" >{if $rule['trigger_day']}{$rule['trigger_day']}{else}1{/if}</span>
+									<input type="button" value="+" class="add">
+								</div>
+								<em>关闭游戏 <i class="daysNum2"></i> 天后</em>
+							</div>
+						</li>
+						<li id="trigger_time_li" style="display: none;">
+							<div class="fl">触发时间</div>
+							<div class="fr">
+								<input type="text"  name="trigger_time" class="timeInput" id="times" value="{$rule['trigger_time']}" />
+								<em>触发点时间格式为：HH:mm</em>
+							</div>
+						</li>
+						<li id="trigger_minute_li" style="display: none;">
+							<div class="fl">触发时间</div>
+							<div class="fr">
+								<input type="text" class="timeInput" name="trigger_minute"  value="{$rule['trigger_minute']}" style="display: inline-block;"/> 
+								<em>分钟</em>
+							</div>
+						</li>
+					</ul>
+					<div class="formBtn">
+						<button type="button" class="btn-modal-yes">提交</button>
+						<button type="button" class="btn-modal-no">取消</button>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			var gameid = {$gameid};
+
+			$(function(){
+				//时间范围
+				  laydate.render({
+				    elem: '#times'
+				    ,type: 'time'
+				    ,format:"HH:mm"
+				  });
+				canuse();
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+	            $(".add").click(function(){
+				    var n=$(this).prev().html();
+				    var num=parseInt(n)+1;
+				    if(num==0){ return;}
+				    $(this).prev().html(num);
+				    canuse();
+				    daysNum2();
+				});
+				//减的效果
+				$(".jian").click(function(){
+				    var n=$(this).next().html();
+				    var num=parseInt(n)-1;
+				    if(num==0){ 
+				    	return
+				    }
+				    $(this).next().html(num);
+				    canuse();
+				    daysNum2();
+				});
+				daysNum2();
+				function daysNum2(){
+					var dats=parseInt($(".daysNum").html());
+					$(".daysNum2").html(dats);
+				}
+				function canuse(){
+					var thisVal=parseInt($(".daysNum").html());
+					if(thisVal==1){
+						$(".jian").attr("disabled",true);
+						$(".jian").addClass("disabled");
+					}else{
+						$(".jian").attr("disabled",false);
+						$(".jian").removeClass("disabled");
+					}
+				}
+
+				// 绑定发送规则事件
+		        $("#send_rule_select").on("change", function (e) {
+		            // 隐藏
+		            $("#trigger_day_li").hide();
+		            $("#trigger_time_li").hide();
+		            $("#trigger_minute_li").hide();
+		            // 展示
+		            var value = parseInt($(this).val()) ;
+		            switch (value) {
+		                case 1:
+		                    $("#trigger_day_li").show();
+		                    $("#trigger_time_li").show();
+		                    break;
+		                case 2:
+		                    $("#trigger_time_li").show();
+		                    break;
+		                case 3:
+		                    $("#trigger_minute_li").show();
+		                    break;
+		                case 4:
+		                    break;
+		            }
+		        });
+		        // 手动触发
+		        $("#send_rule_select").trigger("change");
+
+		        $(".btn-modal-yes").on("click", function () {
+		            layer.confirm("是否进行保存",{
+		                title:'提示'
+		                },function(index){
+		                	saveMsg();
+		                    layer.close(index);
+		                },function(index){
+		                    layer.close(index);
+		            });
+		            
+		        });
+
+		        $(".btn-modal-no").on("click", function() {
+		            location.href = "/message/index/gameid=" + gameid;
+		        });
+
+		        function saveMsg() {
+		        	var name = $("input[name='name']").val();
+		            if (name == "") {
+		                layer.alert("请填写规则名称");
+		                return false;
+		            }
+		            var templateType = $("select[name='template_type']").val();
+		            if (templateType == 0) {
+		                layer.alert("请选择模板类型");
+		                return false;
+		            }
+		            var copywriting1Title = $("input[name='copywritings[0][title]']").val();
+		            if (copywriting1Title == "") {
+		                layer.alert("请填写文案一（标题）");
+		                return false;
+		            }
+		            var copywriting1Subtitle = $("input[name='copywritings[0][subtitle]']").val();
+		            if (copywriting1Subtitle == "") {
+		                layer.alert("请填写文案一（副标题）");
+		                return false;
+		            }
+		            var copywriting1ImageUrl = $("input[name='copywritings[0][image_url]']").val();
+		            if (copywriting1ImageUrl == "") {
+		                layer.alert("请填写文案一（图片地址）");
+		                return false;
+		            }else{
+		                //var reg1 = /[0-9a-zA-z]+.(html|htm|shtml|jsp|asp|php|com|cn|net|com.cn|org)$/;
+		                var reg1 = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/;
+		                var isurl1 = reg1.test(copywriting1ImageUrl);
+		                if(false == isurl1){
+		                    layer.alert("文案一（图片地址）格式填写错误，请校验");
+		                    return false;
+		                }
+		            }
+		            var copywriting2Title = $("input[name='copywritings[1][title]']").val();
+		            if (copywriting2Title == "") {
+		                layer.alert("请填写文案二（标题）");
+		                return false;
+		            }
+		            var copywriting2Subtitle = $("input[name='copywritings[1][subtitle]']").val();
+		            if (copywriting2Subtitle == "") {
+		                layer.alert("请填写文案二（副标题）");
+		                return false;
+		            }
+		            var copywriting2ImageUrl = $("input[name='copywritings[1][image_url]']").val();
+		            if (copywriting2ImageUrl == "") {
+		                layer.alert("请填写文案二（图片地址）");
+		                return false;
+		            }else{
+		                var reg2 = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/;
+		                var isurl2 = reg2.test(copywriting2ImageUrl);
+		                if(false == isurl2){
+		                    layer.alert("文案二（图片地址）格式填写错误，请校验");
+		                    return false;
+		                }
+		            }
+		            var type = $("select[name='type']").val();
+		            if (type == 0) {
+		                layer.alert("请选择规则类型");
+		                return false;
+		            }
+
+		            var triggerDay = 0;
+		            var triggerTime = "";
+		            var triggerMinute = 0;
+		            if (type == 1) {
+		                triggerDay = $("[name='trigger_day']").html();
+		                if (triggerDay == "" || 0 == triggerDay) {
+		                    layer.alert("请填写触发天数");
+		                    return false;
+		                }
+		                triggerTime = $("input[name='trigger_time']").val();
+		                if (triggerTime == "") {
+		                    layer.alert("请选择触发时间");
+		                    return false;
+		                }
+		            } else if (type == 2) {
+		                triggerTime = $("input[name='trigger_time']").val();
+		                if (triggerTime == "") {
+		                    layer.alert("请选择触发时间");
+		                    return false;
+		                }
+		            } else if (type == 3) {
+		                triggerMinute = $("input[name='trigger_minute']").val();
+		                if (triggerMinute == "" || 0 == triggerMinute) {
+		                    layer.alert("请选择触发时间");
+		                    return false;
+		                }
+		            }
+
+		            var copywritings = [];
+		            copywritings[0] = {
+		            	title:copywriting1Title,
+		            	subtitle:copywriting1Subtitle,
+		            	image_url:copywriting1ImageUrl
+		            }
+		            copywritings[1] = {
+		            	title:copywriting2Title,
+		            	subtitle:copywriting2Subtitle,
+		            	image_url:copywriting2ImageUrl
+		            }
+		            var id = $("input[name='id']").val();
+
+		            $.ajax({
+		                url: "/message/messageSave/",
+		                type: "POST",
+		                data: {
+		                	id:id,
+		                	gameid:gameid,
+		                	name:name,
+		                	template_type:templateType,
+		                	type:type,
+		                	copywritings:copywritings,
+		                	trigger_day:triggerDay,
+		                	trigger_time:triggerTime,
+		                	trigger_minute:triggerMinute
+		                },
+		                dataType:"json",
+		                success: function (data) {
+		                	if (data.code == 0) {
+		                		layer.alert("创建消息成功！", 
+	                                {title:'提示'}, 
+	                                function(index){
+			                			location.href = "/message/index/gameid=" + gameid;
+	                                    layer.close(index);
+	                            });
+		                	} else {
+		                		layer.alert(data.message, 
+	                                {title:'提示'}, 
+	                                function(index){
+			                			location.href = "/message/index/gameid=" + gameid;
+	                                    layer.close(index);
+	                            });
+		                	}
+		                }
+		            });
+		        }
+
+
+			})
+		</script>
+	</body>
+
+</html>

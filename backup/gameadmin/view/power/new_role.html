@@ -1,0 +1,177 @@
+{include layout/left.html}
+<style type="text/css">
+	input {
+		
+	}
+</style>
+	<!-- BEGIN CONTENT -->
+	<div class="page-content-wrapper">
+		<div class="page-content">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">Modal title</h4>
+						</div>
+						<div class="modal-body">
+							 Widget settings form goes here
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn blue">Save changes</button>
+							<button type="button" class="btn default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+
+			<br>
+			<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<div class="col-md-12 news-page">
+					<h1>Role setting</h1>
+					<div style="height:30px; padding-left: 5px;padding-right: 15px; display: inline-block;">
+						<input id="role_name" type="text" placeholder="请输入角色名" >
+					</div>
+					<button id='setting_submit' class="btn btn-sm blue filter-cancel"><i class="fa fa-check"></i> 确认</button>
+					<br><br>
+					<div class="row">
+						{foreach ($menus as $menu)}
+						<div class="col-md-5" style="padding-bottom: 20px">
+							
+							<div class="top-news">
+								<div class="btn blue" style="width: 100%">
+								<span class="">
+									<input type="checkbox" class="menu title" value="{$menu['id']}"> {$menu['name']} 
+								</span>
+								</div>
+							</div>
+							<div class="news-blocks">
+								<div class="news-block-tags">
+									{foreach ($menu['sub'] as $sub)}
+									<span style="font-size: 16px;  display:inline-block; padding: 10px">
+										<input type="checkbox" class="menu sub" value="{$sub['id']}"> {$sub['name']} 
+									</span>
+									{if isset($sub['sub'])}
+									{foreach ($sub['sub'] as $ssub)}
+									<span style="font-size: 16px;  display:inline-block; padding: 10px">
+										<input type="checkbox" class="menu sub" value="{$ssub['id']}"> {$ssub['name']} 
+									</span>
+									{/foreach}
+									{/if}
+									{/foreach}
+								</div>
+							</div>
+						</div>
+						{/foreach}
+						<!--end col-md-5-->
+					</div>
+
+                    	
+
+				</div>
+			</div>
+			<!-- END PAGE CONTENT-->
+		</div>
+	</div>
+	<!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".title").change(function(){
+			if ($(this).prop("checked")) {
+				var sub = $(this).parents(".top-news").next(".news-blocks").find(".sub");
+				$(sub).each(function(){
+					$(this).get(0).checked = true;
+					$(this).parent("span").addClass("checked");
+					var id = $(this).val();
+
+					if (!ids.includes(id)) {
+						ids.push(id);
+					}
+				});
+			}
+
+			if ($(this).prop("checked") == false) {
+				var sub = $(this).parents(".top-news").next(".news-blocks").find(".sub");
+				$(sub).each(function(){
+					$(this).get(0).checked = false;
+					$(this).parent("span").removeClass("checked");
+					var id = $(this).val();
+
+					if (ids.includes(id)) {
+						removeByValue(ids,id);
+					}
+				});
+			}
+			
+		});
+		var ids=[];
+		$(".menu").change(function(){
+			if ($(this).prop("checked")) {
+				var id = $(this).val();
+
+				if (!ids.includes(id)) {
+					ids.push(id);
+				}
+			}
+			else if ($(this).prop("checked") == false) {
+				var id = $(this).val();
+
+				if (ids.includes(id)) {
+					removeByValue(ids,id);
+				}
+			}
+			console.log(ids);
+		});
+
+		$("#setting_submit").click(function(){
+			role_name = $("#role_name").val();
+			if (role_name == '') {
+				alert("请输入角色名");return;
+			}
+			if (ids.length == 0) {
+				alert("请选中至少一项权限");return;
+			}
+			if(confirm('确定要执行操作吗')==true){
+                $.ajax({
+                    type: "POST",
+                    url: "/power/no/power/newRoleSave/",
+                    data: {
+                        ids:ids,
+                        role_name:role_name
+                    },
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 200) {
+                            alert("操作成功");
+                        } else {
+                            alert("操作失败");
+                        }
+                    }
+                });
+
+            }
+		});
+		
+	});
+
+	function removeByValue(arr, val) {
+	    for (var i = 0; i < arr.length; i++) {
+	        if (arr[i] == val) {
+	            arr.splice(i, 1);
+	            break;
+	        }
+	    }
+	}   
+
+</script>
+<!-- END BODY -->
+</html>

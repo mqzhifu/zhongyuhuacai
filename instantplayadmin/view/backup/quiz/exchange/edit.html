@@ -1,0 +1,87 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+{include layout/left.html}
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>发送邮件;
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row margin-top-20">
+                        <div class="table-container">
+                            <ul>
+                                <form id="send_rule_form" action="/quiz/no/upgrade/update/?id={$result['id']}" method="post" autocomplete="off" enctype="multipart/form-data">
+                                    <div class="table-container">
+                                        <span>id：</span><input  name="id"  id="id"  width="5px" value="{$info['id']}" disabled="disabled">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <span>邮箱：</span><input  name="email"  id="email"  width="5px" value="{$info['email']}" disabled="disabled">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <span>兑换码：</span><input  name="goods_card"  id="goods_card"  width="5px" value="">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <span>兑换密码：</span><input  name="goods_pass"  id="goods_pass" width="5px" value="">
+                                    </div>
+                                    <div style="text-align: left;margin-top: 40px; margin-bottom: 40px;">
+                                        <button id="cancel_button" type="button" class="btn btn-danger">返回首页</button>
+                                        <button id="submit_button" type="button" class="btn btn-default">确认兑换</button>
+                                    </div>
+                                </form>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 发送按钮
+        $('#submit_button').click(function(){
+            var formData = new FormData();
+            var id = $('#id').val();
+            var email = $('#email').val();
+            var goods_card = $('#goods_card').val();
+            var goods_pass = $('#goods_pass').val();
+
+            formData.append('email', email);
+            formData.append('goods_card', goods_card);
+            formData.append('goods_pass', goods_pass);
+            formData.append('id', id);
+            url = '/quiz/no/exchange/save/';
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        location.href = '/quiz/no/manager/index/';
+                    }else{
+//                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+    });
+</script>
+
+
+<script>
+    $("#cancel_button").on("click", function() {
+        location.href = "http://isadmin-test.feidou.com/";
+    });
+</script>

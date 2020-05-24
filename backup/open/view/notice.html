@@ -1,0 +1,99 @@
+{include /layout/left_manager.html}
+
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/notice.css" />
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/layui.css" />
+			<div class="iframeBox">
+				<div class="statisticsLi">
+					<div class="section">
+						<div class="title">通知</div>
+						<ul class="noticeUl">
+						</ul>
+						<div id="pageClup"></div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		
+		<script>
+			var count=0;
+			$(function(){
+				$.ajax({
+	                url: "/notice/getCount/",
+	                type: "GET",
+	                success: function (data) {
+	                	count = data.data.count;
+	                	layui.use(['laypage'], function(){
+							var laypage = layui.laypage;
+							//完整功能
+							laypage.render({
+								elem: 'pageClup'
+								,count: count
+								,layout: ['prev', 'page', 'next', 'limit', 'skip']
+								,jump: function(obj){
+									$.ajax({
+						                url: "/notice/getNoticeList/",
+						                type: "GET",
+						                data: {page:obj.curr, length:obj.limit},
+						                dataType: "json",
+						                success: function (data) {
+						                	var list = data.data;
+						                	var html="";
+						                	for (var i = 0; i < list.length; i++) {
+						                		html += '<li attr-id='+list[i].id+'><div class="inner"><div class="fl"><div class="noticeTitle">'+list[i].title+'</div><div class="noticeMain"><p>'+list[i].content+'</p></div></div><div class="fr"><span>'+list[i].a_time+'</span><img src="{CONST|H_STATIC_URL}assets/open/img/select-bg.png"></div></div></li>';
+						                	}
+						                	$(".noticeUl").html(html);
+						                }
+						            });
+								}
+							});
+						});
+	                }
+	            });
+				
+				/*菜单*/
+				$(".first-level").click(function(){
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true,false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function(){
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				$(".noticeUl").on("click","li",function(){
+					$(this).toggleClass("active").siblings("li").removeClass("active");
+					//$(".noticeUl").find(".noticeMain").slideUp(200);
+					$(this).children(".inner").children(".fl").children(".noticeMain").slideToggle(200);
+					hasRead($(this).attr("attr-id"));
+				});
+			});
+
+			function hasRead(id) {
+		        var postUrl = "/notice/setReadStatus/";
+		        var postInfo = {
+		            id: id
+		        };
+		        $.ajax({
+		            type: "POST",
+		            url: postUrl,
+		            data: postInfo,
+		            dataType: "json",
+		            success: function (res) {
+		            },
+		        });
+		    }			
+		</script>
+	</body>
+</html>

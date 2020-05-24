@@ -1,0 +1,796 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="actions">
+                                <div class="btn-group">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+									<span>
+									</span>
+                                    <a class="btn btn-default btn-circle" href="javascript:;" id="add_app_ad" data-toggle="dropdown" style="margin-left: 10px;">添加广告位</a>
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+
+                                        <th width="7%">
+                                            广告位名称ID
+                                        </th>
+                                        <th width="5%">
+                                            广告位ID
+                                        </th>
+
+                                        <th width="5%">
+                                            广告类型
+                                        </th>
+                                        <th width="5%">
+                                            展示方向
+                                        </th>
+
+                                        <th width="5%">
+                                            广告状态
+                                        </th>
+
+                                        <th width="3%">
+                                            广告开关
+                                        </th>
+
+                                        <th width="10%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+<div class="modal fade" id="add_app_ad_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="width: 800px">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">创建广告</h4>
+        </div>
+        <div class="modal-body"  style="width: 800px;margin-left: 20px">
+            
+            <br/>
+            <br/>
+            <!-- 基本设置 -->
+            <div id="base-set" style="margin-left: 20px;margin-right: 40px;">
+
+                
+                <br/>
+                <div>
+                    <span>
+                        <label>  广告位类型</label>
+                    </span>
+                    <span style="margin-left: 20px">
+                        {foreach ($advertise_type as $k=>$v)}
+                        <label><input class="advertise_type" name="advertise_type" type="radio" value="{$k}"/>{$v}</label>
+                        {/foreach}
+                    </span>
+                </div>
+                <br/>
+                <div>
+                    <span>广告位名称</span>
+                    <span style="margin-left: 20px" id ='img_spac'>
+                        <input type="text" id='ad_name1' placeholder="请输入" />
+                    </span>
+                    <span style="margin-left: 3px">
+                        <span class="user_hint"></span>
+                    </span>
+                </div>
+
+                <br/>
+
+                <div>
+                    <span>
+                        <label>展示方向</label>
+                    </span>
+                    <span style="margin-left: 20px">
+                        {foreach ($direction as $k=>$v)}
+                        <label id="direction{$k}"><input  name="direction" type="radio" value="{$k}"/>{$v}</label>
+                        {/foreach}
+                    </span>
+                </div>
+                <br/>
+
+                <hr style="width: 700px;">
+
+                
+            </div>
+          
+        </div>
+        <div class="modal-footer-diy" align="center">
+          <button type="button" class="add_app_ad_modal_undo" data-dismiss="modal">取消</button>
+          <button type="button" class="add_app_ad_save" >保存</button>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="ad_tactics_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 350px; padding-top: 100px">
+      <div class="modal-content" style="width: 350px; text-align: center;margin: 0!important">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">展示策略</h4>
+        </div>
+        <div class="modal-body" style="width: 350px;">
+            
+            <div class="row static-info" style="margin-top: 30px; margin-bottom: 30px;">
+                <div class="col-md-6 name" style="text-align: right">
+                    广告开关
+                </div>  
+                <div class="col-md-6 value" style="text-align: left">
+                    <select id="toggle" style="width: 80px">
+                        <option id="toggle-on" value="1">开</option>
+                        <option id="toggle-off" value="0">关</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row static-info" style="margin-top: 30px; margin-bottom: 30px;">
+                <div class="col-md-6 name" style="text-align: right">
+                     <button  id="tactics_cancel" class="btn btn-sm default yellow" style="width: 60px;">取消</button>
+                </div>
+                <div class="col-md-6 value" style="text-align: left">
+                    <button  id="tactics_submit" class="btn btn-sm default green" style="width: 60px;">确定</button>
+                </div>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content" style="width: 800px">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">编辑</h4>
+                </div>
+                <div class="modal-body"  style="width: 800px;margin-left: 20px">
+                    
+                    <br/>
+                    <br/>
+                <!-- 基本设置 -->
+                <div id="base-set" style="margin-left: 20px;margin-right: 40px;">
+                    <div>
+                        <span>广告位名称</span><span style="margin-left: 20px"><input type="text" disabled id="ad_name"></span>
+                    </div>
+                    <hr style="width: 700px;">
+                    <div>
+                        <span>广告位ID</span><span class="intro" style="margin-left: 20px"><input type="text" disabled id="ad_id"></span>
+                        
+                    </div>
+                    <hr style="width: 700px;">
+                    <div>
+                        <span>广告类型</span><span style="margin-left: 20px"><input type="text" disabled id="ad_type"></span>
+                        
+                    </div>
+                    <hr style="width: 700px;">
+                    <div>
+                        <span>展示方向</span><span style="margin-left: 20px"><input type="text" disabled id="direction"></span>
+                        
+                    </div>
+                    <hr style="width: 700px;">
+                    <div align="center">
+                        <table class="table table-bordered" id="ad_map_tb">
+                            <thead>
+                            <tr>
+                                <th>广告单元ID</th>
+                                <th>系统</th>
+                                <th>广告商</th>
+                                <th>渠道</th>
+                                <td>操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="add" style="width: 100px;">添加</button>
+                    <!-- <br/>
+                    <br/>
+                    <select name="name" class="form-control form-filter input-sm " id="ad_status" style="width: 200px;">
+                        {foreach ($statusDesc as $k=>$v)}
+                            <option value="{$k}">{$v}</option>
+                        {/foreach}
+                    </select> -->
+                    
+                </div>
+                <br/>
+                  <div align="center" id='pass_reason' style="display: none;">
+                        <textarea style="width: 500px;height:150px" id="reason_area" placeholder="不通过原因"></textarea>
+                        
+                    </div>
+                </div>
+                <!-- <div class="modal-footer-diy" align="center">
+                  <button type="button" class="undo" data-dismiss="modal">取消</button>
+                  <button type="button" class="save" >保存修改</button>
+                </div> -->
+              </div>
+            </div>
+          </div>
+<div id="system_select_option" style="display: none;">
+    {foreach ($system as $k=>$v) }
+    <option value='{$k}'>{$v}</option>
+    {/foreach}
+</div>
+<div id="advertiser_type_select_option" style="display: none;">
+    {foreach ($advertiser_type as $k=>$v)}
+    <option value='{$k}'>{$v}</option>
+    {/foreach}
+</div>
+<div id="ad_channel_select_option" style="display: none;">
+    {foreach ($ad_channel as $k=>$v)}
+    <option value='{$k}'>{$v}</option>
+    {/foreach}
+</div>
+<!-- 添加广告位弹窗 -->
+<div>
+    
+</div>
+<script>
+
+
+    var currentId = 0;
+    var oldadname = "";
+    function edit(obj){
+        type = 2;
+        var formData = new FormData();
+        formData.append('id', obj.getAttribute('data-id'));
+        editid = obj.getAttribute('data-id');
+        $.ajax({
+            type: 'post',
+            url: '/promotion/no/game/getOnePopularization/',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.code == 200){
+                    $('#game_id').val(data.data['data1']['game_id']);
+
+                    $('#start_launch_time').val(data.data['data1']['start_launch_time']);
+                    $('#end_launch_time').val(data.data['data1']['end_launch_time']);
+                    $('#weight').val(data.data['data1']['weight']);
+                    $('#played_num').val(data.data['data1']['played_num']);
+
+
+                    $('#popularization_column_select').html("");
+                    for(var i = 0; i < data.data['data2'].length; i++){
+                        $('#popularization_column_select').append('<option value="'+data.data['data2'][i]['id']+'">'+data.data['data2'][i]['id']+'</option>');
+                    }
+
+                    $('#popularization_column_select').val(data.data['data1']['p_id']);
+                    $('#add_game_modal').modal();   
+                }else{
+                    alert(data.message);
+                }
+                          
+            }
+        });
+    }
+
+    function change(obj){
+        var id = obj.getAttribute('data-id');
+        var lab = $('.change_select[data-id="'+id+'"]');
+        var status = lab.val();
+        
+        var formData = new FormData();
+        formData.append('status', status);
+        formData.append('id',id);
+        $.ajax({
+            url:"/app_manager/no/show/updateAd/",
+            type:'post',
+            data:formData,
+            dataType:'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                if(data.code == 200){
+                    lab.attr('readonly',1);
+                }else{
+                    alert(data.message);
+                }
+                
+            }
+        });
+        
+    }
+    function getDetail(obj){
+        var id = obj.getAttribute('data-id');
+        if(id !== undefined){
+            currentId = id;
+            $.ajax({
+                url:"/app_manager/no/show/getDetails/",
+                type:"post",
+                data:{
+                    id:id
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.code == 200){
+                        $('#ad_name').val(data.data['base']['title']);
+                        $('#ad_id').val(data.data['base']['id']);
+                        $('#ad_type').val(data.data['base']['advertise_type']);
+                        $('#ad_map_tb tbody').html("");
+                        $('#ad_status').val(data.data['base']['status']);
+                        $('#direction').val(data.data['base']['direction']);
+
+                        var items = data.data['real_ad_data'];
+                        for(var i=0; i<items.length; i++){
+                            $('#ad_map_tb tbody').append("<tr tr-id='"+items[i]['id']+"'><td><input type='text' disabled ad-id='"+items[i]['id']+"' class='outer_ad_id' value='"+items[i]['outer_ad_id']+"'></td><td><select class='system' disabled ad-id='"+items[i]['id']+"' name='' value='"+items[i]['system']+"'>"+$('#system_select_option').html()+"</select></td><td><select class='advertiser' disabled ad-id='"+items[i]['id']+"' name='' value='"+items[i]['advertiser']+"'>"+$('#advertiser_type_select_option').html()+"</select></td><td><select class='channel' disabled ad-id='"+items[i]['id']+"' name='' value='"+items[i]['channel']+"'>"+$('#ad_channel_select_option').html()+"</select></td><td>"
+                                +"<div style='display: inline-block;'><div class='deleteDivBtn oprate-del' delete-ad-id='"+items[i]['id']+"' style='display: inline-block;cursor:pointer;' onclick='onClickDeleteDivBtn(this)'>删除</div>|<div style='display: none;cursor:pointer;' class='editDivBtn oprate-edit' edit-ad-id='"+items[i]['id']+"' onclick='onClickOkDivBtn(this)'>确认</div><div class='clickEditDivBtn oprate-edit' click-edit-ad-id='"+items[i]['id']+"' style='display: inline-block;cursor:pointer;' onclick='onClickEditDivBtn(this)'>编辑</div></div></td></tr>");
+                            $('.system[ad-id="'+items[i]['id']+'"').val(items[i]['system']);
+                            $('.advertiser[ad-id="'+items[i]['id']+'"').val(items[i]['advertiser']);
+                            $('.channel[ad-id="'+items[i]['id']+'"').val(items[i]['channel']);
+                        }
+
+                        // initEvent();
+
+                        $('#myModal').modal();
+                    }
+                }
+            });
+        }
+    }
+
+    function edit1(obj){
+        var id = obj.getAttribute('data-id');
+        var lab = $('#ad_name_input[data-id="'+id+'"]');
+        lab.removeAttr('readonly');
+        oldadname = lab.val();
+    }
+
+    //失去焦点
+    function save_ad_name(obj){
+        var id = obj.getAttribute('data-id');
+        var lab = $('#ad_name_input[data-id="'+id+'"]');
+        var title = lab.val();
+        if(oldadname == title){
+            lab.attr('readonly',1);
+        }else{
+            var formData = new FormData();
+            formData.append('title', title);
+            formData.append('id',id);
+            $.ajax({
+                url:"/app_manager/no/show/updateAd/",
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        lab.attr('readonly',1);
+                    }else{
+                        alert(data.message);
+                    }
+                    
+                }
+            });
+        }
+    }
+
+    // function save_ad_name2(obj){
+    //     var id = obj.getAttribute('data-id');
+    //     var lab = $('#ad_name_input[data-id="'+id+'"]');
+    //     var title = lab.val();
+    //     // lab.on()
+    //     if(oldadname == title){
+    //         lab.attr('readonly',1);
+    //     }
+    // }
+
+    function del(obj){
+        if (!confirm("确认删除？")) {
+            return false;
+        }
+        var id = obj.getAttribute('data-id');
+        var formData = new FormData();
+        formData.append('id',id);
+        $.ajax({
+            url:"/app_manager/no/show/delOneAd/",
+            type:'post',
+            data:formData,
+            dataType:'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                if(data.code == 200){
+                    location.href = "/app_manager/no/show/index/";
+                }else{
+                    alert(data.message);
+                }
+                
+            }
+        });
+    }
+    var ad_id = 0;
+
+    function strate(obj){
+        id = $(obj).attr('data-id');
+        ad_id = id;
+        $.ajax({
+            url:"/app_manager/no/show/getDetails/",
+            type:"post",
+            data:{
+                id:id
+            },
+            dataType:"json",
+            success:function(data){
+                if (data.data.base.state==1) {
+                    $("#toggle-on").attr("selected","selected");
+                } else if (data.data.base.state==0) {
+                    $("#toggle-off").attr("selected","selected");
+                }
+                $("#ad_tactics_modal").modal();
+            }
+        });
+        
+    }
+
+    function get_code(obj){
+        alert("功能未开放");
+    }
+
+    function onClickEditDivBtn(obj){
+        var id = obj.getAttribute('click-edit-ad-id');
+        obj.setAttribute('style','display:none');
+        $('.editDivBtn[edit-ad-id='+id+']').attr('style','display:inline-block;cursor:pointer;');
+        $('.system[ad-id='+id+']').removeAttr('disabled');
+        $('.channel[ad-id='+id+']').removeAttr('disabled');
+        $('.advertiser[ad-id='+id+']').removeAttr('disabled');
+        $('.outer_ad_id[ad-id='+id+']').removeAttr('disabled');
+    }
+
+    function onClickOkDivBtn(obj){
+        var ad_map_id = obj.getAttribute('edit-ad-id');
+        var inner_ad_id = $('#ad_id').val();
+        if (!inner_ad_id || !ad_map_id) {
+            alert('参数有误！');
+            return false;
+        }
+        var outer_ad_id = $(".outer_ad_id[ad-id='"+ad_map_id+"'").val();
+        var system = $(".system[ad-id='"+ad_map_id+"'").val();
+        var advertiser = $(".advertiser[ad-id='"+ad_map_id+"'").val();
+        var channel = $(".channel[ad-id='"+ad_map_id+"'").val()
+        var postUrl = "/app_manager/no/show/updateOneAdMap/";
+        var postInfo = {
+            id: ad_map_id,
+            inner_ad_id: inner_ad_id,
+            system: system,
+            advertiser: advertiser,
+            channel: channel,
+            outer_ad_id: outer_ad_id
+        };
+        $.ajax({
+            type: "post",
+            url: postUrl,
+            data: postInfo,
+            dataType: "json",
+            success: function (data, $status) {
+                if (data.code == 200) {
+                    $(".editDivBtn[edit-ad-id='"+ad_map_id+"']").attr('style','display:none');
+                    $('.clickEditDivBtn[click-edit-ad-id='+ad_map_id+']').attr('style','display:inline-block;cursor:pointer;');
+                    $('.system[ad-id='+ad_map_id+']').attr('disabled','1');
+                    $('.channel[ad-id='+ad_map_id+']').attr('disabled','1');
+                    $('.advertiser[ad-id='+ad_map_id+']').attr('disabled','1');
+                    $('.outer_ad_id[ad-id='+ad_map_id+']').attr('disabled','1');
+                    // alert('更新成功！');
+                } else {
+                    alert('更新失败，请重试!');
+                    return false;
+                }
+            },
+        });
+    }
+
+    function onClickDeleteDivBtn(obj){
+        if (!confirm("确认删除？")) {
+            return false;
+        }
+        var ad_map_id = obj.getAttribute('delete-ad-id');
+        var inner_ad_id = $('#ad_id').val();
+        if (!inner_ad_id || !ad_map_id) {
+            alert('参数有误！');
+            return false;
+        }
+
+        var postUrl = "/app_manager/no/show/delOneAdMap/";
+        var postInfo = {
+            ad_map_id: ad_map_id,
+            inner_ad_id: inner_ad_id,
+        };
+        $.ajax({
+            type: "post",
+            url: postUrl,
+            data: postInfo,
+            dataType: "json",
+            success: function (data, $status) {
+                if (data.code == 200) {
+                    $("tr[tr-id='"+ad_map_id+"']").remove();
+                } else {
+                    alert('删除失败，请重试!');
+                    return false;
+                }
+            },
+            error: function () {
+                return false;
+            }
+        });
+    }
+
+
+</script>
+
+
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/app_manager/no/show/getList/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ 0,1,2,3,4]
+                    }],
+                }
+            });
+
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                        function(){
+                            ids += ($(this).val())+",";
+                        }
+                    );
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/?ac=delBat&ids="+ids ,
+                        dataType: 'json',
+                        success: function(data){
+                            grid.setAjaxParam("customActionType", "group_action");
+                            grid.setAjaxParam("customActionName", action.val());
+                            grid.setAjaxParam("id", grid.getSelectedRows());
+                            grid.getDataTable().ajax.reload();
+                            grid.clearAjaxParams();
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+
+        
+
+        $('.add').click(function(){
+            var formData = new FormData();
+            formData.append('inner_ad_id', $('#ad_id').val());
+
+            $.ajax({
+                url:"/app_manager/no/show/addOneAdMap/",
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        var id = data.data;
+                        $('#ad_map_tb tbody').append("<tr tr-id='"+id+"'><td><input type='text' disabled ad-id='"+id+"' class='outer_ad_id' value=''></td><td><select class='system' disabled ad-id='"+id+"' name='' value=''>"+$('#system_select_option').html()+"</select></td><td><select class='advertiser' disabled ad-id='"+id+"' name='' value=''>"+$('#advertiser_type_select_option').html()+"</select></td><td><select class='channel' disabled ad-id='"+id+"' name='' value=''>"+$('#ad_channel_select_option').html()+"</select></td><td>"
+                                +"<div style='display: inline-block;'><div class='deleteDivBtn oprate-del' delete-ad-id='"+id+"' style='display: inline-block;cursor:pointer;' onclick='onClickDeleteDivBtn(this)'>删除</div>|<div style='display: none;cursor:pointer;' class='editDivBtn oprate-edit' edit-ad-id='"+id+"' onclick='onClickOkDivBtn(this)'>确认</div><div class='clickEditDivBtn oprate-edit' click-edit-ad-id='"+id+"' style='display: inline-block;cursor:pointer;' onclick='onClickEditDivBtn(this)'>编辑</div></div></td></tr>");
+                        // initEvent();
+                    }
+                },
+            });
+        });
+
+        $('#add_app_ad').click(function(){
+
+            $('#add_app_ad_modal').modal();
+        });
+
+
+        $(".advertise_type").change(function(){
+            $("#direction1").hide();
+            $("#direction2").hide();
+
+            if ($(this).prop("checked")) {
+                var type = $(this).val();
+
+                if (type == 1 || type == 2) {
+                    $("#direction1").show();
+                    $("#direction2").show();
+                // banner横板
+                } else if (type == 3) {
+                    $("#direction1").show();
+                } else if (type == 4) {
+                    // 开屏竖版
+                    $("#direction2").show();
+                }
+            }
+            
+        });
+
+        $('.add_app_ad_save').click(function(){
+            var advertise_type = $("input[name='advertise_type']:checked").val();
+            var direction = $("input[name='direction']:checked").val();
+            var title = $('#ad_name1').val();
+            if(!((/^[\u4e00-\u9fa5_a-zA-Z0-9]{0,30}$/).test(title))){
+                return false;
+            }
+            var formData = new FormData();
+            formData.append('advertise_type', advertise_type);
+            formData.append('title', title);
+            formData.append('direction', direction);
+            $.ajax({
+                url:"/app_manager/no/show/addAppAd/",
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        location.href = "/app_manager/no/show/index/";
+                    }else{
+                        alert(data.message);
+                    }
+                    
+                }
+            });
+        });
+
+        $('#ad_name1').blur(function(){
+            if ((/^[\u4e00-\u9fa5_a-zA-Z0-9]{0,30}$/).test($("#ad_name1").val())){
+              $('.user_hint').html("0-30个字符，支持英文、数字、汉字").css("color","rgba(158,172,202,1)");
+              user_Boolean = true;
+            }else if($("#ad_name1").val() != ""){
+              $('.user_hint').html("0-30个字符，支持英文、数字、汉字").css("color","#EF4D57");
+              user_Boolean = true;
+            }else{
+              $('.user_hint').html("请输入昵称").css("color","#EF4D57");
+              user_Boolean = false;
+            }
+        });
+
+        $("#tactics_submit").click(function(){
+            var state = $("#toggle").find("option:selected").val();
+            $.ajax({
+                url:"/app_manager/no/show/updateAd/",
+                type:'post',
+                data:{id:ad_id,state:state},
+                dataType:'json',
+                success:function(data){
+                    if(data.code == 200){
+                        alert("更新成功");
+                        location.reload();
+                    }else{
+                        alert(data.message);
+                        location.reload();
+                    }
+                    
+                }
+            });
+        });
+
+        $("#tactics_cancel").click(function(){
+            $('.close').click();
+        });
+    });
+
+
+</script>
+

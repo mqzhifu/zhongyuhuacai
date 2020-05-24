@@ -1,0 +1,133 @@
+
+<script>
+    var areaSelectedProvince = 0;
+    var areaSelectedCity = 0;
+
+    var city = eval({$cityJs});
+    var county = eval({$countyJs});
+    var ajaxStreetData = null;
+
+
+    function isEmpty(value){
+        if(!value || typeof value == "undefined" || value == 'undefined' || value == 'undefine'){
+            return 1;
+        }
+        return 0;
+    }
+
+    function areaChange(type,obj){
+        if(type == 'province'){
+            areaSelectedProvince = $(obj).val();
+
+            //清除原数据
+            $("#city").html("<option value=''>请选择</option>");
+            $("#county").html("<option value=''>请选择</option>");
+            $("#street").html("<option value=''>请选择</option>");
+
+            if(isEmpty(areaSelectedProvince)){
+                return alert("province is undefined");
+            }
+
+            //找到下级城市的数据列表
+            var cityList = city[areaSelectedProvince];
+            var optionHtml = "<option value=''>请选择</option>";
+            for(var i=0;i<cityList.length;i++){
+                optionHtml += "<option value='"+cityList[i][2]+"'>"+cityList[i][1]+"</option>";
+            }
+            // var optionHtml = getOptionHtml(cityList);
+            $("#city").html(optionHtml);
+            //4个直辖市
+            if(areaSelectedProvince == 110000 || areaSelectedProvince == 120100 || areaSelectedProvince == 310100|| areaSelectedProvince == 500100 ){
+                var special = new Array();
+                special[110000] = 110100;
+                special[120100] = 120100;
+                special[310100] = 310100;
+                special[500100] = 500100;
+                areaSelectedCity = special[areaSelectedProvince];
+                setCity(document.getElementById("city"),'special');
+            }
+        }else if(type =='city'){
+            setCity(obj,'normal');
+        }else if(type =='county'){
+            if(isEmpty(areaSelectedProvince)){
+                return alert("areaSelectedProvince is undefined");
+            }
+            if(isEmpty(areaSelectedCity)){
+                return alert("areaSelectedCity is undefined");
+            }
+            var countyId = $(obj).val();
+            if(isEmpty(countyId)){
+                return alert("countyId is undefined");
+            }
+
+            // $("#county").html("<option value=''>请选择</option>");
+            $("#town").html("<option value=''>请选择</option>");
+            ajaxGetAreaStreet(countyId);
+
+            var streetData = ajaxStreetData;
+            var optionHtml = "<option value=''>请选择</option>";
+            for(var i=0;i<streetData.length;i++){
+                optionHtml += "<option value='"+streetData[i]['town_code']+"'>"+streetData[i]['short_name']+"</option>";
+            }
+            $("#town").html(optionHtml);
+        }else{
+            return alert(" type error");
+        }
+    }
+
+    function setCity(obj,type){
+        if(isEmpty(areaSelectedProvince)){
+            return alert("areaSelectedProvince is undefined");
+        }
+        if(type == 'normal'){
+            areaSelectedCity = $(obj).val();
+        }
+
+        if(isEmpty(areaSelectedCity)){
+            return alert("city is undefined");
+        }
+
+        $("#town").html("<option value=''>请选择</option>");
+
+        var countyList = county[areaSelectedCity];
+        // var optionHtml = getOptionHtml(countyList);
+        var optionHtml = "<option value=''>请选择</option>";
+        for(var i=0;i<countyList.length;i++){
+            optionHtml += "<option value='"+countyList[i][1]+"'>"+countyList[i][2]+"</option>";
+        }
+        $("#county").html(optionHtml);
+    }
+
+    function getOptionHtml(data){
+        var optionHtml = "";
+        for(var i=0;i<data.length;i++){
+            optionHtml += "<option value='"+data[i][2]+"'>"+data[i][1]+"</option>";
+        }
+        return optionHtml;
+    }
+
+    function ajaxGetAreaStreet(countyId){
+        $.ajax({
+            async: false,
+            // contentType: "application/json;charset=UTF-8",
+            //请求方式
+            type : "POST",
+            url : "/people/no/agent/getCountyData/countyId="+countyId,
+//            //数据，json字符串
+            // data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                if(!result){
+                    return alert("ajax getProductCategoryRelation is null");
+                }
+
+                ajaxStreetData =eval("("+result+")");
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("ajax failed!");
+            }
+        });
+    }
+
+</script>

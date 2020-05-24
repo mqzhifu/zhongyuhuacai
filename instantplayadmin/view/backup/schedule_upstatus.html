@@ -1,0 +1,226 @@
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN VALIDATION STATES-->
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-reorder"></i>添加后台帐户
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="?action=add" id="addaccount_form" class="form-horizontal">
+                    <input type="hidden" name="doings" value="1"/>
+                    <div class="form-body">
+                        <div class="alert alert-danger display-hide">
+                            <button class="close" data-close="alert"></button>
+                            错误，请按规定填写！
+                        </div>
+                        <div class="alert alert-success display-hide">
+                            <button class="close" data-close="alert"></button>
+                            成功!
+                        </div>
+
+                        <div class="form-group" id="add_group_div">
+                            <label class="control-label col-md-3"></label>
+                            <div class="col-md-4">
+                                <a href="javascript:;" id="add_group">备注</a>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">真实姓名
+							<span class="required">
+								 *
+							</span>
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" name="realname" data-required="1" class="form-control"
+                                       AUTOCOMPLETE="OFF"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">前台用户账号
+                            </label>
+                            <div class="col-md-4">
+                                <input type="text" name="reg_username" id="reg_username" data-required="1" class="form-control"
+                                       AUTOCOMPLETE="OFF"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-actions fluid">
+                        <div class="col-md-offset-3 col-md-9">
+                            <button type="submit" class="btn green">提交</button>
+                            <button type="button" class="btn default" id="cancel">取消关闭</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+            <!-- END VALIDATION STATES-->
+        </div>
+    </div>
+</div>
+
+<script>
+    var UT_Account_Add_FormValidation = function () {
+
+        var handleValidation = function () {
+            // for more info visit the official plugin documentation:
+            // http://docs.jquery.com/Plugins/Validation
+
+            var theform = $('#addaccount_form');
+            var error = $('.alert-danger', theform);
+            var success = $('.alert-success', theform);
+
+
+            theform.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    groupid: {
+                        required: true
+                    },
+                    username: {
+                        minlength: 2,
+                        required: true
+                    },
+                    realname: {
+                        minlength: 2,
+                        required: true
+                    },
+                    reg_username: {
+                        remote:{
+                            type:"POST",
+                            url:"/system/account.php?action=regUsername",
+                            data:{name:function(){return $("#reg_username").val();}}
+                        }
+                    },
+                    mobile: {
+                        isMobile: true
+                    },
+                    password: {
+                        required: true
+                    },
+                    repassword: {
+                        equalTo: "#password"
+                    }
+                },
+                messages:{
+                    reg_username:{
+                        remote:"用户不存在或者已被其它绑定"
+                    }
+                },
+
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    if (element.parent(".input-group").size() > 0) {
+                        error.insertAfter(element.parent(".input-group"));
+                    } else if (element.attr("data-error-container")) {
+                        error.appendTo(element.attr("data-error-container"));
+                    } else if (element.parents('.radio-list').size() > 0) {
+                        error.appendTo(element.parents('.radio-list').attr("data-error-container"));
+                    } else if (element.parents('.radio-inline').size() > 0) {
+                        error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
+                    } else if (element.parents('.checkbox-list').size() > 0) {
+                        error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
+                    } else if (element.parents('.checkbox-inline').size() > 0) {
+                        error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
+                    } else {
+                        error.insertAfter(element); // for other inputs, just perform default behavior
+                    }
+                },
+
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    success.hide();
+                    error.show();
+                    App.scrollTo(error, -200);
+                },
+
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+                    $(element)
+                            .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+
+                success: function (label) {
+                    label
+                            .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+
+                submitHandler: function (form) {
+                    //error.show();
+                    error.hide();
+                    $(form).ajaxSubmit({
+                        type: "post",
+                        dataType: "json",
+                        success: function (ret) {
+                            if (ret.error_code === 0) {
+                                bootbox.hideAll();
+
+                                var UTbox = UTHING.bootbox({
+                                    message: ret.data.msg,
+                                    type: "alert",
+                                    status: "success"
+                                });
+
+                                UT_Account_TableAjax.reload();
+                                setTimeout(function () {
+                                    bootbox.hideAll();
+                                }, 2000);
+                            } else {
+                                var UTbox = UTHING.bootbox({
+                                    message: ret.data.msg,
+                                    type: "alert",
+                                    status: "error"
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+
+        };
+
+
+        return {
+            //main function to initiate the module
+            init: function () {
+                handleValidation();
+            }
+
+        };
+
+    }();
+
+    // 手机号码验证
+    jQuery.validator.addMethod("isMobile", function (value, element) {
+        var length = value.length;
+        var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+        return this.optional(element) || (length == 11 && mobile.test(value));
+    }, "请正确填写手机号码");
+
+    jQuery(document).ready(function () {
+        UT_Account_Add_FormValidation.init();
+        $("#addaccount_form #cancel").on("click", function () {
+            bootbox.hideAll();
+        });
+
+        $('#add_group').on("click", function () {
+            $("#add_group_div").before($('#group_div div:first').clone(true));
+        });
+
+        $('.del_group').on("click", function () {
+            $(this).parent().parent().remove();
+        });
+    });
+
+</script>

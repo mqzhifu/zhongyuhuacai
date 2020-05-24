@@ -1,0 +1,164 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <!-- <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-share"></i> 导出 <i class="fa fa-angle-down"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="export_data();">
+                                                Excel </a>
+                                        </li>
+                                        <li class="divider">
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                PDF </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                WORD </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div> -->
+                        </div>
+                    <div class="col-md-7 value" style="height:70px;width: 200px; padding-left: 0px; padding-top: 10px">
+                        <select id="sum-type" class="" style="height:34px;width: 120px;">
+
+                            {foreach ($type as  $k=>$v)  }
+                            <option value="{$k}" {if isset($selected) && $selected==$k} selected="selected" {/if}>{$v}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="input-group date form_datetime margin-bottom-5" style="width: 200px; padding-top: 10px">
+                        <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" {if isset($from)} value={$from} {else} value="{$dateNow}" {/if} placeholder="From">
+                        <span class="input-group-btn">
+                            <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                            <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+
+
+                    <div class="input-group date form_datetime margin-bottom-5" style="width: 200px">
+                        <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" {if isset($to)} value={$to} {/if} placeholder="To">
+                        <span class="input-group-btn">
+                            <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                            <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                    
+                    <div style="height:60px;width: 200px;">
+                        <button id="sum-search" class="btn yellow" style="height: 34px">
+                            搜索  <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs"></i>金币生态汇总
+                            </div>
+                            <!--<div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>-->
+                        </div>
+                        <div class="portlet-body flip-scroll">
+                            <table class="table table-bordered table-striped table-condensed flip-content">
+                            <thead class="flip-content">
+                            <tr>
+                            	{foreach ($title as $t)}
+                                <th class="numeric">
+                                     {$t}
+                                </th>
+                                {/foreach}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach ($logs as $log)}
+                            <tr>
+                            	{foreach ($log as $val)}
+                                <td>
+                                     {$val}
+                                </td>
+                                {/foreach}
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+<script >
+	$(document).ready(function(){
+		$("#sum-search").click(function(){
+			var type = $("#sum-type").find("option:selected").val();
+			var from = $("#from").val();
+			var to = $("#to").val();
+			var url = "/app_cnt/no/goldcoinSummary/index/?type=";
+			if (type == '') 
+				type = 1;
+			url += type;
+			if (from != '') 
+				url += "&from="+from;
+			if (to != '') 
+				url += "&to="+to;
+			location.href=url;
+		});
+		
+	});
+</script>
+
+<script>
+
+
+    if (!jQuery().datetimepicker) {
+        alert(333);
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        minView: "month",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+
+    
+
+</script>

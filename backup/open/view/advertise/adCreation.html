@@ -1,0 +1,341 @@
+{include /layout/left_game.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/adCreation.css" />
+
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title" style="font-size: 18px;">广告位管理</div>
+					<div class="title">创建广告</div>
+					<div class="adBox">
+						<ul class="basicMessage">
+							<li>
+								<span>广告位类型</span>
+								<div>
+									<div class="redioGroup adtype">
+										{foreach ($adType as $k=>$v)}
+										<span class="radioBox">
+											{if $k == 1}
+											<input type="radio" class="input_check" id="radio1_{$k}" value="{$k}" name="adtype" checked>
+											{else}
+											<input type="radio" class="input_check" id="radio1_{$k}" value="{$k}" name="adtype">
+											{/if}
+											<label for="radio1_{$k}">{$v}广告</label>
+										</span>
+										{/foreach}
+									</div>
+								</div>
+							</li>
+							{if !isset($foreign) || !$foreign}
+							<li id="direct_li">
+								<span>方向</span>
+								<div>
+									<div class="redioGroup direction">
+										<span class="radioBox">
+											<input type="radio" class="input_check radioH" id="radio2_1" name="direction" value="1" checked="">
+											<label for="radio2_1">横版</label>
+										</span>
+										<span class="radioBox">
+											<input type="radio" class="input_check radioV" id="radio2_2" name="direction" value="2">
+											<label for="radio2_2">竖版</label>
+										</span>
+									</div>
+								</div>
+							</li>
+							{/if}
+							<li>
+								<span>广告位名称</span>
+								<div><input class="adName" type="text" value="" placeholder="请输入" maxlength="30" /> <i>0</i>/30</div>
+							</li>
+							<li>
+								<span></span>
+								<div>此名称用于区分各广告位，方便管理</div>
+							</li>
+							<li class="settLi">
+								<span>频次设置</span>
+								<div>
+									<div class="redioGroup">
+										<span class="radioBox">
+											<input type="radio" class="input_check" id="radio3_1" value="1" name="adSet" checked="">
+											<label for="radio3_1">广告之间的间隔</label>
+										</span>
+										<span class="radioBox">
+											<input type="radio" class="input_check" id="radio3_2" value="2" name="adSet">
+											<label for="radio3_2">广告时间的间隔</label>
+										</span>
+										<span class="radioBox">
+											<input type="radio" class="input_check" id="radio3_3" value="3" name="adSet">
+											<label for="radio3_3">无限制</label>
+										</span>
+									</div>
+								</div>
+							</li>
+							<li class="settLi">
+								<span></span>
+								<div>
+									<dl class="settUl">
+										<dt class="active">
+											<div class="game_name">广告之间的间隔时间（单位“秒”）</div>
+											<div>
+												<input id="interval" type="text" value="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  />
+											</div>
+											<i class="settNotice">注：设置每位用户在一次播放完广告后间隔多久进行下一次的广告播放。</i>
+										</dt>
+										<dt>
+											<div class="game_name">时间段内广告最多可出现的次数</div>
+											<div>
+												<input id="times" type="text"  value="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" oninput="if(value>100)value=100;if(value!='' && value==0)value=1" /><em>（请输入1-100之间的数字）</em>
+											</div>
+											<div class="game_name">时间段（小时）</div>
+											<div>
+												<input id="period" type="text"  value="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" oninput="if(value>48)value=48;if(value!='' && value==0)value=1" /><em>（请输入1-48之间的数字）</em>
+											</div>
+											<i class="settNotice">注：设置每位用户在设定时间段内可能看到自动播放广告的频率。</i>
+										</dt>
+										<dt>
+											<div class="game_name">无设置</div>
+											<i class="settNotice">注：无间隔、频率的设置，根据游戏的设定播放广告</i>
+										</dt>
+									</dl>
+								</div>
+							</li>
+						</ul>
+						<div class="fr">
+							<img class="verticalAd" src=""  />
+			                <!--<div class="adImg " style="background-image: url();"></div>-->
+						</div>
+						<div class="horizontalBox">
+							<img src="" class="horizontalAd"  />
+			                    <!--<div class="adImg horizontalAd" style="background-image: url();"></div>-->
+						</div>
+					</div>
+					
+					<div class="butClup">
+						<button type="button" class="btn-modal-no">取消</button>
+	              		<button type="button" class="btn-modal-yes">确定</button>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			var foreign = "{$foreign}";
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*计算输入框长度*/
+				textLength();
+				function textLength(){
+					var text2 = $(".adName").val(),
+						counter2;
+					if(text2) {
+						counter2 = text2.length;
+					}else{
+						counter2 =0;
+					}
+					$(".adName").siblings("i").text(counter2);
+					$(".adName").on('blur keyup input', function() {
+						var text = $(this).val();
+						var counter = text.length;
+						$(".adName").siblings("i").text(counter);
+					});
+				}
+				function radioVal(){
+					var adType=$('input[name="adtype"]:checked').val();
+					var adDirection=$('input[name="direction"]:checked').val();
+				 	var info={"adType":adType,"adDirection":adDirection};
+    				return info;
+				}
+				function switchAd(){
+					var switchMap=radioVal();
+					var adType=switchMap.adType,
+						adDirection=switchMap.adDirection;
+					if(adType==3){
+						$(".direction .radioBox .radioV").prop("checked",true);
+						$(".direction .radioBox .radioH").prop("checked",false);
+						$(".direction .radioBox:nth-of-type(1) .input_check").attr("disabled",true);
+						$(".direction .radioBox:nth-of-type(1)").addClass("disabled");
+						$(".settLi").hide();
+						$("#direct_li").hide();
+					} else if (adType==1) {
+						$("#direct_li").show();
+						$(".settLi").show();
+					} else {
+						$("#direct_li").show();
+						$(".settLi").hide();
+					}
+					if($(".direction .radioBox .input_check:checked").val()==1){
+						$(".horizontalBox").show();
+						$(".adBox .fr").hide();
+					}else{
+						$(".adBox .fr").show();
+						$(".horizontalBox").hide();
+					}
+					var indexAdType=$('input[name="adtype"]:checked').val(),
+						indexDirection=$('input[name="direction"]:checked').val();
+					if(indexAdType==3){
+						$(".verticalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/kpV.png");
+					}else if(indexAdType==2){
+						if(indexDirection==1){
+							$(".horizontalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/jlH.png");
+						}else{
+							$(".verticalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/jlV.png");
+						}
+					}else if(indexAdType==1){
+						if(indexDirection==1){
+							$(".horizontalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/qpH.png");
+						}else{
+							$(".verticalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/qpV.png");
+						}
+					}else if(indexAdType==4){
+						$(".verticalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/kpV.png");
+					}
+				};
+				switchAd();
+				$('input[name="adtype"],input[name="direction"]').change(function() {
+					$(".direction .radioBox .input_check").attr("disabled",false);
+					$(".direction .radioBox").removeClass("disabled");
+			        switchAd();
+			    });
+
+			    function switchAd2(){
+					var indexSetting=$('input[name="adSet"]:checked').val();
+					$(".settUl").find("dt").eq(indexSetting-1).show().siblings("dt").hide();
+				};
+			    switchAd2();
+				$('input[name="adSet"]').change(function() {
+			        switchAd2();
+			    });
+			    $(".adTable").on("click",".setting",function(){
+			    	var adType=$(this).parents("td").siblings("td:nth-of-type(3)").html();
+			    	if(adType=='全屏视频广告'){
+			    		$(".setting_win").show();
+			    	}
+			    });
+
+
+			    var gameId = {$gameid};
+
+				$('.btn-modal-no').click(function () {
+					location.href = "/advertise/manage/gameid=" + gameId;
+				});
+
+				var sent = false;
+
+			    $('.btn-modal-yes').click(function () {
+			    	if (sent === true) {
+			    		return false;
+			    	}
+		            var adName = $('.adName').val();
+		            adName = adName.trimSpace();
+		            var adType = $('input[name="adtype"]:checked').val();
+		            var frequencyType = 0;
+		            var interval = 0;
+		            var times = 0;
+		            var period = 0;
+		            if (!adName) {
+		                layer.alert('请输入广告位名称');
+		                return false;
+		            }
+		            if (!adType) {
+		                layer.alert('请选择广告位类型');
+		                return false;
+		            }
+		            if (!gameId) {
+		                layer.alert('参数有误');
+		                return false;
+		            }
+		            if (!foreign) {
+		            	var direction = $('input[name="direction"]:checked').val();
+		            	if (adType == 3) {
+							direction = '';
+						} else if (!direction) {
+			                layer.alert('请选择广告展示方向');
+			                return false;
+			            }
+		            }
+		            if (adType == 1) {
+		            	frequencyType = $('input[name="adSet"]:checked').val();
+		            	if (!frequencyType) {
+		            		layer.alert('请设定广告频次');
+		                	return false;
+		            	} else if (frequencyType == 1) {
+			            	interval = $("#interval").val();
+			            	if (!interval) {
+			            		layer.alert('请设定广告间隔');
+			                	return false;
+			            	}
+			            } else if (frequencyType == 2) {
+			            	times = $("#times").val();
+			            	if (!times) {
+			            		layer.alert('请设定广告展示次数');
+			                	return false;
+			            	}
+			            	period = $("#period").val();
+			            	if (!period) {
+			            		layer.alert('请设定时间段');
+			                	return false;
+			            	}
+			            }
+		            }
+		            var postUrl = "/advertise/addSubmit/";
+		            var postInfo = {
+		                gameid: gameId,
+		                title: adName,
+		                adType: adType,
+		                frequencyType: frequencyType,
+		                interval: interval,
+		                times: times,
+		                period:period
+		            };
+		            if (!foreign) {
+		            	postInfo.direction = direction;
+		            }
+		            console.log(postInfo);
+		            sent = true;
+		            $.ajax({
+		                type: "post",
+		                url: postUrl,
+		                data: postInfo,
+		                dataType: "json",
+		                success: function (data) {
+		                	sent = false;
+		                    if (data.code == 200) {
+		                        layer.alert('添加广告位成功！', 
+		                            {title:'提示'}, 
+		                            function(){
+		                                location.href = "/advertise/manage/gameid=" + gameId;
+		                        });
+		                    } else {
+		                        layer.alert('添加失败，请重试!');
+		                        return false;
+		                    }
+		                },
+		                error: function () {
+		                	sent = false;
+		                    return false;
+		                }
+		            });
+		        });
+			})
+		</script>
+	</body>
+
+</html>

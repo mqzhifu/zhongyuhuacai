@@ -1,0 +1,154 @@
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 10, // default record count per page
+                    "ajax": {
+                        "url": "?ctrl=wxuser&getlist=1" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ 0,2,3,4,5,7,8 ]
+                    }],
+                    "order": [
+                        [1, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                            function(){
+                                ids += ($(this).val())+",";
+                            }
+                    );
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/?ac=delBat&ids="+ids +"&type=1",
+                        dataType: 'json',
+                        success: function(data){
+                            grid.setAjaxParam("customActionType", "group_action");
+                            grid.setAjaxParam("customActionName", action.val());
+                            grid.setAjaxParam("id", grid.getSelectedRows());
+                            grid.getDataTable().ajax.reload();
+                            grid.clearAjaxParams();
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+    });
+
+
+</script>
+
+<script>
+
+    $("#datatable_products").on("click",".delone",function(){
+        var id = $(this).attr("data-id");
+        bootbox.confirm("Are you sure?", function(result) {
+            if(result == true){
+                $.ajax({
+                    type: 'GET',
+                    url: "/?ac=delOne&id="+id +"&type=1",
+                    dataType: 'json',
+                    success: function(data){
+                        location.reload();
+                    }
+
+                });
+            }
+        });
+
+
+
+    });
+
+    if (!jQuery().datetimepicker) {
+        alert(333);
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14 10:00",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+
+</script>

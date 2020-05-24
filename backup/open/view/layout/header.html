@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9"/>
+    <!-- 重置文件 -->
+    <link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/bootstrap.min.css">
+    <link href="{CONST|H_STATIC_URL}assets/open/css/bootstrap-switch.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/normalize.css?2">
+    {$css}
+    <script type="text/javascript" src="{CONST|H_STATIC_URL}assets/open/scripts/jquery.min.js"></script>
+    {$js}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        html {
+            font-family: "Microsoft YaHei", 微软雅黑, "MicrosoftJhengHei", 华文细黑, STHeiti, MingLiu !important;
+        }
+    </style>
+    <title>开心小游戏</title>
+</head>
+<body>
+<header class="header">
+    <div class="center">
+        <div class="left"><a href="/game/show/" style="color: #F14D5C;text-decoration:none">开心小游戏 · 开放平台</a></div>
+        <div class="right right1">
+            <a href="/doc/index/">文档</a>
+        </div>
+        <div class="right right2">
+            {if $this->openGamesService->getReadStatus($uid) == true }
+            <a href="/notice/index/"><span style="color: red">•</span>通知</a>
+            {else}
+            <a href="/notice/index/">通知</a>
+            {/if}
+        </div>
+        <div class="right right3">
+            <a href="/game/show/">我的游戏</a>
+        </div>
+        <img class=" right right4 avator dropdown-toggle" src="{$avatar}" alt="" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"/>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" style="left: auto;right: 0;">
+            <li><a href="/game/show/">查看所有游戏</a></li>
+            <li><a href="/game/show/">添加新游戏</a></li>
+            <li><a href="/developer/base/">开发者设置</a></li>
+            <!-- <li><a href="/advertise/show/">广告</a></li> -->
+            <li><a href="/index/logout/">退出账号</a></li>
+        </ul>
+    </div>
+</header>
+

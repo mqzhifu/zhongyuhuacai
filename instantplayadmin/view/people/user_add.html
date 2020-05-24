@@ -1,0 +1,283 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>添加用户
+                            </div>
+                            <div class="actions">
+                                <a href="{$this->_backListUrl}" class="btn btn-default btn-sm">
+                                    <i class="fa fa-arrow-left"></i> 返回列表 </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="{$this->_addPostUrl}" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
+                                <!--<div class="form-body">-->
+                                    <!--<div class="alert alert-danger display-hide">-->
+                                        <!--<button class="close" data-close="alert"></button>-->
+                                        <!--You have some form errors. Please check below.-->
+                                    <!--</div>-->
+                                    <!--<div class="alert alert-success display-hide">-->
+                                        <!--<button class="close" data-close="alert"></button>-->
+                                        <!--表单验证成功-->
+                                    <!--</div>-->
+
+
+                                    <!--</div>-->
+
+
+                                    <!--<div class="form-group">-->
+                                        <!--<label class="control-label col-md-3">生日   <span class="required">-->
+                                        <!--* </span>-->
+                                        <!--</label>-->
+                                        <!--<div class="col-md-4">-->
+                                            <!--<input type="text" data-required="1"  class="form-control" name="birthday" />-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--&lt;!&ndash;<div id="categoryAttrPara" style="display: none"></div>&ndash;&gt;-->
+
+                                <div class="form-body">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">用户名 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" class="form-control" name="uname"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group last">
+                                        <label class="control-label col-md-3">头像</label>
+                                        <div class="col-md-9">
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                                    <img src="{CONST|H_STATIC_URL}/noimg.png" alt=""/>
+                                                </div>
+                                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+                                                </div>
+                                                <div>
+													<span class="btn default btn-file">
+													<span class="fileinput-new">
+													选择图片</span>
+													<span class="fileinput-exists">
+													更改 </span>
+													<input type="file" name="pic">
+													</span>
+                                                    <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">
+                                                        移除 </a>
+                                                </div>
+                                            </div>
+                                            <!--<div class="clearfix margin-top-10">-->
+                                            <!--<span class="label label-danger">-->
+                                            <!--NOTE! </span>-->
+                                            <!--Image preview only works in IE10+, FF3.6+, Safari6.0+, Chrome6.0+ and Opera11.1+. In older browsers the filename is shown instead.-->
+                                            <!--</div>-->
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">真实姓名 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="realname"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">身份证号 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="id_card_num"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">性别 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <select name="sex" class="form-control">
+                                                    {$sexOption}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">手机号 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="mobile"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="form-group">-->
+                                        <!--<label class="control-label col-md-3">佣金比例 <span class="required">-->
+										<!--* </span>-->
+                                        <!--</label>-->
+                                        <!--<div class="col-md-4">-->
+                                            <!--<div class="input-icon right">-->
+                                                <!--<i class="fa"></i>-->
+                                                <!--<input type="text" name="fee_percent"  class="form-control" value="" />-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">省<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+
+
+                                                <select  name="province" id="province" class="form-control" onchange="areaChange('province',this)">
+                                                    <option value="">请选择</option>
+                                                    {$provinceOption}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">市<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <select  name="city" id="city" class="form-control" onchange="areaChange('city',this)">
+                                                    <option value="">请选择</option>
+                                                </select>
+                                            </div>
+                                            <span class="help-block">
+											请先选择省</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">县(区)<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <select  name="county" id="county" class="form-control" onchange="areaChange('county',this)">
+                                                    <option value="">请选择</option>
+                                                </select>
+                                            </div>
+                                            <span class="help-block">
+											请先选择省，再选择市</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">乡镇(街道)<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+
+
+
+
+                                                <select name="town" id="town"  class="form-control" >
+                                                    <option value="">请选择</option>
+                                                </select>
+
+                                            </div>
+                                            <span class="help-block">
+											请先选择省，再选择市，再选择县</span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">分类<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+
+                                                <select name="status"  class="form-control">
+                                                {$typeOption}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">昵称 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="nickname"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn green sub_click">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                        <!-- END VALIDATION STATES-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

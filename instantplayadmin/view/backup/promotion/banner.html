@@ -1,0 +1,1358 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td {
+        white-space: normal;
+        word-wrap: break-word;
+        break-word: break-all;
+    }
+    .ad_detail {
+        width: 360px;
+        display: block;
+        height: 30px;
+    }
+    .ad_table span {
+        display: inline-block;
+        width: 70px;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .ad_table span+input{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .ad_table span+select{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .modal-body {
+        margin: 0;
+    }
+    .strategySelect {
+        width: 160px
+    }
+    .sort_input {
+        width: 40px;
+    }
+    select:disabled {
+        border: 1px solid #DDD;
+        background-color: #F5F5F5;
+        color: #ACA899;
+    }
+    .opt {
+        margin-right: 10px;
+    }
+    .unView {
+        display:none;
+    }
+    .view {
+        display:block;
+    }
+    .btnView {
+        display:inline-block;
+        cursor:pointer;
+    }
+    .max{
+        width: 100%;
+        height: auto;
+    }
+    .min{
+        width: 100px;
+        height: auto;
+    }
+</style>
+
+
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="actions">
+                                <div class="btn-group">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="alert alert-info">
+                                <strong>APP推广管理 / Banner功能管理</strong>
+                            </div>
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <a class="btn btn-circle blue-madison" onclick="content_edit(this)" href="javascript:;"  data-toggle="dropdown">
+                                        Banner位置配置
+                                    </a>
+                                    <a class="btn btn-circle green-meadow" onclick="content_edit1(this)" href="javascript:;" id="" data-toggle="dropdown">
+                                        跳转类型配置
+                                    </a>
+                                    <a class="btn btn-circle red-sunglo" href="javascript:;" id="add_game" data-toggle="dropdown">
+                                        添加轮播图
+                                    </a>
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+
+                                        <th width="5%">
+                                            主键
+                                        </th>
+                                        <th width="5%">
+                                            展示名称
+                                        </th>
+                                        <th width="5%">
+                                            游戏名称
+                                        </th>
+
+                                        <th width="5%">
+                                            游戏ID
+                                        </th>
+                                        <th width="8%">
+                                            banner位置
+                                        </th>
+                                        <th width="8%">
+                                            跳转类型
+                                        </th>
+                                        <th width="5%">
+                                            排序
+                                        </th>
+                                        <th width="8%">
+                                            图片
+                                        </th>
+
+                                        <th width="8%">
+                                            适用APP版本号
+                                        </th>
+
+                                        <th width="8%">
+                                            开始投放时间
+                                        </th>
+
+                                        <th width="8%">
+                                            结束投放时间
+                                        </th>
+
+                                        <th width="5%">
+                                            状态
+                                        </th>
+
+                                        <th width="10%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="game_name">
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <select name="banner_location" id="" style="    display: inline-block;width: 200px" class="form-control form-filter input-sm">
+                                                <option value="">全部</option>
+                                                {foreach ($status_all as  $k=>$v)  }
+                                                <option value="{$k}">{$v}</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <select name="banner_skip" id="" style="    display: inline-block;width: 200px" class="form-control form-filter input-sm">
+                                                <option value="">全部</option>
+                                                {foreach ($status_skip as  $k=>$v)  }
+                                                <option value="{$k}">{$v}</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-circle blue btn-sm filter-submit" style="display: inline-block;"><i class="fa fa-search"></i> 搜索</button><button class="btn btn-circle green btn-sm" style="display: inline-block;"><i class="fa fa-times"></i> 重置</button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<div class="modal fade" id="add_game_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel" align="center"><span style="font-weight: bold">添加轮播图</span></h5>
+            </div>
+            <div class="modal-body"  style="width: 800px;margin-left: 20px">
+
+                <br/>
+                <br/>
+                <!-- 基本设置 -->
+                <div id="base-set" style="margin-left: 20px;margin-right: 40px;">
+
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">展示名称</span>
+                        <span style="margin-left: 20px">
+                        <input type="text" id="name">
+                    </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">适用版本号</span>
+                        <span style="margin-left: 20px">
+                        <input type="text" id="app_version">
+                    </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">banner位置</span>
+                        <select name="title" id="banner_column_select1" style="    display: inline-block;margin-left: 20px;width: 200px" class="form-control form-filter input-sm">
+                            <option value="">全部</option>
+                            {foreach ($status_all as  $k=>$v)  }
+                            <option value="{$k}">{$v}</option>
+                            {/foreach}
+                        </select>
+
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">跳转类型</span>
+                        <select name="title" id="banner_column_select2" style="    display: inline-block;margin-left: 20px;width: 200px" class="form-control form-filter input-sm">
+                            <option value="">全部</option>
+                            {foreach ($status_skip as  $k=>$v)  }
+                            <option value="{$k}">{$v}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <br/>
+                    <div id="game" style="display: none">
+                        <div>
+                            <span style="    display: inline-block;width: 70px;"><label>  游戏ID</label> </span><span style="margin-left: 20px"><input data-tag="inputNumber" type="text" id="game_id" style="width: 150px" placeholder="选择''站内游戏''时必填！"></span>
+                        </div>
+                        <br/>
+                    </div>
+
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">图片上传</span>
+                        <span style="margin-left: 20px" id ='img_spac'>
+                        <input id='upload_input' type="file" name="banner_img" style="display:none;">
+                        <input id='upload' type="button" value="点击上传"/>
+                        <button class='view' value="" style="    display: inline-block;">预览</button>
+                    </span>
+                        <span style="margin-left: 20px;display:none;" id='url_span'>
+                        <input name="url" type="text" id='img_url'/>
+                    </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">排序</span><span style="margin-left: 20px"><input type="text" id="weight"></span>
+                        <span style="color: #9EACCA">注：数字越大展示越靠前</span>
+                    </div>
+                    <br>
+                    <div>
+                        开放投放时间
+                        <div class="input-group date form_datetime">
+                            <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="start_launch_time" id="start_launch_time" placeholder="">
+                            <span class="input-group-btn">
+                                <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div>
+                        结束投放时间
+                        <div class="input-group date form_datetime">
+                            <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="end_launch_time" id="end_launch_time" placeholder="">
+                            <span class="input-group-btn">
+                                <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                            </span>
+                        </div>
+
+                    </div>
+                    <br/>
+                    <br/>
+
+                    <hr style="width: 700px;">
+
+
+                </div>
+
+            </div>
+            <div class="modal-footer-diy" align="center">
+                <button type="button" class="add_game_modal_undo" data-dismiss="modal" style="background-color: #b92c28"><span style="color: white">取消</span></button>
+                <button type="button" class="add_game_save" style="background-color: #3e8f3e"><span style="color: white  ">保存</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:20000;width:100%;height:100%;display:none;">
+    <div id="innerdiv" style="position:absolute;">
+        <img id="bigimg" style="border:5px solid #fff;text-align: center;" src="" />
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-2" role="dialog" aria-labelledby="myModalLabel1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel1" align="center"><span style="font-weight: bold">Banner位置配置</span></h4>
+            </div>
+            <div class="modal-body" style="width: 800px;margin-left: 20px">
+                <div id="base-set1" style="margin-left: 20px;margin-right: 60px;">
+                    <hr style="width: 600px;">
+                    <div align="center">
+                        <table class="table table-bordered" id="ad_map_tb">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th style="width:100px">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="add" style="background-color: green"><span style="color: white">添加</span></button>
+                    <br>
+                    <hr style="width: 700px;">
+                </div>
+
+            </div>
+
+            <div class="modal-footer-diy" align="center">
+                <br>
+                <button type="button" class="btn btn-sm default red" style="margin-right: 10px" data-dismiss="modal">取消</button>
+                <br>
+                <br>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal1" tabindex="-2" role="dialog" aria-labelledby="myModalLabel2">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel2" align="center"><span style="font-weight: bold">跳转类型配置</span></h4>
+            </div>
+            <div class="modal-body" style="width: 800px;margin-left: 20px">
+                <div id="base-set2" style="margin-left: 20px;margin-right: 60px;">
+                    <hr style="width: 600px;">
+                    <div align="center">
+                        <table class="table table-bordered" id="ad_map_tb1">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>名称</th>
+                                <th style="width:100px">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="add" style="background-color: green"><span style="color: white">添加</span></button>
+                    <br>
+                    <hr style="width: 700px;">
+                </div>
+
+            </div>
+
+            <div class="modal-footer-diy" align="center">
+                <br>
+                <button type="button" class="btn btn-sm default red" style="margin-right: 10px" data-dismiss="modal">取消</button>
+                <br>
+                <br>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function content_edit(obj) {
+        $.ajax({
+            url: "/promotion/no/banner/getDetails/",
+            type: "post",
+            data: {
+                id: 1
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 200) {
+                    $('#id').val(data.data['base']['id']);
+                    $('#name').val(data.data['base']['name']);
+                    $('#ad_map_tb tbody').html("");
+
+                    var items = data.data['real_ad_data'];
+                    for (var i = 0; i < items.length; i++) {
+
+                        $('#ad_map_tb tbody').append(
+                            "<tr attr-id='" + items[i].id + "'>"+
+                            "<td>"+
+                            "<span class='id_span'>"+items[i].id+"</span>"+
+                            "<input type='text' class='outer_id unView' value="+items[i].id+">"+
+                            "</td>"+
+                            "<td>"+
+                            "<span class='name_span'>"+items[i].name+"</span>"+
+                            "<input type='text' class='outer_name unView' value="+items[i].name+">"+
+                            "</td>"+
+                            "<td>"+
+                            "<div class='optCancel opt unView'>取消</div>"+
+                            "<div class='editSubmit opt unView'>确认</div>"+
+                            "<div class='delAdUnit opt btnView'>删除</div>"+
+                            "<div class='editAdUnit opt btnView'>编辑</div>"+
+                            "</td>"+
+                            "</tr>");
+                    }
+                    $('#myModal').modal();
+                }
+            }
+        });
+    }
+
+    $('.add').click(function () {
+        $('#ad_map_tb tbody').append(
+            "<tr>"+
+            "<td>"+
+            "<span class='id_span unView'></span>"+
+            "<input type='text' class='outer_id'>"+
+            "</td>"+
+            "<td>"+
+            "<span class='name_span unView'></span>"+
+            "<input type='text' class='outer_name'>"+
+            "</td>"+
+            "<td>"+
+            "<div class='optCancel opt btnView'>取消</div>"+
+            "<div class='editSubmit opt btnView'>确认</div>"+
+            "<div class='delAdUnit opt unView'>删除</div>"+
+            "<div class='editAdUnit opt unView'>编辑</div>"+
+            "</td>"+
+            "</tr>"
+        );
+    });
+
+    // 确认按钮;
+    $("#ad_map_tb").on("click", ".editSubmit", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").siblings("td").children(".outer_id").val();
+        var name = $editElem.parents("td").siblings("td").children(".outer_name").val();
+        if (id == '' || name == '') {
+            alert("请将信息补充完整");
+            return;
+        }
+
+        var inner_ad_id = $('#ad_id').val();
+
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');// 分类id
+        var url = "/promotion/no/banner/upLocationOne/";
+        var post_data = {
+            id:id,
+            name:name,
+        };
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: post_data,
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+//                    var id = data.data;
+                    $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                    // span 赋值
+                    $editElem.parents("td").siblings("td").children(".id_span").html(id);
+                    $editElem.parents("td").siblings("td").children(".name_span").html(name);
+
+                    // span 显示
+                    $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+                    $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+                    // 输入 隐藏
+                    $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+                    $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+                    // 按钮 隐藏 显示
+                    $editElem.siblings(".optCancel").removeClass("btnView").addClass("unView");
+                    $editElem.removeClass("btnView").addClass("unView");
+
+                    $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                    $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+    // 取消按钮;
+    $("#ad_map_tb").on("click", ".optCancel", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").parents("tr").attr('attr-id');
+        console.log(id);
+
+        if (id == '' || id == undefined) {
+            // 广告单元未保存 移除该行
+            $editElem.parents("td").parents("tr").remove();
+        } else {
+            // span 显示
+            $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+            // 输入 隐藏
+            $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+            // 按钮 隐藏 显示
+            $editElem.siblings(".editSubmit").removeClass("btnView").addClass("unView");
+            $editElem.removeClass("btnView").addClass("unView");
+
+            $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+            $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+        }
+    });
+
+    // 编辑按钮;
+    $("#ad_map_tb").on("click", ".editAdUnit", function (e) {
+        var $editElem = $(this);
+        // span 隐藏
+        $editElem.parents("td").siblings("td").children(".id_span").addClass("unView");
+        $editElem.parents("td").siblings("td").children(".name_span").addClass("unView");
+
+        // 输入 选中
+        var channel = $editElem.parents("td").siblings("td").children(".id_span").html();
+        var advertiser = $editElem.parents("td").siblings("td").children(".name_span").html();
+
+        // 输入 显示
+        $editElem.parents("td").siblings("td").children(".outer_id").removeClass("unView");
+        $editElem.parents("td").siblings("td").children(".outer_name").removeClass("unView");
+
+        // 按钮 隐藏 显示
+        $editElem.siblings(".optCancel").removeClass("unView").addClass("btnView");
+        $editElem.siblings(".editSubmit").removeClass("unView").addClass("btnView");
+
+        $editElem.siblings(".delAdUnit").removeClass("btnView").addClass("unView");
+        $editElem.removeClass("btnView").addClass("unView");
+    });
+
+    // 删除按钮;
+    $("#ad_map_tb").on("click", ".delAdUnit", function (e) {
+        if (!confirm("确认删除吗？")) {
+            return false;
+        }
+
+        var $editElem = $(this);
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+        $.ajax({
+            url: "/promotion/no/banner/delLocationOne/",
+            type: 'post',
+            data: {id:attr_id},
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    $editElem.parents("td").parents("tr").remove();
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+</script>
+
+
+<script>
+
+    function content_edit1(obj) {
+        $.ajax({
+            url: "/promotion/no/banner/getDetailsSkip/",
+            type: "post",
+            data: {
+                id: 1
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 200) {
+                    $('#id').val(data.data['base']['id']);
+                    $('#name').val(data.data['base']['name']);
+                    $('#ad_map_tb1 tbody').html("");
+
+                    var items = data.data['real_ad_data'];
+                    for (var i = 0; i < items.length; i++) {
+
+                        $('#ad_map_tb1 tbody').append(
+                            "<tr attr-id='" + items[i].id + "'>"+
+                            "<td>"+
+                            "<span class='id_span'>"+items[i].id+"</span>"+
+                            "<input type='text' class='outer_id unView' value="+items[i].id+">"+
+                            "</td>"+
+                            "<td>"+
+                            "<span class='name_span'>"+items[i].name+"</span>"+
+                            "<input type='text' class='outer_name unView' value="+items[i].name+">"+
+                            "</td>"+
+                            "<td>"+
+                            "<div class='optCancel opt unView'>取消</div>"+
+                            "<div class='editSubmit opt unView'>确认</div>"+
+                            "<div class='delAdUnit opt btnView'>删除</div>"+
+                            "<div class='editAdUnit opt btnView'>编辑</div>"+
+                            "</td>"+
+                            "</tr>");
+                    }
+                    $('#myModal1').modal();
+                }
+            }
+        });
+    }
+
+    $('.add').click(function () {
+        $('#ad_map_tb1 tbody').append(
+            "<tr>"+
+            "<td>"+
+            "<span class='id_span unView'></span>"+
+            "<input type='text' class='outer_id'>"+
+            "</td>"+
+            "<td>"+
+            "<span class='name_span unView'></span>"+
+            "<input type='text' class='outer_name'>"+
+            "</td>"+
+            "<td>"+
+            "<div class='optCancel opt btnView'>取消</div>"+
+            "<div class='editSubmit opt btnView'>确认</div>"+
+            "<div class='delAdUnit opt unView'>删除</div>"+
+            "<div class='editAdUnit opt unView'>编辑</div>"+
+            "</td>"+
+            "</tr>"
+        );
+    });
+
+    // 确认按钮;
+    $("#ad_map_tb1").on("click", ".editSubmit", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").siblings("td").children(".outer_id").val();
+        var name = $editElem.parents("td").siblings("td").children(".outer_name").val();
+        if (id == '' || name == '') {
+            alert("请将信息补充完整");
+            return;
+        }
+
+        var inner_ad_id = $('#ad_id').val();
+
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');// 分类id
+        var url = "/promotion/no/banner/upSkipOne/";
+        var post_data = {
+            id:id,
+            name:name,
+        };
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: post_data,
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+//                    var id = data.data;
+                    $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                    // span 赋值
+                    $editElem.parents("td").siblings("td").children(".id_span").html(id);
+                    $editElem.parents("td").siblings("td").children(".name_span").html(name);
+
+                    // span 显示
+                    $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+                    $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+                    // 输入 隐藏
+                    $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+                    $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+                    // 按钮 隐藏 显示
+                    $editElem.siblings(".optCancel").removeClass("btnView").addClass("unView");
+                    $editElem.removeClass("btnView").addClass("unView");
+
+                    $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                    $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+    // 取消按钮;
+    $("#ad_map_tb1").on("click", ".optCancel", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").parents("tr").attr('attr-id');
+        console.log(id);
+
+        if (id == '' || id == undefined) {
+            // 广告单元未保存 移除该行
+            $editElem.parents("td").parents("tr").remove();
+        } else {
+            // span 显示
+            $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+            // 输入 隐藏
+            $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+            // 按钮 隐藏 显示
+            $editElem.siblings(".editSubmit").removeClass("btnView").addClass("unView");
+            $editElem.removeClass("btnView").addClass("unView");
+
+            $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+            $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+        }
+    });
+
+    // 编辑按钮;
+    $("#ad_map_tb1").on("click", ".editAdUnit", function (e) {
+        var $editElem = $(this);
+        // span 隐藏
+        $editElem.parents("td").siblings("td").children(".id_span").addClass("unView");
+        $editElem.parents("td").siblings("td").children(".name_span").addClass("unView");
+
+        // 输入 选中
+        var channel = $editElem.parents("td").siblings("td").children(".id_span").html();
+        var advertiser = $editElem.parents("td").siblings("td").children(".name_span").html();
+
+        // 输入 显示
+        $editElem.parents("td").siblings("td").children(".outer_id").removeClass("unView");
+        $editElem.parents("td").siblings("td").children(".outer_name").removeClass("unView");
+
+        // 按钮 隐藏 显示
+        $editElem.siblings(".optCancel").removeClass("unView").addClass("btnView");
+        $editElem.siblings(".editSubmit").removeClass("unView").addClass("btnView");
+
+        $editElem.siblings(".delAdUnit").removeClass("btnView").addClass("unView");
+        $editElem.removeClass("btnView").addClass("unView");
+    });
+
+    // 删除按钮;
+    $("#ad_map_tb1").on("click", ".delAdUnit", function (e) {
+        if (!confirm("确认删除吗？")) {
+            return false;
+        }
+
+        var $editElem = $(this);
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+        $.ajax({
+            url: "/promotion/no/banner/delSkipOne/",
+            type: 'post',
+            data: {id:attr_id},
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    $editElem.parents("td").parents("tr").remove();
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+</script>
+
+
+<script>
+    var editid = 0;
+    var img_upload_type = 1;//1 图片 2图片url
+
+    var type = 0;//1 添加 2更新
+    function one_del(obj){
+        if (!confirm("确认删除？")) {
+            return false;
+        }
+        $.ajax({
+            type: 'post',
+            url: '/promotion/no/banner/delone/',
+            data: {
+                id:obj.getAttribute('data-id')
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 200){
+                    location.href = '/promotion/no/banner/index/';
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    }
+
+    function showImg(src) {
+        $('#bigimg').attr("src", src);
+        /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+        $('#bigimg').load(function(){
+            var windowW = $(window).width();//获取当前窗口宽度
+            var windowH = $(window).height();//获取当前窗口高度
+            var realWidth = this.width;//获取图片真实宽度
+            var realHeight = this.height;//获取图片真实高度
+            var imgWidth, imgHeight;
+            var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放
+
+            if(realHeight>windowH*scale) {//判断图片高度
+                imgHeight = windowH*scale;//如大于窗口高度，图片高度进行缩放
+                imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度
+                if(imgWidth>windowW*scale) {//如宽度扔大于窗口宽度
+                    imgWidth = windowW*scale;//再对宽度进行缩放
+                }
+            } else if(realWidth>windowW*scale) {//如图片高度合适，判断图片宽度
+                imgWidth = windowW*scale;//如大于窗口宽度，图片宽度进行缩放
+                imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度
+            } else {//如果图片真实高度和宽度都符合要求，高宽不变
+                imgWidth = realWidth;
+                imgHeight = realHeight;
+            }
+            $('#bigimg').css("width",imgWidth);//以最终的宽度对图片缩放
+
+            var w = (windowW-imgWidth)/2;//计算图片与窗口左边距
+            var h = (windowH-imgHeight)/2;//计算图片与窗口上边距
+            $("#innerdiv").css({"top":h, "left":w});//设置#innerdiv的top和left属性
+            $("#outerdiv").fadeIn("fast");//淡入显示#outerdiv及.pimg
+        });
+    }
+
+    function edit(obj){
+        type = 2;
+        var formData = new FormData();
+        formData.append('id', obj.getAttribute('data-id'));
+        editid = obj.getAttribute('data-id');
+        $.ajax({
+            type: 'post',
+            url: '/promotion/no/banner/getOneBanner/',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.code == 200){
+                    $('#game_id').val(data.data['data1']['game_id']);
+                    $('#start_launch_time').val(data.data['data1']['start_launch_time']);
+                    $('#end_launch_time').val(data.data['data1']['end_launch_time']);
+                    $('#weight').val(data.data['data1']['weight']);
+                    $('#img_link').val(data.data['data1']['img_link']);
+                    $('#name').val(data.data['data1']['name']);
+                    $('#app_version').val(data.data['data1']['app_version']);
+                    $('.view').val(data.data['data1']['img']);
+
+                    $('#is_relative').val(data.data['data1']['is_relative']);
+                    if(1 == data.data['data1']['is_relative']){
+                        $("input[name='is_relative']").eq(0).attr("checked","checked");
+                        $("input[name='is_relative']").eq(1).removeAttr("checked");
+                        $("input[name='is_relative']").eq(0).click();
+                    }else if(2 == data.data['data1']['is_relative']){
+                        $("input[name='is_relative']").eq(1).attr("checked","checked");
+                        $("input[name='is_relative']").eq(0).removeAttr("checked");
+                        $("input[name='is_relative']").eq(1).click();
+                    }
+                    console.log(data.data['data1']['relative_path']);
+
+                    if(1 == data.data['data1']['relative_path']){
+                        $("input[name='relative_path']").eq(0).attr("checked","checked");
+                        $("input[name='relative_path']").eq(1).removeAttr("checked");
+                        $("input[name='relative_path']").eq(2).removeAttr("checked");
+                        $("input[name='relative_path']").eq(3).removeAttr("checked");
+                        $("input[name='relative_path']").eq(0).click();
+                    }else if(2 == data.data['data1']['relative_path']){
+                        $("input[name='relative_path']").eq(1).attr("checked","checked");
+                        $("input[name='relative_path']").eq(0).removeAttr("checked");
+                        $("input[name='relative_path']").eq(2).removeAttr("checked");
+                        $("input[name='relative_path']").eq(3).removeAttr("checked");
+                        $("input[name='relative_path']").eq(1).click();
+                    }else if(3 == data.data['data1']['relative_path']){
+                        $("input[name='relative_path']").eq(2).attr("checked","checked");
+                        $("input[name='relative_path']").eq(0).removeAttr("checked");
+                        $("input[name='relative_path']").eq(1).removeAttr("checked");
+                        $("input[name='relative_path']").eq(3).removeAttr("checked");
+                        $("input[name='relative_path']").eq(2).click();
+                    }else if(4 == data.data['data1']['relative_path']){
+                        $("input[name='relative_path']").eq(3).attr("checked","checked");
+                        $("input[name='relative_path']").eq(1).removeAttr("checked");
+                        $("input[name='relative_path']").eq(2).removeAttr("checked");
+                        $("input[name='relative_path']").eq(0).removeAttr("checked");
+                        $("input[name='relative_path']").eq(3).click();
+                    }
+
+                    /*$('#banner_column_select').html("");
+                    for(var i = 0; i < data.data['data2'].length; i++){
+                        $('#banner_column_select').append('<option value="'+data.data['data2'][i]['id']+'">'+data.data['data2'][i]['id']+'</option>');
+                    }*/
+                    $('#banner_column_select1').val(data.data['data1']['banner_location']);
+                    $('#banner_column_select2').val(data.data['data1']['banner_skip']);
+                    $('#add_game_modal').modal();
+                }else{
+                    alert(data.message);
+                }
+
+            }
+        });
+    }
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+
+
+</script>
+
+
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/promotion/no/banner/getList/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ 0,1,2,3,4,5,6,7,8,9]
+                    }],
+                    "order": [
+                        [0, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                        function(){
+                            ids += ($(this).val())+",";
+                        }
+                    );
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/?ac=delBat&ids="+ids ,
+                        dataType: 'json',
+                        success: function(data){
+                            grid.setAjaxParam("customActionType", "group_action");
+                            grid.setAjaxParam("customActionName", action.val());
+                            grid.setAjaxParam("id", grid.getSelectedRows());
+                            grid.getDataTable().ajax.reload();
+                            grid.clearAjaxParams();
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+
+
+        $(".view").click(function(){
+            var src = $(this).val();
+            showImg(src);
+        });
+        $("#outerdiv").click(function(){//再次点击淡出消失弹出层
+            $(this).fadeOut("fast");
+        });
+
+        // $('#game_name').blur(function(){
+        //     .ajax({
+        //         type: 'post',
+        //         url: '/promotion/no/banner/getGames/',
+        //         dataType: 'json',
+        //         success: function(data){
+
+        //             $('#banner_column_select').html("");
+        //             for(var i = 0; i < data.data.length; i++){
+        //                 $('#banner_column_select').append('<option value="'+data.data[i]['id']+'">'+data.data[i]['id']+'</option>');
+        //             }
+        //             $('#add_game_modal').modal();
+        //         }
+        //     });
+        // });
+
+        $('#upload').click(function(){
+            $('#upload_input').click();
+            $('#upload_input').on('change', function(){
+                var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+                if (objUrl) {
+                    $('.view').val(objUrl);
+                }
+            });
+        });
+
+        $("input:radio[name='img_or_url']").change(function (){
+            var opt=$("input:radio[name='img_or_url']:checked").val();
+            if(opt == 1){
+                $('#img_spac').attr('style', 'margin-left: 20px;display:inline-block');
+                $('#url_span').attr('style', 'margin-left: 20px;display:none');
+                img_upload_type = 1;
+            }
+
+            if(opt ==2 ){
+                $('#img_spac').attr('style', 'margin-left: 20px;display:none');
+                $('#url_span').attr('style', 'margin-left: 20px;display:inline-block');
+                img_upload_type = 2;
+            }
+        });
+
+        $('#add_game').click(function(){
+            // $('#add_game_modal').modal();
+            type = 1;
+            $.ajax({
+                type: 'post',
+                url: '/promotion/no/banner/getBannerColumn/',
+                dataType: 'json',
+                success: function(data){
+                    if(data.code==200){
+                        $('#game_id').val("");
+                        $('#start_launch_time').val("");
+                        $('#end_launch_time').val("");
+                        //$('#weight').val("");
+                        $('#name').val("");
+                        $('#img_link').val("");
+                        $('.view').val("");
+                        $('#img_url').val("");
+                        $('#app_version').val("");
+
+                        $('#banner_column_select').html("");
+                        for(var i = 0; i < data.data.length; i++){
+                            $('#banner_column_select').append('<option value="'+data.data[i]['id']+'">'+data.data[i]['id']+'</option>');
+                        }
+                        $('#add_game_modal').modal();
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+
+
+        });
+
+        $('#add_popularization').click(function(){
+            $.ajax({
+                type: 'post',
+                url: '/promotion/no/banner/getBannerColumn/',
+                dataType: 'json',
+                success: function(data){
+                    if(data.code == 200){
+                        $('#popularization_tb tbody').html("");
+                        for(var i = 0; i < data.data.length; i++){
+                            $('#popularization_tb tbody').append('<tr><td>展示位</td><td>'+data.data[i]['id']+'</td></tr>');
+                        }
+                        $('#add_popularization_modal').modal();
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+
+        $('.add_btn').click(function(){
+            $.ajax({
+                type: 'post',
+                url: '/promotion/no/banner/getBannerColumn/',
+                dataType: 'json',
+                success: function(data){
+                    if(data.code == 200){
+                        $('#popularization_tb tbody').html("");
+                        for(var i = 0; i < data.data.length; i++){
+                            $('#popularization_tb tbody').append('<tr><td>展示位</td><td>'+data.data[i]['id']+'</td></tr>');
+                        }
+                        $('#add_popularization_modal').modal();
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+        });
+
+        $('.add_game_save').click(function(){
+            var formData = new FormData();
+            var game_id = $('#game_id').val();
+            var start_launch_time = $('#start_launch_time').val();
+            var end_launch_time = $('#end_launch_time').val();
+            var banner_column_select1 = $('#banner_column_select1').val();
+            var banner_column_select2 = $('#banner_column_select2').val();
+            var weight = $('#weight').val();
+            var img_link = $('#img_link').val();
+            var name = $('#name').val();
+            var app_version = $('#app_version').val();
+
+            formData.append('name', name);
+            formData.append('app_version', app_version);
+            formData.append('game_id', game_id);
+            formData.append('start_launch_time', start_launch_time);
+            formData.append('end_launch_time', end_launch_time);
+            formData.append('banner_location', banner_column_select1);
+            formData.append('banner_skip', banner_column_select2);
+            formData.append('weight', weight);
+            formData.append('img_link', img_link);
+            formData.append('img_upload_type', img_upload_type);
+            formData.append('id', editid);
+            var file1 = $('#upload_input')[0].files[0];
+            if(file1!='undefined'){
+                formData.append('img', file1);
+            }
+            var url = '';
+            if(1 == type){
+                url = '/promotion/no/banner/addOne/';
+            }else{
+                url = '/promotion/no/banner/updateOne/';
+            }
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        alert(data.message);
+                        $('.add_game_modal_undo').click();
+                        location.href = '/promotion/no/banner/index/';
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+    });
+
+
+</script>
+
+<script>
+    if (!jQuery().datetimepicker) {
+        alert("error:0");
+    }
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        minView: "month",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2019-01-01",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+</script>
+
+
+
+<script>
+    // 只能输入数字
+    $("[data-tag='inputNumber']").each(function (index, value) {
+        $(this).on("keyup", function () {
+            this.value = this.value.replace(/\D/g,'');
+        });
+    });
+
+    function showSelectedPrice()
+    {
+        var is_relative=$("input:radio[name='is_relative']:checked").val();
+        if(2 == is_relative){
+            document.getElementById('leibie').style.display = "none";
+            document.getElementById('game').style.display = "none";
+        }else if(1 == is_relative){
+            document.getElementById('leibie').style.display = "block";
+            document.getElementById('game').style.display = "block";
+        }
+    }
+</script>
+
+<!--<script>
+    function showSelected() {
+        var relative_path = $("input:radio[name='relative_path']:checked").val();
+        if (1 == relative_path) {
+            document.getElementById('game').style.display = "block";
+        }else{
+            document.getElementById('game').style.display = "none";
+        }
+    }
+</script>-->
+
+<script>
+    $("#banner_column_select2").change(function(){
+        var banner_column_select2 = $('#banner_column_select2').val();
+        if(1 == banner_column_select2){
+            document.getElementById('game').style.display = "block";
+        }else{
+            document.getElementById('game').style.display = "none";
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $("#img-bottom").click(function () {
+            var src = $(this).val();
+            $('#bigimg').attr("src", src);
+            /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+            $('#bigimg').load(function () {
+                var windowW = $(window).width();//获取当前窗口宽度
+                var windowH = $(window).height();//获取当前窗口高度
+                var realWidth = this.width;//获取图片真实宽度
+                var realHeight = this.height;//获取图片真实高度
+                var imgWidth, imgHeight;
+                var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放
+
+                if (realHeight > windowH * scale) {//判断图片高度
+                    imgHeight = windowH * scale;//如大于窗口高度，图片高度进行缩放
+                    imgWidth = imgHeight / realHeight * realWidth;//等比例缩放宽度
+                    if (imgWidth > windowW * scale) {//如宽度扔大于窗口宽度
+                        imgWidth = windowW * scale;//再对宽度进行缩放
+                    }
+                } else if (realWidth > windowW * scale) {//如图片高度合适，判断图片宽度
+                    imgWidth = windowW * scale;//如大于窗口宽度，图片宽度进行缩放
+                    imgHeight = imgWidth / realWidth * realHeight;//等比例缩放高度
+                } else {//如果图片真实高度和宽度都符合要求，高宽不变
+                    imgWidth = realWidth;
+                    imgHeight = realHeight;
+                }
+                $('#bigimg').css("width", imgWidth);//以最终的宽度对图片缩放
+
+                var w = (windowW - imgWidth) / 2;//计算图片与窗口左边距
+                var h = (windowH - imgHeight) / 2;//计算图片与窗口上边距
+                $("#innerdiv").css({"top": h, "left": w});//设置#innerdiv的top和left属性
+                $("#outerdiv").fadeIn("fast");//淡入显示#outerdiv及.pimg
+            });
+        });
+        $("#outerdiv").click(function () {//再次点击淡出消失弹出层
+            $(this).fadeOut("fast");
+        });
+    });
+</script>
+
+
+
+

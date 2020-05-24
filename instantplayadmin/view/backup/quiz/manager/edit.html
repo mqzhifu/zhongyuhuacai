@@ -1,0 +1,106 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+{include layout/left.html}
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>礼品卡修改
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row margin-top-20">
+                        <div class="table-container">
+                            <ul>
+                                <form id="send_rule_form" action="/quiz/no/upgrade/update/?id={$result['id']}" method="post" autocomplete="off" enctype="multipart/form-data">
+                                    <div class="table-container">
+                                        <span>礼品卡id：</span><input  name="id"  id="id"  width="5px" value="{$data['id']}">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <span>礼品卡名称：</span><input  name="goods_name"  id="goods_name"  width="5px" value="{$data['goods_name']}">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <span>礼品价值：</span><input name ="goods_value"  id="goods_value" width="5px" value="{$data['goods_value']}">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <span>礼品描述：</span><input  name="goods_describe"  id="goods_describe" width="5px" value="{$data['goods_describe']}">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <span>礼品标识：</span><input  name="goods_code"  id="goods_code" width="5px" value="{$data['goods_code']}">
+                                    </div><br>
+                                    <div class="table-container">
+                                        <img src="{$data['goods_vectorgraph']}" style="width: 220px;height: 110px"><br><br>
+                                        <span>上传图片</span><input type="file" name="img" id="img" />
+                                    </div><br>
+                                    <div style="text-align: left;margin-top: 40px; margin-bottom: 40px;">
+                                        <button id="cancel_button" type="button" class="btn btn-danger">返回首页</button>
+                                        <button id="submit_button" type="button" class="btn btn-default">提交</button>
+                                    </div>
+                                </form>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 只能输入数字
+        $("[data-tag='inputNumber']").each(function (index, value) {
+            $(this).on("keyup", function () {
+                this.value = this.value.replace(/\D/g,'');
+            });
+        });
+        // 发送按钮
+        $('#submit_button').click(function(){
+            var formData = new FormData();
+            var goods_name = $('#goods_name').val();
+            var goods_value = $('#goods_value').val();
+            var goods_describe = $('#goods_describe').val();
+            var id = $('#id').val();
+
+            formData.append('goods_name', goods_name);
+            formData.append('goods_value', goods_value);
+            formData.append('goods_describe', goods_describe);
+            formData.append('id', id);
+
+            var file = $('#img')[0].files[0];
+            if(file!='undefined'){
+                formData.append('img', file);
+            }
+            console.log(formData);
+            url = '/quiz/no/manager/saveInfo/';
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        location.href = '/quiz/no/manager/index/';
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+    });
+</script>
+
+
+<script>
+    $("#cancel_button").on("click", function() {
+        location.href = "http://isadmin-test.feidou.com/";
+    });
+</script>

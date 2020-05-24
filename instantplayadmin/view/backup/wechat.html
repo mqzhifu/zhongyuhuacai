@@ -1,0 +1,481 @@
+<form method="post" id="mf" action="?ctrl=session&ac=sendPic" enctype="multipart/form-data" >
+
+    <input type="file" style="display:none;" name="up_pic_ipt" id="up_pic_ipt" />
+    <input type="hidden" name="sid" id="session_id" />
+
+</form>
+
+
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include /layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+
+
+
+
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- BEGIN SAMPLE TABLE PORTLET-->
+                    <div class="portlet box red">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs"></i>待接入
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-scrollable">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            #
+                                        </th>
+                                        <th>
+                                            用户名
+                                        </th>
+
+                                        <th>
+                                            操作
+                                        </th>
+
+
+
+                                        <th>
+                                            未读数
+                                        </th>
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody id="userlist_wait">
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                        <!-- BEGIN SAMPLE TABLE PORTLET-->
+                    <div class="portlet box yellow">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs"></i>已接入
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-scrollable">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>
+                                            #
+                                        </th>
+                                        <th>
+                                            用户名
+                                        </th>
+
+
+                                        <th>
+                                            操作
+                                        </th>
+
+
+                                        <th>
+                                            未读数
+                                        </th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody id="userlist_process">
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                        <!-- END SAMPLE TABLE PORTLET-->
+
+
+                    <!-- END SAMPLE TABLE PORTLET-->
+                </div>
+
+
+                <div class="col-md-4">
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bubble font-red-sunglo"></i>
+                                <span class="caption-subject font-red-sunglo bold uppercase">Chats</span>
+                            </div>
+                            <div class="actions">
+                                <div class="portlet-input input-inline">
+                                    <div class="input-icon right">
+                                        <i class="icon-magnifier"></i>
+                                        <input type="text" class="form-control input-circle" placeholder="search...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body" id="chats">
+                            <div class="" style="height: 341px;overflow:auto;" data-always-visible="1" data-rail-visible1="1" id="div_scroller">
+                                <ul class="chats" id="chats_box">
+
+
+
+                                </ul>
+                            </div>
+                            <div class="chat-form">
+                                <div class="input-cont">
+                                    <input class="form-control" id="msg" name="msg" type="text" placeholder="Type a message here..."/>
+                                </div>
+
+                                <div class="btn-cont" style="right: 48px;">
+									<span class="arrow">
+									</span>
+                                    <a href="#" onclick="up_pic()" class="btn red icn-only">
+                                        <i class="fa fa-file-o"></i>
+                                    </a>
+                                </div>
+
+
+                                <div class="btn-cont">
+									<span class="arrow">
+									</span>
+                                    <a href="#" onclick="send_msg()" class="btn blue icn-only">
+                                        <i class="fa fa-check icon-white"></i>
+                                    </a>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-3">
+                    <!-- BEGIN SAMPLE TABLE PORTLET-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs"></i>用户信息
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-scrollable">
+                                <table class="table table-hover">
+                                    <!--<thead>-->
+                                    <!--<tr>-->
+                                    <!--<th>-->
+                                    <!--#-->
+                                    <!--</th>-->
+                                    <!--<th>-->
+                                    <!--用户名-->
+                                    <!--</th>-->
+
+
+                                    <!--<th>-->
+                                    <!--操作-->
+                                    <!--</th>-->
+                                    <!--</tr>-->
+                                    <!--</thead>-->
+                                    <tbody id="userinfo">
+
+
+
+
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+            <!-- END PAGE CONTENT-->
+        </div>
+
+
+
+
+            <!--<div class="row">-->
+
+
+            <!--</div>-->
+
+        </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+<script>
+
+
+    var sid = 0;
+
+    function getUserList(type){
+        if(type == 2){
+            var div_id = "userlist_wait";
+        }else if(type == 3){
+            var div_id = "userlist_process";
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "?ctrl=session&ac=userlist&type="+type,
+            dataType: "json",
+            success: function(rs){
+                var dd = rs.data;
+                $("#"+div_id).html(dd);
+            }
+        });
+    }
+
+    function up_pic(){
+        if(!sid){
+            return alert('sid=0,请选中一个会话');
+        }
+
+        document.getElementById('up_pic_ipt').click();
+    }
+
+    function get_msg(session_id){
+        if(!session_id){
+            return alert('sid=0,请选中一个会话');
+        }
+
+        sid = session_id;
+        $.ajax({
+            type: "GET",
+            url: "?ctrl=session&ac=getMsg&sid="+session_id,
+            dataType: "json",
+            success: function(rs){
+                var dd = rs.data;
+                $("#chats_box").html(dd);
+
+                var div = document.getElementById('div_scroller');
+                div.scrollTop = div.scrollHeight;
+
+
+            }
+        });
+
+//        getUserInfo(openid);
+    }
+
+    function send_msg(){
+        if(!sid){
+            return alert('sid=0,请选中一个会话');
+        }
+
+        var content = $("#msg").val();
+        if(!content)
+            return alert('内容不能为空');
+
+        $.ajax({
+            type: "GET",
+            url: "?ctrl=session&ac=sendMsg&content="+content+"&sid="+sid,
+            dataType: "json",
+//            data: {content:content},
+            success: function(rs){
+                if(rs.code == 200){
+                    $("#chats_box").append(rs.data);
+                    $("#msg").val("");
+
+                    var div = document.getElementById('div_scroller');
+                    div.scrollTop = div.scrollHeight;
+
+                }else{
+                    return alert(rs.data);
+                }
+            }
+        });
+
+    }
+
+    function get_user_inc_msg(){
+        if(!sid){
+            return 0;
+//            return alert('sid=0,请选中一个会话');
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "?ctrl=session&ac=getIncMsg&sid="+sid,
+            dataType: "json",
+//            data: {content:content},
+            success: function(rs){
+                if(rs.code == 200){
+                    $("#chats_box").append(rs.data);
+
+
+                    var div = document.getElementById('div_scroller');
+                    div.scrollTop = div.scrollHeight;
+
+
+                    getUserList(3);
+                }
+            }
+        });
+    }
+
+
+    setInterval("get_user_inc_msg()",2000);
+
+    function up_status(sess_id,status){
+        $.ajax({
+            type: "GET",
+            url: "?ctrl=session&ac=upstatus&sid="+sess_id+"&status="+status,
+            dataType: "json",
+            success: function(rs){
+                getUserList(2);
+                getUserList(3);
+
+//                return alert(rs);
+//                location.reload(true);
+//                var dd = rs.data;
+//                $("#chats_box").html(dd);
+            }
+        });
+    }
+
+    function getUserInfo(openid){
+        if(openid){
+            $.ajax({
+                type: "GET",
+                url: "?ctrl=session&ac=getUserInfo&openid="+openid,
+                dataType: "json",
+                success: function(rs){
+                    var dd = rs.data;
+                    $("#userinfo").html(dd);
+                }
+            });
+        }else{
+            var html = '<tr><td colspan="2"><img src="/www/images/nouser.png" width="50" height="50" /></td></tr>'+
+                    '<tr><td>昵称</td><td></td></tr>'+
+                    '<tr><td>国家/省/市</td><td>---</td></tr>'+
+                    '<tr><td>关注时间</td><td></td></tr>'+
+                    '<tr><td>手机号</td><td></td></tr>'+
+                    '<tr><td>地点</td><td></td></tr>'+
+                    '<tr><td>更新时间</td><td></td></tr>'+
+                    '<tr><td>订单数</td><td></td></tr>'+
+                    '<tr><td>消费金额</td><td></td></tr>'+
+                    '<tr><td>常用地址</td><td></td></tr>'+
+                    '<tr><td>用户标签</td><td></td></tr>'
+
+            $("#userinfo").html(html);
+        }
+    }
+
+
+
+
+    getUserList(2);
+    getUserList(3);
+    getUserInfo();
+
+
+    setInterval("getUserList(3)",5000);
+    setInterval("getUserList(2)",5000);
+
+    $(document).ready(function(){
+        $('#up_pic_ipt').live('change',function(){
+                    if(!sid){
+                        return alert('sid=0,请选中一个会话');
+                    }
+
+                    var c = $('#up_pic_ipt').val();
+                    if(!c || typeof(c)=="undefined")
+                        return '文件名为空,请选择文件';
+
+                    var c_ext = c.split(".");
+//                    alert(c_ext[1]);
+
+                    var ext_type = ['bmp','png','jpeg','jpg','gif'];
+                    var is_ext = 0;
+                    for(var i=0;i<5;i++){
+                        if(c_ext[1] == ext_type[i]){
+                            is_ext = 1;
+                            break;
+                        }
+                    }
+
+                    if(!is_ext)
+                        return alert("图片格式为：bmp/png/jpeg/jpg/gif");
+
+                    $("#session_id").val(sid);
+                    $('#mf').submit();
+
+//                    alert(2);
+
+
+                }
+        );
+
+
+        $('#mf').ajaxForm(function(rs) {
+            var rs = eval ( "("+rs+")" );
+            alert(rs.code);
+            if(rs.code == 200){
+                $("#chats_box").append(rs.data);
+                $("#msg").val("");
+
+                var div = document.getElementById('div_scroller');
+                div.scrollTop = div.scrollHeight;
+
+            }
+        });
+
+
+    });
+
+
+</script>

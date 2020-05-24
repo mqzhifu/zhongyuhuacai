@@ -1,0 +1,141 @@
+<html>
+
+
+<body>
+<div>API请求样例：http://域名/控制器/方法名/</div>
+<br/>
+
+<br/>
+
+<div>所有接口，支持 长/短连接~，（短连接支持POST、 GET、 JSON）</div>
+
+<div>短连接-请求返回，格式为：{"code":200,"msg":{"ip":"134.175.231.69","port":"9500"}},code为状态码，只有为200是成功，msg:如果状态码为200，是数据，否则是错误提示信息</div>
+<div>长连接-请求返回，也会有CODE和msg，但使用protobuf,只有code非200，也就是失败了msg才有值</div>
+
+
+<br/>
+
+<div>请求示例，短连接：http://local.sanguo.com/index/getServer/channel=1</div>
+<div>其中，index:控制器(模块)，getServer:就方法名，channel是参数</div>
+
+<br/>
+
+<div>错误状态码返回示例：</div>
+<div>{"code":8231,"msg":"redis\u4e2d\u6ca1\u6709token\uff0c\u7528\u6237\u5e76\u6ca1\u6709\u767b\u9646\u8fc7"}</div>
+
+
+<br/>
+
+<div>共计，模块:{$moduleCnt},方法:{$methodCnt}</div>
+
+<br/>
+
+<div><a href="/tools/getCodeDesc/" target="_blank">错误码查看</a> </div>
+<br/><br/><br/>
+<table>
+    <tr>
+
+        <td>模块/控制器</td>
+    </tr>
+
+
+    {foreach ($api as $k=>$module) }
+    <tr>
+        <td>{$module['title']}/{$k}</td>
+        <td>
+            <table border="1">
+                {foreach ($module as $k2=>$method) }
+                    {if $k2 == 'title'}
+                        {continue}
+                    {/if}
+                <tr>
+                    <td>方法名</td><td>描述</td><td>WebSocket</td><td>登陆</td><td>请求相关</td><td>返回信息</td><td>测试</td>
+                </tr>
+                    <tr>
+                        <td>{$k2}</td>
+                        <td>{$method['title']}</td>
+                        <td>{$method['ws']['request_code']}/{$method['ws']['response_code']}</td>
+                        <td> {$method['is_login']}</td>
+                        <td>
+                            {if $method['request']}
+                            <table>
+                                <tr>
+                                    <td>参数名</td>
+                                    <td>描述</td>
+                                    <td>类型</td>
+                                    <td>必填写</td>
+                                </tr>
+                            {foreach ($method['request'] as $k3=>$para) }
+                                <tr>
+                                    <td>{$k3}</td>
+                                    <td>{$para['title']}</td>
+                                    <td>{$para['type']}</td>
+                                    <td>{if $para['must']}是{else}否{/if}</td>
+
+                                </tr>
+                            {/foreach}
+                            </table>
+                            {/if}
+                        </td>
+                        <td>
+
+                            {if $method['return']}
+                            <table>
+                                <td>键值</td>
+                                <td>描述</td>
+                                <td>类型</td>
+                                <td>必返</td>
+                                <tr>
+
+                                </tr>
+                                {foreach ($method['return'] as $k3=>$para) }
+                                <tr>
+                                    {if !arrKeyIssetAndExist($para,'list') }
+                                        <td>{$k3}</td>
+                                        <td>{$para['title']}</td>
+                                        <td>{$para['type']}</td>
+                                        <td>{$para['must']}</td>
+                                    {else}
+                                    <td>{$k3}</td>
+                                    <td>
+                                    <table>
+                                        {foreach ($para['list'] as $k4=>$v4) }
+                                        <tr>
+                                            <td>{$k4}</td>
+                                            <td>{$v4['title']}</td>
+                                            <td>{$v4['type']}</td>
+                                            <td>{$v4['must']}</td>
+                                        </tr>
+                                        {/foreach}
+                                    </table>
+                                    </td>
+
+                                    {/if}
+                                </tr>
+                                {/foreach}
+                            </table>
+                            {/if}
+
+
+                        </td>
+                        <td><a href="/tools/apitest/c={$k}&a={$k2}&code=mqzhifu">http请求</a>||<a href="/tools/testProtoBuf/c={$k}&a={$k2}&code=mqzhifu">ws请求</a> </td>
+                    </tr>
+                {/foreach}
+            </table>
+        </td>
+
+
+
+    </tr>
+
+    {/foreach}
+
+
+</table>
+
+
+
+</body>
+
+
+</html>

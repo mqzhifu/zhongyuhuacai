@@ -1,0 +1,306 @@
+{include /layout/left_manager.html}
+
+			<div class="iframeBox">
+				<div class="section">
+					<ul class="statisticsTitle">
+						<li {if $this->ctrl == 'developer' && $this->ac == 'base'}class="active"{/if}><a href="/developer/base/">基本设置</a></li>
+						<li {if $this->ctrl == 'developer' && $this->ac == 'account'}class="active"{/if}><a href="/developer/account/">账号信息</a></li>
+						<li {if $this->ctrl == 'developer' && $this->ac == 'finance'}class="active"{/if}><a href="/developer/finance/">财务信息</a></li>
+					</ul>
+				</div>
+				<div class="section">
+					{if !$finance['status']}
+					<div class="review"><img src="{CONST|H_STATIC_URL}assets/open/img/unsubmitted.png" />未提交</div>
+					{/if}
+					{if $finance['status']==1}
+					<div class="review"><img src="{CONST|H_STATIC_URL}assets/open/img/underreview.png" />审核中</div>
+					{/if}
+					{if $finance['status']==2}
+					<div class="review"><img src="{CONST|H_STATIC_URL}assets/open/img/passed.png" />审核通过</div>
+					{/if}
+					{if $finance['status']==3}
+					<div class="review"><img src="{CONST|H_STATIC_URL}assets/open/img/unpassed.png" />审核不通过</div>
+					{/if}
+				</div>
+				<div class="section">
+					<div class="section-title">基础信息</div>
+					<ul class="form-ul">
+						<li>
+							<div class="fl">开发者ID</div>
+							<div class="fr">{$user['uid']}</div>
+						</li>
+						<li>
+							<div class="fl">开发者类型</div>
+							<div class="fr">
+								<div class="company-link">{$user['accountDesc']}</div>
+							</div>
+						</li>
+						<li>
+							<div class="fl">开发者名称（开户名称）</div>
+							<div class="fr">{$user['account_holder']}</div>
+						</li>
+						<li>
+							<div class="fl">开户行地址</div>
+							<div class="fr">
+								<select id="province_selector" class="li-select select1">
+						            <option value="">省</option>
+						        </select>
+						        <select id="city_selector" class="li-select select2">
+						            <option value="">市</option>
+						        </select>
+						        <select id="district_selector" class="li-select select3">
+						            <option value="">区</option>
+						        </select>
+								<i class="prompt">不能为空</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">银行名称</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" id="bank_name" value="{if isset($finance)}{$finance['bank_name']}{/if}" placeholder="请输入完整的银行名称" />
+								<i class="prompt">不能为空</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">支行信息</div>
+							<div class="fr">
+								<input class="li-input file-input" id="branch_name" value="{if isset($finance)}{$finance['branch_name']}{/if}" type="text" placeholder="请填写支行名，如西二旗支行" /><i class="prompt">请输入支行信息</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">银行账号</div>
+							<div class="fr">
+								<input class="li-input file-input" id="bank_account" value="{if isset($finance)}{$finance['bank_account']}{/if}"  type="text" /><i class="prompt">请输入银行账号</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">银行卡正面扫描件</div>
+							<div class="fr">
+								<div class="upload-box">
+									<img class="upload-img1" onclick="$('#file1').click()" src="{if isset($finance)}{$finance['bank_img']}{else}{CONST|H_STATIC_URL}assets/open/img/upload.png{/if}"  />
+									<input class="hide" type="file" id="file1" accept="image/jpg,image/jpeg,image/bmp,image/png">
+									<span>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M，<a href="{CONST|H_STATIC_URL}assets/open/img/bank.png" target="_blank">查看示例</a></span>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="fl">身份证号</div>
+							<div class="fr">
+								<input class="li-input file-input" id="idcard_number" value="{$finance['idcard_number']}"  type="text" /><i class="prompt">请输入正确的身份证号码</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">证件有效期</div>
+							<div class="fr">
+								<input class="li-input effective" id="idcard_start_date" value="{$finance['idcard_start_date']}" type="text" /> - <input class="li-input effective" id="idcard_end_date" value="{$finance['idcard_end_date']}"  type="text" /><i class="prompt">不能为空</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">身份证正反面</div>
+							<div class="fr">
+								<div class="upload-box">
+									<div class="imgBox">
+										<img class="upload-img2" onclick="$('#file2').click()" src="{if isset($finance['idcard_img'])}{$finance['idcard_img']}{else}{CONST|H_STATIC_URL}assets/open/img/upload.png{/if}"  />
+										<em>正面</em>
+									</div>
+									<div class="imgBox">
+										<img class="upload-img3" onclick="$('#file3').click()" src="{if isset($finance['idcard2_img'])}{$finance['idcard2_img']}{else}{CONST|H_STATIC_URL}assets/open/img/upload.png{/if}"  />
+										<em>反面</em>
+									</div>
+									<span>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M，<a href="{CONST|H_STATIC_URL}assets/open/img/idcard-eg.jpg" target="_blank">查看示例</a></span>
+									<input class="hide" type="file" id="file2" accept="image/jpg,image/jpeg,image/bmp,image/png">
+									<input class="hide" type="file" id="file3" accept="image/jpg,image/jpeg,image/bmp,image/png">
+									
+								</div>
+							</div>
+						</li>
+						
+					</ul>
+				</div>
+				<div class="section">
+					<div class="section-title">联系人信息</div>
+					<ul class="form-ul">
+						<li>
+							<div class="fl">联系人</div>
+							<div class="fr">
+								<input class="li-input file-input" id="contact" value="{$user['contact']}"  type="text" /><i class="prompt">请输入联系人</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">联系地址</div>
+							<div class="fr">
+								<input class="li-input file-input" id="contact_addr" value="{$user['address']}"  type="text" /><i class="prompt">请输入联系地址</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">联系邮箱</div>
+							<div class="fr">
+								<input class="li-input file-input" id="contact_email" value="{$user['email']}"  type="text" /><i class="prompt">请输入正确的联系邮箱</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">联系电话</div>
+							<div class="fr">
+								<input class="li-input file-input" id="contact_phone" value="{$user['phone']}"  type="text" /><i class="prompt">请输入正确的联系电话</i>
+							</div>
+						</li>
+					</ul>
+					<div class="protocolDiv">
+						<span>
+							<input type="checkbox" class="input_check" id="protocol" checked="">
+							<label for="protocol">你已阅读并同意</label>
+						</span>
+						<a href="/developer/openProtocolIndex/" class="xyLable">《开心小游戏开放平台服务协议》</a>
+					</div>
+					<div class="formBtn">
+						<button type="button" class="register-btn">提交</button>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			//layer.alert('内容');
+		  	var start = laydate.render({  
+		        elem: '#idcard_start_date',  
+		        done:function(value,date){
+		        	if(value!=''){
+		        		date.month=date.month-1;
+		        		end.config.min=date;
+		        	}
+		        }
+		    });  
+		    var end = laydate.render({  
+		        elem: '#idcard_end_date',   
+		        done:function(value,date){
+		        	if(value!=''){
+		        		date.month=date.month-1;
+		        		end.config.min=date;
+		        	}
+		        }
+		    }); 		   
+			/*菜单*/
+			$(".first-level").click(function() {
+				$(this).children(".level-click").toggleClass("up");
+				$(this).siblings(".second-level").stop(true, false).slideToggle();
+			});
+			/*菜单选择*/
+			$(".second-level li").click(function() {
+				$(".second-level li").removeClass("active")
+				$(this).addClass("active");
+			});
+			
+			/*协议选择*/
+			$("#protocol").click(function(){
+				if(this.checked){
+					$(".register-btn").attr("disabled",false).removeClass("unUse");
+				}else{
+					$(".register-btn").attr("disabled",true).addClass("unUse");
+				}
+			})
+			
+			$(".file-input").on("blur",function(){
+				if(!$(this).val()){
+					$(this).addClass("empty");
+					$(this).siblings(".prompt").show();
+				}else{
+					$(this).removeClass("empty");
+					$(this).siblings(".prompt").hide();
+				}
+			})
+			$(".effective").click(function(){
+				$(document).bind("click",function(e){     
+			        if($(e.target).closest(".effective").length == 0&&$(e.target).closest(".layui-laydate1").length == 0){
+			           	if($("#idcard_start_date").val()==''||$("#idcard_end_date").val()==''){
+							$(".effective").siblings(".prompt").show();
+						}else{
+							$(".effective").siblings(".prompt").hide();
+						}
+			        }
+			    });
+			    $(".laydate-btns-confirm").click(function(){
+			    	if($("#idcard_start_date").val()==''||$("#idcard_end_date").val()==''){
+						$(".effective").siblings(".prompt").show();
+					}else{
+						$(".effective").siblings(".prompt").hide();
+					}
+			    })
+			})
+
+			$('#file1').change(function() {
+				files = ($(this)[0]).files;
+				for(var i = 0; i < files.length; i++) {
+					img1(files[i]);
+				}
+			});
+			function img1(file) {
+				var reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = function(event) {
+					$('.upload-img1').attr("src", event.target.result);
+				};
+			}
+			$('#file2').change(function() {
+				files = ($(this)[0]).files;
+				for(var i = 0; i < files.length; i++) {
+					img2(files[i]);
+				}
+			});
+			function img2(file) {
+				var reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = function(event) {
+					$('.upload-img2').attr("src", event.target.result);
+				};
+			}
+			$('#file3').change(function() {
+				files = ($(this)[0]).files;
+				for(var i = 0; i < files.length; i++) {
+					img3(files[i]);
+				}
+			});
+			function img3(file) {
+				var reader = new FileReader();
+				reader.readAsDataURL(file);
+				reader.onload = function(event) {
+					$('.upload-img3').attr("src", event.target.result);
+				};
+			}
+
+			$(document).ready(function(){
+		        var province = "{if isset($finance)}{$finance['bank_province']}{/if}";
+		        var city = "{if isset($finance)}{$finance['bank_city']}{/if}";
+		        var district = "{if isset($finance)}{$finance['bank_district']}{/if}";
+		        areaSearch('',province,city,district);
+
+				$(".register-btn").click(function(){
+					$(".li-input").each(function(){
+						var that=$(this);
+						if(that.val()==''){
+							that.siblings(".prompt").show();
+						}
+					})
+					if($(".prompt").is(":visible")){
+						layer.alert("请先完善信息");
+					}else{
+						financePerson({if isset($finance)}true{/if});
+					}
+				});
+
+			});
+
+		</script>
+	</body>
+
+</html>

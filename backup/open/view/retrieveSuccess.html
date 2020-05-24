@@ -1,0 +1,43 @@
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/retrieve.css">
+		<div class="mainBox">
+			<img class="main-head" src="{CONST|H_STATIC_URL}assets/open/img/step4.png" />
+			<div class="successBox">
+				<img class="success-icon" src="{CONST|H_STATIC_URL}assets/open/img/info-success.png"  />
+				<p>您的密码已经完成更新</p>
+				<span><em class="second">2</em>秒后将返回登录页面</span>
+				<a href="/index/codeLogin/" class="go-login">立即登录</a>
+			</div>
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<script>
+			$(function(){
+				var countdown = 10;
+				settime();
+				function settime() {
+					if(countdown == -1) {
+						window.location.href='/index/codeLogin/';
+						return;
+					} else {
+						$(".second").text(countdown);
+						countdown--;
+					}
+					setTimeout(function() {
+						settime();
+					}, 1000)
+				}
+				
+			})
+			
+		</script>
+	</body>
+</html>

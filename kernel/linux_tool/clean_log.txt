@@ -1,0 +1,47 @@
+#!/bin/bash                                                                                                                                                                      
+                                                                                                                                                                                 
+if [ $# -lt 3 ]; then                                                                                                                                                            
+    echo "Usage: ./clear_log.sh <servername><processname><logname>"                                                                                                              
+    exit;                                                                                                                                                                        
+fi                                                                                                                                                                               
+S_NAME=$1                                                                                                                                                                        
+P_NAME=$2                                                                                                                                                                        
+L_NAME=$3                                                                                                                                                                        
+                                                                                                                                                                                 
+BASE_DIR="/data2/logs/"                                                                                                                                                          
+                                                                                                                                                                                 
+echo $BASE_DIR                                                                                                                                                                   
+echo $S_NAME                                                                                                                                                                     
+echo $P_NAME                                                                                                                                                                     
+echo $L_NAME                                                                                                                                                                     
+                                                                                                                                                                                 
+LOG_DIR=$BASE_DIR$S_NAME/$L_NAME                                                                                                                                                 
+if [ -e $LOG_DIR ]; then                                                                                                                                                         
+    echo "$LOG_DIR exist"                                                                                                                                                        
+else                                                                                                                                                                             
+    echo "$LOG_DIR not exist"                                                                                                                                                    
+    exit                                                                                                                                                                         
+fi                                                                                                                                                                               
+                                                                                                                                                                                 
+SIZE=`du -m $LOG_DIR|awk '{print $1}'`                                                                                                                                           
+echo "fie size:$SIZE"                                                                                                                                                            
+if [ $SIZE -gt 5 ]; then                                                                                                                                                         
+    echo " > 5";                                                                                                                                                                 
+else                                                                                                                                                                             
+    echo " < 5";                                                                                                                                                                 
+    exit;                                                                                                                                                                        
+fi                                                                                                                                                                               
+                                                                                                                                                                                 
+PID=`ps aux|grep $S_NAME |grep $P_NAME|grep -v clear_log|awk '{print $2}'`                                                                                                       
+if [ "$PID" == "" ]; then                                                                                                                                                        
+    echo "process no startup"                                                                                                                                                    
+else                                                                                                                                                                             
+    echo "pricess pid:$PID"                                                                                                                                                      
+    echo "kill $PID"                                                                                                                                                             
+    `kill $PID`                                                                                                                                                                  
+fi                                                                                                                                                                               
+                                                                                                                                                                                 
+NEW_LOG_NAME=$LOG_DIR`date '+%D%T'|sed 's/\//-/g'`;                                                                                                                              
+echo $NEW_LOG_NAME                                                                                                                                                               
+echo "mv $LOG_DIR $NEW_LOG_NAME"                                                                                                                                                 
+`mv $LOG_DIR $NEW_LOG_NAME`           

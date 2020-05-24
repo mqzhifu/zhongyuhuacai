@@ -1,0 +1,411 @@
+{include /publish/left_game.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/adManagement.css" />
+
+			<div class="iframeBox">
+				<!-- <div class="section">
+					<div class="title" style="font-size: 18px;">广告位管理</div>
+					<div class="title">游戏广告展示
+						<span>开启该开关后，您的广告位将可以展示广告</span>
+						<div class="switchBox adControl">
+							<div class="switchMain">
+								<i></i>
+							</div>
+							<em>已关闭</em>
+							<div class="switchWin switchClose">
+								<div class="top">
+									<p>关闭后，您的广告不再展示小游戏广告。确认关闭小游戏广告展示？</p>
+									<i></i>
+								</div>
+								<button type="button" class="btn-modal-no">取消</button>
+      							<button type="button" class="btn-modal-yes">确认提交</button>
+							</div>
+							<div class="switchWin switchOpen">
+								<div class="top">
+									<p>确认开启小游戏广告展示？</p>
+									<i></i>
+								</div>
+								<button type="button" class="btn-modal-no">取消</button>
+      							<button type="button" class="btn-modal-yes">确认提交</button>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<div class="section">
+					<div class="title">广告位列表
+						<a class="add_Pro" href="/publish/addAd/gameid={$gameid}">+添加广告位</a>
+					</div>
+					<table class="table adTable">
+						<thead>
+							<tr>
+								<td>广告位名称</td>
+								<td>广告位ID</td>
+								<td>广告类型</td>
+								<td>方向</td>
+								<td>广告状态</td>
+								<td>操作</td>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<div class="page">
+						<em class="prevpage"></em><span class="indexPage">1</span> / <span class="allPage">3</span><em class="nextpage"></em>
+						<input class="pageInput" type="text" /> 
+						<button class="pageRun">跳转</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<div class="warn-outBox add_win">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head">获取代码</div>
+				<div class="del_main">
+					<div class="game_name">复制如下代码片段，插入小游戏中适合的位置，发布后即展现对应广告位</div>
+					<div class="codeBox" id="codeBox">let bannerAd =  wx.createBannerAd({
+	adUnitId : 'adunit-a34114774c748b03',
+	style:{
+		left:0,
+		top:0,
+		width:350
+	}
+})
+bannerAd.show();</div>
+	              	<button type="button" class="btn-modal-no">关闭</button>
+	              	<button type="button" class="btn-modal-yes">复制代码</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			var gameid = {$gameid};
+			var totalPage = 0;
+
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*广告位单项*/
+				$(".adTable").on("click", ".switchBox .switchMain", function() {
+					var thisDom=$(this);
+					if(thisDom.siblings("em").html()=='已开启'){
+						thisDom.siblings(".switchClose").show();
+					}else{
+						thisDom.siblings(".switchOpen").show();
+						//thisDom.siblings("em").text("已开启");
+					}
+				});
+				$(".adTable").on("click",".switchBox .btn-modal-yes",function(){
+					var thisDom=$(this).parents(".switchWin").siblings(".switchMain")
+					switchAd(thisDom);
+				});
+				/*广告位总操作*/
+				$(".adControl").on("click", ".switchMain", function() {
+					var thisDom=$(this);
+					if(thisDom.siblings("em").html()=='已开启'){
+						thisDom.siblings(".switchClose").show();
+					}else{
+						thisDom.siblings(".switchOpen").show();
+						//thisDom.siblings("em").text("已开启");
+					}
+				});
+				$(".adControl").on("click",".btn-modal-yes",function(){
+					var thisDom=$(this).parents(".switchWin").siblings(".switchMain");
+					switchAd(thisDom);
+					
+				});
+				$(document).on("click",".btn-modal-no",function(){
+					$(".switchWin").hide();
+					$(".add_win").hide();
+					$(".add_win .btn-modal-yes").html("复制代码");
+			    });
+				/*复制代码*/
+				$(".adTable").on("click",".getCode",function(){
+					$(".add_win").show();
+				});
+				$(".add_win").on("click",".btn-modal-yes",function(){
+					copyUrl2();
+				});
+				function copyUrl2()
+			    {
+			        var Url2=document.getElementById("codeBox").innerText;
+			        var oInput = document.createElement('input');
+			        oInput.value = Url2;
+			        document.body.appendChild(oInput);
+			        oInput.select(); // 选择对象
+			        document.execCommand("Copy"); // 执行浏览器复制命令
+			        oInput.className = 'oInput';
+			        oInput.style.display='none';
+			        alert("复制成功");
+			       	$(".add_win .btn-modal-yes").html("已复制");
+			    }
+				/*删除广告*/
+				$(".adTable").on("click",".delAd",function(){
+					$(this).siblings(".adDel").show();
+				});
+				$(".adTable").on("click",".controlClup .btn-modal-yes",function(){
+					delAd(this);
+				});
+				
+				$(document).on("click", ".modify", function() {
+					$(document).find(".adName").removeClass("active");
+					$(this).parents("dt").parents("dl").addClass("active");
+					var adName=$(this).siblings("p").html();
+					var thisObj=$(this).parents("dt").siblings("dd").children(".adInput");
+					thisObj.focus();
+					thisObj.val(adName);
+					textLength(thisObj);
+				});
+				$(document).on("blur",".adInput",function(){
+					modifyTitle(this);
+				});
+				function textLength(thisObj){
+					var text2 = thisObj.val(),
+						counter2;
+					if(text2) {
+						counter2 = text2.length;
+					}else{
+						counter2 =0;
+					}
+					thisObj.siblings("i").text(counter2);
+					thisObj.on('blur keyup input', function() {
+						var text = thisObj.val();
+						var counter = text.length;
+						thisObj.siblings("i").text(counter);
+					});
+				}
+
+				$(".nextpage").click(function(){
+					var page = parseInt($(".indexPage").html())+1;
+					if (page > totalPage) {
+						return;
+					}
+					$(".indexPage").html(page);
+					loadTable(page);
+
+				});
+
+				$(".prevpage").click(function(){
+					var page = $(".indexPage").html()-1;
+					if (page < 1) {
+						return;
+					}
+					$(".indexPage").html(page);
+					loadTable(page);
+				});
+
+				$(".pageRun").click(function(){
+					var page = $(".pageInput").val();
+					if (page > totalPage) {
+						page = totalPage;
+					} else if (page < 1) {
+						page = 1;
+					}
+					$(".indexPage").html(page);
+					loadTable(page);
+				});
+
+				loadTable(1);
+
+
+
+				
+			})
+
+			function loadTable(page) {
+	            $.ajax({
+			        type: "POST",
+			        url: "/publish/getAds/",
+					data: {gameid:gameid,page:page},
+					dataType:"json",
+			        success: function(data) {
+			        	if (data.code == 200) {
+			        		totalPage = data.data.totalPage;
+		                	if (totalPage == 0) {
+		                		totalPage = 1;
+		                	}
+			        		var ads= data.data.list;
+			        		$(".allPage").html(totalPage);
+			        		var html = '';
+				        	for(var i = 0; i < ads.length; i++) {
+								html +='<tr><td><dl class="adName"><dt><p>'+ads[i].title+'</p><img class="modify" src="{CONST|H_STATIC_URL}assets/open/img/modify.png"></dt><dd><input class="adInput" attr-id='+ads[i].id+' type="text" maxlength="30" /><i>2</i>/30</dd></dl></td><td>'+ads[i].id+'</td><td>'+ads[i].advertise_type_desc+'</td><td>'+ads[i].direction_desc+'</td>';
+								if (ads[i].status == 1) {
+									html += '<td><div class="check" style="background-color: #33CD9C;">审核中</div></td>';
+								} else if (ads[i].status == 2) {
+									html += '<td><div class="switchBox"><div attr-id='+ads[i].id+' class="switchMain switchClose"><i></i></div><em>已关闭</em><div class="switchWin switchClose"><div class="top"><p>若广告位线上代码已发布，关闭广告位将导致小游戏广告无法展示。确认关闭小游戏广告展示？</p><i></i></div><button type="button" class="btn-modal-no">取消</button><button type="button" class="btn-modal-yes">确认提交</button></div><div class="switchWin switchOpen"><div class="top"><p>确认开启小游戏广告展示？</p><i></i></div><button type="button" class="btn-modal-no">取消</button><button type="button" class="btn-modal-yes">确认提交</button></div></div></td>';
+								} else if (ads[i].status == 3) {
+									html += '<td><div class="switchBox"><div attr-id='+ads[i].id+'  class="switchMain onSwitch"><i></i></div><em>已开启</em><div class="switchWin switchClose"><div class="top"><p>若广告位线上代码已发布，关闭广告位将导致小游戏广告无法展示。确认关闭小游戏广告展示？</p><i></i></div><button type="button" class="btn-modal-no">取消</button><button type="button" class="btn-modal-yes">确认提交</button></div><div class="switchWin switchOpen"><div class="top"><p>确认开启小游戏广告展示？</p><i></i></div><button type="button" class="btn-modal-no">取消</button><button type="button" class="btn-modal-yes">确认提交</button></div></div></td>';
+								} else if (ads[i].status == 5) {
+									html += '<td><div class="check" style="background-color: #EF4D57;">未通过</div></td>';
+								} 
+								html += '<td><div class="controlClup"><span class="getCode">获取代码</span><span class="delAd">删除</span><div class="switchWin adDel"><div class="top"><p>若广告位线上代码已发布，删除广告位将导致小游戏广告无法展示。确认删除小游戏广告展示？</p><i></i></div><button type="button" class="btn-modal-no">取消</button><button type="button" value='+ads[i].id+' class="btn-modal-yes">删除广告位</button></div></div></td></tr>';
+							}
+							$("tbody").html(html);
+
+			        	} else {
+			        		layer.alert("查询不到该游戏！");
+			        	}
+			        }
+			    });
+			}
+
+			function delAd(elem) {
+				var aid = $(elem).val();
+				if (!aid) {
+					layer.alert('删除失败，请重试!');
+					$(".switchWin").hide();
+                    return false;
+				}
+				var postUrl = "/publish/deleteAd/";
+                var postInfo = {
+                    gameid: gameid,
+                    aid: aid,
+                };
+				$.ajax({
+                    type: "post",
+                    url: postUrl,
+                    data: postInfo,
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.result) {
+                            layer.alert('删除成功！', 
+                                {title:'提示'}, 
+                                function(index){
+                                    $(elem).parents(".switchWin").parents(".controlClup").parents("td").parents("tr").remove();
+                                    $(".switchWin").hide();
+                                    layer.close(index);
+									
+                            });
+                        } else {
+                        	$(".switchWin").hide();
+                            layer.alert('删除失败，请重试!');
+                        }
+                    }
+                   
+                });
+			}
+
+			function modifyTitle(elem)
+			{
+				var adId = $(elem).attr('attr-id');
+	            if (!adId || !gameid) {
+	                layer.alert('参数有误！');
+	                $(elem).parents("dd").parents("dl").removeClass("active");
+	                return false;
+	            }
+
+	            var oldTitle = $(elem).parents("dd").siblings("dt").children("p").html();
+	            var text = $(elem).val().trimSpace();
+
+	            if (text == oldTitle) {
+	            	$(elem).parents("dd").parents("dl").removeClass("active");
+	            	return false;
+	            }
+	            
+	            if (!text || '' == text) {
+	                layer.alert('请输入有效的广告位名称！');
+	                $(elem).parents("dd").parents("dl").removeClass("active");
+	                return false;
+	            }
+	            var postUrl = "/publish/updateAd/";
+	            var postInfo = {
+	                gameid: gameid,
+	                aid: adId,
+	                title: text,
+	            };
+	            $.ajax({
+	                type: "post",
+	                url: postUrl,
+	                data: postInfo,
+	                dataType: "json",
+	                success: function (data, $status) {
+	                    if (data.result) {
+	                        $(elem).parents("dd").siblings("dt").children("p").html(text);
+							$(elem).parents("dd").parents("dl").removeClass("active");
+							return true;
+	                    } else {
+	                        layer.alert('修改失败，请重试!');
+	                        $(elem).parents("dd").parents("dl").removeClass("active");
+	                        return false;
+	                    }
+	                },
+	                error: function () {
+	                    return false;
+	                }
+	            });
+			}
+
+			function switchAd(elem)
+			{
+				var adId = elem.attr('attr-id');
+	            if (!adId || !gameid) {
+	                layer.alert('参数有误！');
+	                return false;
+	            }
+
+	            if (elem.hasClass("onSwitch")) {
+					status = 2; //关闭
+				} else {
+					status = 3; //开启
+				}
+
+	            var postUrl = "/publish/switchAd/";
+	            var postInfo = {
+	                gameid: gameid,
+	                aid: adId,
+	                status: status,
+	            };
+				$.ajax({
+	                type: "post",
+	                url: postUrl,
+	                data: postInfo,
+	                dataType: "json",
+	                success: function (data) {
+	                    if (data.code == 200) {
+	                    	if(elem.hasClass("onSwitch")) {
+								elem.removeClass("onSwitch");
+								elem.siblings("em").text("已关闭");
+								$(".switchMain").removeClass("onSwitch");
+								$(".switchMain").siblings("em").text("已关闭");
+								$(".switchWin").hide();
+							}else {
+								elem.addClass("onSwitch");
+								elem.siblings("em").text("已开启");
+								$(".switchMain").addClass("onSwitch");
+								$(".switchMain").siblings("em").text("已开启");
+								$(".switchWin").hide();
+							}
+							return true;
+	                    } else {
+	                        layer.alert(data.message);
+	                    }
+	                },
+	                error: function () {
+	                    return false;
+	                }
+	            });
+			}
+
+		</script>
+	</body>
+
+</html>

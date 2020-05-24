@@ -1,0 +1,265 @@
+{include /publish/left_game.html}
+			<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/androidEdit.css" />
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">小游戏基本信息</div>
+					<ul class="basicMessage">
+						<li>
+							<span>应用图标</span>
+							<div>
+								<input id="icon_256" type="file">
+								<label for="icon_256" id="icon_256_label">
+									<div class="android_icon" style="background-image: url({if $gameInfo['icon_256'] != ''}{$gameInfo['icon_256']}{/if});" src='{if ($gameInfo["icon_256"] != "")}{$gameInfo["icon_256"]}{/if}'><span>{if $gameInfo['icon_256'] == ''}256x256{/if}</span></div>
+				                </label>
+								
+							</div>
+						</li>
+						<li>
+							<span>游戏编号</span>
+							<div><input type="text"  class="disabled" disabled="" value="{$gameid}" /></div>
+						</li>
+						<li>
+							<span>应用秘钥</span>
+							<div>
+								<input id="appSecret"  class="disabled" readonly="" disabled="" type="text" value="●●●●●●●●" />
+								<img class="secretBtn" src="{CONST|H_STATIC_URL}assets/open/img/eye.png" />
+							</div>
+						</li>
+						<li>
+							<span>类别</span>
+							<div>
+								<select id="category" name="category">
+									<option value="0">--请选择--</option>
+						            {foreach ($gameCategory as $category)}
+						            <optgroup label="{$category['name_cn']}">
+						                {foreach ($category['child'] as $child)}
+						                {if ($gameInfo['category'] == $child['id'])}
+						                <option value="{$child['id']}" selected>{$child['name_cn']}</option>
+						                {else}
+						                <option value="{$child['id']}">{$child['name_cn']}</option>
+						                {/if}
+						                {/foreach}
+						            </optgroup>
+						            {/foreach}
+								</select>
+							</div>
+						</li>
+						<li>
+							<span>简介</span>
+							<div><input id="summary" type="text" name="summary" value="{$gameInfo['summary']}" placeholder="游戏描述建议简短并符合游戏特征" /></div>
+						</li>
+						<li>
+							<span>屏幕方向</span>
+							<div>
+								<div class="redioGroup">
+									<span class="radioBox">
+										<input type="radio" value="2" class="input_check" id="radio1_1" name="coderadio" {if ($gameInfo['screen'] == 2)}checked{/if}>
+										<label for="radio1_1">竖屏</label>
+									</span>
+									<span class="radioBox">
+										<input type="radio" value="1" class="input_check" id="radio1_2" name="coderadio" {if ($gameInfo['screen'] == 1)}checked{/if}>
+										<label for="radio1_2">横屏</label>
+									</span>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div class="btnBox">
+						<button id="cancelBtn" type="button" class="btn-modal-no">放弃</button>
+              			<button id="saveBtn" type="button" class="btn-modal-yes">保存更改</button>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<div class="warn-outBox secretWin">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head">请重新输入密码</div>
+				<div class="del_main">
+					<div class="game_name">为保护你的帐户安全，请重新输入密码后再继续操作。</div>
+					<div class="passwordBox">
+						<input class="pas_input" type="text" name="" id="" value="" /><a href="/forgetPs/index/">忘记密码？</a>
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button id="checkAuthBtn" type="button" class="btn-modal-yes">提交</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*添加游戏*/
+				$(".add_game,.game_add").click(function() {
+					$(".add_win").show();
+				});
+				/*删除游戏*/
+				$(document).on("click", ".del_game", function() {
+					$(".del_win").show();
+				});
+				$(".btn-modal-no").click(function() {
+					$(".warn-outBox").hide()
+				});
+				$("#cancelBtn").click(function(){
+					location.href = "/publish/detail/gameid="+gameid; 
+				})
+				// 上传图片事件
+				$("#icon_256").on("change", function(e) {
+					var file = e.target.files[0];
+
+					if(!file.type.match("image.*")) {
+						return false;
+					}
+
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+
+					reader.onload = function(arg) {
+						console.log(arg.target.result);
+						$(".android_icon span").hide();
+						$(".android_icon").attr("style", "background-image: url(" + arg.target.result + ")");
+					}
+				})
+				/*查看秘钥*/
+				$(".secretBtn").click(function(){
+					$(".secretWin").show();
+				});
+				$(".btn-modal-no , .btn-modal-yes").click(function(){
+					$(".secretWin").hide();
+				});
+				$(".colorPicker").click(function(){
+					$("#myColorPicker").fadeToggle(100);
+				});
+				$("#myColorPicker").on("click","li",function(){
+					var thisClolr=$(this).attr("mce_style");
+					$("#background_color").val(thisClolr);
+					$("#background_color_2,#background_color_1").css({"background-color":thisClolr,"color":thisClolr});
+				});
+
+				var gameid = {$gameid};
+
+				// 校验身份，显示密钥
+		        $("#checkAuthBtn").on("click", function() {
+		            var formData = new FormData();
+		            var password = $(".pas_input").val();
+		            formData.append("gameid", gameid);
+		            formData.append("password", password);
+		            $.ajax({
+		                url: "/publish/auth/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function (res) {
+		                    layer.alert(res.message, 
+		                        {title:'提示'}, 
+		                        function(index){
+		                            $("#myModal").modal("hide");
+		                            if (res.code === 0) {
+		                                $(".secretBtn").hide();
+		                                $("#appSecret").val(res.data.appSecret);
+		                                $(".resetBtn").show();
+		                            }
+		                            layer.close(index);
+		                            $(".secretWin").hide();
+		                    	}
+		                    );
+		                    
+		                }
+		            });
+		        });
+
+		        // 重复提交
+		        var saving = false;
+		        // 保存逻辑
+		        var saveDetailEvent = function() {
+		            var formData = new FormData();
+		            // 游戏ID
+		            formData.append("gameid", gameid);
+		            // 分类
+		            var category = $("select[name=category]").val();
+		            if (category == 0){
+		                saving = false;
+		                layer.alert("请选择分类");
+		                return;
+		            }
+		            formData.append("category", category);
+		            // 简介
+		            var summary = $("input[name=summary]").val();
+		            if (!summary){
+		                saving = false;
+		                layer.alert("请填写简介");
+		                return;
+		            }
+		            formData.append("summary", summary);
+		            // 屏幕方向
+		            var screen = $("input[name=coderadio]:checked").val();
+		            if (!screen){
+		                saving = false;
+		                layer.alert("请选择屏幕方向");
+		                return;
+		            }
+		            formData.append("screen", screen);
+		            
+		            // 应用图标256*256
+		            var icon256 = document.getElementById("icon_256").files[0];
+		            var icon256Preview = $(".android_icon").attr("src");
+		            if (icon256 !== undefined) {
+		                formData.append("icon_256", icon256);
+		            } else if (icon256Preview === undefined) {
+		                saving = false;
+		                layer.alert("请上传应用图标");
+		                return;
+		            }
+
+		            $.ajax({
+		                url: "/publish/save/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function (res) {
+		                    layer.alert(res.message, 
+		                        {title:'提示'}, 
+		                        function(){
+		                            location.href = "/publish/detail/gameid={$gameid}";
+		                    });
+		                },
+		                complete: function(res) {
+		                    saving = false;
+		                }
+		            });
+		        };
+
+		        // 保存按钮
+		        $("#saveBtn").on("click", function() {
+		            if (!saving) {
+		                saving = true;
+		                saveDetailEvent();
+		            }
+		        });
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,152 @@
+{include layout/left.html}
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>消息设置
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row margin-top-20">
+                        <form id="apppush_form" action="/msg/no/appPush/pushSave/" method="post" autocomplete="off">
+                            <ul class="reg_ul">
+                                <li>
+                                    <span>发送类型：</span>
+                                    <select id="sendTypes" name="sendTypes" class="form-control">
+                                        <option value="0">--请选择--</option>
+                                        {foreach ($sendTypes as $key => $value)}
+                                        <option value="{$key}">{$value}</option>
+                                        {/foreach}
+                                    </select>
+                                </li>
+                                <li>
+                                    <span>PUSH类型：</span>
+                                    <select id = "pushTypes" name="pushTypes" class="form-control">
+                                        <option value="0">--请选择--</option>
+                                        {foreach ($pushTypes as $key => $value)}
+                                        <option value="{$key}">{$value}</option>
+                                        {/foreach}
+                                    </select>
+                                </li>
+                                <li>
+                                    <span>平台选择：</span>
+                                    <select id="platformTypes" name="platformTypes" class="form-control">
+                                        <option value="0">--请选择--</option>
+                                        {foreach ($platformTypes as $key => $value)}
+                                        <option value="{$key}">{$value}</option>
+                                        {/foreach}
+                                    </select>
+                                </li>
+                                <li>
+                                    <span>发送原因：</span>
+                                    <input  id="push_reason" name ="push_reason" type="text"/>
+                                </li>
+                                <li>
+                                    <span>发送标题：</span>
+                                    <input  id="push_title" name ="push_title" type="text"/>
+                                </li>
+                                <li>
+                                    <span>发送内容：</span>
+                                    <input  id="push_content" name ="push_content" type="text"/>
+                                </li><br>
+                                <input type="radio" name="kfid_type" value="1" checked>开发者ID
+                                <input type="radio" name="kfid_type" value="2" disabled="disabled">开发者账号
+                                <input style="width: 280px;height: 40px;" placeholder="多个开发者id用 ';' 隔开" id="kf_ids" name ="kf_ids" type="text"/><br><br>
+                                <label><input name="fruit" type="radio" id="" value="1" onclick="showSelectedPrice(this)">立即发送</label>
+                                    <label><input name="fruit" type="radio" id="danxuan" value="1" onclick="noSelectedPrice(this)">发送时间</label>&nbsp;&nbsp;
+                                    <input  style="width: 280px;height: 40px;"id="act_start_time" name="act_start_time" type="text" class="text-box hasDatepicker" value="" placeholder="设置时间" readonly="readonly" >
+                                    <div style="text-align: left;margin-left: 60px; margin-top: 40px; margin-bottom: 40px;">
+                                    <button id="cancel_button" type="button" style="color: red" class="btn btn-circle"><span style="font-weight: bold">返回</span></button>
+                                    <button id="submit_button" type="submit" style="color: green" class="btn btn-circle"><span style="font-weight: bold">保存</span></button>
+                                </div>
+                           </ul>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>
+
+<script type="text/javascript">
+    $( "input[name='act_start_time']").datetimepicker();
+</script>
+<script type="text/javascript">
+    $(function() {
+        // 发送按钮
+        $("#submit_button").on("click", function () {
+            if (confirm("是否进行保存？")) {
+                var send_types = $("#sendTypes").find("option:selected").val();
+                var push_types = $("#pushTypes").find("option:selected").val();
+                var platform_types = $("#platformTypes").find("option:selected").val();
+                var kf_ids = $("input#kf_ids").val();
+                var push_reason = $("input#push_reason").val();
+                var push_title = $("input#push_title").val();
+                var push_content = $("input#push_content").val();
+                var act_start_time = $("input#act_start_time").val();
+                var fruit = $("input[name='fruit']:checked").val();
+                if('0' === send_types){
+                    alert("请选择发送方式！");
+                    return false;
+                }
+                if('0' === push_types){
+                    alert("请选择PUSH类型！");
+                    return false;
+                }
+                if('0' === platform_types){
+                    alert("请选择平台类型！");
+                    return false;
+                }
+                if('' == kf_ids || null == kf_ids){
+                    alert("请选择开发者ID！");
+                    return false;
+                }
+                if('' == push_reason || null == push_reason){
+                    alert("请填写发送原因！");
+                    return false;
+                }
+                if('' == push_title || null == push_title){
+                    alert("请填写发送标题！");
+                    return false;
+                }
+                if('' == push_content || null == push_content){
+                    alert("请填写发送内容！");
+                    return false;
+                }
+                if(fruit != 1){
+                    if('' == act_start_time || null == act_start_time){
+                        alert("请设置发送时间！");
+                        return false;
+                    }
+                }
+            }
+        });
+        // 表单数据验证
+        // 取消按钮
+
+    });
+</script>
+
+<script>
+    $("#cancel_button").on("click", function() {
+        location.href = "/msg/no/appPush/index/";
+    });
+</script>
+
+    <script>
+        function showSelectedPrice(thisRadio)
+        {
+            $('#act_start_time').attr('disabled',true);
+        }
+        function noSelectedPrice() {
+            $('#act_start_time').attr('disabled',false);
+        }
+    </script>

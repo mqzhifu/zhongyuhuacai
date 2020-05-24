@@ -1,0 +1,70 @@
+		<div class="gameManage">
+			<div class="manageHead">
+				<div class="gameSelect dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<img src="{if $gameInfo['icon_128_url']}{$gameInfo['icon_128_url']}{else}{CONST|H_STATIC_URL}assets/open/img/default_icon.png{/if}"  /><span>{$gameInfo["name"]}</span>
+				</div>
+				<ul class="dropdown-menu gameSelectUl" aria-labelledby="dropdownMenu">
+				</ul>
+				<div class="game_number">游戏编号：{$gameid}<a href="/game/show/">返回游戏列表</a></div>
+				<div class="clearfix"></div>
+			</div>
+			<ul class="nav-list">
+				<li class="levelLi">
+					<div class="first-level">小游戏<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div>
+					<ul class="second-level">
+						<li {if $this->ctrl == 'game' && ($this->ac == 'detail'||$this->ac == 'edit')}class="active"{/if} ><a href="/game/detail/?gameid={$gameid}">游戏详情</a></li>
+						<li {if $this->ctrl == 'payment' && $this->ac == 'index'}class="active"{/if}><a href="/payment/index/?gameid={$gameid}">游戏支付</a></li>
+						<!-- 权限检查 -->
+        				{if $this->openGamesService->hasAuthority($uid, $gameid, 'game_host') == true}
+						<li {if $this->ctrl == 'game' && $this->ac == 'hosting'}class="active"{/if}><a href="/game/hosting/?gameid={$gameid}">游戏托管</a></li>
+						{/if}
+						<li {if $this->ctrl == 'game' && $this->ac == 'audit'}class="active"{/if}><a href="/game/audit/?gameid={$gameid}">游戏审核</a></li>
+						{if (!$foreign)}
+						{if $this->openGamesService->hasAuthority($uid, $gameid, 'data_analysis') == true}
+						<li {if $this->ctrl == 'statistics'}class="active"{/if}><a href="/statistics/index/?gameid={$gameid}">游戏统计</a></li>
+						{/if}
+						{/if}
+						<!-- <li {if $this->ctrl == 'message'}class="active"{/if}><a href="/message/index/gameid={$gameid}">消息设置</a></li> -->
+						{if $this->openGamesService->hasAuthority($uid, $gameid, 'game_manage') == true}
+						<li {if $this->ctrl == 'member' && $this->ac == 'show'}class="active"{/if}><a href="/member/show/?gameid={$gameid}">成员管理</a></li>
+						{/if}
+					</ul>
+				</li>
+				{if $this->openGamesService->hasAuthority($uid, $gameid, 'ad') == true}
+				<li class="levelLi">
+					<div class="first-level">广告<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div>
+					<ul class="second-level">
+						{if (!$foreign)}
+						<li {if $this->ctrl == 'advertise' && $this->ac == 'statistics'}class="active"{/if}><a href="/advertise/statistics/gameid={$gameid}">广告统计</a></li>
+						{/if}
+						<li {if $this->ctrl == 'advertise' && $this->ac == 'manage'}class="active"{/if}><a href="/advertise/manage/gameid={$gameid}">广告位管理</a></li>
+					</ul>
+				</li>
+				{/if}
+				<li class="levelLi">
+					<div class="first-level">日志<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div>
+					<ul class="second-level">
+						<li {if $this->ctrl == 'activityLog' && $this->ac == 'index'}class="active"{/if}><a href="/activityLog/index/gameid={$gameid}">日志活动</a></li>
+					</ul>
+				</li>
+			</ul>
+			<script>
+				$(function(){
+					$.ajax({
+			            type: "POST",
+			            url: "/game/getGames/",
+			            dataType: "json",
+			            success: function (data) {
+			            	var games= data.data;
+				        	for(var i = 0; i < games.length; i++) {
+								if (games[i].small_img == '') {
+									games[i].small_img = "{CONST|H_STATIC_URL}assets/open/img/default_icon.png";
+								}
+								var html ='<li><a href="/game/detail/gameid='+games[i].id+'"><img src="'+games[i].small_img+'"/><span>'+games[i].name+'</span></a></li>';
+								$(".gameSelectUl").append(html);
+							}
+			            },
+			        });
+				});
+
+			</script>

@@ -1,0 +1,586 @@
+
+
+<link href="{CONST|H_STATIC_URL}assets/global/google/font.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN THEME STYLES -->
+<link href="{CONST|H_STATIC_URL}assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="{CONST|H_STATIC_URL}assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+
+<script>
+    function linechart(id,data) {
+        if ($('#'+id).size() != 1) {
+            return;
+        }
+
+        
+        var newdata = new Array();
+        for(var i = 0; i < data.length; i++){
+            var a = [];
+            var b = [];
+            for(var j = 0; j < data[i].data.length; j++){
+              console.log(data[i].data[j][1]);
+              a[j] = [j+1, data[i].data[j][1]];
+              b[j] = [j+1, data[i].data[j][0]];
+            }
+
+            newdata.push({
+                data: a,
+                label: data[i].label,
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0,
+            });
+        }
+
+        var plot = $.plot($("#"+id), newdata, {
+            series: {
+                lines: {
+                    show: true,
+                    lineWidth: 2,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.05
+                        }, {
+                            opacity: 0.01
+                        }]
+                    }
+                },
+                points: {
+                    show: true,
+                    radius: 3,
+                    lineWidth: 1
+                },
+                shadowSize: 2
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            },
+            colors: ["#d12610", "#37b7f3", "#52e136"],
+            xaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+                // tickFormatter: function(axis){
+                //   return "dsdsd"+axis.toString();
+                // },
+                ticks:b,
+            },
+            yaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            }
+        });
+
+        
+        function showTooltip(x, y, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 15,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+        }
+
+        var previousPoint = null;
+        $("#"+id).bind("plothover", function(event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + y + "秒");
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
+    }
+
+</script>
+<script>
+
+jQuery(document).ready(function() {       
+   // initiate layout and plugins
+    Metronic.init(); // init metronic core components
+    Layout.init(); // init current layout
+    QuickSidebar.init(); // init quick sidebar
+    Demo.init(); // init demo features
+
+
+  $('#search_btn').click(function(){
+    var from = $('#from').val();
+    var to = $('#to').val();
+    var gameid = $('#game_id').val();
+    $.ajax({
+          url:"/xyx_cnt/no/time/getDataByDay/",
+          type:"post",
+          data:{
+            from:from,
+            to:to,
+            gameid:gameid
+          },
+          dataType:"json",
+          success: function(res){
+            if(res.code == 200){
+              linechart("byday", res.data['line']);
+
+              // 表格
+              $('#active_rank_tb tbody').html("");
+              var tableData = res.data['table'];
+              for (var i = 0; i <= tableData.length; i++) {
+                  $('#active_rank_tb tbody').append("<tr><td>"+tableData[i][0]+"</td><td>"+tableData[i][1]+"</td><td>"+tableData[i][2]+"</td><td>"+tableData[i][3]+"</td></tr>");
+              }
+              
+            }else{
+                alert(res.message);
+            }
+          }
+      });
+  });
+
+   
+
+});
+</script>
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+
+    .col-width {
+        width: 12.5%;
+    }
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                             Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <div class="theme-panel hidden-xs hidden-sm hide">
+                <div class="toggler">
+                </div>
+                <div class="toggler-close">
+                </div>
+                <div class="theme-options">
+                    <div class="theme-option theme-colors clearfix">
+                        <span>
+                        THEME COLOR </span>
+                        <ul>
+                            <li class="color-default current tooltips" data-style="default" data-container="body" data-original-title="Default">
+                            </li>
+                            <li class="color-darkblue tooltips" data-style="darkblue" data-container="body" data-original-title="Dark Blue">
+                            </li>
+                            <li class="color-blue tooltips" data-style="blue" data-container="body" data-original-title="Blue">
+                            </li>
+                            <li class="color-grey tooltips" data-style="grey" data-container="body" data-original-title="Grey">
+                            </li>
+                            <li class="color-light tooltips" data-style="light" data-container="body" data-original-title="Light">
+                            </li>
+                            <li class="color-light2 tooltips" data-style="light2" data-container="body" data-html="true" data-original-title="Light 2">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Theme Style </span>
+                        <select class="layout-style-option form-control input-sm">
+                            <option value="square" selected="selected">Square corners</option>
+                            <option value="rounded">Rounded corners</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Layout </span>
+                        <select class="layout-option form-control input-sm">
+                            <option value="fluid" selected="selected">Fluid</option>
+                            <option value="boxed">Boxed</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Header </span>
+                        <select class="page-header-option form-control input-sm">
+                            <option value="fixed" selected="selected">Fixed</option>
+                            <option value="default">Default</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Top Menu Dropdown</span>
+                        <select class="page-header-top-dropdown-style-option form-control input-sm">
+                            <option value="light" selected="selected">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Mode</span>
+                        <select class="sidebar-option form-control input-sm">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected="selected">Default</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Menu </span>
+                        <select class="sidebar-menu-option form-control input-sm">
+                            <option value="accordion" selected="selected">Accordion</option>
+                            <option value="hover">Hover</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Style </span>
+                        <select class="sidebar-style-option form-control input-sm">
+                            <option value="default" selected="selected">Default</option>
+                            <option value="light">Light</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Position </span>
+                        <select class="sidebar-pos-option form-control input-sm">
+                            <option value="left" selected="selected">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Footer </span>
+                        <select class="page-footer-option form-control input-sm">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected="selected">Default</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <div class="page-bar">
+                <ul class="page-breadcrumb">
+                    <li>
+                        小游戏时长-分段
+                    </li>
+                </ul>
+                
+            </div>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row margin-top-20">
+                <div class="col-md-12">
+                    <!-- BEGIN PROFILE CONTENT -->
+                    <div class="profile-content">   
+                        <!-- 条件 -->
+                        <div class="row">
+                          
+                          <div class="col-md-2">
+                            <div class="input-group date form_datetime margin-bottom-5">
+                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="to" id="to" placeholder="当月">
+                                <span class="input-group-btn">
+                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                </span>
+                            </div>
+                          </div>
+                          <div class="col-md-2">
+                            <!-- <label class="control-label col-md-3">Extra Large</label> -->
+                            <select class="form-control select2me" style="width: 220px !important;" id="game_id" data-placeholder="游戏名称">
+                                <option value=""></option>
+                                {foreach ($gameNameList as $k=>$v)}
+                                    <option value="{$v['id']}">{$v['name']}</option>
+                                {/foreach}
+                            </select>
+                            <!-- <input type="text" id="game_id"> -->
+                            
+                          </div>
+                          <div class="col-md-4">
+                            <input type="button" id="search_btn" value="搜索">
+
+                          </div>
+                          
+                        </div>               
+                        <!-- 折线图 -->
+                        <div class="row">
+                            
+                            <!-- <div class="col-md-6"> -->
+                                <!-- BEGIN PORTLET -->
+                                <div class="portlet light">
+                                    <div class="portlet-title tabbable-line">
+                                        <div class="caption caption-md">
+                                            <i class="icon-globe theme-font hide"></i>
+                                            <span class="caption-subject font-blue-madison bold uppercase">趋势图</span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="portlet-body">
+                                        <!--BEGIN TABS-->
+                                        <div class="tab-content">
+                                            <div class="col-md-12">
+                                                <div id="byday" class="chart">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--END TABS-->
+                                    </div>
+                                </div>
+                                <!-- END PORTLET -->
+                            <!-- </div> -->
+                        </div>
+                        <!-- 表格-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                  <div class="portlet box red">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-cogs"></i>详细数据
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="table-scrollable">
+                                                <table class="table table-hover" id="active_rank_tb">
+                                                <thead>
+                                                <tr>
+                                                    <th>
+                                                         时间
+                                                    </th>
+                                                    <th>
+                                                         新用户
+                                                    </th>
+                                                    <th>
+                                                         活跃用户
+                                                    </th>
+                                                    <th>
+                                                         平均使用时长
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PROFILE CONTENT -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+
+
+
+<script>
+    
+ 
+
+    jQuery(document).ready(function() {
+
+//         Metronic.init(); // init metronic core components
+// Layout.init(); // init current layout
+// QuickSidebar.init(); // init quick sidebar
+// Demo.init(); // init demo features
+   TableAdvanced.init();
+   ChartsAmcharts.init();
+
+   ChartsFlotcharts.init();
+   ChartsFlotcharts.initCharts();
+   ChartsFlotcharts.initPieCharts();
+   ChartsFlotcharts.initBarCharts();
+
+        EcommerceProducts.init();
+        
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<!-- <script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script> -->
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="{CONST|H_STATIC_URL}assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/pages/scripts/table-advanced.js"></script>
+
+
+
+
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/amcharts.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/serial.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/pie.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/radar.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/themes/light.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/themes/patterns.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/themes/chalk.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/ammap/ammap.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="{CONST|H_STATIC_URL}assets/admin/pages/scripts/charts-amcharts.js"></script>
+
+
+
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.resize.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.pie.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.stack.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.crosshair.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/pages/scripts/charts-flotcharts.js"></script>
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+
+    });
+
+
+</script>
+
+<script>
+
+
+    if (!jQuery().datetimepicker) {
+        alert("error:333");
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        format: "yyyy-mm",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2019-04-25 00:00",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10,
+        minView:"month"
+    });
+
+</script>
+
+
+
+
+
+
+

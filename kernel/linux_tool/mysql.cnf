@@ -1,0 +1,98 @@
+# http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html
+
+[mysqld]
+# basedir = .....
+# datadir = .....
+# socket = .....
+# pid-file
+
+port=3306
+
+skip-name-resolve
+
+#default-time-zone= "+8:00"
+
+back_log=100    #未建立TCP连接的请求个数
+
+character_set_server=utf8
+explicit_defaults_for_timestamp=true
+
+max_connections = 1024
+connect_timeout=360 #tcp请求连接超时时间
+interactive_timeout = 120  #连接成功后的超时时间
+wait_timeout = 120  #连接成功后的超时时间
+
+query_cache_size = 0
+
+join_buffer_size = 64M
+sort_buffer_size = 2M
+read_rnd_buffer_size = 2M
+
+tmp_table_size = 128M #内存临时表大小，如果超过该值，则结果放到磁盘中
+max_heap_table_size = 128M #内存表
+#最大临时表数量
+#max_tmp_tables
+#当临时表大于上限后，会映射到硬盘上的某个位置
+#tmpdir 
+
+key_buffer_size=64M
+table_open_cache=2000
+
+#sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+
+server_id = 1
+#relayrelay-log
+#relayrelay_log_index
+#max_relay_log_size
+
+#要复制的数据库
+#replicate-do-db=rctailor_test
+
+#不复制test库的binlog
+#replicate-ignore-db=test
+#replicate-ignore-db=mysql
+#replicate-ignore-db=information_schema
+
+
+
+##binlog 要记录 的数据库
+binlog-do-db=kernel
+
+##不记录binlog
+binlog-ignore-db=test
+binlog-ignore-db=mysql
+binlog-ignore-db=information_schema
+
+log-bin=bin_log
+#log-bin-index
+expire-logs-days=7
+max_binlog_size=512M
+binlog_format = MIXED
+#binlog_cache_size
+
+long_query_time = 5 
+slow-query-log=1
+slow-query-log-file=/home/mysql_data/slave_3306/slow.log
+
+
+
+
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# # 8G
+innodb_buffer_pool_size=128M
+#innodb_data_file_path = ibdata0:1024M;ibdata1:1024M;ibdata2:48912M;ibdata3:1024M;ibdata4:2048M:autoextend
+innodb_log_file_size = 128M   
+#innodb_log_buffer_size = 512M  
+#innodb_additional_mem_pool_size=20M
+
+#死琐-日志
+innodb_print_all_deadlocks=on
+
+#琐等待超-回退时间：一般像表琐出现死琐，或者事务超时
+#innodb_lock_wait_timeout
+#自增琐-模式
+#innodb_autoinc_lock_mode
+#
+#
+#
+#

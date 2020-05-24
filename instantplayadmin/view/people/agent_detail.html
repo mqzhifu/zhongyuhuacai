@@ -1,0 +1,344 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+
+
+
+
+
+                        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+                        <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                        <h4 class="modal-title">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Widget settings form goes here
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn blue">Save changes</button>
+                                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        <!-- /.modal -->
+                        <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+                        <!-- BEGIN STYLE CUSTOMIZER -->
+                        <!-- END STYLE CUSTOMIZER -->
+                        <!-- BEGIN PAGE HEADER-->
+                        <!-- END PAGE HEADER-->
+                        <!-- BEGIN PAGE CONTENT-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- Begin: life time stats -->
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-shopping-cart"></i>一级代理详情 #{$agent['id']}
+                                            <!--<span class="hidden-480">| Dec 27, 2013 7:16:25 </span>-->
+                                        </div>
+                                        <div class="actions">
+                                            <a href="javascript:;" class="btn default yellow-stripe">
+                                                <i class="fa fa-angle-left"></i>
+                                                <span class="hidden-480">
+								Back </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-lg">
+                                                <li class="active">
+                                                    <a href="#tab_1" data-toggle="tab">
+                                                        详情 </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab_3" data-toggle="tab">
+                                                        订单列表 </a>
+                                                </li>
+                                                <!--<li>-->
+                                                    <!--<a href="#tab_4" data-toggle="tab">-->
+                                                        <!--日志列表 </a>-->
+                                                <!--</li>-->
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="tab_1">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet yellow-crusta box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>属性
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            id #:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['id']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            注册 日期 & 时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['dt']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            状态:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+																<span class="label label-success">
+																{$agent['status_desc']} </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            真实姓名:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                           {$agent['real_name']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            店面名称:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['title']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            身份证号:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['id_card_num']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            地址:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['address']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            佣金:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['fee_percent']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            店面图片:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            <img width="100" height="100" src="{$agent['pic_url']}" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            省-市-县-乡镇:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$userLivePlaceDesc}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            居住村庄:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['villages']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            手机号:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['mobile']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            性别:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['sex']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            后台审核人:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['audit_admin_id']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            后台审核时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['audit_time']}
+                                                                        </div>
+                                                                    </div>
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet blue-hoki box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>统计
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            分享产品次数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['id']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            总获取佣金金额:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['id']}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="tab-pane" id="tab_3">
+                                                    <div class="table-container">
+                                                        <table class="table table-striped table-bordered table-hover" id="datatable_credit_memos">
+                                                            <thead>
+                                                            <tr role="row" class="heading">
+                                                                <th width="5%">
+                                                                    id
+                                                                </th>
+                                                                <th width="15%">
+                                                                    pid
+                                                                </th>
+                                                                <th width="15%">
+                                                                    goods_id
+                                                                </th>
+                                                                <th width="10%">
+                                                                    价格
+                                                                </th>
+                                                                <th width="10%">
+                                                                    状态
+                                                                </th>
+                                                                <th>
+                                                                    佣金数
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+
+                                                            {if $orders }
+
+                                                                {foreach ($orders as $k=>$v) }
+                                                                <tr>
+
+                                                                    <td>{$v['id']}</td>
+                                                                    <td>{$v['pid']}</td>
+                                                                    <td>{$v['goods_id']}</td>
+                                                                    <td>{$v['price']}</td>
+                                                                    <td>{$v['status']}</td>
+                                                                    <td>{$v['fee_percent']}</td>
+
+                                                                </tr>
+                                                                {/foreach}
+
+                                                            {/if}
+
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End: life time stats -->
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

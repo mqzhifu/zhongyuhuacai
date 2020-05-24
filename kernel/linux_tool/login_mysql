@@ -1,0 +1,21 @@
+#!/bin/sh
+if [ ! -n "$1" ] ;then
+echo "pleace input Host index...";
+exit
+fi
+
+config=`cat /tools/mysql.ini|grep "$1"`
+
+if [ ! -n "$config" ] ;then
+echo "Host index not found...";
+exit
+fi
+
+host=`echo $config|awk '{print $2}'  `
+user=`echo $config|awk '{print $4}'  `
+ps=`echo $config|awk '{print $5}'  `
+port=`echo $config|awk '{print $3}'  `
+
+
+/usr/local/mysql/bin/mysql -u$user -p$ps -h$host -P$port
+

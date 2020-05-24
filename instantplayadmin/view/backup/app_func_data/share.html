@@ -1,0 +1,306 @@
+<style>
+#fountainTextG{
+    width:234px;
+    margin:auto;
+    margin-top: 300px;
+    margin-left: 50%;
+}
+
+.fountainTextG{
+    color:rgb(0,0,0);
+    font-family:Arial;
+    font-size:24px;
+    text-decoration:none;
+    font-weight:normal;
+    font-style:normal;
+    float:left;
+    animation-name:bounce_fountainTextG;
+        -o-animation-name:bounce_fountainTextG;
+        -ms-animation-name:bounce_fountainTextG;
+        -webkit-animation-name:bounce_fountainTextG;
+        -moz-animation-name:bounce_fountainTextG;
+    animation-duration:2.09s;
+        -o-animation-duration:2.09s;
+        -ms-animation-duration:2.09s;
+        -webkit-animation-duration:2.09s;
+        -moz-animation-duration:2.09s;
+    animation-iteration-count:infinite;
+        -o-animation-iteration-count:infinite;
+        -ms-animation-iteration-count:infinite;
+        -webkit-animation-iteration-count:infinite;
+        -moz-animation-iteration-count:infinite;
+    animation-direction:normal;
+        -o-animation-direction:normal;
+        -ms-animation-direction:normal;
+        -webkit-animation-direction:normal;
+        -moz-animation-direction:normal;
+    transform:scale(.5);
+        -o-transform:scale(.5);
+        -ms-transform:scale(.5);
+        -webkit-transform:scale(.5);
+        -moz-transform:scale(.5);
+}#fountainTextG_1{
+    animation-delay:0.75s;
+        -o-animation-delay:0.75s;
+        -ms-animation-delay:0.75s;
+        -webkit-animation-delay:0.75s;
+        -moz-animation-delay:0.75s;
+}
+#fountainTextG_2{
+    animation-delay:0.9s;
+        -o-animation-delay:0.9s;
+        -ms-animation-delay:0.9s;
+        -webkit-animation-delay:0.9s;
+        -moz-animation-delay:0.9s;
+}
+#fountainTextG_3{
+    animation-delay:1.05s;
+        -o-animation-delay:1.05s;
+        -ms-animation-delay:1.05s;
+        -webkit-animation-delay:1.05s;
+        -moz-animation-delay:1.05s;
+}
+#fountainTextG_4{
+    animation-delay:1.2s;
+        -o-animation-delay:1.2s;
+        -ms-animation-delay:1.2s;
+        -webkit-animation-delay:1.2s;
+        -moz-animation-delay:1.2s;
+}
+#fountainTextG_5{
+    animation-delay:1.35s;
+        -o-animation-delay:1.35s;
+        -ms-animation-delay:1.35s;
+        -webkit-animation-delay:1.35s;
+        -moz-animation-delay:1.35s;
+}
+#fountainTextG_6{
+    animation-delay:1.5s;
+        -o-animation-delay:1.5s;
+        -ms-animation-delay:1.5s;
+        -webkit-animation-delay:1.5s;
+        -moz-animation-delay:1.5s;
+}
+#fountainTextG_7{
+    animation-delay:1.64s;
+        -o-animation-delay:1.64s;
+        -ms-animation-delay:1.64s;
+        -webkit-animation-delay:1.64s;
+        -moz-animation-delay:1.64s;
+}
+
+
+
+
+@keyframes bounce_fountainTextG{
+    0%{
+        transform:scale(1);
+        color:rgb(0,0,0);
+    }
+
+    100%{
+        transform:scale(.5);
+        color:rgb(255,255,255);
+    }
+}
+
+@-o-keyframes bounce_fountainTextG{
+    0%{
+        -o-transform:scale(1);
+        color:rgb(0,0,0);
+    }
+
+    100%{
+        -o-transform:scale(.5);
+        color:rgb(255,255,255);
+    }
+}
+
+@-ms-keyframes bounce_fountainTextG{
+    0%{
+        -ms-transform:scale(1);
+        color:rgb(0,0,0);
+    }
+
+    100%{
+        -ms-transform:scale(.5);
+        color:rgb(255,255,255);
+    }
+}
+
+@-webkit-keyframes bounce_fountainTextG{
+    0%{
+        -webkit-transform:scale(1);
+        color:rgb(0,0,0);
+    }
+
+    100%{
+        -webkit-transform:scale(.5);
+        color:rgb(255,255,255);
+    }
+}
+
+@-moz-keyframes bounce_fountainTextG{
+    0%{
+        -moz-transform:scale(1);
+        color:rgb(0,0,0);
+    }
+
+    100%{
+        -moz-transform:scale(.5);
+        color:rgb(255,255,255);
+    }
+}
+
+</style>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    {include layout/left.html}
+
+    <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.1);z-index:3;width:100%;height:100%;display:none;">
+        <div id="innerdiv">
+            <div id="fountainTextG">
+                <div id="fountainTextG_1" class="fountainTextG">L</div>
+                <div id="fountainTextG_2" class="fountainTextG">o</div>
+                <div id="fountainTextG_3" class="fountainTextG">a</div>
+                <div id="fountainTextG_4" class="fountainTextG">d</div>
+                <div id="fountainTextG_5" class="fountainTextG">i</div>
+                <div id="fountainTextG_6" class="fountainTextG">n</div>
+                <div id="fountainTextG_7" class="fountainTextG">g</div>
+            </div>
+        </div>
+    </div>  
+
+    
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                    <div class="col-md-7 value" style="height:70px;width: 200px; padding-left: 0px; padding-top: 10px">
+                        <select id="category" class="" style="height:34px;width: 120px;">
+                            {foreach ($category as  $k=>$v)  }
+                            <option value="{$k}">{$v}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <div class="input-group date form_datetime margin-bottom-5" style="width: 140px; padding-top: 10px">
+                        <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" value="{$firstday}" placeholder="From">
+                        <span class="input-group-btn">
+                            <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+
+                    <div class="input-group date form_datetime margin-bottom-5" style="width: 140px">
+                        <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" value="{$today}" placeholder="To">
+                        <span class="input-group-btn">
+                            <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                        </span>
+                    </div>
+                    
+                    <div style="height:60px;width: 200px;">
+                        <button id="data_search" class="btn yellow" style="height: 34px">
+                            搜索  <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs"></i>APP分享数据
+                            </div>
+                        </div>
+                        <div class="portlet-body flip-scroll">
+                            <table class="table table-bordered table-striped table-condensed flip-content">
+                                <thead id="data_head" class="flip-content">
+                                </thead>
+                                <tbody id="data_body">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+<script >
+	$(document).ready(function(){
+		$("#data_search").click(function(){
+            getTableAjax();
+        });
+        getTableAjax();
+	});
+
+    function getTableAjax() {
+        var loading = $('#fountainTextG');
+        var category = $("#category").val();
+        var url = "/app_func_data/no/share/" + category + "/";
+        var from = $("#from").val();
+        var to = $("#to").val();
+        $.ajax({
+            url: url,
+            type: 'get',
+            data: {
+                from:from,
+                to:to
+            },
+            dataType: 'json',
+            beforeSend: function() {
+                $("#outerdiv").fadeIn("fast");
+            },
+            success: function (data) {
+                $("#outerdiv").fadeOut("fast");
+                var head = data.data.head;
+                var body = data.data.body;
+                var thead = "<tr>";
+                var tbody = "";
+
+                for (var i = 0; i < head.length; i++) {
+                    thead += "<th>" + head[i] + "</th>";
+                }
+                thead += "</tr>";
+
+                for (var i = 0; i < body.length; i++) {
+                    tbody += "<tr>" ;
+                    for (var row in body[i]) {
+                        tbody += "<td>" + body[i][row] + "</td>";
+                    }
+                    tbody += "</tr>" ;
+                }
+
+                $("#data_head").html(thead);
+                $("#data_body").html(tbody);
+            }
+        });
+    }
+</script>
+
+<script>
+
+
+    if (!jQuery().datetimepicker) {
+        alert(333);
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        minView: "month",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+
+    
+
+</script>

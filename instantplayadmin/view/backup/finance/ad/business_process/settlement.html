@@ -1,0 +1,366 @@
+<style type="text/css">
+    .row.static-info {
+        margin: 10px;
+    }
+</style>
+
+
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                Settlement <small>view details</small>
+            </h3>
+            <br/>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Begin: life time stats -->
+                    <div class="portlet">
+
+
+                        <div class="portlet-body">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>收入结算设置
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                            <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                                <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+                                                    {include finance/base.html}
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                合同开始日期
+                                                            </div>
+                                                            <div class="col-md-7 value">{$finance['contract_start_date']}
+                                                            </div>
+                                                        </div>
+                                                            
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                合同结束日期
+                                                            </div>
+                                                            <div class="col-md-7 value">{$finance['contract_end_date']}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                账期
+                                                            </div>
+                                                            <div class="col-md-7 value">{$account_period[$finance['account_period']]}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                签约主体
+                                                            </div>
+                                                            <div class="col-md-7 value">{$contract_body[$finance['contract_body']]}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name" style="font-weight: 600;">
+                                                                请根据合同主协议填写以下内容
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                游戏分成比例
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <!-- <input id="divide" type="text" name="" style="width: 10%" value=""> -->
+                                                                {$finance['divide']*100}
+                                                                %
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                通道费
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <!-- <input id="slotting_allowance" type="text" name="" style="width: 10%" value=""> -->
+                                                                {$finance['slotting_allowance']*100}
+                                                                %
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                原始金额
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="original_revenue" readonly type="text" name="" style="width: 25%" value="{$bill['original_revenue']}">
+                                                                元
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                原始客户应收
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="original_after_tax" readonly type="text" name="" style="width: 25%" value="{$bill['settle_revenue']}">
+                                                                元
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                实际客户应收
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="after_tax" readonly type="text" name="" style="width: 25%" value="{$bill['after_tax']}">
+                                                                元
+                                                                <a id="revenue_edit" style="padding-left: 10px">编辑</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                可分成金额
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="cut_revenue" readonly type="text" name="" style="width: 25%" value="{$bill['cut_revenue']}">
+                                                                元
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                结算状态变更
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <select id="settlementStatus" class="form-control form-filter input-sm" style="width: 30%">
+                                                                    
+
+                                                                    <!-- <option value="0">请选择</option> -->
+                                                                    {foreach ($settlementStatus as  $k=>$v)  }
+                                                                    {if $bill['status'] == $k}
+                                                                    <option value="{$k}" selected>{$v}</option>
+                                                                    {else}
+                                                                    <option value="{$k}">{$v}</option>
+                                                                    {/if}
+                                                                    {/foreach}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                <button id="cancel" type="button" class="btn btn-sm yellow"><i class="fa fa-times"></i> 返回</button>
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button id='settle_submit' class="btn btn-sm blue filter-submit"><i class="fa fa-check"></i> 确认</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        
+                                                </div>
+                                                
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>
+
+<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+    <div id="innerdiv" style="position:absolute;">
+            <img id="bigimg" style="border:5px solid #fff;text-align: center;" src="" />
+    </div>
+</div>  
+    
+<script>
+    $(document).ready(function(){
+        $("#cancel").click(function(){
+            window.history.back(-1); 
+        });
+        $(".btn.btn-sm.blue.filter-submit.margin-bottom").click(function(){
+            var src = $(this).val();
+            $('#bigimg').attr("src", src);
+                        /*获取当前点击图片的真实大小，并显示弹出层及大图*/  
+            $('#bigimg').load(function(){  
+                var windowW = $(window).width();//获取当前窗口宽度  
+                var windowH = $(window).height();//获取当前窗口高度  
+                var realWidth = this.width;//获取图片真实宽度  
+                var realHeight = this.height;//获取图片真实高度  
+                var imgWidth, imgHeight;  
+                var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
+                  
+                if(realHeight>windowH*scale) {//判断图片高度  
+                    imgHeight = windowH*scale;//如大于窗口高度，图片高度进行缩放  
+                    imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度  
+                    if(imgWidth>windowW*scale) {//如宽度扔大于窗口宽度  
+                        imgWidth = windowW*scale;//再对宽度进行缩放  
+                    }  
+                } else if(realWidth>windowW*scale) {//如图片高度合适，判断图片宽度  
+                    imgWidth = windowW*scale;//如大于窗口宽度，图片宽度进行缩放  
+                    imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度  
+                } else {//如果图片真实高度和宽度都符合要求，高宽不变  
+                    imgWidth = realWidth;  
+                    imgHeight = realHeight;  
+                }  
+                    $('#bigimg').css("width",imgWidth);//以最终的宽度对图片缩放  
+                  
+                var w = (windowW-imgWidth)/2;//计算图片与窗口左边距  
+                var h = (windowH-imgHeight)/2;//计算图片与窗口上边距  
+                $("#innerdiv").css({"top":h, "left":w});//设置#innerdiv的top和left属性  
+                $("#outerdiv").fadeIn("fast");//淡入显示#outerdiv及.pimg  
+            });
+        });
+        $("#outerdiv").click(function(){//再次点击淡出消失弹出层  
+            $(this).fadeOut("fast");  
+        }); 
+
+        // $("#divide").blur(function(){
+        //     var divide = $("#divide").val();
+        //     var allowance = $("#slotting_allowance").val();
+        //     var adjust_original_revenue = $("#adjust_original_revenue").val();
+        //     var adjust_settle_revenue = setRevenue(divide, allowance, adjust_original_revenue);
+        //     $("#adjust_settle_revenue").attr('value', adjust_settle_revenue);
+        // });
+        // $("#slotting_allowance").blur(function(){
+        //     var divide = $("#divide").val();
+        //     var allowance = $("#slotting_allowance").val();
+        //     var adjust_original_revenue = $("#adjust_original_revenue").val();
+        //     var adjust_settle_revenue = setRevenue(divide, allowance, adjust_original_revenue);
+        //     $("#adjust_settle_revenue").attr('value', adjust_settle_revenue);
+        // });
+
+        $("#revenue_edit").click(function(){
+            $("#after_tax").removeAttr('readonly');
+            $("#after_tax").focus();
+        });
+
+        // $("#after_tax").blur(function(){
+        //     var divide = $("#divide").val();
+        //     var allowance = $("#slotting_allowance").val();
+        //     var adjust_original_revenue = $("#after_tax").val();
+        //     var after_tax = setRevenue(divide, allowance, adjust_original_revenue);
+        //     $("#after_tax").attr('value', after_tax);
+        // });
+
+
+        $("#settle_submit").click(function(){
+            var divide = $("#divide").val();
+            if (divide == '') {
+                alert("请填写分成比例");return;
+            } else if (divide>100 || divide<0) {
+                alert("分成比例填写不正确");return;
+            }
+            var slotting_allowance = $("#slotting_allowance").val();
+            if (slotting_allowance == '') {
+                alert("请填写通道费");return;
+            } else if (slotting_allowance>100 || slotting_allowance<0) {
+                alert("通道费填写不正确");return;
+            }
+            var status = $("#settlementStatus").find("option:selected").val();
+            if (status == '') {
+                alert("请选择结算状态");return;
+            }
+
+            var after_tax = $("#after_tax").val();
+            // var adjust_settle_revenue = $("#adjust_settle_revenue").val();
+
+            if(confirm('确定要执行操作吗')==true){
+                $.ajax({
+                    type: "POST",
+                    url: "/finance/ad/businessProcess/save/",
+                    data: {
+                        id:{$id},
+                        after_tax:after_tax,
+                        status:status,
+                    },
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 200) {
+                            alert("操作成功");
+                            window.history.back(-1); 
+                        } else {
+                            alert("操作失败");
+                            window.history.back(-1); 
+                        }
+                        
+                    }
+                });
+
+            }
+        });
+
+    });
+    
+    // 重新计算结算收入
+    // function setRevenue(divide, allowance, original_revenue) {
+    //     return (original_revenue*divide/100*(1-allowance/100)).toFixed(2);
+    // }
+
+</script>

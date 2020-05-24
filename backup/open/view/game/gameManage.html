@@ -1,0 +1,227 @@
+{include /layout/left_manager.html}
+			<div class="iframeBox">
+				<div class="game-head">
+					<div class="searchBox">
+						<input type="text" id="searchText" />
+						<button class="searchBtn"></button>
+					</div>
+					<span class="add_game">添加新游戏</span>
+				</div>
+				<ul class="game_ul">
+					<li class="game_add">
+						<img src="{CONST|H_STATIC_URL}assets/open/img/game_add.png"  />
+						<span>添加新游戏</span>
+					</li>
+					<div class="clearfix"></div>
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<div class="warn-outBox del_win">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head"><img src="{CONST|H_STATIC_URL}assets/open/img/warn_icon.png" />删除游戏？</div>
+				<div class="del_main">
+					<p style="margin-top: 40px;">删除 方块消除 会：</p>
+	              	<p style="margin-top: 16px;">• 彻底删除所有数据中心</p>
+	              	<p style="margin-top: 16px;">• 拒绝其他用户访问你的游戏地址</p>
+	              	<p style="margin-top: 16px;margin-bottom: 40px;">如果你想要停止向公众开放游戏，请把游戏设置为 “开发模式”，这样应用就只对“身份”板块中的用户可见了。</p>
+	              	<button type="button" class="btn-modal-no">取消</button>
+	              	<button type="button" class="btn-modal-yes">确认提交</button>
+				</div>
+			</div>
+		</div>
+		<div class="warn-outBox add_win">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head">创建新游戏</div>
+				<div class="del_main">
+					<div class="game_name">游戏名称</div>
+					<input class="name_input" maxlength="20" type="text" />
+					<div class="agree">继续即代表你同意<a href="/developer/openProtocolIndex/" target="_blank">《开心小游戏开放平台政策》</a></div>
+	              	<button type="button" class="btn-modal-no">取消</button>
+	              	<button type="button" id="addGameBtn" class="btn-modal-yes">创建新游戏</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function(){
+				/*菜单*/
+				$(".first-level").click(function(){
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true,false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function(){
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*添加游戏*/
+				$(".add_game,.game_add").click(function(){
+					$(".add_win").fadeIn();
+				});
+				/*删除游戏*/
+				$(document).on("click",".del_game",function(){
+					$(".del_win").fadeIn();
+				});
+				$(".btn-modal-no").click(function(){
+					$(".warn-outBox").fadeOut()
+				});
+				$(".searchBtn").click(function(){
+					var searchText = $("#searchText").val().trimSpace();
+					if (searchText!='') {
+						searchGame(searchText);
+					} else {
+						$(".game_ul").html('<li class="game_add"><img src="{CONST|H_STATIC_URL}assets/open/img/game_add.png"/><span>添加新游戏</span></li><div class="clearfix"></div>');
+						curPos=0;
+						pageLoad(12);
+					}
+				});
+
+		        var sent = false;
+
+
+				$('#addGameBtn').click(function () {
+
+					if (sent) {
+						return false;
+					}
+		            var name = $('.name_input').val().trimSpace();
+		            if (name == '') {
+		                layer.alert('请输入游戏名称！');
+		                return false;
+		            }
+
+		            var postUrl = "/game/add/";
+		            var postInfo = {
+		                name: name
+		            };
+
+		            $.ajax({
+		                type: "post",
+		                url: postUrl,
+		                data: postInfo,
+		                dataType: "json",
+		                beforeSend: function() {
+			            	sent = true;
+			            },
+		                success: function (data) {
+		                	sent = false;
+		                    if (data.result) {
+		                        var str = '添加游戏' + data.game_name + '成功！';
+		                        layer.alert(str, 
+			                        {title:'提示'}, 
+			                        function(){
+			                            location.href = "/game/edit/gameid=" + data.game_id;
+			                    });
+		                    } else {
+		                        if(data.result = '-1001'){
+		                            layer.alert('游戏名称已存在，请重新添加！');
+		                            return false;
+		                        }else{
+		                            layer.alert('添加失败，请重试!');
+		                            return false;
+		                        }
+		                    }
+		                },
+		                error: function () {
+		                	sent = false;
+		                    return false;
+		                }
+		            });
+		        });
+				
+			})
+			function checkScrollDirector() { //判断滚动条是否滑到底部  
+				var flag = 0;
+				var offBottom=$(".game_ul").offset().top+$(".game_ul").height();
+				if($(document).scrollTop() + $(window).height() >= offBottom) {
+					flag = 1;
+				}
+				return flag;
+			}
+			var curPos=0;	
+			var pageLength=4;
+			var dateFlag=true;
+			var hasData=true;
+			window.onload=function(){
+				pageLoad(12);
+			}
+			function loadList(){
+				window.onscroll = function() { //滚动条滚动执行  
+					if(checkScrollDirector()) {
+						if(dateFlag){
+							dateFlag=false;
+							pageLoad(pageLength);
+						}
+						
+					}
+				}
+				
+			}
+			function pageLoad(pageLength){
+				$.ajax({
+			        type: "POST",
+			        url: "/game/getGames/",
+					data: {curPos:curPos, pageLength:pageLength},
+					dataType:"json",
+			        success: function(data) {
+			        	var games= data.data;
+			        	for(var i = 0; i < games.length; i++) {
+							if (games[i].small_img == '') {
+								games[i].small_img = "{CONST|H_STATIC_URL}assets/open/img/default_icon.png";
+							}
+							var html ="<li class='game_li'><a href=/game/detail/gameid="+games[i].id+"><img class='game_icon' src="+games[i].small_img+"></a>"+
+								"<span class='game_name'>"+games[i].name+"</span>"+
+								"<p class='game_num'>游戏编号："+games[i].id+"</p>"+
+								"<em class='game_state'>状态：<i style='background:"+games[i].status_color+"' class='notPass'>"+games[i].status_desc+"</i></em></li>"
+							$(".game_ul .game_add").before(html);
+						}
+						curPos+=pageLength;
+						if (games.length != 0) {
+							loadList();
+							dateFlag=true;
+						}
+						
+			        }
+				});
+			}
+			function searchGame(name) {
+				$.ajax({
+			        type: "POST",
+			        url: "/game/getGames/",
+					data: {name:name},
+					dataType:"json",
+			        success: function(data) {
+			        	if (data.code == 200) {
+			        		var games= data.data;
+				        	for(var i = 0; i < games.length; i++) {
+								if (games[i].small_img == '') {
+									games[i].small_img = "{CONST|H_STATIC_URL}assets/open/img/default_icon.png";
+								}
+								var html ="<li class='game_li'><a href=/game/detail/gameid="+games[i].id+"><img class='game_icon' src="+games[i].small_img+"></a>"+
+									"<span class='game_name'>"+games[i].name+"</span>"+
+									"<p class='game_num'>游戏编号："+games[i].id+"</p>"+
+									"<em class='game_state'>状态：<i style='background:"+games[i].status_color+"' class='notPass'>"+games[i].status_desc+"</i></em></li>"
+								$(".game_ul").html(html);
+							}
+			        	} else {
+			        		layer.alert("查询不到该游戏！");
+			        	}
+			        }
+			    });    
+			}
+		</script>
+	</body>
+</html>

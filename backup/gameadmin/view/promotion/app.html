@@ -1,0 +1,887 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td {
+        white-space: normal;
+        word-wrap: break-word;
+        break-word: break-all;
+    }
+    .ad_detail {
+        width: 360px;
+        display: block;
+        height: 30px;
+    }
+    .ad_table span {
+        display: inline-block;
+        width: 70px;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .ad_table span+input{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .ad_table span+select{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .modal-body {
+        margin: 0;
+    }
+    .strategySelect {
+        width: 160px
+    }
+    .sort_input {
+        width: 40px;
+    }
+    select:disabled {
+        border: 1px solid #DDD;
+        background-color: #F5F5F5;
+        color: #ACA899;
+    }
+    .opt {
+        margin-right: 10px;
+    }
+    .unView {
+        display:none;
+    }
+    .view {
+        display:block;
+    }
+    .btnView {
+        display:inline-block;
+        cursor:pointer;
+    }
+    .max{
+        width: 100%;
+        height: auto;
+    }
+    .min{
+        width: 100px;
+        height: auto;
+    }
+</style>
+
+
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="actions">
+                                <div class="btn-group">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="alert alert-info">
+                                <strong>PK相关设置 / APP_SETING</strong>
+                            </div>
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <a class="btn btn-circle blue-madison" href="javascript:;" id="add_game" data-toggle="dropdown">
+                                        添加
+                                    </a>
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <th width="15%">
+                                            ID
+                                        </th>
+                                        <th width="15%">
+                                            名称
+                                        </th>
+                                        <th width="15%">
+                                            状态
+                                        </th>
+                                        <th width="8%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm"  readonly="readonly">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm"  readonly="readonly">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm"  readonly="readonly">
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-circle blue btn-sm" style="display: inline-block;"><i class="fa fa-search"></i> 搜索</button><button class="btn btn-circle green btn-sm" style="display: inline-block;"><i class="fa fa-times"></i> 重置</button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<div class="modal fade" id="add_game_modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 500px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel1" align="center"><span style="font-weight: bold"> + APP_SETING </span></h5>
+            </div>
+            <div class="modal-body"  style="width: 800px;margin-left: 20px">
+                <!-- 基本设置 -->
+                <div id="base-set1" style="margin-left: 20px;margin-right: 40px;">
+                    <div>
+                        <span style="display: inline-block;width: 70px;">名称</span>
+                        <span style="margin-left: 20px">
+                        <input type="text" id="name">
+                    </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">状态</span>
+                        <select name="title" id="banner_column_select" style="display: inline-block;margin-left: 20px;width: 160px" class="form-control form-filter input-sm">
+                            <option value="">全部</option>
+                            {foreach ($status_all as  $k=>$v)  }
+                            <option value="{$k}">{$v}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">密码</span>
+                        <span style="margin-left: 20px">
+                        <input id="pass" type="password"  autocomplete="new-password" onclick=javascript:this.value=''>
+                    </span>
+                    </div>
+                    <br/>
+                </div>
+
+            </div>
+            <div class="modal-footer-diy" align="center">
+                <button type="button" class="add_game_modal_undo" data-dismiss="modal" style="background-color: #b92c28"><span style="color: white">取消</span></button>
+                <button type="button" class="add_game_save" style="background-color: #3e8f3e"><span style="color: white  ">保存</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add_game_modal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 500px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel" align="center"><span style="font-weight: bold">  APP_SETING </span></h5>
+            </div>
+            <div class="modal-body"  style="width: 800px;margin-left: 20px">
+                <!-- 基本设置 -->
+                <div id="base-set" style="margin-left: 20px;margin-right: 40px;">
+                    <div>
+                        <span style="display: inline-block;width: 70px;">ID</span>
+                        <span style="margin-left: 20px">
+                        <input type="text" id="id1" readonly>
+                    </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="display: inline-block;width: 70px;">名称</span>
+                        <span style="margin-left: 20px">
+                        <input type="text" id="name1">
+                    </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">状态</span>
+                        <select name="title" id="banner_column_select1" style="display: inline-block;margin-left: 20px;width: 160px" class="form-control form-filter input-sm">
+                            <option value="">全部</option>
+                            {foreach ($status_all as  $k=>$v)  }
+                            <option value="{$k}">{$v}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">密码</span>
+                        <span style="margin-left: 20px">
+                        <input id="pass1" type="password"  autocomplete="new-password" onclick=javascript:this.value=''>
+                    </span>
+                    </div>
+                    <br/>
+                </div>
+
+            </div>
+            <div class="modal-footer-diy" align="center">
+                <button type="button" class="add_game_modal_undo" data-dismiss="modal" style="background-color: #b92c28"><span style="color: white">取消</span></button>
+                <button type="button" class="add_game_save1" style="background-color: #3e8f3e"><span style="color: white  ">确认</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+
+    // 确认按钮;
+    $("#ad_map_tb").on("click", ".editSubmit", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").siblings("td").children(".outer_id").val();
+        var name = $editElem.parents("td").siblings("td").children(".outer_name").val();
+        if (id == '' || name == '') {
+            alert("请将信息补充完整");
+            return;
+        }
+
+        var inner_ad_id = $('#ad_id').val();
+
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');// 分类id
+        var url = "/promotion/no/banner/upLocationOne/";
+        var post_data = {
+            id:id,
+            name:name,
+        };
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: post_data,
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+//                    var id = data.data;
+                    $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                    // span 赋值
+                    $editElem.parents("td").siblings("td").children(".id_span").html(id);
+                    $editElem.parents("td").siblings("td").children(".name_span").html(name);
+
+                    // span 显示
+                    $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+                    $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+                    // 输入 隐藏
+                    $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+                    $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+                    // 按钮 隐藏 显示
+                    $editElem.siblings(".optCancel").removeClass("btnView").addClass("unView");
+                    $editElem.removeClass("btnView").addClass("unView");
+
+                    $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                    $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+    // 取消按钮;
+    $("#ad_map_tb").on("click", ".optCancel", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").parents("tr").attr('attr-id');
+        console.log(id);
+
+        if (id == '' || id == undefined) {
+            // 广告单元未保存 移除该行
+            $editElem.parents("td").parents("tr").remove();
+        } else {
+            // span 显示
+            $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+            // 输入 隐藏
+            $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+            // 按钮 隐藏 显示
+            $editElem.siblings(".editSubmit").removeClass("btnView").addClass("unView");
+            $editElem.removeClass("btnView").addClass("unView");
+
+            $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+            $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+        }
+    });
+
+    // 编辑按钮;
+    $("#ad_map_tb").on("click", ".editAdUnit", function (e) {
+        var $editElem = $(this);
+        // span 隐藏
+        $editElem.parents("td").siblings("td").children(".id_span").addClass("unView");
+        $editElem.parents("td").siblings("td").children(".name_span").addClass("unView");
+
+        // 输入 选中
+        var channel = $editElem.parents("td").siblings("td").children(".id_span").html();
+        var advertiser = $editElem.parents("td").siblings("td").children(".name_span").html();
+
+        // 输入 显示
+        $editElem.parents("td").siblings("td").children(".outer_id").removeClass("unView");
+        $editElem.parents("td").siblings("td").children(".outer_name").removeClass("unView");
+
+        // 按钮 隐藏 显示
+        $editElem.siblings(".optCancel").removeClass("unView").addClass("btnView");
+        $editElem.siblings(".editSubmit").removeClass("unView").addClass("btnView");
+
+        $editElem.siblings(".delAdUnit").removeClass("btnView").addClass("unView");
+        $editElem.removeClass("btnView").addClass("unView");
+    });
+
+    // 删除按钮;
+    $("#ad_map_tb").on("click", ".delAdUnit", function (e) {
+        if (!confirm("确认删除吗？")) {
+            return false;
+        }
+
+        var $editElem = $(this);
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+        $.ajax({
+            url: "/promotion/no/banner/delLocationOne/",
+            type: 'post',
+            data: {id:attr_id},
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    $editElem.parents("td").parents("tr").remove();
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+</script>
+
+
+<script>
+
+    function content_edit1(obj) {
+        $.ajax({
+            url: "/promotion/no/banner/getDetailsSkip/",
+            type: "post",
+            data: {
+                id: 1
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 200) {
+                    $('#id').val(data.data['base']['id']);
+                    $('#name').val(data.data['base']['name']);
+                    $('#ad_map_tb1 tbody').html("");
+
+                    var items = data.data['real_ad_data'];
+                    for (var i = 0; i < items.length; i++) {
+
+                        $('#ad_map_tb1 tbody').append(
+                            "<tr attr-id='" + items[i].id + "'>"+
+                            "<td>"+
+                            "<span class='id_span'>"+items[i].id+"</span>"+
+                            "<input type='text' class='outer_id unView' value="+items[i].id+">"+
+                            "</td>"+
+                            "<td>"+
+                            "<span class='name_span'>"+items[i].name+"</span>"+
+                            "<input type='text' class='outer_name unView' value="+items[i].name+">"+
+                            "</td>"+
+                            "<td>"+
+                            "<div class='optCancel opt unView'>取消</div>"+
+                            "<div class='editSubmit opt unView'>确认</div>"+
+                            "<div class='delAdUnit opt btnView'>删除</div>"+
+                            "<div class='editAdUnit opt btnView'>编辑</div>"+
+                            "</td>"+
+                            "</tr>");
+                    }
+                    $('#myModal1').modal();
+                }
+            }
+        });
+    }
+
+    $('.add').click(function () {
+        $('#ad_map_tb1 tbody').append(
+            "<tr>"+
+            "<td>"+
+            "<span class='id_span unView'></span>"+
+            "<input type='text' class='outer_id'>"+
+            "</td>"+
+            "<td>"+
+            "<span class='name_span unView'></span>"+
+            "<input type='text' class='outer_name'>"+
+            "</td>"+
+            "<td>"+
+            "<div class='optCancel opt btnView'>取消</div>"+
+            "<div class='editSubmit opt btnView'>确认</div>"+
+            "<div class='delAdUnit opt unView'>删除</div>"+
+            "<div class='editAdUnit opt unView'>编辑</div>"+
+            "</td>"+
+            "</tr>"
+        );
+    });
+
+    // 确认按钮;
+    $("#ad_map_tb1").on("click", ".editSubmit", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").siblings("td").children(".outer_id").val();
+        var name = $editElem.parents("td").siblings("td").children(".outer_name").val();
+        if (id == '' || name == '') {
+            alert("请将信息补充完整");
+            return;
+        }
+
+        var inner_ad_id = $('#ad_id').val();
+
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');// 分类id
+        var url = "/promotion/no/banner/upSkipOne/";
+        var post_data = {
+            id:id,
+            name:name,
+        };
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: post_data,
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+//                    var id = data.data;
+                    $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                    // span 赋值
+                    $editElem.parents("td").siblings("td").children(".id_span").html(id);
+                    $editElem.parents("td").siblings("td").children(".name_span").html(name);
+
+                    // span 显示
+                    $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+                    $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+                    // 输入 隐藏
+                    $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+                    $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+                    // 按钮 隐藏 显示
+                    $editElem.siblings(".optCancel").removeClass("btnView").addClass("unView");
+                    $editElem.removeClass("btnView").addClass("unView");
+
+                    $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                    $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+    // 取消按钮;
+    $("#ad_map_tb1").on("click", ".optCancel", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").parents("tr").attr('attr-id');
+        console.log(id);
+
+        if (id == '' || id == undefined) {
+            // 广告单元未保存 移除该行
+            $editElem.parents("td").parents("tr").remove();
+        } else {
+            // span 显示
+            $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+
+            // 输入 隐藏
+            $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+
+            // 按钮 隐藏 显示
+            $editElem.siblings(".editSubmit").removeClass("btnView").addClass("unView");
+            $editElem.removeClass("btnView").addClass("unView");
+
+            $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+            $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+        }
+    });
+
+    // 编辑按钮;
+    $("#ad_map_tb1").on("click", ".editAdUnit", function (e) {
+        var $editElem = $(this);
+        // span 隐藏
+        $editElem.parents("td").siblings("td").children(".id_span").addClass("unView");
+        $editElem.parents("td").siblings("td").children(".name_span").addClass("unView");
+
+        // 输入 选中
+        var channel = $editElem.parents("td").siblings("td").children(".id_span").html();
+        var advertiser = $editElem.parents("td").siblings("td").children(".name_span").html();
+
+        // 输入 显示
+        $editElem.parents("td").siblings("td").children(".outer_id").removeClass("unView");
+        $editElem.parents("td").siblings("td").children(".outer_name").removeClass("unView");
+
+        // 按钮 隐藏 显示
+        $editElem.siblings(".optCancel").removeClass("unView").addClass("btnView");
+        $editElem.siblings(".editSubmit").removeClass("unView").addClass("btnView");
+
+        $editElem.siblings(".delAdUnit").removeClass("btnView").addClass("unView");
+        $editElem.removeClass("btnView").addClass("unView");
+    });
+
+    // 删除按钮;
+    $("#ad_map_tb1").on("click", ".delAdUnit", function (e) {
+        if (!confirm("确认删除吗？")) {
+            return false;
+        }
+
+        var $editElem = $(this);
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+        $.ajax({
+            url: "/promotion/no/banner/delSkipOne/",
+            type: 'post',
+            data: {id:attr_id},
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    $editElem.parents("td").parents("tr").remove();
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+</script>
+
+
+<script>
+    var editid = 0;
+    var img_upload_type = 1;//1 图片 2图片url
+
+    var type = 0;//1 添加 2更新
+    function one_del(obj){
+        if (!confirm("确认删除？")) {
+            return false;
+        }
+        $.ajax({
+            type: 'post',
+            url: '/promotion/no/app/delOne/',
+            data: {
+                id:obj.getAttribute('data-id')
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 200){
+                    history.go(0);
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    }
+
+
+    // app edit
+    function edit(obj){
+        var formData = new FormData();
+        formData.append('id', obj.getAttribute('data-id'));
+        editid = obj.getAttribute('data-id');
+        $.ajax({
+            type: 'post',
+            url: '/promotion/no/app/getOneApp/',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.code === 200){
+                    $('#id1').val(data.data['data1']['id']);
+                    $('#name1').val(data.data['data1']['name']);
+                    $('#pass1').val(data.data['data1']['ps']);
+                    $('#banner_column_select1').val(data.data['data1']['status']);
+                    $('#add_game_modal2').modal();
+                }else{
+                    alert(data.message);
+                }
+
+            }
+        });
+    }
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+
+
+</script>
+
+
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/promotion/no/app/getList/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ ]
+                    }],
+                    "order": [
+                        [0, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                        function(){
+                            ids += ($(this).val())+",";
+                        }
+                    );
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/?ac=delBat&ids="+ids ,
+                        dataType: 'json',
+                        success: function(data){
+                            grid.setAjaxParam("customActionType", "group_action");
+                            grid.setAjaxParam("customActionName", action.val());
+                            grid.setAjaxParam("id", grid.getSelectedRows());
+                            grid.getDataTable().ajax.reload();
+                            grid.clearAjaxParams();
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+
+
+        $(".view").click(function(){
+            var src = $(this).val();
+            showImg(src);
+        });
+        $("#outerdiv").click(function(){//再次点击淡出消失弹出层
+            $(this).fadeOut("fast");
+        });
+
+        // $('#game_name').blur(function(){
+        //     .ajax({
+        //         type: 'post',
+        //         url: '/promotion/no/banner/getGames/',
+        //         dataType: 'json',
+        //         success: function(data){
+
+        //             $('#banner_column_select').html("");
+        //             for(var i = 0; i < data.data.length; i++){
+        //                 $('#banner_column_select').append('<option value="'+data.data[i]['id']+'">'+data.data[i]['id']+'</option>');
+        //             }
+        //             $('#add_game_modal').modal();
+        //         }
+        //     });
+        // });
+
+        $('#upload').click(function(){
+            $('#upload_input').click();
+            $('#upload_input').on('change', function(){
+                var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+                if (objUrl) {
+                    $('.view').val(objUrl);
+                }
+            });
+        });
+
+        $("input:radio[name='img_or_url']").change(function (){
+            var opt=$("input:radio[name='img_or_url']:checked").val();
+            if(opt == 1){
+                $('#img_spac').attr('style', 'margin-left: 20px;display:inline-block');
+                $('#url_span').attr('style', 'margin-left: 20px;display:none');
+                img_upload_type = 1;
+            }
+
+            if(opt ==2 ){
+                $('#img_spac').attr('style', 'margin-left: 20px;display:none');
+                $('#url_span').attr('style', 'margin-left: 20px;display:inline-block');
+                img_upload_type = 2;
+            }
+        });
+
+        // app添加;
+        $('#add_game').click(function(){
+            $('#add_game_modal1').modal();
+        });
+
+
+
+        $('.add_game_save').click(function(){
+            var formData = new FormData();
+            var name = $('#name').val();
+            var pass = $('#pass').val();
+            var banner_column_select = $('#banner_column_select').val();
+
+            formData.append('name', name);
+            formData.append('status', banner_column_select);
+            formData.append('pass', pass);
+            url = '/promotion/no/app/addAppOne/';
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code === 200){
+                        alert(data.message);
+                        history.go(0);
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+        $('.add_game_save1').click(function(){
+            var formData = new FormData();
+            var id = $('#id1').val();
+            var name = $('#name1').val();
+            var pass = $('#pass1').val();
+            var banner_column_select = $('#banner_column_select1').val();
+
+            formData.append('id', id);
+            formData.append('name', name);
+            formData.append('status', banner_column_select);
+            formData.append('pass', pass);
+            url = '/promotion/no/app/upAppOne/';
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code === 200){
+                        alert(data.message);
+                        history.go(0);
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+    });
+
+
+</script>
+
+<script>
+    // 只能输入数字
+    $("[data-tag='inputNumber']").each(function (index, value) {
+        $(this).on("keyup", function () {
+            this.value = this.value.replace(/\D/g,'');
+        });
+    });
+</script>

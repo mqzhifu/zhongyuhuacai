@@ -1,0 +1,159 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+{include layout/left.html}
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>头像新增
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row margin-top-20">
+                        <div class="table-container">
+                            <ul>
+                                <form id="send_rule_form" action="/quiz/no/upgrade/update/?id={$result['id']}" method="post" autocomplete="off" enctype="multipart/form-data">
+                                    <div class="table-container">
+                                        <span>上传头像</span><input type="file" name="img" id="img" />
+                                    </div><br>
+                                    <div style="text-align: left;margin-top: 40px; margin-bottom: 40px;">
+                                        <button id="cancel_button" type="button" class="btn btn-danger">返回首页</button>
+                                        <button id="submit_button" type="button" class="btn btn-default">提交</button>
+                                    </div>
+                                </form>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        // 只能输入数字
+        $("[data-tag='inputNumber']").each(function (index, value) {
+            $(this).on("keyup", function () {
+                this.value = this.value.replace(/\D/g,'');
+            });
+        });
+        // 表单数据验证
+        var checkForm = function ($form) {
+
+            return true;
+        };
+        // 发送按钮
+        $('#submit_button').click(function(){
+            var formData = new FormData();
+
+            var file1 = $('#img')[0].files[0];
+            if(file1!='undefined'){
+                formData.append('img', file1);
+            }
+            console.log(formData);
+            url = '/quiz/no/manager/saveHead/';
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        location.href = '/quiz/no/manager/index/';
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#btn_uploadimg").click(function () {
+            var fileObj = document.getElementById("FileUpload").files[0]; // js 获取文件对象
+            if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                alert("请选择文件");
+                return;
+            }
+            var formFile = new FormData();
+            formFile.append("action", "UploadVMKImagePath");
+            formFile.append("file", fileObj); //加入文件对象
+
+            //第一种  XMLHttpRequest 对象
+            //var xhr = new XMLHttpRequest();
+            //xhr.open("post", "/Admin/Ajax/VMKHandler.ashx", true);
+            //xhr.onload = function () {
+            //    alert("上传完成!");
+            //};
+            //xhr.send(formFile);
+
+            //第二种 ajax 提交
+
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        $('.add_game_modal_undo').click();
+                        location.href = '/promotion/no/banner/index/';
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        })
+    })
+</script>
+<!--<script>-->
+<!--$("#update_file").click(function(){-->
+<!--var id = document.getElementById("updf").value;-->
+<!--var postUrl = "/app_manager/no/upgrade/updateFile/";-->
+<!--var postInfo = {-->
+<!--id: id-->
+<!--};-->
+<!--console.log(postInfo);-->
+<!--$.ajax({-->
+<!--type: "POST",-->
+<!--url: postUrl,-->
+<!--data: postInfo,-->
+<!--dataType: "json",-->
+<!--success: function (res) {-->
+<!--alert(res);-->
+<!--history.go(0);-->
+<!--},-->
+<!--error: function () {-->
+<!--return false;-->
+<!--}-->
+<!--});-->
+<!--});-->
+
+<!--</script>-->
+
+<script>
+    $("#cancel_button").on("click", function() {
+        location.href = "http://isadmin-test.feidou.com/";
+    });
+</script>
+
+<!--
+<script>
+    var E = window.wangEditor;
+    var editor = new E('#txta_content');
+    editor.create();
+</script>-->

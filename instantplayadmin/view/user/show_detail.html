@@ -1,0 +1,417 @@
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                Order View <small>view order details</small>
+            </h3>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Begin: life time stats -->
+                    <div class="portlet">
+
+
+                        <div class="portlet-body">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="portlet yellow-crusta box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>用户信息
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                            <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                                <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                    {foreach ($user as $k=>$v) }
+
+
+
+
+                                                            <div class="row static-info">
+                                                                <div class="col-md-5 name">
+                                                                    {$k}
+                                                                </div>
+                                                                <div class="col-md-7 value">
+                                                                    {$v}
+                                                                </div>
+                                                            </div>
+
+
+                                                    {/foreach}
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="portlet blue-hoki box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>缓存信息
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                            <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                                <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                token:
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {if $token}
+                                                                {$token}
+                                                                {else}
+                                                                无
+                                                                {/if}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                缓存中的token:
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {if $cacheToken}
+                                                                {$cacheToken}
+                                                                {else}
+                                                                无
+                                                                <a href="/user/makeRedisToken/uid={$user['id']}" target="_blank" class="btn btn-xs default green" data-id="'.$v['id'].'"><i class="fa fa-user"></i> 登陆</a>
+                                                                {/if}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                game缓存中的token:
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {if $gameCacheToken}
+                                                                {$gameCacheToken}
+                                                                {else}
+                                                                无
+                                                                {/if}
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                用户匹配状态:
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {if $userStatus}
+                                                                {$userStatus}
+                                                                <a href="/user/clearUserMatchStatus/uid={$user['id']}" target="_blank" class="btn btn-xs default green" data-id="'.$v['id'].'"><i class="fa fa-user"></i> 清除</a>
+
+                                                                {else}
+                                                                无
+                                                                {/if}
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                heartbeat:
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {if $heartBeat}
+                                                                    {DT|$heartBeat}
+                                                                {else}
+                                                                    无
+                                                                {/if}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="portlet grey-cascade box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>任务
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                            <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                                <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-bordered table-striped">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        id
+                                                                    </th>
+                                                                    <th>
+                                                                        task id
+                                                                    </th>
+                                                                    <th>
+                                                                        已完成步骤
+                                                                    </th>
+                                                                    <th>
+                                                                        完成时间
+                                                                    </th>
+                                                                    <th>
+                                                                        领取奖励时间
+                                                                    </th>
+                                                                    <th>
+                                                                        总步骤
+                                                                    </th>
+                                                                    <th>
+                                                                        task_config_type
+                                                                    </th>
+                                                                    <th>
+                                                                        a_time
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                {if $task}
+
+
+                                                                {foreach ($task as $k=>$v) }
+                                                                    <tr>
+                                                                        <td>
+                                                                            {$v['id']}
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="label label-sm label-success"></span>
+                                                                                {$v['task_id']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {$v['step']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {DT|$v['done_time']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {DT|$v['reward_time']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {$v['total_step']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {$v['task_config_type']}
+                                                                        </td>
+                                                                        <td>
+                                                                            {DT|$v['a_time']}
+                                                                        </td>
+                                                                    </tr>
+                                                                {/foreach}
+
+                                                                {else}
+                                                                    <tr><td>无</td></tr>
+                                                                {/if}
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="portlet grey-cascade box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>玩过的游戏
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                        <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                        <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-bordered table-striped">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        id
+                                                                    </th>
+                                                                    <th>
+                                                                        gameId
+                                                                    </th>
+
+                                                                    <th>
+                                                                        结束时间
+                                                                    </th>
+
+                                                                    <th>
+                                                                        添加时间
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                {if $playedGameHistoryList}
+
+
+                                                                {foreach ($playedGameHistoryList as $k=>$v) }
+                                                                <tr>
+                                                                    <td>
+                                                                        {$v['id']}
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="label label-sm label-success"></span>
+                                                                        {$v['game_id']}
+                                                                    </td>
+                                                                    <td>
+                                                                        {DT|$v['e_time']}
+                                                                    </td>
+                                                                    <td>
+                                                                        {DT|$v['a_time']}
+                                                                    </td>
+                                                                </tr>
+                                                                {/foreach}
+
+                                                                {else}
+                                                                <tr><td>无</td></tr>
+                                                                {/if}
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="row">
+                                            <div class="col-md-12 col-sm-12">
+                                                <div class="portlet grey-cascade box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>金币日志
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                        <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                        <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+                                                    <div class="portlet-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover table-bordered table-striped">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        id
+                                                                    </th>
+                                                                    <th>
+                                                                        num
+                                                                    </th>
+
+                                                                    <th>
+                                                                        标题
+                                                                    </th>
+
+                                                                    <th>
+                                                                        内容
+                                                                    </th>
+                                                                    <td>
+                                                                        添加时间
+                                                                    </td>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                {if $goldLog}
+
+
+                                                                {foreach ($goldLog as $k=>$v) }
+                                                                <tr>
+                                                                    <td>
+                                                                        {$v['id']}
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="label label-sm label-success"></span>
+                                                                        {$v['num']}
+                                                                    </td>
+                                                                    <td>
+                                                                        {$v['title']}
+                                                                    </td>
+                                                                    <td>
+                                                                        {$v['content']}
+                                                                    </td>
+                                                                    <td>
+                                                                        {DT|$v['a_time']}
+                                                                    </td>
+                                                                </tr>
+                                                                {/foreach}
+
+                                                                {else}
+                                                                <tr><td>无</td></tr>
+                                                                {/if}
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>

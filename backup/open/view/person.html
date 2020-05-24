@@ -1,0 +1,279 @@
+	<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/person.css">
+		<div class="data-warn">资料提交<span>（备注：请务必真实有效的填写资料信息，直接影响到结算）</span></div>
+		<div class="section">
+			<div class="section-title">用户信息</div>
+			<ul class="form-ul">
+				<li>
+					<div class="fl">开发者ID</div>
+					<div class="fr">{$this->_uid}</div>
+				</li>
+				<li>
+					<div class="fl">开发者类型</div>
+					<div class="fr">
+						<a class="company-link" href="/developer/company/">公司账号</a>
+						<a class="person-link" href="/developer/person/">个人账户</a>
+					</div>
+				</li>
+				<li>
+					<div class="fl">开发者名称（开户名称）</div>
+					<div class="fr">
+						<input class="li-input file-input" id="account_holder" type="text" /><i class="prompt">请填写开发者名称（开户名称），否则不予验证通过</i>
+					</div>
+				</li>
+				<li>
+					<div class="fl">身份证号</div>
+					<div class="fr">
+						<input class="li-input file-input" id="idcard_number" type="text" /><i class="prompt">请输入正确的身份证号码</i>
+					</div>
+				</li>
+				<li>
+					<div class="fl">证件有效期</div>
+					<div class="fr">
+						<input class="li-input effective" style="width: 134px" id="test-laydate-start" type="text" />-
+						<input class="li-input effective" style="width: 134px" id="test-laydate-end" type="text" /><i class="prompt">不能为空</i>
+					</div>
+				</li>
+				<li>
+					<div class="fl">上传法人身份证正反面</div>
+					<div class="fr">
+						<div class="upload-box">
+							<div class="imgBox">
+								<img class="upload-img" onclick="$('#file').click()" src="{CONST|H_STATIC_URL}assets/open/img/upload.png"  />
+								<em>正面</em>
+							</div>
+							<div class="imgBox">
+								<img class="upload-img2" onclick="$('#file2').click()" src="{CONST|H_STATIC_URL}assets/open/img/upload.png"  />
+								<em>反面</em>
+							</div>
+							<input class="hide" type="file" id="file" accept="image/*">
+							<input class="hide" type="file" id="file2" accept="image/*">
+							<span>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M，<a href="{CONST|H_STATIC_URL}assets/open/img/idcard-eg.jpg" target="_blank">查看示例</a></span>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="section">
+			<div class="section-title">联系人信息</div>
+			<ul class="form-ul">
+				<li>
+					<div class="fl">联系人</div>
+					<div class="fr">
+						<input class="li-input file-input" id="contact" type="text" /><i class="prompt">请输入联系人</i>
+					</div>
+				</li>
+				<li>
+					<div class="fl">联系地址</div>
+					<div class="fr">
+						<input class="li-input file-input" id="contact_addr" type="text" /><i class="prompt">请输入联系地址</i>
+					</div>
+				</li>
+				<li>
+					<div class="fl">联系邮箱</div>
+					<div class="fr">
+						<input class="li-input file-input" id="contact_email" type="text" /><i class="prompt">请输入正确的联系邮箱</i>
+					</div>
+				</li>
+				<li>
+					<div class="fl">联系电话</div>
+					<div class="fr">
+						<input class="li-input file-input" id="contact_phone" type="text" /><i class="prompt">请输入正确的联系电话</i>
+					</div>
+				</li>
+			</ul>
+			<div class="protocolDiv">
+				<span>
+					<input type="checkbox" class="input_check" id="protocol" checked="">
+					<label for="protocol">你已阅读并同意</label>
+				</span>
+				<a href="/developer/openProtocolIndex/" target="_blank" class="xyLable">《开心小游戏开放平台服务协议》</a>
+			</div>
+			<button class="register-btn">注册</button>
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<div class="warn-outBox" id="succBox">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<img class="icon-img" src="{CONST|H_STATIC_URL}assets/open/img/info-success.png"/>
+				<span>信息提交成功</span>
+				<p>你可前往开心小游戏开放平台使用相关功能。</p>
+				<a href="/game/show/">前往小游戏</a>
+			</div>
+		</div>
+		<script>
+			var start = laydate.render({  
+		        elem: '#test-laydate-start',  
+		        done:function(value,date){
+		        	if(value!=''){
+		        		date.month=date.month-1;
+		        		end.config.min=date;
+		        	}
+		        }
+		    });  
+		    var end = laydate.render({  
+		        elem: '#test-laydate-end',   
+		        done:function(value,date){
+		        	if(value!=''){
+		        		date.month=date.month-1;
+		        		end.config.min=date;
+		        	}
+		        }
+		    }); 
+			$(function(){
+				$("#protocol").click(function(){
+					if(this.checked){
+						$(".register-btn").attr("disabled",false).removeClass("unUse");
+					}else{
+						$(".register-btn").attr("disabled",true).addClass("unUse");
+					}
+				})
+				$(".register-btn").click(function(){
+					if($(".li-input").val()==''){
+						$(".li-input").siblings(".prompt").show();
+					}
+					if($(".prompt").is(":visible")){
+						layer.alert("请先完善信息");
+					}else{
+						registPerson();
+					}
+				});
+				$(".file-input").blur(function(){
+					if(!$(this).val()){
+						$(this).addClass("empty");
+						$(this).siblings(".prompt").show();
+					}else{
+						$(this).removeClass("empty");
+						$(this).siblings(".prompt").hide();
+					}
+				});
+				$(".effective").click(function(){
+					$(document).bind("click",function(e){     
+				        if($(e.target).closest(".effective").length == 0&&$(e.target).closest(".layui-laydate1").length == 0){
+				           	if($("#test-laydate-start").val()==''||$("#test-laydate-end").val()==''){
+								$(".effective").siblings(".prompt").show();
+							}else{
+								$(".effective").siblings(".prompt").hide();
+							}
+				        }
+				    });
+				    $(".laydate-btns-confirm").click(function(){
+				    	if($("#test-laydate-start").val()==''||$("#test-laydate-end").val()==''){
+							$(".effective").siblings(".prompt").show();
+						}else{
+							$(".effective").siblings(".prompt").hide();
+						}
+				    })
+				});
+				$('#file').change(function() {
+					files = ($(this)[0]).files;
+					for(var i = 0; i < files.length; i++) {
+						img1(files[i]);
+					}
+				});
+				function img1(file) {
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(event) {
+						$('.upload-img').attr("src", event.target.result);
+					};
+				}
+				$('#file2').change(function() {
+					files = ($(this)[0]).files;
+					for(var i = 0; i < files.length; i++) {
+						img2(files[i]);
+					}
+				});
+				function img2(file) {
+					var reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function(event) {
+						$('.upload-img2').attr("src", event.target.result);
+					};
+				}
+				function registPerson() {
+					// 开户人
+					var account_holder = $("#account_holder").val().trimSpace();
+					// 身份证号
+					var idcard_number = $("#idcard_number").val().trimSpace();
+					// 身份证有效期（起）
+					var idcard_start_date = $("#test-laydate-start").val().trimSpace();
+					// 身份证有效期（止）
+					var idcard_end_date = $("#test-laydate-end").val().trimSpace();
+					// 身份证正面
+					var idcard_1 = $('#file')[0].files[0];
+					// 身份证反面
+					var idcard_2 = $('#file2')[0].files[0];
+					// 联系人
+					var contact = $("#contact").val().trimSpace();
+					// 联系地址
+					var contact_addr = $("#contact_addr").val().trimSpace();
+					// 联系邮箱
+					var contact_email = $("#contact_email").val().trimSpace();
+					// 联系电话
+					var contact_phone = $("#contact_phone").val().trimSpace();
+
+					if (!hasText(account_holder) || !hasText(idcard_number) || !hasText(idcard_start_date) || !hasText(idcard_end_date) || !hasText(idcard_1)  || !hasText(idcard_2) )
+					{
+						layer.alert("请完善用户信息！");
+						return;
+					}
+					if (!hasText(contact) || !hasText(contact_addr) || !hasText(contact_email) ||
+						!hasText(contact_phone)) 
+					{
+						layer.alert("请完善联系人信息！");
+						return;
+					}
+					var sendData = new FormData();
+					sendData.append("type", 2); //个人
+				    sendData.append("account_holder", account_holder);
+				    sendData.append("idcard_number", idcard_number);
+				    sendData.append("idcard_start_date", idcard_start_date);
+				    sendData.append("idcard_end_date", idcard_end_date);
+				    sendData.append("idcard1", idcard_1);
+				    sendData.append("idcard2", idcard_2);
+				    sendData.append("contact", contact);
+				    sendData.append("contact_addr", contact_addr);
+				    sendData.append("contact_email", contact_email);
+				    sendData.append("contact_phone", contact_phone);
+
+				    $.ajax({
+				        type: "POST",
+				        url: "/developer/submit/",
+						data: sendData,
+						dataType:"json",
+						cache: false,
+						contentType: false,
+						processData: false,
+				        success: function(data) {
+				        	if(data.code == 200){
+			        			$("#succBox").fadeIn();
+			                }else{
+			                    //错误信息
+			                    layer.alert(data.message);
+			                }
+				        }
+
+					})
+				}
+			});
+			function hasText (val) {
+				if (val == '' || val == undefined || val == null) {
+					return false;
+				}
+				return true;
+			}
+			
+		</script>
+	</body>
+</html>

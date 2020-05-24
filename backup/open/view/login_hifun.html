@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<link href="{CONST|H_STATIC_URL}assets/open/css/public.css" rel="stylesheet">
+<link href="{CONST|H_STATIC_URL}assets/open/css/login.css" rel="stylesheet">
+<body>
+<div class="loginBox">
+
+    <h1>登录HiFun开放平台</h1>
+    <fb:login-button size="large" style="display:none;" scope="public_profile,email" onlogin="checkLoginState();">
+    </fb:login-button>
+    <div class="FacebookBtn"   id="facebook"><img src="{CONST|H_STATIC_URL}assets/open/img/facebook_icon.png" />Facebook</div>
+    <!--<div class="FacebookBtn"> <a href="javascript:fbLogin();" target="_top" onclick="fbLogin();"><img src="{CONST|H_STATIC_URL}assets/open/img/facebook_icon.png" />Facebook</a></div>-->
+    <p>OR</p>
+    <div class="GoogleBtn" id="googleBtn"><img src="{CONST|H_STATIC_URL}assets/open/img/google_icon.png" />Google</div>
+</div>
+<script src="{CONST|H_STATIC_URL}assets/open/scripts/public.js" type="text/javascript" >
+</script>
+<script>
+    window.onload = function(){
+        initGoogle();
+        document.getElementById("facebook").onclick = faceLogin;
+        function faceLogin(){
+            FB.login(function(response){
+                statusChangeCallback(response);
+            });
+        }
+    }
+</script>
+</body>
+</html>

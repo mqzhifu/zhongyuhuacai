@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package test;
+
+service Test {
+  rpc GetUserOne (GetUserOneRequest) returns (GetUserOneReply) {}
+  rpc GetUserInfo (GetUserOneRequest) returns (GetUserOneReply) {}
+}
+
+message GetUserOneRequest {
+  required int32 uid = 1;
+  optional string ff = 2;
+}
+
+message GetUserOneReply {
+  required string nickname = 1;
+  optional int32 sex = 2;
+}

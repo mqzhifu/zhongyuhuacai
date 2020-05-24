@@ -1,0 +1,26 @@
+#table#
+
+<script>
+
+
+    $("#datatable_products").on("click",".delone",function(){
+        var id = $(this).attr("data-id");
+        bootbox.confirm("Are you sure?", function(result) {
+            if(result == true){
+                $.ajax({
+                    type: 'GET',
+                    url: "/?ac=delOne&id="+id +"&type=1",
+                    dataType: 'json',
+                    success: function(data){
+                        location.reload();
+                    }
+
+                });
+            }
+        });
+
+
+
+    });
+
+</script>

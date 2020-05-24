@@ -1,0 +1,204 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+    {include layout/left.html}
+    <div class="page-container">
+        <div class="page-content-wrapper">
+            <div class="page-content">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-cogs"></i>APP升级管理
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row margin-top-20">
+                            <div class="table-container">
+                                <ul>
+                        <form id="send_rule_form" action="/app_manager_version/no/upgrade/updateVersionInfo/?id={$result['id']}" method="post" autocomplete="off" enctype="multipart/form-data">
+                        <input type="hidden" name="id" id="updf" value="{$result['id']}" disabled="disabled">
+                        <div class="table-container">
+                            <span>当前外部版本号：</span><span style="color: #0A9AF2">{$result["version_name"]}</span>
+                        </div>
+                        <div class="table-container"><br>
+                            <span>更新外部版本号：</span><input data-tag="inputNumber" name="v1" width="5px">.<input data-tag="inputNumber" name="v2" width="5px">.<input data-tag="inputNumber" name="v3" width="5px">
+                        </div>
+                        <div class="table-container" style="width: auto"><br>
+                            <span style="color: red">*版本号：</span><input style="width: 260px" data-tag="inputNumber" placeholder = "需与移动端同事商议后再做填入……" name="version_code" >
+                        </div><br>
+                        <div class="table-container">
+                            <span>对应后端API接口版本：</span><input  name="api_version" width="5px">
+                        </div><br>
+                        <div class="table-container">
+                            <span>设备：</span><input type="radio" checked = "checked" name="machine_code">Android
+                        </div>
+                        <div class="table-container"><br>
+                            <span>注意事项：</span><br>
+                            1 .设置外部版本号要遵循<span style="color: red;font-weight: bold"> 只升不降 </span>的原则，即设置的外部版本号要高于前一版本号，否则，已安装用户需要卸载重新安装应用才能正常更新升级。<br>
+                            2 .外部版本号，用途为上架第三方应用市场<br>
+                            3 .外部版本号修改之后,需要重新生成应用才可以生效。<br>
+                            4 .外部版本号设置之后，不可撤销，请谨慎操作<br>
+                        </div><br>
+                        <img src="{$result['idcard_img']}" style="width: 110px;height: 110px"><br><br>
+                        <div class="table-container">
+                            <span>更新安装包</span><input type="file" name="FileUpload" id="FileUpload" />
+                            <input id="btn_uploadimg" type="button" value="上传安装包" /><br><br>
+                            <label><input name="force" type="radio"  value="1" >强制更新</label>
+                            <label><input name="force" type="radio"  value="2" >非强制更新</label>
+                        </div><br>
+
+                        <textarea style="width: 600px;height: 300px" name="summary" rows="" id="" cols="20"></textarea><br>
+                            <!--<div style="text-align:left;height: 300px;width: 700px;" name ="summary" id="txta_content"></div>-->
+
+                            <div style="text-align: left;margin-top: 40px; margin-bottom: 40px;">
+                                <button id="cancel_button" type="button" class="btn btn-danger">返回</button>
+                                <button id="submit_button" type="button" class="btn btn-default">提交</button>
+                            </div>
+                        </form>
+                                </ul>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+<script type="text/javascript">
+    $(function() {
+        // 只能输入数字
+        $("[data-tag='inputNumber']").each(function (index, value) {
+            $(this).on("keyup", function () {
+                this.value = this.value.replace(/\D/g,'');
+            });
+        });
+        // 表单数据验证
+        var checkForm = function ($form) {
+            var v1 = $.trim($form.find("input[name='v1']").val());
+            if (v1 == "") {
+                alert("版本序号第一位不允许为空！");
+                return false;
+            }
+            var v2 = $.trim($form.find("input[name='v2']").val());
+            if (v2 == "") {
+                alert("版本序号第二位不允许为空！");
+                return false;
+            }
+            var v3 = $.trim($form.find("input[name='v3']").val());
+            if (v3 == "") {
+                alert("版本序号第三位不允许为空！");
+                return false;
+            }
+
+            var summary = $.trim($form.find("textarea[name='summary']").val());
+            if (summary == "") {
+                alert("更新内容文案不允许为空!");
+                return false;
+            }
+            return true;
+        };
+        // 发送按钮
+        $("#submit_button").on("click", function () {
+            if (confirm("是否进行保存？")) {
+                $("#send_rule_form").ajaxSubmit({
+                    beforeSubmit: function (arr, $form, options) {
+                        return checkForm($form);
+                    },
+                    beforeSerialize: function($form, options) {
+                        console.log($form);
+                    },
+                    success: function (code) {
+                        console.log(code);
+                        if (code == 200) {
+                            alert("success！");
+                            location.href = "/app_manager_version/no/upgrade/index/";
+                        } else {
+                            alert("fail！");
+                            location.href = "/app_manager_version/no/upgrade/index/";
+                            alert(r.message);
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
+<script type="text/javascript">
+       $(function () {
+           $("#btn_uploadimg").click(function () {
+               var fileObj = document.getElementById("FileUpload").files[0]; // js 获取文件对象
+               if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
+                   alert("请选择文件");
+                   return;
+               }
+               var formFile = new FormData();
+               formFile.append("action", "UploadVMKImagePath");
+               formFile.append("file", fileObj); //加入文件对象
+
+               //第一种  XMLHttpRequest 对象
+               //var xhr = new XMLHttpRequest();
+               //xhr.open("post", "/Admin/Ajax/VMKHandler.ashx", true);
+               //xhr.onload = function () {
+               //    alert("上传完成!");
+               //};
+               //xhr.send(formFile);
+
+               //第二种 ajax 提交
+
+               var data = formFile;
+               $.ajax({
+                   url: "/app_manager_version/no/upgrade/updateFile/",
+                   data: data,
+                   type: "Post",
+                   dataType: "json",
+                   cache: false,//上传文件无需缓存
+                   processData: false,//用于对data参数进行序列化处理 这里必须false
+                   contentType: false, //必须
+                   success: function (code) {
+                       if(code>0){
+                           alert("上传成功!");
+                       }else{
+                           alert("上传失败!");
+                       }
+                   },
+               })
+           })
+       })
+ </script>
+<!--<script>-->
+    <!--$("#update_file").click(function(){-->
+        <!--var id = document.getElementById("updf").value;-->
+        <!--var postUrl = "/app_manager/no/upgrade/updateFile/";-->
+        <!--var postInfo = {-->
+            <!--id: id-->
+        <!--};-->
+        <!--console.log(postInfo);-->
+        <!--$.ajax({-->
+            <!--type: "POST",-->
+            <!--url: postUrl,-->
+            <!--data: postInfo,-->
+            <!--dataType: "json",-->
+            <!--success: function (res) {-->
+                <!--alert(res);-->
+                <!--history.go(0);-->
+            <!--},-->
+            <!--error: function () {-->
+                <!--return false;-->
+            <!--}-->
+        <!--});-->
+    <!--});-->
+
+<!--</script>-->
+
+<script>
+    $("#cancel_button").on("click", function() {
+        history.go(-1);
+    });
+</script>
+
+<!--
+<script>
+    var E = window.wangEditor;
+    var editor = new E('#txta_content');
+    editor.create();
+</script>-->

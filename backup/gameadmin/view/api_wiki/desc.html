@@ -1,0 +1,149 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>说明
+                            </div>
+                            <!--<div class="tools">-->
+                            <!--<a href="javascript:;" class="collapse">-->
+                            <!--</a>-->
+                            <!--<a href="#portlet-config" data-toggle="modal" class="config">-->
+                            <!--</a>-->
+                            <!--<a href="javascript:;" class="reload">-->
+                            <!--</a>-->
+                            <!--<a href="javascript:;" class="remove">-->
+                            <!--</a>-->
+                            <!--</div>-->
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="/systemAdminUser/upPs/opt=1" method="post" id="form_sample_3" class="form-horizontal">
+                                <div class="form-body">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">API请求样例：
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            http://域名/控制器/方法名/参数
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            短连接支持POST、 GET、 JSON，暂时推荐用POST，GET模式 NGINX REWRITE 对中文有些影响，后期我会处理
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">短连接-返回格式
+                                        </label>
+                                        <div class="col-md-4">
+                                            {"code":200,"msg":{"ip":"134.175.231.69","port":"9500"}}
+                                            <br/>code为状态码，只有为200是成功，msg:如果状态码为200，是数据，否则是错误提示信息
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">长连接-返回格式
+                                        </label>
+                                        <div class="col-md-4">
+                                            同上，也有CODE和msg，但使用protobuf,只有code非200，也就是失败了msg才有值，JSON下同上
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">demo
+                                        </label>
+                                        <div class="col-md-4">
+                                            http://isgame-test.heyshell.com/login/webSocketLogin/token=1
+                                            <br/>
+                                            其中，index:控制器(模块)，getServer:就方法名，token是参数
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">错误状态码返回示例：
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            {"code":8231,"msg":"redis\u4e2d\u6ca1\u6709token\uff0c\u7528\u6237\u5e76\u6ca1\u6709\u767b\u9646\u8fc7"}
+                                            <br>
+                                            错误码<a href="http://isgame-test.heyshell.com/tools/getCodeDesc/" target="_blank">查看</a>连接
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">游戏长连接逻辑-简要说明
+                                        </label>
+                                        <div class="col-md-4">
+                                            1、先到后台，申请APP，拿到APPID跟密钥，存于自己的后端</br>
+                                            2、进入后台，添加一个<匹配类型>/br>
+                                            3、把SDK嵌入APP/H5中</br>
+                                            4、访问自己APP/H5后台，用APPID 密钥换取TOKEN<br/>
+                                            5、用TOKEN，传给SDK，让SDK登陆长连接<br/>
+                                            6、heartbeat，每5秒一次心跳，保证长连接 不会被OS/浏览器 断开</br>
+                                            7、userMatchSign 用户报名</br>
+                                            8、等待S端推送，游戏开始</br>
+                                            9、cancelMatch，用户离开匹配页面 或 取消匹配</br>
+                                            10、realtimeRsyncMsg ，游戏开始后，实时同步比分消息</br>
+                                            11、C端等待S端推送 对方的 实时比分</br>
+                                            12、C端等待S端推送  游戏结束  通知</br>
+                                            13、用户离开房间/关闭游戏</br>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">游戏长连接逻辑-游戏结束
+                                        </label>
+                                        <div class="col-md-4">
+                                            当用户报名匹配成功后，S端会生成一个XX秒的定时器，XX秒后会通知双方游戏已结束<br/>
+                                            可能S端会出现异常导致没有推送这个消息，C端也可以主动触发游戏结束接口
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">游戏长连接逻辑-弃权
+                                        </label>
+                                        <div class="col-md-4">
+                                            如果长连接断开/用户离开了游戏页面，用户且在游戏中，S端会自动判此用户弃权，并进入游戏结算过程<br/>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                        <!-- END VALIDATION STATES-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

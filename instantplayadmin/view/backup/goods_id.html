@@ -1,0 +1,115 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <!-- <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-share"></i> 导出 <i class="fa fa-angle-down"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="export_data();">
+                                                Excel </a>
+                                        </li>
+                                        <li class="divider">
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                PDF </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                WORD </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <span>
+                                    </span>
+                                    <select class="table-group-action-input form-control input-inline input-small input-sm">
+                                        <option value="">选择</option>
+                                    </select>
+
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <!-- <th width="2%">
+                                            <input type="checkbox" class="group-checkable">
+                                        </th> -->
+                                        <th width="3%">
+                                            OSID<br/><i>（安卓填1、IOS填2）</i>
+                                        </th>
+                                        <th width="3%">
+                                            商品价格<br/><i>（元）</i>
+                                        </th>
+
+                                        <th width="3%">
+                                            商品名称<br/><i>（用户实际收到的商品, 如100钻石）</i>
+                                        </th>
+
+                                        <th width="3%">
+                                            商品ID<br/><i>（生成商品ID）</i>
+                                        </th>
+
+                                    </tr>
+                                    {foreach ($list2 as $item)}
+                                    <tr role="row" class="filter">
+                                        <!-- <th width="2%">
+                                            <input type="checkbox" class="group-checkable">
+                                        </th> -->
+                                        <td align="center">
+                                            {$item["iostype"]}</i>
+                                        </td>
+                                        <td align="center">
+                                            {if isset($foreign) && $foreign==true}${else}￥{/if}{$item["price"]}</i>
+                                        </td>
+
+                                        <td align="center">
+                                            {$item["goods_name"]}</i>
+                                        </td>
+
+                                        <td align="center">
+                                            {$item["id"]}</i>
+                                        </td>
+
+                                    </tr>
+                                    {/foreach}
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+
+
+

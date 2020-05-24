@@ -1,0 +1,222 @@
+<style type="text/css">
+    #txta_content {
+        width: 90%;
+        height: 80px;
+        overflow: auto;
+        border: 1px solid #c5c5c5;
+    }
+</style>
+
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+
+            </h3>
+            <br/>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Begin: life time stats -->
+                    <div class="portlet">
+
+
+                        <div class="portlet-body">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="portlet green box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>修改普通人员权限及密码
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                        <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                        <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <br/>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                            用户ID
+                                                        </div>
+                                                        <div class="col-md-7 value">
+                                                            <input disabled id="admin_id" value="{$userInfo['id']}" type="text" name="admin_id" style="width: 60%;background-color: lightgrey" >
+                                                        </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                登陆账号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input disabled id="uname" value="{$userInfo['uname']}" type="text" name="" style="width: 60%;background-color: lightgrey">
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                姓名
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input disabled id="nickname" value="{$userInfo['nickname']}" type="text" name="" style="width: 60%;background-color: lightgrey">
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                密码
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="pass" value="{$userInfo['ps']}" type="password" name="" style="width: 60%; " onclick=javascript:this.value=''>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                角色
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <select id="role_select" class="form-control form-filter input-sm" style="width: 60%">
+                                                                    <option value="">{$roleName}</option>
+                                                                    {foreach ($roles as  $role)  }
+                                                                    <option value="{$role['id']}">{$role['name']}</option>
+                                                                    {/foreach}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                <button type="button" id='cancel_button' class="btn btn-sm grey"><i class="fa fa-check"></i> 返回 </button>
+                                                                <button type="button" id='new-admin' class="btn btn-sm green"><i class="fa fa-check"></i> 提交 </button>
+                                                            </div>
+
+                                                            <div class="col-md-7 value">
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End: life time stats -->
+                    </div>
+                </div>
+                <!-- END PAGE CONTENT-->
+            </div>
+        </div>
+        <!-- END CONTENT -->
+        <!-- BEGIN QUICK SIDEBAR -->
+        <!-- END QUICK SIDEBAR -->
+    </div>
+
+    <div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+        <div id="innerdiv" style="position:absolute;">
+            <img id="bigimg" style="border:5px solid #fff;text-align: center;" src="" />
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $("#new-admin").click(function(){
+                var role_id = $("#role_select").find("option:selected").val();
+                var admin_id = $("#admin_id").val();
+                var pass = $("#pass").val();
+                /*if (role_id == '') {
+                    alert("请选则角色!");
+                    return false;
+                }*/
+                if(confirm('确定要执行操作吗?')==true){
+                    $.ajax({
+                        type: "POST",
+                        url: "/power/no/account/editInfoSave/",
+                        data: {
+                            id:admin_id,
+                            role_id:role_id,
+                            pass:pass,
+                        },
+                        dataType:'json',
+                        success: function(data){
+                            if (data == '-1001') {
+                                alert("您当前选中的用户角色与原有相同，请勿进行无效操作！");
+                                history.go(0);
+                            } else if(data == '-1002'){
+                                alert("当前账号无效，请重新登录！");
+                                history.go(0);
+                            }else if(data == '-1003'){
+                                alert("抱歉，您没有操作权限！");
+                                history.go(0);
+                            }else if(data == '-1004'){
+                                alert("密码不能少于6个字符！");
+                                history.go(0);
+                            }else if(data == '-1005'){
+                                alert("无效操作！");
+                                history.go(0);
+                            }else if(data == '-1006'){
+                                alert("修改个人信息成功！");
+                                location.href = "/no/no/index/login/";
+                            }else {
+                                alert("操作成功！");
+                                history.go(-1);
+                            }
+                        }
+                    });
+
+                }
+            });
+        });
+
+    </script>
+
+    <script>
+        $("#cancel_button").on("click", function() {
+            location.href = "/power/no/account/index/";
+        });
+    </script>

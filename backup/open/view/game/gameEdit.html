@@ -1,0 +1,482 @@
+{include /layout/left_game.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/gameEdit.css" />
+
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">小游戏基本信息</div>
+					<ul class="basicMessage">
+						<li>
+							<span>游戏编号</span>
+							<div><input class="disabled" type="text" disabled="" value="{$gameid}" /></div>
+						</li>
+						<li>
+							<span>应用秘钥</span>
+							<div>
+								<input class="disabled" id="appSecret" disabled="" readonly="" type="text" value="●●●●●●●●" />
+								<img class="secretBtn" src="{CONST|H_STATIC_URL}assets/open/img/eye.png" />
+								<span class="resetBtn">重置</span>
+								<input id="appSecretToken" style="display: none;" />
+							</div>
+						</li>
+						<li>
+							<span>类别</span>
+							<div>
+								<select id="category" name="category" style="width: 49%;display: block;float: left;">
+									<option value="0">--请选择分类--</option>
+						            {foreach ($gameCategory as $k=>$v)}
+							            {if ($k == $gameInfo['category'])}
+								            <option value="{$k}" selected>
+								                {$v}
+								            </option>
+							            {else}
+								            <option value="{$k}">
+								                {$v}
+								            </option>
+							            {/if}
+						            {/foreach}
+								</select>
+								<select id="paintStyle" name="paintStyle" placeholder="画风" style="width: 49%;display: block;float: right;margin-right: 1px;">
+									<option value="0">--请选择画风--</option>
+						            {foreach ($paintStyleDesc as $k=>$v)}
+							            {if ($k == $gameInfo['paint_style'])}
+								            <option value="{$k}" selected>
+								                {$v}
+								            </option>
+							            {else}
+								            <option value="{$k}">
+								                {$v}
+								            </option>
+							            {/if}
+						            {/foreach}
+								</select>
+							</div>
+						</li>
+						<li>
+							<span>简介</span>
+							<div><input id="summary" type="text" name="summary" maxlength="30" value="{$gameInfo['summary']}" placeholder="游戏描述建议简短并符合游戏特征" /></div>
+						</li>
+						<li>
+							<span>屏幕方向</span>
+							<div>
+								<div class="redioGroup">
+									<span class="radioBox">
+										<input type="radio" value="2" class="input_check" id="radio1_1" name="coderadio" {if ($gameInfo['screen'] == 2)}checked{/if}>
+										<label for="radio1_1">竖屏</label>
+									</span>
+									<span class="radioBox">
+										<input type="radio" value="1" class="input_check" id="radio1_2" name="coderadio" {if ($gameInfo['screen'] == 1)}checked{/if}>
+										<label for="radio1_2">横屏</label>
+									</span>
+								</div>
+							</div>
+						</li>
+						{if $power_link||$power_wechat}
+						<li>
+							<span>启动类型</span>
+							<div>
+								<div class="redioGroup">
+									{foreach ($urlTypeDesc as $k=>$v)}
+									<span class="radioBox">
+										<input type="radio" class="input_check" id="radio2_{$k}" name="urltype" value="{$k}">
+										<label for="radio2_{$k}">{$v}</label>
+									</span>
+									{/foreach}
+								</div>
+							</div>
+						</li>
+						<li id="link_url_div">
+							<span>外链</span>
+							<div><input id="link_url" type="text" name="link_url" value="{$gameInfo['link_url']}"></div>
+
+						</li>
+						<div id="wx_url_div">
+							<li>
+								<span>原始id</span>
+								<div><input id="wx_userName" type="text" name="wx_userName" value="{$gameInfo['wx_userName']}"></div>
+							</li>
+							<li>
+								<span>小程序路径</span>
+								<div><input id="wx_path" type="text" name="wx_path" value="{$gameInfo['wx_path']}"></div>
+							</li>
+							<li>
+								<span>版本类型</span>
+								<div>
+									<select id="wx_miniprogramType" name="wx_miniprogramType" value="{$gameInfo['wx_miniprogramType']}">
+										{foreach ($wechat_program_desc as $k=>$v)}
+					                        {if $gameInfo['wx_miniprogramType']==$k}
+					                            <option value="{$k}" selected>{$v}</option>
+					                        {else}
+					                            <option value="{$k}">{$v}</option>
+					                        {/if}
+					                    {/foreach}
+									</select>
+								</div>
+							</li>
+						</div>
+						{/if}
+					</ul>
+				</div>
+				<div class="section">
+					<div class="title">图片资源</div>
+					<div class="imgBox">
+						<div class="fl">
+							<div class="img-title">应用图标（256 x 256）</div>
+							<input id="icon_256" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label for="icon_256" id="icon_256_label" style="margin-right: 75px;">
+			                    <div id="icon_256_preview" class="img-i1-1" style="background-image: url({if $gameInfo['icon_256_url'] != ''}{$gameInfo['icon_256_url']}{/if});" src='{if ($gameInfo["icon_256_url"] != "")}{$gameInfo["icon_256_url"]}{/if}'></div>
+			                </label>
+			                <div id="background_color_1" class="img-i1-2" style="{if ($gameInfo['background_color'] != '')}background-color: {$gameInfo['background_color']}{/if}"></div>	
+							<div class="colorPicker">
+								<div id="background_color_2" class="img-color-box" style="{if ($gameInfo['background_color'] != '')}background-color: {$gameInfo['background_color']}; color: {$gameInfo['background_color']}{/if}">请选择色卡颜色</div>
+								<div id="triangle-down" class="img-color-icon"></div>
+								<input id="background_color" type="hidden" name="background_color" value="{$gameInfo['background_color']}">
+								<ul id="myColorPicker">
+									<li style="background:#f04263" mce_style="#f04263"></li>
+									<li style="background:#f34d43" mce_style="#f34d43"></li>
+									<li style="background:#f99200" mce_style="#f99200"></li>
+									<li style="background:#fad113" mce_style="#fad113"></li>
+									<li style="background:#96d70c" mce_style="#96d70c"></li>
+									<li style="background:#4ebe2d" mce_style="#4ebe2d"></li>
+									<li style="background:#0cb7f6" mce_style="#0cb7f6"></li>
+									<li style="background:#5c8ff7" mce_style="#5c8ff7"></li>
+									<li style="background:#545cf4" mce_style="#545cf4"></li>
+									<li style="background:#7f5ae8" mce_style="#7f5ae8"></li>
+									<li style="background:#b652f0" mce_style="#b652f0"></li>
+									<li style="background:#f95895" mce_style="#f95895"></li>
+								</ul>
+							</div>
+							
+						</div>
+						<div class="fc">
+							<div class="img-title">应用图标 (128 x 128)</div>
+							<input id="icon_128" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label for="icon_128" id="icon_128_label">
+			                    <div id="icon_128_preview" class="img-i2-1" style="background-image: url({if $gameInfo['icon_128_url'] != ''}{$gameInfo['icon_128_url']}{/if});" src='{if ($gameInfo["icon_128_url"] != "")}{$gameInfo["icon_128_url"]}{/if}'></div>
+			                </label>
+						</div>
+						<div class="fr">
+							<div class="img-title">游戏启动页（1080 x 1920）</div>
+							<input id="startup" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label for="startup" id="startup_label">
+			                    <div id="startup_preview" class="img-i3-1" style="background-image: url({if $gameInfo['startup_url'] != ''}{$gameInfo['startup_url']}{/if});" src='{if ($gameInfo["startup_url"] != "")}{$gameInfo["startup_url"]}{/if}'></div>
+			                </label>
+						</div>
+						<ul class="warnUl">
+							<li>图像内容不允许涉及政治敏感与色情;</li>
+							<li>图片格式必须为：png,bmp,jpeg,jpg,gif；不可大于2M；建议使用png格式图片，以保持最佳效果</li>
+						</ul>
+						
+						<div class="clearfix"></div>
+						<div class="btnBox">
+							<button id="cancelBtn" type="button" class="btn-modal-no">放弃</button>
+	              			<button id="saveBtn" type="button" class="btn-modal-yes">保存更改</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<div class="warn-outBox secretWin">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head">请重新输入密码</div>
+				<div class="del_main">
+					<div class="game_name">为保护你的帐户安全，请重新输入密码后再继续操作。</div>
+					<div class="passwordBox">
+						<input class="pas_input" type="password" name="" id="" value="" /><a href="/forgetPs/index/">忘记密码？</a>
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button type="button" id="checkAuthBtn" class="btn-modal-yes">提交</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*添加游戏*/
+				$(".add_game,.game_add").click(function() {
+					$(".add_win").show();
+				});
+				/*删除游戏*/
+				$(document).on("click", ".del_game", function() {
+					$(".del_win").show();
+				});
+				$(".btn-modal-no").click(function() {
+					$(".warn-outBox").hide()
+				});
+				/*查看秘钥*/
+				$(".secretBtn").click(function(){
+					{if isset($foreign) && $foreign==true}
+					$.ajax({
+		                url: "/game/detailAuth/",
+		                type: "POST",
+		                data:{gameid:gameid},
+		                success: function (res) {
+                            $(".secretBtn").hide();
+                            $("#appSecret").val(res.data.appSecret);
+                            resetToken = res.data.resetToken;
+		                }
+		            });
+		            {else}
+					$(".secretWin").show();
+					{/if}
+
+				});
+				$(".btn-modal-no").click(function(){
+					$(".secretWin").hide();
+				})
+				$("#cancelBtn").click(function(){
+					location.href = "/game/detail/gameid="+gameid; 
+				})
+				// 上传图片事件
+				var bindChangeFile = function(label) {
+					$("#" + label).on("change", function(e) {
+						var file = e.target.files[0];
+
+						if(!file.type.match("image.*")) {
+							return false;
+						}
+
+						var reader = new FileReader();
+						reader.readAsDataURL(file);
+
+						reader.onload = function(arg) {
+							console.log(arg.target.result);
+							$("#" + label + "_preview").attr("style", "background-image: url(" + arg.target.result + ")");
+						}
+					})
+				}
+
+				var uploadLabels = ["icon_256", "icon_128", "startup"];
+
+				for(var i in uploadLabels) {
+					var label = uploadLabels[i];
+					bindChangeFile(label);
+				}
+				$(".colorPicker").click(function(){
+					$("#myColorPicker").fadeToggle(100);
+				});
+				$("#myColorPicker").on("click","li",function(){
+					var thisClolr=$(this).attr("mce_style");
+					$("#background_color").val(thisClolr);
+					$("#background_color_2,#background_color_1").css({"background-color":thisClolr,"color":thisClolr});
+				});
+				function changeRadio(opt){
+		            if(opt == 2){
+		                $("#link_url_div").show();
+		                $("#wx_url_div").hide();
+		            }else if(opt == 3){
+		                $("#link_url_div").hide();
+		                $("#wx_url_div").show();
+		            }else{
+		                $("#link_url_div").hide();
+		                $("#wx_url_div").hide();
+		            }
+		        }
+		        var initGameType = function(){
+		            $("#link_url_div").hide();
+		            $("#wx_url_div").hide();
+		            $('input[type=radio][name=urltype]').change(function() {
+		                var opt=$("input:radio[name='urltype']:checked").val();
+		                changeRadio(opt);
+		            });
+
+		            $("input:radio[name='urltype'][value='{$gameInfo['url_type']}']").attr("checked","checked");
+		            changeRadio({$gameInfo['url_type']});
+				}();
+
+				var gameid = {$gameid};
+        		var resetToken = "";
+
+				// 校验身份，显示密钥
+		        $("#checkAuthBtn").on("click", function() {
+		            var formData = new FormData();
+		            var password = $(".pas_input").val();
+		            formData.append("gameid", gameid);
+		            formData.append("password", password);
+		            $.ajax({
+		                url: "/game/detailAuth/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function (res) {
+		                    layer.alert(res.message, 
+		                        {title:'提示'}, 
+		                        function(index){
+		                            $("#myModal").modal("hide");
+		                            if (res.code === 0) {
+		                                $(".secretBtn").hide();
+		                                $("#appSecret").val(res.data.appSecret);
+		                                $(".resetBtn").show();
+		                                resetToken = res.data.resetToken;
+		                            }
+		                            layer.close(index);
+		                            $(".secretWin").hide();
+		                    	}
+		                    );
+		                    
+		                }
+		            });
+		        });
+		        // 重置按钮
+		        $(".resetBtn").on("click", function() {
+		        	$("#appSecretToken").val(resetToken);
+		            var charSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		            var randomString = '';
+		            for (var i = 0; i < 32; i++) {
+		                var randomPoz = Math.floor(Math.random() * charSet.length);
+		                randomString += charSet.substring(randomPoz,randomPoz+1);
+		            }
+		            $("#appSecret").val(hex_md5(randomString + (new Date()).valueOf()));
+		            layer.alert("重置密钥已自动生成，保存后生效");
+		        });
+
+		        // 重复提交
+		        var saving = false;
+		        // 保存逻辑
+		        var saveDetailEvent = function() {
+		            var formData = new FormData();
+		            // 游戏ID
+		            formData.append("gameid", gameid);
+		            // 密钥
+		            var appSecret = $("#appSecret").val();
+		            formData.append("appSecret", appSecret);
+		            // 密钥token
+		            var appSecretToken = $("#appSecretToken").val();
+		            formData.append("appSecretToken", appSecretToken);
+		            // 分类
+		            var category = $("select[name=category]").val();
+		            if (category == 0){
+		                saving = false;
+		                layer.alert("请选择分类");
+		                return;
+		            }
+		            formData.append("category", category);
+
+		            // 画风
+		            var paintStyle = $("select[name=paintStyle]").val();
+		            if (paintStyle == 0){
+		                saving = false;
+		                layer.alert("请选择画风");
+		                return;
+		            }
+		            formData.append("paintStyle", paintStyle);
+		            // 简介
+		            var summary = $("input[name=summary]").val();
+		            if (!summary){
+		                saving = false;
+		                layer.alert("请填写简介");
+		                return;
+		            }
+		            formData.append("summary", summary);
+		            // 屏幕方向
+		            var screen = $("input[name=coderadio]:checked").val();
+		            if (!screen){
+		                saving = false;
+		                layer.alert("请选择屏幕方向");
+		                return;
+		            }
+		            formData.append("screen", screen);
+		            // 游戏启动类型
+		            var url_type = $("input:radio[name='urltype']:checked").val();
+		            formData.append('url_type', url_type);
+		            if(url_type == 1){
+
+		            }else if(url_type == 2){
+		                var link_url = $('#link_url').val();
+		                formData.append("link_url", link_url);
+		            }else if(url_type == 3){
+		                var wx_path = $('#wx_path').val();
+		                var wx_userName = $('#wx_userName').val();
+		                var wx_miniprogramType = $('#wx_miniprogramType').val();
+		                formData.append('wx_userName', wx_userName);
+		                formData.append('wx_path', wx_path);
+		                formData.append('wx_miniprogramType', wx_miniprogramType);
+		            }
+		            
+		            // 应用图标256*256
+		            var icon256 = document.getElementById("icon_256").files[0];
+		            var icon256Preview = $("#icon_256_preview").attr("src");
+		            if (icon256 !== undefined) {
+		                formData.append("icon_256", icon256);
+		            } else if (icon256Preview === undefined) {
+		                saving = false;
+		                layer.alert("请上传应用图标");
+		                return;
+		            }
+		            // 背景颜色
+		            var backgroundColor = $("#background_color").val();
+		            formData.append("backgroundColor", backgroundColor);
+		            // 应用图标128*128
+		            var icon128 = document.getElementById("icon_128").files[0];
+		            var icon128Preview = $("#icon_128_preview").attr("src");
+		            if (icon128 !== undefined) {
+		                formData.append("icon_128", icon128);
+		            } else if (icon128Preview === undefined) {
+		                saving = false;
+		                layer.alert("请上传应用图标");
+		                return;
+		            }
+		            // 启动页面
+		            var startup = document.getElementById("startup").files[0];
+		            var startupPreview = $("#startup_preview").attr("src");
+		            if (startup !== undefined) {
+		                formData.append("startup", startup);
+		            } else if (startupPreview === undefined) {
+		                saving = false;
+		                layer.alert("请上传游戏启动页");
+		                return;
+		            }
+
+		            $.ajax({
+		                url: "/game/detailSave/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function (res) {
+		                    layer.alert(res.message, 
+		                        {title:'提示'}, 
+		                        function(){
+		                            location.href = "/game/detail/gameid="+gameid;
+		                    });
+		                },
+		                complete: function(res) {
+		                    saving = false;
+		                }
+		            });
+		        };
+
+		        // 保存按钮
+		        $("#saveBtn").on("click", function() {
+		            if (!saving) {
+		                saving = true;
+		                saveDetailEvent();
+		            }
+		        });
+			})
+		</script>
+	</body>
+
+</html>

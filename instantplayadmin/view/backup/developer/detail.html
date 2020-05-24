@@ -1,0 +1,412 @@
+<style type="text/css">
+    #txta_content {
+    width: 90%;
+    height: 80px;
+    overflow: auto;
+    border: 1px solid #c5c5c5;
+}
+</style>
+
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                Developer <small>view developer details</small>
+            </h3>
+            <br/>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Begin: life time stats -->
+                    <div class="portlet">
+
+
+                        <div class="portlet-body">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="portlet yellow-crusta box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>开发者信息
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                            <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                                <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <br/>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开发者ID
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['uid']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开发者类型
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerType[$developerDetail['type']]}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        
+                                                        {if $developerDetail['type']==1}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                公司名称
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['company']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                注册地址
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['company_addr_province']} {$developerDetail['company_addr_city']} {$developerDetail['company_addr_district']} {$developerDetail['company_addr_detail']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                营业执照号码
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['business_number']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                营业执照扫描件
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$developerDetail['business']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 预览</button>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                法人名称
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['legal_person']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                法人身份证号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['idcard_number']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                证件有效期
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['idcard_start_date']} 至 {$developerDetail['idcard_end_date']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                法人身份证（正反面）
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$developerDetail['idcard_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 正面</button>
+                                                                <button value="{$developerDetail['idcard2_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 反面</button>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        {/if}
+
+                                                        {if $developerDetail['type']==2}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系人（开户名称）
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['account_holder']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                身份证号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['idcard_number']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                证件有效期
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['idcard_start_date']} 至 {$developerDetail['idcard_end_date']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                身份证（正反面）
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$developerDetail['idcard_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 正面</button>
+                                                                <button value="{$developerDetail['idcard2_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 反面</button>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        {/if}
+
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系人
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['contact']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系电话
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['phone']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系邮箱
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['email']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系地址
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developerDetail['address']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+
+                                                        {if $developerDetail['status']==1}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                驳回理由
+                                                            </div>
+
+                                                            <div class="col-md-7 value">
+                                                                <textarea id="txta_content" wrap="logical" placeholder="如审核通过不需要填写...."></textarea>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        {/if}
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                <button id="cancel" type="button" class="btn btn-sm yellow"><i class="fa fa-times"></i> 返回</button>
+                                                            </div>
+
+                                                            <div class="col-md-7 value">
+                                                                {if $developerDetail['status']==1}
+                                                                <button id="audit_reject" type="button" class="btn btn-sm red"><i class="fa fa-times"></i> 驳回</button>
+                                                                <button id='audit_pass' class="btn btn-sm green"><i class="fa fa-check"></i> 通过</button>
+                                                                {/if}
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>
+
+<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+    <div id="innerdiv" style="position:absolute;">
+            <img id="bigimg" style="border:5px solid #fff;text-align: center;" src="" />
+    </div>
+</div>  
+    
+<script>
+    $(document).ready(function(){
+        $(".btn.btn-sm.blue.filter-submit.margin-bottom").click(function(){
+            var src = $(this).val();
+            $('#bigimg').attr("src", src);
+                        /*获取当前点击图片的真实大小，并显示弹出层及大图*/  
+            $('#bigimg').load(function(){  
+                var windowW = $(window).width();//获取当前窗口宽度  
+                var windowH = $(window).height();//获取当前窗口高度  
+                var realWidth = this.width;//获取图片真实宽度  
+                var realHeight = this.height;//获取图片真实高度  
+                var imgWidth, imgHeight;  
+                var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
+                  
+                if(realHeight>windowH*scale) {//判断图片高度  
+                    imgHeight = windowH*scale;//如大于窗口高度，图片高度进行缩放  
+                    imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度  
+                    if(imgWidth>windowW*scale) {//如宽度扔大于窗口宽度  
+                        imgWidth = windowW*scale;//再对宽度进行缩放  
+                    }  
+                } else if(realWidth>windowW*scale) {//如图片高度合适，判断图片宽度  
+                    imgWidth = windowW*scale;//如大于窗口宽度，图片宽度进行缩放  
+                    imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度  
+                } else {//如果图片真实高度和宽度都符合要求，高宽不变  
+                    imgWidth = realWidth;  
+                    imgHeight = realHeight;  
+                }  
+                    $('#bigimg').css("width",imgWidth);//以最终的宽度对图片缩放  
+                  
+                var w = (windowW-imgWidth)/2;//计算图片与窗口左边距  
+                var h = (windowH-imgHeight)/2;//计算图片与窗口上边距  
+                $("#innerdiv").css({"top":h, "left":w});//设置#innerdiv的top和left属性  
+                $("#outerdiv").fadeIn("fast");//淡入显示#outerdiv及.pimg  
+            });
+        });
+        $("#outerdiv").click(function(){//再次点击淡出消失弹出层  
+            $(this).fadeOut("fast");  
+        });  
+        $("#audit_pass").click(function(){
+            if(confirm('确定要通过吗')==true){
+                $.ajax({
+                    type: "POST",
+                    url: "/developer/no/examine/pass/",
+                    data: {
+                        uid:{$developerDetail['uid']},
+                    },
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 200) {
+                            alert("操作成功");
+                            window.history.back(-1);
+                        } else {
+                            alert("操作失败");
+                            window.history.back(-1); 
+                        }
+                        
+                    }
+                });
+
+            }
+        });
+
+        $("#audit_reject").click(function(){
+            if ($("#txta_content").val() == '') {
+                alert('请填写驳回理由');return;
+            }
+            if(confirm('确定要驳回吗')==true){
+                $.ajax({
+                    type: "POST",
+                    url: "/developer/no/examine/reject/",
+                    data: {
+                        uid:{$developerDetail['uid']},
+                        detail:$("#txta_content").val()
+                    },
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 200) {
+                            alert("操作成功");
+                            window.history.back(-1); 
+                        } else {
+                            alert("操作失败");
+                            window.history.back(-1); 
+                        }
+                        
+                    }
+                });
+
+            }
+        });
+
+        $("#cancel").click(function(){
+            window.history.back(-1); 
+        })
+    });
+
+</script>

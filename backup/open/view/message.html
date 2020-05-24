@@ -1,0 +1,115 @@
+{include /layout/left_game.html}
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">发送规则
+						<span>（关闭小游戏后，给玩家发送消息规则）</span>
+					</div>
+				</div>
+				<div class="section">
+					<div class="title">
+						<!-- <div class="batchControl">
+							<span class="checkBox">
+								<input type="checkbox" id="allCheck" class="input_check">
+								<label for="allCheck"></label>
+							</span>
+							<select class="batchSelect">
+								<option>批量操作</option>
+								<option>删除</option>
+							</select>
+						</div> -->
+						<a class="add_Pro" href="/message/detail/gameid={$gameid}">+新建</a>
+					</div>
+					<table class="table adTable">
+						<thead>
+							<tr>
+								<td>规则名称</td>
+								<td>消息模板</td>
+								<td>时间规则类型</td>
+								<td>触发点</td>
+								<td>创建时间</td>
+								<td>修改时间</td>
+								<td>操作</td>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			var gameid = {$gameid};
+			$(function(){
+				$('#allCheck').on('click',function(){
+	                if(this.checked) {
+	                    $(document).find(".sonCheck").prop('checked',true);
+	                }else {
+	                    $(document).find(".sonCheck").prop('checked',false);
+	                }
+	            });
+	            $(document).on("click",".sonCheck",function(){
+	            	var flag;
+	            	$(document).find(".sonCheck").each(function(){
+	            		if ($(".sonCheck:checked").length == $(".sonCheck").length) {
+							$("#allCheck").prop('checked',true);
+						}
+						else{
+							$("#allCheck").prop('checked',false);
+						}
+	            	});
+	            });
+
+	            $.ajax({
+	                url: "/message/getMsgList/",
+	                type: "GET",
+	                data: {gameid:gameid},
+	                dataType:"json",
+	                success: function (data) {
+	                	var msgs = data.data;
+			        	var html = "";
+			        	for (var i = 0; i < msgs.length; i++) {
+			        		html += '<tr><td>'+msgs[i].name+'</td><td>'+msgs[i].template_type+'</td><td>'+msgs[i].type+'</td><td>'+msgs[i].point_trips+'</td><td>'+msgs[i].created_at+'</td><td>'+msgs[i].updated_at+'</td><td><span class="delBtn" attr-id='+msgs[i].id+'>删除</span><span class="editBtn" attr-id='+msgs[i].id+'>编辑</span></td></tr>';
+			        	}
+			        	$("tbody").html(html);
+	                }
+	            });
+
+	            $(document).on("click",".editBtn",function(){
+	            	var url = "/message/detail/?gameid="+gameid+"&id="+$(this).attr("attr-id");
+	            	location.href= url;
+	            });
+
+	            $(document).on("click",".delBtn",function(){
+	            	var url = "/message/dlGamesSetSingle/?gameid="+gameid+"&id="+$(this).attr("attr-id");
+	            	$.ajax({
+		                url: url,
+		                type: "GET",
+		                dataType:"json",
+		                success: function (data) {
+		                	layer.alert(data.message, 
+                                {title:'提示'}, 
+                                function(index){
+		                			location.href = "/message/index/gameid=" + gameid;
+                                    layer.close(index);
+                            });
+		                }
+		            });
+	            });
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,180 @@
+{include layout/left.html}
+	<!-- BEGIN CONTENT -->
+	<div class="page-content-wrapper">
+		<div class="page-content">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">Modal title</h4>
+						</div>
+						<div class="modal-body">
+							 Widget settings form goes here
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn blue">Save changes</button>
+							<button type="button" class="btn default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+
+			<br>
+			<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<div class="col-md-12 news-page">
+					<h1>Role setting</h1>
+					
+					<div class="row">
+
+						<div class="col-md-5" style="padding-bottom: 20px">
+							<div style="height:30px; padding-left: 5px;padding-right: 15px; display: inline-block;">
+								<select id="role_select" class="form-control form-filter input-sm" >
+		                            <option value="">请选择</option>
+		                            {foreach ($roles as  $role)  }
+		                            <option value="{$role['id']}" {if $select_id==$role['id']}selected{/if}>{$role['name']}</option>
+		                            {/foreach}
+		                        </select>
+							</div>
+							<button id='role_search' class="btn btn-sm blue filter-cancel"><i class="fa fa-check"></i> 查询</button>
+							<button id='role_save' class="btn btn-sm green filter-cancel"><i class="fa fa-check"></i> 保存</button>
+							<button id='role_new' class="btn btn-sm yellow filter-cancel" style="float: right"><i class="fa fa-plus"></i> 新角色</button>
+						</div>
+					</div>
+					<div class="row">
+						{foreach ($menus as $menu)}
+						<div class="col-md-5" style="padding-bottom: 20px">
+							
+							<div class="top-news">
+								<div class="btn blue" style="width: 100%">
+								<span>
+									<input type="checkbox" class="menu title" value="{$menu['id']}" {if isset($powers)&&in_array($menu['id'],$powers)}checked="checked"{/if}> {$menu['name']} 
+								</span>
+								</div>
+							</div>
+							<div class="news-blocks">
+								<div class="news-block-tags">
+									{foreach ($menu['sub'] as $sub)}
+									<span style="font-size: 16px;  display:inline-block; padding: 10px">
+										<input type="checkbox" class="menu sub" value="{$sub['id']}" {if isset($powers)&&in_array($sub['id'],$powers)}checked="checked"{/if}> {$sub['name']} 
+									</span>
+									{if isset($sub['sub'])}
+									{foreach ($sub['sub'] as $ssub)}
+									<span style="font-size: 16px;  display:inline-block; padding: 10px">
+										<input type="checkbox" class="menu sub" value="{$ssub['id']}" {if isset($powers)&&in_array($ssub['id'],$powers)}checked="checked"{/if}> {$ssub['name']} 
+									</span>
+									{/foreach}
+									{/if}
+									{/foreach}
+								</div>
+							</div>
+						</div>
+						{/foreach}
+						<!--end col-md-5-->
+					</div>
+
+                    	
+
+				</div>
+			</div>
+			<!-- END PAGE CONTENT-->
+		</div>
+	</div>
+	<!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		var ids=[];
+		$(".menu").each(function(){
+			if ($(this).prop("checked")) {
+				var id = $(this).val();
+
+				if (!ids.includes(id)) {
+					ids.push(id);
+				}
+			}
+		})
+
+
+
+		$(".menu").change(function(){
+			if ($(this).prop("checked")) {
+				var id = $(this).val();
+
+				if (!ids.includes(id)) {
+					ids.push(id);
+				}
+			}
+			else if ($(this).prop("checked") == false) {
+				var id = $(this).val();
+
+				if (ids.includes(id)) {
+					removeByValue(ids,id);
+				}
+			}
+			console.log(ids);
+		});
+
+		$("#role_search").click(function(){
+			role_id = $("#role_select").find("option:selected").val();
+			if (role_id == '') {
+				alert("请选择角色");return;
+			}
+			location.href="/power/user/power/search/id="+role_id;
+
+		});
+
+		$("#role_save").click(function(){
+			if (ids.length == 0) {
+				alert("请选中至少一项权限");return;
+			}
+			if(confirm('确定要执行操作吗')==true){
+				role_id = $("#role_select").find("option:selected").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/power/no/power/save/",
+                    data: {
+                        ids:ids,
+                        role_id:role_id
+                    },
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 200) {
+                            alert("操作成功");
+                        } else {
+                            alert("操作失败");
+                        }
+                    }
+                });
+
+            }
+		});
+
+		$("#role_new").click(function(){
+			location.href="/power/no/power/newRole/";
+
+		});
+		
+	});
+
+	function removeByValue(arr, val) {
+	    for (var i = 0; i < arr.length; i++) {
+	        if (arr[i] == val) {
+	            arr.splice(i, 1);
+	            break;
+	        }
+	    }
+	}   
+
+</script>
+<!-- END BODY -->
+</html>

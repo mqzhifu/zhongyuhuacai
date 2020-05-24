@@ -1,0 +1,238 @@
+<script>
+
+    var FormValidation = function () {
+
+
+        // advance validation
+        var handleValidation3 = function() {
+            // for more info visit the official plugin documentation:
+            // http://docs.jquery.com/Plugins/Validation
+
+            var form3 = $('#form_sample_3');
+            var error3 = $('.alert-danger', form3);
+            var success3 = $('.alert-success', form3);
+
+            //IMPORTANT: update CKEDITOR textarea with actual content before submit
+            form3.on('submit', function() {
+//                for(var instanceName in CKEDITOR.instances) {
+//                    CKEDITOR.instances[instanceName].updateElement();
+//                }
+            });
+
+            form3.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block help-block-error', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "", // validate all fields including form hidden input
+                rules: {
+                    title: {
+                        required: true
+                    },
+                    pic: {
+                        required: true
+                    },
+                    realname: {
+                        required: true,
+                    },
+                    id_card_num: {
+                        required: true
+                    },
+                    sex: {
+                        required: true
+                    },
+                    mobile: {
+                        required: true
+                    },
+                    fee_percent: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    },
+                    province: {
+                        required: true
+                    },
+
+                    city: {
+                        required: true
+                    },
+
+                    county: {
+                        required: true
+                    },
+
+                    street: {
+                        required: true
+                    },
+
+                    villages: {
+                        required: true
+                    },
+
+                },
+
+                messages: { // custom messages for radio buttons and checkboxes
+                    // old_ps: {
+                    //     minlength: '最少6个字符',
+                    //     required: '不能为空'
+                    // },
+                    // ps: {
+                    //     minlength: '最少6个字符',
+                    //     required: '不能为空'
+                    // },
+                    // ps_sure: {
+                    //     minlength: '最少6个字符',
+                    //     required: '不能为空',
+                    //     equalTo:'两次密码不一致'
+                    // }
+                },
+
+                errorPlacement: function (error, element) { // render error placement for each input type
+                    if (element.parent(".input-group").size() > 0) {
+                        error.insertAfter(element.parent(".input-group"));
+                    } else if (element.attr("data-error-container")) {
+                        error.appendTo(element.attr("data-error-container"));
+                    } else if (element.parents('.radio-list').size() > 0) {
+                        error.appendTo(element.parents('.radio-list').attr("data-error-container"));
+                    } else if (element.parents('.radio-inline').size() > 0) {
+                        error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
+                    } else if (element.parents('.checkbox-list').size() > 0) {
+                        error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
+                    } else if (element.parents('.checkbox-inline').size() > 0) {
+                        error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
+                    } else {
+                        error.insertAfter(element); // for other inputs, just perform default behavior
+                    }
+                },
+
+                invalidHandler: function (event, validator) { //display error alert on form submit
+                    success3.hide();
+                    error3.show();
+                    Metronic.scrollTo(error3, -200);
+                },
+
+                highlight: function (element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                unhighlight: function (element) { // revert the change done by hightlight
+                    $(element)
+                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
+                },
+
+                success: function (label) {
+                    label
+                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
+                },
+
+                submitHandler: function (form) {
+                    var btn = $(this);
+                    btn.button('loading');
+
+                    success3.show();
+                    error3.hide();
+                    form[0].submit(); // submit the form
+                }
+
+            });
+
+        }
+
+        return {
+            //main function to initiate the module
+            init: function () {
+
+                handleValidation3();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        FormValidation.init();
+
+    });
+</script>
+
+
+<script>
+
+    var areaSelectedProvince = 0;
+    var areaSelectedCity = 0;
+    var areaSelectedCounty = 0;
+
+
+    var city = eval({$cityJs});
+    var county = eval({$countyJs});
+    var ajaxStreetData = null;
+    function area(type,obj){
+        if(type == 'province'){
+            $("#city").html("<option value=''>请选择</option>");
+            $("#county").html("<option value=''>请选择</option>");
+            $("#street").html("<option value=''>请选择</option>");
+
+            areaSelectedProvince = $(obj).val();
+
+            var cityList = city[areaSelectedProvince];
+            // return alert(cityList[0]);
+            var optionHtml = "";
+            for(var i=0;i<cityList.length;i++){
+                optionHtml += "<option value='"+cityList[i][2]+"'>"+cityList[i][1]+"</option>";
+            }
+            $("#city").html(optionHtml);
+        }else if(type =='city'){
+            $("#county").html("<option value=''>请选择</option>");
+            $("#street").html("<option value=''>请选择</option>");
+
+            areaSelectedCity = $(obj).val();
+            var countyList = county[areaSelectedCity];
+            var optionHtml = "";
+            for(var i=0;i<countyList.length;i++){
+                optionHtml += "<option value='"+countyList[i][1]+"'>"+countyList[i][2]+"</option>";
+            }
+            $("#county").html(optionHtml);
+        }else if(type =='county'){
+            $("#street").html("<option value=''>请选择</option>");
+            var countyId = $(obj).val();
+            ajaxGetAreaStreet(countyId);
+            var streetData = ajaxStreetData;
+            // alert(streetData[0]['street_code']);
+            var optionHtml = "";
+            for(var i=0;i<streetData.length;i++){
+                optionHtml += "<option value='"+streetData[i]['street_code']+"'>"+streetData[i]['short_name']+"</option>";
+            }
+            $("#street").html(optionHtml);
+        }else{
+            return alert(" type error");
+        }
+    }
+
+
+    function ajaxGetAreaStreet(countyId){
+        $.ajax({
+            async: false,
+            // contentType: "application/json;charset=UTF-8",
+            //请求方式
+            type : "POST",
+            url : "/people/no/agent/getCountyData/countyId="+countyId,
+//            //数据，json字符串
+            // data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                if(!result){
+                    return alert("ajax getProductCategoryRelation is null");
+                }
+
+                ajaxStreetData =eval("("+result+")");
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                alert("ajax failed!");
+            }
+        });
+    }
+
+</script>

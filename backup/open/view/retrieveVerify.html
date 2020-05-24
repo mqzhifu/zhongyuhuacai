@@ -1,0 +1,117 @@
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/retrieve.css">
+		<div class="mainBox">
+			<img class="main-head" src="{CONST|H_STATIC_URL}assets/open/img/step2.png" />
+			<div class="mainInner-title">您正在为账号<!--<span>a*****7 </span>-->找回密码 </div>
+			<div class="mainInner">
+				
+				<dl>
+					<dt class="phoneNum">手机号<em id="phone"></em></dt>
+					<dt class="codeTitle">验证码</dt>
+					<dd>
+						<input class="input-code" type="text" placeholder="请输入验证码" >
+			            <button class="phoneCode yzmBtn">获取验证码</button>
+			            <i class="prompt">请输入正确的验证码</i>
+					</dd>
+				</dl>
+				<div class="btn-clup">
+					<div class="next-step">下一步</div>
+					<div class="prev-step">返回</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<script>
+			$(function(){
+				var phone = localStorage.getItem("phone");
+
+				$("#phone").html(phone.substr(0,3)+'****'+phone.substr(7,4));
+				$(".yzmBtn").click(function(){
+					if (!phone) {
+						layer.alert("非法访问");
+						return;
+					}
+					invokeSettime(this);
+					$.ajax({
+			            type: "POST",
+			            url: "/forgetPs/sendSms/",
+			            data: {phone:phone}, 
+			            dataType:'json',
+			            success: function(data){
+			                if (data.code == 200) {
+			                    console.log('send success');
+			                } else {
+			                    layer.alert(data.message);
+			                }
+			            }
+			        });
+				});
+				$(".input-code").on("blur",function(){
+					if(!$(this).val()){
+						$(this).addClass("empty");
+						$(this).siblings(".prompt").show();
+					}else{
+						$(this).removeClass("empty");
+						$(this).siblings(".prompt").hide();
+					}
+				});
+				$(".next-step").click(function(){
+					var code = $(".input-code").val();
+					if (!code) {
+						layer.alert("请输入验证码");
+						return;
+					}
+			        $.ajax({
+			            type: "POST",
+			            url: "/forgetPs/authCode/",
+			            data: {phone:phone, code:code},
+			            dataType:'json',
+			            success: function(data){
+			                if (data.code == 200) {
+			                	localStorage.setItem("upcode",data.data.upcode);
+			                    location.href="/forgetPs/reset/";
+			                } else {
+			                    layer.alert("验证码验证失败");
+			                }
+			            }
+			        });
+	        	});
+	        	$(".prev-step").click(function(){
+	        		window.history.go(-1);
+	        	});
+			})
+			
+			function invokeSettime(obj) {
+				var countdown = 60;
+				$(obj).addClass("disabled");
+				settime(obj);
+				function settime(obj) {
+					if(countdown == 0) {
+						$(obj).attr("disabled", false);
+						$(obj).removeClass("disabled");
+						$(obj).text("获取验证码");
+						countdown = 60;
+						return;
+					} else {
+						$(obj).attr("disabled", true);
+						$(obj).text(countdown + "s");
+						countdown--;
+					}
+					setTimeout(function() {
+						settime(obj);
+					}, 1000)
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,445 @@
+		<div class="gameManage">
+			<div class="manageHead">
+				<div class="gameSelect dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<img src="{if $gameInfo['icon_128_url']}{$gameInfo['icon_128_url']}{else}{CONST|H_STATIC_URL}assets/open/img/default_icon.png{/if}"  /><span>{$gameInfo["name"]}</span>
+				</div>
+				<ul class="dropdown-menu gameSelectUl" aria-labelledby="dropdownMenu">
+				</ul>
+				<div class="game_number">游戏编号：{$gameid}<a href="/game/show/">返回游戏列表</a></div>
+				<div class="clearfix"></div>
+			</div>
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">提交审核</div>
+					<div class="section-title">小游戏基本信息</div>
+					<ul class="basicMessage">
+						<li>
+							<span>类别</span>
+							<div>
+							{foreach ($gameCategory as $k=>$v)}
+							{if ($gameInfo['category'] == $k)}
+								{$v}
+							{/if}
+							{/foreach}
+							-
+							{foreach ($paintStyleDesc as $k=>$v)}
+								{if ($gameInfo['paint_style'] == $k)}
+									{$v}
+								{/if}
+							{/foreach}
+							</div>
+						</li>
+						<li>
+							<span>简介</span>
+							<div>{$gameInfo['summary']}</div>
+						</li>
+						<li>
+							<span>屏幕方向</span>
+							<div>
+								{if ($gameInfo['screen'] == 2)} 竖屏 {/if}
+								{if ($gameInfo['screen'] == 1)} 横屏 {/if}
+							</div>
+						</li>
+					</ul>
+				</div>
+				
+				<div class="section">
+					<div class="section-title">图片资源</div>
+					<div class="imgBox">
+						<div class="fl">
+							<div class="img-title">应用图标（256 x 256）</div>
+							<input id="icon_256" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label for="icon_256" id="icon_256_label" style="margin-right: 75px;">
+			                    <div id="icon_256_preview" class="img-i1-1" style="background-image: url({if $gameInfo['icon_256_url'] != ''}{$gameInfo['icon_256_url']}{/if});" src='{if ($gameInfo["icon_256_url"] != "")}{$gameInfo["icon_256_url"]}{/if}'></div>
+			                </label>
+			                <div id="background_color_1" class="img-i1-2" style="{if ($gameInfo['background_color'] != '')}background-color: {$gameInfo['background_color']}{/if}"></div>	
+							<div class="colorPicker">
+								<div id="background_color_2" class="img-color-box" style="{if ($gameInfo['background_color'] != '')}background-color: {$gameInfo['background_color']}; color: {$gameInfo['background_color']}{/if}">请选择色卡颜色</div>
+								<div id="triangle-down" class="img-color-icon"></div>
+								<input id="background_color" type="hidden" name="background_color" value="{$gameInfo['background_color']}">
+								<ul id="myColorPicker">
+									<li style="background:#f04263" mce_style="#f04263"></li>
+									<li style="background:#f34d43" mce_style="#f34d43"></li>
+									<li style="background:#f99200" mce_style="#f99200"></li>
+									<li style="background:#fad113" mce_style="#fad113"></li>
+									<li style="background:#96d70c" mce_style="#96d70c"></li>
+									<li style="background:#4ebe2d" mce_style="#4ebe2d"></li>
+									<li style="background:#0cb7f6" mce_style="#0cb7f6"></li>
+									<li style="background:#5c8ff7" mce_style="#5c8ff7"></li>
+									<li style="background:#545cf4" mce_style="#545cf4"></li>
+									<li style="background:#7f5ae8" mce_style="#7f5ae8"></li>
+									<li style="background:#b652f0" mce_style="#b652f0"></li>
+									<li style="background:#f95895" mce_style="#f95895"></li>
+								</ul>
+							</div>
+							
+						</div>
+						<div class="fc">
+							<div class="img-title">应用图标 (128 x 128)</div>
+							<input id="icon_128" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label for="icon_128" id="icon_128_label">
+			                    <div id="icon_128_preview" class="img-i2-1" style="background-image: url({if $gameInfo['icon_128_url'] != ''}{$gameInfo['icon_128_url']}{/if});" src='{if ($gameInfo["icon_128_url"] != "")}{$gameInfo["icon_128_url"]}{/if}'></div>
+			                </label>
+						</div>
+						<div class="fr">
+							<div class="img-title">游戏启动页（1080 x 1920）</div>
+							<input id="startup" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label for="startup" id="startup_label">
+			                    <div id="startup_preview" class="img-i3-1" style="background-image: url({if $gameInfo['startup_url'] != ''}{$gameInfo['startup_url']}{/if});" src='{if ($gameInfo["startup_url"] != "")}{$gameInfo["startup_url"]}{/if}'></div>
+			                </label>
+						</div>
+						<ul class="warnUl">
+							<li>图像内容不允许涉及政治敏感与色情;</li>
+							<li>图片格式必须为：png,bmp,jpeg,jpg,gif；不可大于2M；建议使用png格式图片，以保持最佳效果</li>
+						</ul>
+						
+						<div class="clearfix"></div>
+						
+					</div>
+				</div>
+				{if !isset($foreign) || !$foreign}
+				<div class="section">
+					{if $idcard==1 && $business==1}
+					<div class="section-title">证件上传</div>
+					<div class="filebox">
+						{if $developer_type==1}
+						<div class="fileMain">
+							<span>营业执照上传</span>
+							<span>企业开发者首次提审，请上传营业执照（或三证合一）扫描件</span>
+							<input id="license" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label class="fileView" for="license" id="license_label">
+								{if (!isset($otherImgs['business']) || $otherImgs['business'] == '')}
+								<div class="fileDiv">
+									<img src="{CONST|H_STATIC_URL}assets/open/img/img_file.png">
+									<em>上传营业执照</em>
+								</div>
+								<img id="license_preview" class="fileImg hide" src="" />
+								{else}
+								<img id="license_preview" class="fileImg" src="{$otherImgs['business']}" />
+								{/if}
+							</label>
+							<p>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M，<a href="{CONST|H_STATIC_URL}assets/open/img/business-eg.png" target="_blank">查看示例</a></p>
+						</div>
+						{/if}
+						<div class="fileMain">
+							<span>身份证</span>
+							<span>企业开发者首次提审，请上传企业法人身份证正面和反面照片，个人用户请上传本人身份证正反面扫描件</span>
+							<input id="cardfront" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label class="fileView" for="cardfront" id="cardfront_label">
+								{if (!isset($otherImgs['idcard_img']) || $otherImgs['idcard_img'] == '')}
+								<div class="fileDiv">
+									<img src="{CONST|H_STATIC_URL}assets/open/img/img_file.png">
+									<em>上传身份证正面</em>
+								</div>
+								<img id="cardfront_preview" class="fileImg hide" src="" />
+								{else}
+								<img id="cardfront_preview" class="fileImg" src="{$otherImgs['idcard_img']}" />
+								{/if}
+							</label>
+							<input id="cardback" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label class="fileView" for="cardback" id="cardback_label">
+								{if (!isset($otherImgs['idcard2_img']) || $otherImgs['idcard2_img'] == '')}
+								<div class="fileDiv">
+									<img src="{CONST|H_STATIC_URL}assets/open/img/img_file.png">
+									<em>上传身份证反面</em>
+								</div>
+								<img id="cardback_preview" class="fileImg hide" src="" />
+								{else}
+								<img id="cardback_preview" class="fileImg" src="{$otherImgs['idcard2_img']}" />
+								{/if}
+							</label>
+							<p>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M，<a href="{CONST|H_STATIC_URL}assets/open/img/idcard-eg.jpg" target="_blank">查看示例</a></p>
+						</div>
+					</div>
+					{/if}
+				</div>
+				
+				<div class="section">
+					<div class="section-title" style="line-height: 30px;padding-top: 10px;">软著授权<i>应文化部要求，所有上线游戏均需要软著证书，并且需要授权渠道才能联运发行。请上传这两种证书的照片，以便游戏正常上线。</i></div>
+					<div class="filebox">
+						<div class="fileMain">
+							<span>计算机软件著作权登记证书</span>
+							<span>如版号及备案信息中运营单位与小游戏著作权人主体不一致的，请上传相关授权书</span>
+							<input id="soft" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label class="fileView vertical" for="soft" id="soft_label">
+								{if (!isset($otherImgs['soft_copyright']) || $otherImgs['soft_copyright'] == '')}
+								<div class="fileDiv">
+									<img src="{CONST|H_STATIC_URL}assets/open/img/img_file.png">
+									<em>上传软著证书</em>
+								</div>
+								<img id="soft_preview" class="fileImg hide" src="" />
+								{else}
+								<img id="soft_preview" class="fileImg" src="{$otherImgs['soft_copyright']}" />
+								{/if}
+							</label>
+							<p>上传原件或复印件，复印件必须加盖公司公章</p>
+							<p>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M，<a href="{CONST|H_STATIC_URL}assets/open/img/softcopyright-eg.png" target="_blank">查看示例</a></p>
+						</div>
+						<div class="fileMain">
+							<span>授权证书（选填）</span>
+							<span>请针对小游戏资质软著授权、小游戏品牌合作等素材露出、使用他人的商标或IP等场景上传相关授权书既授权人的权利证明，包括但不限于版号、备案信息中的运营单位授权他人发布小游戏；使用文学作品或影视作品名称或内容的小游戏；使用他人商标的小游戏；品牌联合推广等。</span>
+							<input id="authorize" type="file" accept="image/jpg,image/jpeg,image/bmp,image/png">
+							<label class="fileView" for="authorize" id="authorize_label">
+								{if (!isset($otherImgs['authorization']) || $otherImgs['authorization'] == '')}
+								<div class="fileDiv">
+									<img src="{CONST|H_STATIC_URL}assets/open/img/img_file.png">
+									<em>上传授权证书</em>
+								</div>
+								<img id="authorize_preview" class="fileImg hide" src="" />
+								{else}
+								<img id="authorize_preview" class="fileImg" src="{$otherImgs['authorization']}" />
+								{/if}
+							</label>
+							<p>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M</p>
+						</div>
+					</div>
+				</div>
+				{/if}
+				<div class="section">
+					<div class="section-title">版本更新内容</div>
+					<div class="imgBox">
+						<textarea id="version_updates" placeholder="请输入版本更新内容，如：1、新增：排行榜，挑战功能 2、修复：游戏匹配页面样式；游戏第五关卡死问题"></textarea>
+						<div class="noticeInfo">
+							<p class="hide">提交审核前，请先填写上方每项内容</p>
+						</div>
+						<div class="btnBox">
+							<button type="button" class="reviewQx">取消</button>
+	              			<button type="button" class="reviewSubmit">提交审核</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<div class="warn-outBox setSuccessWin">
+			<div class="winbg"></div>
+			<div class="warn-inner" style="height: 432px;">
+				<img class="closeWin" src="{CONST|H_STATIC_URL}assets/open/img/closeBtn.png">
+				<img class="icon-img" src="{CONST|H_STATIC_URL}assets/open/img/info-success.png"/>
+				<span>提交审核成功</span>
+				<p>游戏已提交审核，请耐心等待审核结果。</p>
+				<button type="button" class="btn-modal-yes">我知道了</button>
+			</div>
+		</div>
+		<script>
+			var getUrlParam = function getQueryString(name) {
+		      var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+		      var r = window.location.search.substr(1).match(reg);
+		      if (r != null) {
+		        return unescape(r[2]);
+		      }
+		      return null;
+		    }
+			$(function(){
+				$.ajax({
+		            type: "POST",
+		            url: "/game/getGames/",
+		            dataType: "json",
+		            success: function (data) {
+		            	var games= data.data;
+			        	for(var i = 0; i < games.length; i++) {
+							if (games[i].small_img == '') {
+								games[i].small_img = "{CONST|H_STATIC_URL}assets/open/img/default_icon.png";
+							}
+							var html ='<li><a href="/game/detail/gameid='+games[i].id+'"><img src="'+games[i].small_img+'"/><span>'+games[i].name+'</span></a></li>';
+							$(".gameSelectUl").append(html);
+						}
+		            },
+		        });
+				// 上传图片事件
+				var bindChangeFile = function(label) {
+					$("#" + label).on("change", function(e) {
+						var file = e.target.files[0];
+
+						if (file) {
+							var reader = new FileReader();
+							reader.readAsDataURL(file);
+
+							reader.onload = function(arg) {
+								console.log(arg.target.result);
+								$("#" + label + "_preview").attr("style", "background-image: url(" + arg.target.result + ")");
+							}
+						}
+					})
+				}
+
+				var uploadLabels = ["icon_256", "icon_128", "startup"];
+
+				for(var i in uploadLabels) {
+					var label = uploadLabels[i];
+					bindChangeFile(label);
+				}
+				
+				var bindChangeFile2 = function(label) {
+					$("#" + label).on("change", function(e) {
+						var file = e.target.files[0];
+
+						if (file) {
+							var reader = new FileReader();
+							reader.readAsDataURL(file);
+
+							reader.onload = function(arg) {
+								$("#" + label + "_preview").attr("src", arg.target.result);
+								$("#" + label + "_label .fileDiv" ).hide();
+								$("#" + label + "_preview").show();
+								$("#" + label + "_preview").removeClass("hide");
+							}
+						}
+
+						
+					})
+				}
+
+				var uploadLabels2 = ["license","cardfront","cardback","soft","authorize"];
+
+				for(var i in uploadLabels2) {
+					var label = uploadLabels2[i];
+					bindChangeFile2(label);
+				}
+				$(".colorPicker").click(function(){
+					$("#myColorPicker").fadeToggle(100);
+				});
+				$("#myColorPicker").on("click","li",function(){
+					var thisClolr=$(this).attr("mce_style");
+					$("#background_color").val(thisClolr);
+					$("#background_color_2,#background_color_1").css({"background-color":thisClolr,"color":thisClolr});
+				});
+				/*确认提交审核*/
+				$(".btnBox .reviewSubmit").click(function(){
+					if (!saving) {
+		                // saving = true;
+		                saveDetailEvent();
+		            }else{
+		              layer.alert("您已提交过");
+		            }
+				});
+
+				$(".reviewQx").click(function(){
+					$(location).attr("href","/game/audit/gameid="+gameid);
+				});
+				/*审核提交成功关闭*/
+				$(".btn-modal-yes,.closeWin").click(function(){
+					$(".setSuccessWin").hide();
+					$(location).attr("href","/game/audit/gameid="+gameid);
+				});
+
+				var id = getUrlParam("id");
+		        if(id === null){
+		          $(location).attr("href","/game/show/");
+		        }
+		        var gameid = "{$gameInfo['id']}";
+
+		        // 重复提交
+		        var saving = false;
+		        // 保存逻辑
+		        var saveDetailEvent = function() {
+		            var formData = new FormData();
+		            formData.append("gameid", gameid);
+		            formData.append("id", id);
+		            var version_updates = $("#version_updates").val();
+		            if(version_updates != "") {
+		              formData.append("versionUpdates", version_updates);  
+		            }
+		            
+		            // 分类
+		            // var category = $("select[name=category]").find("option:selected").val();
+		            // formData.append("gameType", category);
+		            // 画风
+		            // var paintStyle = $("select[name=paintStyle]").find("option:selected").val();
+		            // formData.append("paintStyle", paintStyle);
+		            // 简介
+		            // var summary = $("input[name=summary]").val();
+		            // formData.append("intro", summary);
+		            // 屏幕方向
+		            // var screen = $('.screen').attr("value");
+		            // formData.append("screenDirection", screen);
+		            // 应用图标256*256
+		            var icon256 = document.getElementById("icon_256").files[0];
+		            if (icon256 !== undefined) {
+		                formData.append("icon_256", icon256);
+		            }
+		            // 背景颜色
+		            var backgroundColor = $("#background_color").val();
+		            formData.append("backgroundColor", backgroundColor);
+		            // 应用图标128*128
+		            var icon128 = document.getElementById("icon_128").files[0];
+		            if (icon128 !== undefined) {
+		                formData.append("icon_128", icon128);
+		            }
+		            // 启动页面
+		            var startup = document.getElementById("startup").files[0];
+		            if (startup !== undefined) {
+		                formData.append("startup", startup);
+		            }
+
+		            // 营业执照
+		            if('{$business}' == 1 && '{$foreign}'!=true){
+		              if ('{$developer_type}'==1) {
+		                var business = $('#license')[0].files[0];
+		                if(business !== undefined){
+		                  formData.append("business", business);
+		                }
+		              }
+		              
+		            }
+		            // 身份证正面反面
+		            if('{$idcard}' == 1 && '{$foreign}'!=true){
+		              var identitycard1 = $('#cardfront')[0].files[0];
+		              var identitycard2 = $('#cardback')[0].files[0];
+		              if(identitycard1 !== undefined){
+		                formData.append("idcard1", identitycard1);
+		              }
+		              if(identitycard2 !== undefined){
+		                formData.append("idcard2", identitycard2);
+		              }
+		            }
+		            // 软著
+		            if('{$softwareCopyright}' == 1 && '{$foreign}'!=true){
+		                var softcopyright = $('#soft')[0].files[0];
+		                if(softcopyright !== undefined){
+		                  formData.append("softcopyright", softcopyright);
+		                }
+
+		                var authorization = $('#authorize')[0].files[0];
+		                if(authorization !== undefined){
+		                  formData.append("authorization", authorization);
+		                }
+		            }
+
+		            $.ajax({
+		                url: "/game/auditSubmit/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function (res) {
+		                  if(res.code == 200){
+		                    saving = true;
+							$(".setSuccessWin").show();
+		                  }else{
+		                    layer.alert(res.message)
+		                  }
+		                    // layer.alert(res.message);
+		                    // location.reload();
+		                },
+		                // complete: function(res) {
+		                //     saving = false;
+		                // }
+		            });
+		        };
+
+			})
+		</script>
+	</body>
+
+</html>

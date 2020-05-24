@@ -1,0 +1,73 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+{include layout/left.html}
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="portlet box yellow ">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>回复操作
+                    </div>
+                </div>
+                <div class="portlet-body">
+                <div class="row margin-top-20">
+                    <div class="table-container">
+                        <form id="send_rule_form" action="/app_manager/no/feedback/edit/?id={$result['id']}" method="post" autocomplete="off">
+                            <ul class="reg_ul">
+                                <li>
+                                    <h4>玩家信息</h4>
+                                </li>
+                                <li>
+                                    <span style="font-size:2.3ex;">用户ID：</span>
+                                    <span style="font-weight: bolder">{$result["uid"]}</span>
+                                </li>
+                                <li>
+                                    <span style="font-size:2.3ex;">客户端QQ\手机\邮箱：</span>
+                                    <span style="font-weight: bolder">{$result["contact"]}</span>
+                                </li>
+                                <li>
+                                    <span style="font-size:2.3ex;">状态：</span>
+                                    <span style="color: red;font-weight: bolder">{$result["status"]}</span>
+                                </li>
+                                <li>
+                                    <span style="font-size:2.3ex;">玩家问题：</span>
+                                    <span style="font-weight: bolder">{$result["content"]}</span>
+                                </li>
+                                <li>
+                                    <span style="font-size:2.3ex;">已回复内容：</span>
+                                    <span style="font-weight: bolder">{$result["content_back"]}</span>
+                                </li>
+                                <li>
+                                    <span style="font-size:2.3ex;">回复：</span>
+                                </li>
+                                    <textarea id="content_back" name="content_back" rows="3" cols="20" style="width:600px;height: 400px"></textarea>
+
+                            </ul>
+                            <!--<input id="submit_button" type="submit" class="btn btn-default">
+                            <button id="cancel_button" type="button" class="btn btn-default">取消</button>-->
+                            <button id="cancel_button" type="button" style="color: red" class="btn btn-circle"><span style="font-weight: bold">返回</span></button>
+                            <button id="submit_button" type="submit" style="color: green" class="btn btn-circle"><span style="font-weight: bold">提交</span></button>
+                        </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#cancel_button").on("click", function() {
+        location.href = "/app_manager/no/feedback/index/";
+    });
+
+    $("#submit_button").on("click", function () {
+        var content_back = document.getElementById("content_back").value;
+        if(content_back.length == ''){
+            alert('回复内容不允许为空！');
+            return false;
+        }
+    });
+</script>

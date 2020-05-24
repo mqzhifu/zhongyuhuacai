@@ -1,0 +1,178 @@
+
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                Edit Category
+            </h3>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Begin: life time stats -->
+                    <div class="portlet">
+                    	<br>
+
+                    	<button id='edit_submit' class="btn btn-sm blue filter-cancel"><i class="fa fa-check"></i> 提交修改</button>
+                        <br>
+                        <br>
+                        <br>
+                        
+                        <div class="row static-info">
+                            <div class="col-md-2 name">
+                                <!--分类ID (不存在则新建,新建可不填)-->
+                                分类ID
+                            </div>
+
+                            <div class="col-md-7 value">
+                                <input id="cate_id" type="text" value="">
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row static-info">
+                            <div class="col-md-2 name">
+                                分类名
+                            </div>
+
+                            <div class="col-md-7 value">
+                                <input id="cate_name" type="text" value="">
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="row static-info">
+                            <div class="col-md-2 name">
+                                排序
+                            </div>
+
+                            <div class="col-md-7 value">
+                                <input id="cate_sort" type="text" value="">
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+
+                        <button id="del_cate" class="btn btn-sm btn-warning table-group-action-submit"><i class="fa fa-times"></i> 删除分类</button>
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="row static-info">
+                            <div class="col-md-2 name">
+                                分类名
+                            </div>
+
+                            <div class="col-md-7 value">
+                                <select id="cate_del_id" class="form-control form-filter input-sm" style="width: 173.33px">
+                                    <option value="">选择分类</option>
+                                    {foreach ($categoryDesc as  $k=>$v)  }
+                                    <option value="{$k}">{$v}</option>
+                                    {/foreach}
+                                </select>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#edit_submit").click(function(){
+            sort = $('#cate_sort').val();
+            id = $('#cate_id').val();
+            name = $('#cate_name').val();
+
+            if (!sort || !id || !name) {
+                alert('请将内容补充完整');
+            }
+
+			$.ajax({
+		        type: "POST",
+		        url: "/content/no/doc/cateEditSubmit/",
+		        data: {
+                    sort:sort,
+		        	id:id,
+		        	name:name,
+		        },
+		        dataType:'json',
+		        success: function(data){
+		        	alert("编辑成功！");
+				}
+			});
+		});
+	});
+	
+</script>
+
+<script>
+    $("#del_cate").click(function(){
+        cate = $('#cate_del_id').find("option:selected").val();
+
+        if (!cate) {
+            alert('请选择分类');
+            return;
+        }
+
+        if(confirm('确定要删除吗')==true){
+                $.ajax({
+                    type: "GET",
+                    url: "/content/no/doc/delCate/",
+                    data: {
+                        docCate:cate,
+                    },
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 1) {
+                            alert("删除成功");
+                        } else {
+                            alert("删除失败");
+                        }
+                }
+            });
+        }
+    });
+
+</script>

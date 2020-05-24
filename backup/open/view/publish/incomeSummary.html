@@ -1,0 +1,152 @@
+{include /publish/left.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/income.css" />
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">实际收入汇总
+						<div class="fr">
+							<div class="dateInterval">
+								<input class="laydateInput" id="laydate-start" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="laydate-end" type="text" placeholder="结束时间" />
+							</div>
+							<span class="searchBtn">搜索</span>
+						</div>
+					</div>
+					<div class="grandTotal">
+						<table class="table">
+						</table>
+							<div class="page">
+								<em class="prevpage"></em><span class="indexPage">1</span> / <span class="allPage">3</span><em class="nextpage"></em>
+								<input class="pageInput" type="text" /> 
+								<button class="pageRun">跳转</button>
+							</div>
+					     </div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			var startDate = "";
+			var endDate = "";
+			var totalPage = 0;
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*添加游戏*/
+				$(".add_Pro").click(function() {
+					$(".addUl").show();
+				});
+				$(".closeBtn").click(function(){
+					$(".addUl").hide();
+				});
+				var start = laydate.render({  
+				    elem: '#laydate-start',
+				    done:function(value,date){
+				    	if(value!=''){
+				    		date.month=date.month-1;
+				    		end.config.min=date;
+				    	}
+					}
+				});  
+				
+				var end = laydate.render({  
+				    elem: '#laydate-end',   
+				    done:function(value,date){
+				    	if(value!=''){
+				    		date.month=date.month-1;
+				    		start.config.max=date;
+				    	}
+				    }
+				});
+
+				$(".nextpage").click(function(){
+					var page = parseInt($(".indexPage").html())+1;
+					if (page > totalPage) {
+						return;
+					}
+					$(".indexPage").html(page);
+					loadTable(page, startDate, endDate);
+
+				});
+
+				$(".prevpage").click(function(){
+					var page = $(".indexPage").html()-1;
+					if (page < 1) {
+						return;
+					}
+					$(".indexPage").html(page);
+					loadTable(page, startDate, endDate);
+				});
+
+				$(".searchBtn").click(function(){
+					startDate = $("#laydate-start").val();
+					endDate = $("#laydate-end").val();
+					$(".indexPage").html(1);
+					$(".pageInput").val('');
+					loadTable(1,startDate,endDate);
+				});
+
+				$(".pageRun").click(function(){
+					var page = $(".pageInput").val();
+					if (page > totalPage) {
+						page = totalPage;
+					} else if (page < 1) {
+						page = 1;
+					}
+					$(".indexPage").html(page);
+					loadTable(page,startDate,endDate);
+				});
+
+				loadTable(1,startDate,endDate);
+
+			})
+
+			function loadTable(page,startDate,endDate) {
+				var os = {$os};
+				$.ajax({
+	                url: "/publish/getIncomeSummary/",
+	                type: "GET",
+	                data: {os:os,page:page,startDate:startDate,endDate:endDate},
+	                dataType:"json",
+	                success: function (data) {
+	                	totalPage = data.data.totalPage;
+	                	if (totalPage == 0) {
+	                		totalPage = 1;
+	                	}
+	                	var list = data.data.list;
+	                	$(".allPage").html(totalPage);
+
+	                	var html = "<tr> <th>日期</th><th>总安装量</th> <th>总消耗</th><th>平均成本</th><th>广告收入</th><th>内购收入</th><th>总收入</th><th>利润</th></tr>";
+
+	                    if (list.length) {
+	                    	for (var i = 0; i < list.length; i++) {
+	                    		html += "<tr> <td>"+list[i].date+"</td> <td>"+list[i].total_installed+"</td> <td>"+list[i].total_overall+"</td> <td>"+list[i].avg_cost+"</td> <td>"+list[i].ad_income+"</td> <td>"+list[i].inside_income+"</td><td>"+list[i].total_income+"</td> <td>"+list[i].profit+"</td></tr>";
+	                    	}
+	                    }
+	                    $(".table").html(html);
+	                }
+	            });
+			}
+
+		</script>
+	</body>
+
+</html>

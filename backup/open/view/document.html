@@ -1,0 +1,116 @@
+<style>
+    .cur {
+        cursor:pointer;
+    }
+    h4 {
+        display: block;
+        margin-top: 1.33em;
+        margin-bottom: 1.33em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        font-weight: bold;
+    }
+    p {
+        display: block;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-inline-start: 0px;
+        margin-inline-end: 0px;
+        line-height: 1.4;        
+    }
+    code[class*="language-"], pre[class*="language-"] {
+        background-color: #f8f8f8;
+        font-size: 16px;
+        line-height: 20px;
+        font-family: Consolas,Monaco,'Andale Mono',monospace!important;
+    }
+    [class*=block-row-]>*, [class*=col-xxs-] {
+        display: block;
+        float: left;
+        min-height: 28px;
+        border-left: 32px solid transparent;
+        border-right: 32px solid transparent;
+        background-clip: padding-box;
+        box-sizing: inherit;
+    }
+    .col-xxs-2 {
+        width: 16.6667%;
+    }
+    .col-xxs-10 {
+        width: 83.3333%;
+    }
+
+</style>
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/document.css" />
+		<div class="gameManage">
+			<ul class="nav-list">
+			</ul>
+			<div class="iframeBox">
+				<div class="card-sub-title">
+		          <div class="card-sub-title-left"></div> 
+		          <div class="card-sub-title-right"></div> 
+		        </div>
+		        <div class="reg_ul">
+		        </div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<script>
+			$(function(){
+				/*菜单*/
+				$(".nav-list").on("click",".levelLi .first-level",function(){
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true,false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".nav-list").on("click",".levelLi .second-level li",function(){
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+					$.ajax({
+		                type: "GET",
+		                url: "/doc/getContent/",
+		                data: {docId:$(this).attr('id')},
+		                dataType:'json',
+		                success: function(data){
+		                    $(".card-sub-title-left").html(data.title);
+		                    $(".card-sub-title-right").html(data.a_time);
+		                    $(".reg_ul").html(data.content);
+		                }
+		            });
+				});
+
+				$.ajax({
+	                type: "GET",
+	                url: "/doc/getDocs/",
+	                dataType:'json',
+	                success: function(data){
+	                    var categoryList = data.categoryList;
+	                    var docList = data.docList;
+	                    for (var i = 0; i < categoryList.length; i++) {
+	                    	var html = '<li class="levelLi"><div class="first-level">'+categoryList[i].name+'<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div><ul class="second-level">';
+	                    	for (var j = 0; j < docList.length; j++) {
+	                    		if (docList[j].category == categoryList[i].id) {
+	                    			html += '<li id='+docList[j].id+'><a>'+docList[j].title+'</a></li>';
+	                    		}
+	                    	}
+	                    	html += '</ul></li>';
+	                    	$(".nav-list").append(html);
+	                    }
+	                    $("#"+docList[0].id).click();
+	                }
+	            });
+			})			
+		</script>
+	</body>
+</html>

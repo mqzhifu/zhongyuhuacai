@@ -1,0 +1,267 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="actions">
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <h4>玩家兑换列表</h4><br><br>
+                            <div align="right">
+                                <!--<button type="button" class="btn btn-sm blue add_one" href="/manager/add">添加</button>-->
+                            </div>
+                            <div class="table-container">
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <th width="5%">
+                                            id
+                                        </th>
+                                        <th width="10%">
+                                            用户
+                                        </th>
+                                        <th width="10%">
+                                            礼品种类
+                                        </th>
+                                        <th width="10%">
+                                            种类id
+                                        </th>
+                                        <th width="10%">
+                                            礼品价值
+                                        </th>
+                                        <th width="10%">
+                                            件数
+                                        </th>
+                                        <th width="10%">
+                                            邮箱
+                                        </th>
+                                        <th width="10%">
+                                            兑换码
+                                        </th>
+                                        <th width="10%">
+                                            密码
+                                        </th>
+                                        <th width="10%">
+                                            状态
+                                        </th>
+                                        <th width="10%">
+                                            操作
+                                        </th>
+
+                                    </tr>
+
+                                    <tr role="row" class="filter">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/quiz/no/exchange/getList/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ ]
+                    }],
+                    "order": [
+                        [1, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                        function(){
+                            ids += ($(this).val())+",";
+                        }
+                    );
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/?ac=delBat&ids="+ids ,
+                        dataType: 'json',
+                        success: function(data){
+                            grid.setAjaxParam("customActionType", "group_action");
+                            grid.setAjaxParam("customActionName", action.val());
+                            grid.setAjaxParam("id", grid.getSelectedRows());
+                            grid.getDataTable().ajax.reload();
+                            grid.clearAjaxParams();
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+    });
+
+
+</script>
+
+<script>
+
+    $("#datatable_products").on("click",".delone",function(){
+        var id = $(this).attr("data-id");
+        bootbox.confirm("Are you sure?", function(result) {
+            if(result == true){
+                $.ajax({
+                    type: 'GET',
+                    url: "/quiz/no/manager/delone/id="+id ,
+                    dataType: 'json',
+                    success: function(data){
+                        location.href = '/promotion/no/banner/index/';
+                        location.reload();
+                    }
+
+                });
+            }
+        });
+
+
+
+    });
+
+    if (!jQuery().datetimepicker) {
+        alert("error:333");
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14 10:00",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+
+</script>
+
+<script type="text/javascript">
+    //select跳页
+    function s_click(obj) {
+        var num = 0;
+        for (var i = 0; i < obj.options.length; i++) {
+            if (obj.options[i].selected == true) {
+                num++;
+            }
+        }
+        if (num == 1) {
+            var url = obj.options[obj.selectedIndex].value;
+            window.open(url); //这里修改打开连接方式
+        }
+    }
+
+
+</script>

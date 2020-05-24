@@ -1,0 +1,218 @@
+{include /publish/left_game.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/adCreation.css" />
+
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title" style="font-size: 18px;">广告位管理</div>
+					<div class="title">创建广告</div>
+					<div class="adBox">
+						<ul class="basicMessage">
+							<li>
+								<span>广告位类型</span>
+								<div>
+									<div class="redioGroup adtype">
+										{foreach ($adType as $k=>$v)}
+										<span class="radioBox">
+											<input type="radio" class="input_check" id="radio1_{$k}" value="{$k}" name="adtype" checked="">
+											<label for="radio1_{$k}">{$v}广告</label>
+										</span>
+										{/foreach}
+									</div>
+								</div>
+							</li>
+							<li>
+								<span>方向</span>
+								<div>
+									<div class="redioGroup direction">
+										<span class="radioBox">
+											<input type="radio" class="input_check radioH" id="radio2_1" name="direction" value="1" checked="">
+											<label for="radio2_1">横版</label>
+										</span>
+										<span class="radioBox">
+											<input type="radio" class="input_check radioV" id="radio2_2" name="direction" value="2">
+											<label for="radio2_2">竖版</label>
+										</span>
+									</div>
+								</div>
+							</li>
+							<li>
+								<span>广告位名称</span>
+								<div><input class="adName" type="text" value="" placeholder="请输入" maxlength="30" /> <i>0</i>/30</div>
+							</li>
+							<li>
+								<span></span>
+								<div>此名称用于区分各广告位，方便管理</div>
+							</li>
+						</ul>
+						<div class="fr">
+							<img class="verticalAd" src=""  />
+			                <!--<div class="adImg " style="background-image: url();"></div>-->
+						</div>
+						<div class="horizontalBox">
+							<img src="" class="horizontalAd"  />
+			                    <!--<div class="adImg horizontalAd" style="background-image: url();"></div>-->
+						</div>
+					</div>
+					
+					<div class="butClup">
+						<button type="button" class="btn-modal-no">取消</button>
+	              		<button type="button" class="btn-modal-yes">确定</button>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*计算输入框长度*/
+				textLength();
+				function textLength(){
+					var text2 = $(".adName").val(),
+						counter2;
+					if(text2) {
+						counter2 = text2.length;
+					}else{
+						counter2 =0;
+					}
+					$(".adName").siblings("i").text(counter2);
+					$(".adName").on('blur keyup input', function() {
+						var text = $(this).val();
+						var counter = text.length;
+						$(".adName").siblings("i").text(counter);
+					});
+				}
+				function radioVal(){
+					var adType=$('input[name="adtype"]:checked').val();
+					var adDirection=$('input[name="direction"]:checked').val();
+				 	var info={"adType":adType,"adDirection":adDirection};
+    				return info;
+				}
+				function switchAd(){
+					var switchMap=radioVal();
+					var adType=switchMap.adType,
+						adDirection=switchMap.adDirection;
+					if(adType==3){
+						$(".direction .radioBox .radioH").prop("checked",true);
+						$(".direction .radioBox .radioV").prop("checked",false);
+						$(".direction .radioBox:nth-of-type(2) .input_check").attr("disabled",true);
+						$(".direction .radioBox:nth-of-type(2)").addClass("disabled");
+					} else if(adType==4){
+						$(".direction .radioBox .radioH").prop("checked",false);
+						$(".direction .radioBox .radioV").prop("checked",true);
+						$(".direction .radioBox:nth-of-type(1) .input_check").attr("disabled",true);
+						$(".direction .radioBox:nth-of-type(1)").addClass("disabled");
+					}
+					if($(".direction .radioBox .input_check:checked").val()==1){
+						$(".horizontalBox").show();
+						$(".adBox .fr").hide();
+					}else{
+						$(".adBox .fr").show();
+						$(".horizontalBox").hide();
+					}
+					var indexAdType=$('input[name="adtype"]:checked').val(),
+						indexDirection=$('input[name="direction"]:checked').val();
+					if(indexAdType==3){
+						$(".horizontalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/jlH.png");
+					}else if(indexAdType==2){
+						if(indexDirection==1){
+							$(".horizontalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/jlH.png");
+						}else{
+							$(".verticalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/jlV.png");
+						}
+					}else if(indexAdType==1){
+						if(indexDirection==1){
+							$(".horizontalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/qpH.png");
+						}else{
+							$(".verticalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/qpV.png");
+						}
+					}else if(indexAdType==4){
+						$(".verticalAd").attr("src", "{CONST|H_STATIC_URL}assets/open/img/kpV.png");
+					}
+				};
+				switchAd();
+				$('input[name="adtype"],input[name="direction"]').change(function() {
+					$(".direction .radioBox .input_check").attr("disabled",false);
+					$(".direction .radioBox").removeClass("disabled");
+			        switchAd();
+			    });
+			    var gameId = {$gameid};
+
+				$('.btn-modal-no').click(function () {
+					location.href = "/publish/Ad/gameid=" + gameId;
+				});
+			    $('.btn-modal-yes').click(function () {
+		            var adName = $('.adName').val();
+		            adName = adName.trimSpace();
+		            var adType = $('input[name="adtype"]:checked').val();
+		            var direction = $('input[name="direction"]:checked').val();
+		            if (!adName) {
+		                layer.alert('请输入广告位名称');
+		                return false;
+		            }
+		            if (!adType) {
+		                layer.alert('请选择广告位类型');
+		                return false;
+		            }
+		            if (!gameId) {
+		                layer.alert('参数有误');
+		                return false;
+		            }
+		            if (!direction) {
+		                layer.alert('请选择广告展示方向');
+		                return false;
+		            }
+		            var postUrl = "/publish/addAdSubmit/";
+		            var postInfo = {
+		                gameid: gameId,
+		                title: adName,
+		                advertise_type: adType,
+		                direction:direction
+		            };
+		            $.ajax({
+		                type: "post",
+		                url: postUrl,
+		                data: postInfo,
+		                dataType: "json",
+		                success: function (data) {
+		                    if (data.result) {
+		                        layer.alert('添加广告位成功！', 
+		                            {title:'提示'}, 
+		                            function(){
+		                                location.href = "/publish/Ad/gameid=" + gameId;
+		                        });
+		                    } else {
+		                        layer.alert('添加失败，请重试!');
+		                        return false;
+		                    }
+		                },
+		                error: function () {
+		                    return false;
+		                }
+		            });
+		        });
+			})
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,206 @@
+
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                Audit <small>view details</small>
+            </h3>
+            <br/>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Begin: life time stats -->
+                    <div class="portlet">
+
+
+                        <div class="portlet-body">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="portlet yellow-crusta box">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>审核操作
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                            <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                                <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <br/>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                用户ID
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$order['uid']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                昵称
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$order['nickname']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                提现金额
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$order['num']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                账号余额（换算后）
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$order['goldcoin']}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                微信返回信息
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {foreach ($order['thir_back_info'] as $k=>$v)}
+                                                                <div class="col-md-5 value" style="min-height: 20px;padding: 0">{$k}</div>
+                                                                <div class="col-md-5 value" style="min-height: 20px;padding: 0">
+                                                                {if $k == 'return_msg'}
+                                                                {foreach ($v as $vv)}{$vv}
+                                                                {/foreach}
+                                                                {else}
+                                                                {$v}
+                                                                {/if}
+                                                                </div>
+                                                                {/foreach}
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                审核操作
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <select id="audit" class="form-control form-filter input-sm" style="width: 30%">
+                                                                    <option value="{if $order['state']!=null}{$order['state']}{/if}">{if array_key_exists($order['state'], $stateDesc)}{$stateDesc[$order['state']]}{else}请选择{/if}</option>
+                                                                    {foreach ($stateDesc as  $k=>$v)  }
+                                                                    <option value="{$k}">{$v}</option>
+                                                                    {/foreach}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        <button id="cancel" type="button" class="btn btn-sm yellow"><i class="fa fa-times"></i> 返回</button>
+
+                                                        <button id='audit_submit' class="btn btn-sm blue filter-cancel"><i class="fa fa-check"></i> 确认</button>
+                                                        <br/><br/>
+
+                                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>
+
+    
+<script>
+    $(document).ready(function(){
+        $("#cancel").click(function(){
+            window.history.back(-1); 
+        })
+
+        $("#audit_submit").click(function(){
+            var operate = $("#audit").find("option:selected").val();
+            if (operate == '') {
+                alert("请选择执行操作");return;
+            }
+            if(confirm('确定要执行操作吗')==true){
+                $.ajax({
+                    type: "POST",
+                    url: "/app_cnt/no/moneyTx/audit/",
+                    data: {
+                        id:{$order['id']},
+                        state:operate
+                    },
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 200) {
+                            alert("操作成功");
+                            window.history.back(-1); 
+                        } else if(data == 300){
+                            alert("该订单已被审核过请不要重复审核，避免错误！");
+                            window.history.back(-1);
+                        }else {
+                            alert("操作失败");
+                            window.history.back(-1); 
+                        }
+                        
+                    }
+                });
+
+            }
+        });
+
+    });
+
+</script>

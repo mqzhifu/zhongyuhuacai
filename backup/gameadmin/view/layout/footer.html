@@ -1,0 +1,36 @@
+<!-- BEGIN FOOTER -->
+<div class="page-footer">
+    <div class="page-footer-inner">
+        Copyright &copy; 2017-2018. XXXX-互联科技有限公司
+    </div>
+    <div class="scroll-to-top">
+        <i class="icon-arrow-up"></i>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    Metronic.setAssetsPath("{CONST|H_STATIC_URL}assets/");
+
+    jQuery(document).ready(function() {
+
+
+
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        Demo.init(); // init demo features
+    });
+
+
+</script>
+
+{if $hook_js}
+{include $hook_js}
+{/if}
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>

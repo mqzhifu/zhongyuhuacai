@@ -1,0 +1,135 @@
+{include /publish/left_game.html}
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/androidDetails.css" />
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">小游戏基本信息</div>
+					<a href="/publish/edit/gameid={$gameid}" class="editBtn"><img src="{CONST|H_STATIC_URL}assets/open/img/editBtn.png" />编辑</a>
+					<ul class="basicMessage">
+						<li>
+							<span>应用图标</span>
+							<div>
+								<div class="android_icon" style="background-image: url({if $gameInfo['icon_256'] != ''}{$gameInfo['icon_256']}{/if});">{if $gameInfo['icon_256'] == ''}256x256{/if}</div>
+							</div>
+						</li>
+						<li>
+							<span>游戏编号</span>
+							<div>{$gameid}</div>
+						</li>
+						<li>
+							<span>应用秘钥</span>
+							<div>
+								<input  class="disabled" id="appSecret"  class="disabled"  disabled="" readonly="" type="text" value="●●●●●●●●" />
+								<img class="secretBtn" src="{CONST|H_STATIC_URL}assets/open/img/eye.png" />
+							</div>
+						</li>
+						<li>
+							<span>类别</span>
+							<div>{foreach ($gameCategory as $category)}{foreach ($category['child'] as $child)}{if ($gameInfo['category'] == $child['id'])}{$child['name_cn']}{/if}{/foreach}{/foreach}</div>
+						</li>
+						<li>
+							<span>简介</span>
+							<div>{$gameInfo['summary']}</div>
+						</li>
+						<li>
+							<span>屏幕方向</span>
+							<div>{if $gameInfo['screen']==1}横屏{else}竖屏{/if}</div>
+						</li>
+					</ul>
+				</div>
+				
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<div class="warn-outBox secretWin">
+			<div class="winbg"></div>
+			<div class="warn-inner">
+				<div class="del_head">请重新输入密码</div>
+				<div class="del_main">
+					<div class="game_name">为保护你的帐户安全，请重新输入密码后再继续操作。</div>
+					<div class="passwordBox">
+						<input class="pas_input" type="text" name="" id="" value="" /><a href="/forgetPs/index/">忘记密码？</a>
+					</div>
+					<button type="button" class="btn-modal-no">取消</button>
+					<button id="checkAuthBtn" type="button" class="btn-modal-yes">提交</button>
+				</div>
+			</div>
+		</div>
+		<script>
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				/*添加游戏*/
+				$(".add_game,.game_add").click(function() {
+					$(".add_win").show();
+				});
+				/*删除游戏*/
+				$(document).on("click", ".del_game", function() {
+					$(".del_win").show();
+				});
+				$(".btn-modal-no").click(function() {
+					$(".warn-outBox").hide()
+				});
+				/*查看秘钥*/
+				$(".secretBtn").click(function(){
+					$(".secretWin").show();
+				});
+				$(".btn-modal-no , .btn-modal-yes").click(function(){
+					$(".secretWin").hide();
+				});
+
+				var gameid = {$gameid};
+
+				// 校验身份，显示密钥
+		        $("#checkAuthBtn").on("click", function() {
+		            var formData = new FormData();
+		            var password = $(".pas_input").val();
+		            formData.append("gameid", gameid);
+		            formData.append("password", password);
+		            $.ajax({
+		                url: "/publish/auth/",
+		                type: "POST",
+		                data: formData,
+		                processData: false,
+		                contentType: false,
+		                success: function (res) {
+		                    layer.alert(res.message, 
+		                        {title:'提示'}, 
+		                        function(index){
+		                            $("#myModal").modal("hide");
+		                            if (res.code === 0) {
+		                                $(".secretBtn").hide();
+		                                $("#appSecret").val(res.data.appSecret);
+		                                $(".resetBtn").show();
+		                            }
+		                            layer.close(index);
+		                            $(".secretWin").hide();
+		                    	}
+		                    );
+		                    
+		                }
+		            });
+		        });
+			})
+		</script>
+	</body>
+
+</html>

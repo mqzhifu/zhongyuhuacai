@@ -1,0 +1,102 @@
+{include layout/left.html}
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>消息设置
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row margin-top-20">
+                        <form id="apppush_form" action="/msg/no/platformMsg/platformMsgSave/" method="post" autocomplete="off">
+                            <ul class="reg_ul">
+                                <li>
+                                    <span>发送类型：</span>
+                                    <select id="sendTypes" name="sendTypes" class="form-control">
+                                        <option value="1" selected="selected">指定发送</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <span>发送原因：</span>
+                                    <input  id="send_reason" name ="send_reason" type="text"/>
+                                </li>
+                                <li>
+                                    <span>发送标题：</span>
+                                    <input  id="send_title" name ="send_title" type="text"/>
+                                </li>
+                                <li>
+                                    <span>发送内容：</span>
+                                    <input  id="send_content" name ="send_content" type="text"/>
+                                </li>
+                                <br>
+
+                                <input type="radio" name="kfid_type" value="1" checked >开发者ID
+                                <input type="radio" name="kfid_type" value="2" disabled="disabled">开发者账号
+                                <input style="width: 280px;height: 40px;" placeholder="多个开发者id用 ';' 隔开" id="kf_ids" name ="kf_ids" type="text"/>
+                                <!--<div class="doc-dd">
+                                    <input name="act_start_time" type="text" class="text-box hasDatepicker" value="" placeholder="开始时间" readonly="readonly" style="cursor:pointer;" id="dp1552543594095">
+                                    <input name="act_stop_time" type="text" class="text-box hasDatepicker" value="" placeholder="结束时间" readonly="readonly" style="cursor:pointer;" id="dp1552543594096">
+                                </div>-->
+                                <div style="text-align: left;margin-left: 60px; margin-top: 40px; margin-bottom: 40px;">
+                                    <button id="cancel_button" type="button" style="color: red" class="btn btn-circle"><span style="font-weight: bold">返回</span></button>
+                                    <button id="submit_button" type="submit" style="color: green" class="btn btn-circle"><span style="font-weight: bold">保存</span></button>
+                                </div>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+        </div>
+    </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>
+<script type="text/javascript">
+    $( "input[name='act_start_time'],input[name='act_stop_time']" ).datetimepicker();
+</script>
+<script type="text/javascript">
+    $(function() {
+        // 发送按钮
+        $("#submit_button").on("click", function () {
+            if (confirm("是否进行保存？")) {
+                var kf_ids = $("input#kf_ids").val();
+                var send_reason = $("input#send_reason").val();
+                var send_title = $("input#send_title").val();
+                var send_content = $("input#send_content").val();
+                var act_start_time = $("input#act_start_time").val();
+                if('' == kf_ids || null == kf_ids){
+                    alert("请选择开发者ID！");
+                    return false;
+                }
+                if('' == send_reason || null == send_reason){
+                    alert("请填写发送原因！");
+                    return false;
+                }
+                if('' == send_title || null == send_title){
+                    alert("请填写发送标题！");
+                    return false;
+                }
+                if('' == send_content || null == send_content){
+                    alert("请填写发送内容！");
+                    return false;
+                }
+            }
+        });
+        // 表单数据验证
+        // 取消按钮
+
+    });
+</script>
+
+<script>
+    $("#cancel_button").on("click", function() {
+        location.href = "/msg/no/platformMsg/index/";
+    });
+</script>

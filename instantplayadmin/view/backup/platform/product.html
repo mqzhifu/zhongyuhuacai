@@ -1,0 +1,1439 @@
+
+
+<link href="{CONST|H_STATIC_URL}assets/global/google/font.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN THEME STYLES -->
+<link href="{CONST|H_STATIC_URL}assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="{CONST|H_STATIC_URL}assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="{CONST|H_STATIC_URL}assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+<script>
+    function map(){
+        option = {
+            title : {
+                text: '2011全国GDP（亿元）',
+                subtext: '数据来自国家统计局'
+            },
+            tooltip : {
+                trigger: 'item'
+            },
+            legend: {
+                x:'right',
+                selectedMode:false,
+                data:['北京','上海','广东']
+            },
+            dataRange: {
+                orient: 'horizontal',
+                min: 0,
+                max: 55000,
+                text:['高','低'],           // 文本，默认为数值文本
+                splitNumber:0
+            },
+            toolbox: {
+                show : true,
+                orient: 'vertical',
+                x:'right',
+                y:'center',
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false}
+                }
+            },
+            series : [
+                {
+                    name: '2011全国GDP分布',
+                    type: 'map',
+                    mapType: 'china',
+                    mapLocation: {
+                        x: 'left'
+                    },
+                    selectedMode : 'multiple',
+                    itemStyle:{
+                        normal:{label:{show:true}},
+                        emphasis:{label:{show:true}}
+                    },
+                    data:[
+                        {name:'西藏', value:605.83},
+                        {name:'青海', value:1670.44},
+                        {name:'宁夏', value:2102.21},
+                        {name:'海南', value:2522.66},
+                        {name:'甘肃', value:5020.37},
+                        {name:'贵州', value:5701.84},
+                        {name:'新疆', value:6610.05},
+                        {name:'云南', value:8893.12},
+                        {name:'重庆', value:10011.37},
+                        {name:'吉林', value:10568.83},
+                        {name:'山西', value:11237.55},
+                        {name:'天津', value:11307.28},
+                        {name:'江西', value:11702.82},
+                        {name:'广西', value:11720.87},
+                        {name:'陕西', value:12512.3},
+                        {name:'黑龙江', value:12582},
+                        {name:'内蒙古', value:14359.88},
+                        {name:'安徽', value:15300.65},
+                        {name:'北京', value:16251.93, selected:true},
+                        {name:'福建', value:17560.18},
+                        {name:'上海', value:19195.69, selected:true},
+                        {name:'湖北', value:19632.26},
+                        {name:'湖南', value:19669.56},
+                        {name:'四川', value:21026.68},
+                        {name:'辽宁', value:22226.7},
+                        {name:'河北', value:24515.76},
+                        {name:'河南', value:26931.03},
+                        {name:'浙江', value:32318.85},
+                        {name:'山东', value:45361.85},
+                        {name:'江苏', value:49110.27},
+                        {name:'广东', value:53210.28, selected:true}
+                    ]
+                },
+                {
+                    name:'2011全国GDP对比',
+                    type:'pie',
+                    roseType : 'area',
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: "{a} <br/>{b} : {c} ({d}%)"
+                    },
+                    center: [document.getElementById('map').offsetWidth - 250, 225],
+                    radius: [30, 120],
+                    data:[
+                        {name: '北京', value: 16251.93},
+                        {name: '上海', value: 19195.69},
+                        {name: '广东', value: 53210.28}
+                    ]
+                }
+            ],
+            animation: false
+        };
+        // var ecConfig = require('echarts/config');
+        require.config({
+            paths: {
+                echarts: '{CONST|H_STATIC_URL}assets/global/plugins/echarts/build/dist'
+            }
+        });
+
+        require(
+            [
+                'echarts',
+                'echarts/chart/map' // 使用柱状图就加载bar模块，按需加载
+            ],
+            function (ec) {
+                // 基于准备好的dom，初始化echarts图表
+                var myChart = ec.init(document.getElementById('map')); 
+                
+                
+        
+                // 为echarts对象加载数据 
+                myChart.setOption(option); 
+            }
+        );
+    }
+
+    function donut(id, data){
+        if ($('#'+id).size() !== 0) {
+            $.plot($("#"+id), data, {
+                series: {
+                    pie: {
+                        innerRadius: 0.5,
+                        show: true
+                    }
+                }
+            });
+        }
+    }
+
+    function linechart(id,data) {
+        if ($('#'+id).size() != 1) {
+            return;
+        }
+
+        
+        var newdata = new Array();
+        for(var i = 0; i < data.length; i++){
+            newdata.push({
+                data: data[i].data,
+                label: data[i].label,
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0,
+            });
+        }
+
+        var plot = $.plot($("#"+id), newdata, {
+            series: {
+                lines: {
+                    show: true,
+                    lineWidth: 2,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.05
+                        }, {
+                            opacity: 0.01
+                        }]
+                    }
+                },
+                points: {
+                    show: true,
+                    radius: 3,
+                    lineWidth: 1
+                },
+                shadowSize: 2
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            },
+            colors: ["#d12610", "#37b7f3", "#52e136"],
+            xaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            },
+            yaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            }
+        });
+
+        
+        function showTooltip(x, y, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 15,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+        }
+
+        var previousPoint = null;
+        $("#"+id).bind("plothover", function(event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
+    }
+
+    function piechart(id, data) {
+        var chart = AmCharts.makeChart(""+id, {
+            "type": "pie",
+            "theme": "light",
+
+            "fontFamily": 'Open Sans',
+            
+            "color":    '#888',
+
+            "dataProvider": data,
+            "valueField": "litres",
+            "titleField": "name",
+            "exportConfig": {
+                menuItems: [{
+                    icon: Metronic.getGlobalPluginsPath() + "amcharts/amcharts/images/export.png",
+                    format: 'png'
+                }]
+            }
+        });
+
+        // $('#chart_6').closest('.portlet').find('.fullscreen').click(function() {
+        //     chart.invalidateSize();
+        // });
+    }
+
+    var datelinechart = function(id, data, title) {
+        
+
+        var chart = AmCharts.makeChart(""+id, {
+            type: "stock",
+            "theme": "light",
+            pathToImages: Metronic.getGlobalPluginsPath() + "amcharts/amcharts/images/",
+            "fontFamily": 'Open Sans',
+            
+            "color":    '#888',
+            dataSets: [{
+                color: "#b0de09",
+                fieldMappings: [{
+                    fromField: "value",
+                    toField: "value"
+                }, {
+                    fromField: "volume",
+                    toField: "volume"
+                }],
+                dataProvider: data,
+                categoryField: "date",
+                // EVENTS
+                stockEvents: []
+            }],
+
+
+            panels: [{
+                title: title,
+                percentHeight: 70,
+
+                stockGraphs: [{
+                    id: "g1",
+                    valueField: "value"
+                }],
+
+                stockLegend: {
+                    valueTextRegular: " ",
+                    markerType: "none"
+                }
+            }],
+
+            chartScrollbarSettings: {
+                graph: "g1"
+            },
+
+            chartCursorSettings: {
+                valueBalloonsEnabled: true,
+                graphBulletSize: 1,
+                valueLineBalloonEnabled:true,
+                valueLineEnabled:true,
+                valueLineAlpha:0.5
+            },
+
+            periodSelector: {
+                periods: [{
+                    period: "DD",
+                    count: 10,
+                    label: "10 days"
+                }, {
+                    period: "MM",
+                    count: 1,
+                    label: "1 month"
+                }, {
+                    period: "YYYY",
+                    count: 1,
+                    label: "1 year"
+                }, {
+                    period: "YTD",
+                    label: "YTD"
+                }, {
+                    period: "MAX",
+                    label: "MAX"
+                }]
+            },
+
+            panelsSettings: {
+                usePrefixes: true
+            }
+        });
+
+        $('#'+id).closest('.portlet').find('.fullscreen').click(function() {
+            chart.invalidateSize();
+        });
+    }
+
+</script>
+<script>
+jQuery(document).ready(function() {       
+   // initiate layout and plugins
+    Metronic.init(); // init metronic core components
+    Layout.init(); // init current layout
+    QuickSidebar.init(); // init quick sidebar
+    Demo.init(); // init demo features
+// ChartsAmcharts.init();
+   // ChartsFlotcharts.init();
+   // ChartsFlotcharts.initCharts();
+   // ChartsFlotcharts.initPieCharts();
+   // ChartsFlotcharts.initBarCharts();
+   
+   $.ajax({
+        url:"/platform/no/product/getTopData/",
+        type:"post",
+        data:$('top_select').serialize(),
+        dataType:"json",
+        success: function(data){
+            $('#top_tb tbody').html("");
+
+            for (var i = 0; i <= data.data.length; i++) {
+                $('#top_tb tbody').append("<tr><td>"+(i+1)+"."+data.data[i]['page']+"</td><td>"+data.data[i]['num']+"</td><td>"+data.data[i]['percent']+"%"+"</td></tr>");
+            }
+        }
+    });
+
+   
+
+   $('#top_select').on("change", function(){
+        $.ajax({
+            url:"/platform/no/product/getTopData/",
+            type:"post",
+            data:$(this).serialize(),
+            dataType:"json",
+            success: function(data){
+                $('#top_tb tbody').html("");
+
+                for (var i = 0; i <= data.data.length; i++) {
+                    $('#top_tb tbody').append("<tr><td>"+(i+1)+"."+data.data[i]['page']+"</td><td>"+data.data[i]['num']+"</td><td>"+data.data[i]['percent']+"%"+"</td></tr>");
+                }
+            }
+        });
+   });
+
+    var chartData = [];
+    function generateChartData() {
+        var firstDate = new Date(2012, 0, 1);
+        firstDate.setDate(firstDate.getDate() - 500);
+        firstDate.setHours(0, 0, 0, 0);
+            console.log(firstDate.getDate());
+        for (var i = 0; i < 500; i++) {
+            var newDate = new Date(firstDate);
+            newDate.setDate(newDate.getDate() + i);
+
+            var a = Math.round(Math.random() * (40 + i)) + 100 + i;
+            var b = Math.round(Math.random() * 100000000);
+
+            chartData.push({
+                date: newDate,
+                value: a,
+                volume: b
+            });
+        }
+    }
+    generateChartData();
+
+    map();
+    
+    datelinechart("near30_income_linechart_1", chartData, "收入趋势图");
+    function randValue() {
+        return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+    }
+    
+    var data = [];
+    
+    data[0] = {
+        label: "男",
+        data: Math.floor(Math.random() * 100) + 1
+    };
+    data[1] = {
+        label: "女",
+        data: Math.floor(Math.random() * 100) + 1
+    };
+    donut("sex_donut_chart", data);
+    donut("donut2", data);
+
+    var v3 = [
+        [1, randValue() - 5],
+        [2, randValue() - 5],
+        [3, randValue() - 5],
+        [4, 23 + randValue()],
+        [5, 5 + randValue()],
+        [6, 2 + randValue()],
+        [7, 25 + randValue()],
+        [8, 36 + randValue()],
+        [9, 26 + randValue()],
+        [10, 38 + randValue()],
+        [11, 39 + randValue()],
+        [12, 30 + randValue()],
+        [13, 51 + randValue()],
+        [14, 12 + randValue()],
+        [15, 33 + randValue()],
+        [16, 14 + randValue()],
+        [17, 15 + randValue()],
+        [18, 15 + randValue()],
+        [19, 16 + randValue()],
+        [20, 17 + randValue()],
+        [21, 18 + randValue()],
+        [22, 19 + randValue()],
+        [23, 10 + randValue()],
+        [24, 21 + randValue()],
+        [25, 14 + randValue()],
+        [26, 24 + randValue()],
+        [27, 25 + randValue()],
+        [28, 20 + randValue()],
+        [29, 27 + randValue()],
+        [30, 31 + randValue()]
+    ];
+
+    var testObj = [
+        {
+            data: v3,
+            label: "全民官斗",
+        }
+    ];
+    
+
+    linechart("total_visit_linechart", testObj);
+    linechart("chart_3", testObj);
+    linechart("realtime_visit_linechart", testObj);
+    var testObj2 = [{
+            "name": "愚公移山",
+            "litres": 501.9
+        }, {
+            "name": "美人心计",
+            "litres": 301.9
+        }, {
+            "name": "全民官斗",
+            "litres": 201.1
+        }];
+
+
+   
+    piechart("chart_6", testObj2);
+
+});
+</script>
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+
+    .col-width {
+        width: 12.5%;
+    }
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                             Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <div class="theme-panel hidden-xs hidden-sm hide">
+                <div class="toggler">
+                </div>
+                <div class="toggler-close">
+                </div>
+                <div class="theme-options">
+                    <div class="theme-option theme-colors clearfix">
+                        <span>
+                        THEME COLOR </span>
+                        <ul>
+                            <li class="color-default current tooltips" data-style="default" data-container="body" data-original-title="Default">
+                            </li>
+                            <li class="color-darkblue tooltips" data-style="darkblue" data-container="body" data-original-title="Dark Blue">
+                            </li>
+                            <li class="color-blue tooltips" data-style="blue" data-container="body" data-original-title="Blue">
+                            </li>
+                            <li class="color-grey tooltips" data-style="grey" data-container="body" data-original-title="Grey">
+                            </li>
+                            <li class="color-light tooltips" data-style="light" data-container="body" data-original-title="Light">
+                            </li>
+                            <li class="color-light2 tooltips" data-style="light2" data-container="body" data-html="true" data-original-title="Light 2">
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Theme Style </span>
+                        <select class="layout-style-option form-control input-sm">
+                            <option value="square" selected="selected">Square corners</option>
+                            <option value="rounded">Rounded corners</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Layout </span>
+                        <select class="layout-option form-control input-sm">
+                            <option value="fluid" selected="selected">Fluid</option>
+                            <option value="boxed">Boxed</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Header </span>
+                        <select class="page-header-option form-control input-sm">
+                            <option value="fixed" selected="selected">Fixed</option>
+                            <option value="default">Default</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Top Menu Dropdown</span>
+                        <select class="page-header-top-dropdown-style-option form-control input-sm">
+                            <option value="light" selected="selected">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Mode</span>
+                        <select class="sidebar-option form-control input-sm">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected="selected">Default</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Menu </span>
+                        <select class="sidebar-menu-option form-control input-sm">
+                            <option value="accordion" selected="selected">Accordion</option>
+                            <option value="hover">Hover</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Style </span>
+                        <select class="sidebar-style-option form-control input-sm">
+                            <option value="default" selected="selected">Default</option>
+                            <option value="light">Light</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Sidebar Position </span>
+                        <select class="sidebar-pos-option form-control input-sm">
+                            <option value="left" selected="selected">Left</option>
+                            <option value="right">Right</option>
+                        </select>
+                    </div>
+                    <div class="theme-option">
+                        <span>
+                        Footer </span>
+                        <select class="page-footer-option form-control input-sm">
+                            <option value="fixed">Fixed</option>
+                            <option value="default" selected="selected">Default</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <div class="page-bar">
+                <ul class="page-breadcrumb">
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="index.html">Home</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">Pages</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">New User Profile</a>
+                    </li>
+                </ul>
+                <div class="page-toolbar">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="1000" data-close-others="true">
+                        Actions <i class="fa fa-angle-down"></i>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row margin-top-20">
+                <div class="col-md-12">
+                    <!-- BEGIN PROFILE CONTENT -->
+                    <div class="profile-content">
+                        
+                        <h3 class="page-title">
+                            统计
+                        </h3> 
+                                              
+                        <!-- 导航统计图等信息 -->
+                        <div class="row">
+                            
+                            <!-- <div class="col-md-6"> -->
+                                <!-- BEGIN PORTLET -->
+                                <div class="portlet light">
+                                    <div class="portlet-title tabbable-line">
+                                        <!-- <div class="caption caption-md">
+                                            <i class="icon-globe theme-font hide"></i>
+                                            <span class="caption-subject font-blue-madison bold uppercase">Feeds</span>
+                                        </div> -->
+                                        <ul class="nav nav-tabs" style="float: left;">
+                                            <li class="active">
+                                                <a href="#tab_1_1" data-toggle="tab">
+                                                概况 </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_2" data-toggle="tab">
+                                                实时统计 </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_3" data-toggle="tab">
+                                                访问分析 </a>
+                                            </li>
+                                            <li>
+                                                <a href="#tab_1_4" data-toggle="tab">
+                                                用户画像 </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <!--BEGIN TABS-->
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="tab_1_1">
+
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>昨日概况
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body" align="center">
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>累计访问人数
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" id="total_visit_select" name="type">
+                                                                <option value="1">最近7天</option>
+                                                                <option value="2">最近30天</option>
+                                                            </select>
+                                                            
+                                                        </div>
+                                                        
+                                                        <div id="total_visit_linechart" class="chart">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>TOP受访页
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" id="top_select" name="type" style="display: inline-block;">
+                                                                <option value="1">最近7天</option>
+                                                                <option value="2">最近30天</option>
+                                                                
+                                                            </select>
+                                                             2019/2/19-2019/2/20
+                                                        </div>
+                                                        
+                                                        
+                                                        <table class="table table-striped table-bordered table-hover" id="top_tb">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                         页面路径
+                                                                    </th>
+                                                                    <th>
+                                                                         访问次数
+                                                                    </th>
+                                                                    <th>
+                                                                         占比
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="tab_1_2">
+                                                
+
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>实时访问次数
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                            <option value="1">所有页面</option>
+                                                        </select>
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                <option value="">最近24小时</option>
+                                                                <option value="1">自定义</option>
+                                                                
+                                                            </select>
+                                                             2019/2/19-2019/2/20
+                                                             时间粒度
+                                                             <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                <option value="1">1小时</option>
+                                                                <option value="2">30分钟</option>
+                                                                <option value="3">10分钟</option>
+                                                                <option value="4">5分钟</option>
+                                                                <option value="5">1分钟</option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="realtime_visit_linechart" class="chart">
+                                                        </div>
+                                                        <br/>
+                                                        <table class="table table-striped table-bordered table-hover" id="datatable_products2">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                         页面路径
+                                                                    </th>
+                                                                    <th>
+                                                                         访问次数
+                                                                    </th>
+                                                                    <th>
+                                                                         占比
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                         Trident
+                                                                    </td>
+                                                                    <td>
+                                                                         Internet Explorer 4.0
+                                                                    </td>
+                                                                    <td>
+                                                                         1%
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="tab-pane" id="tab_1_3">
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>
+                                                            <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                <option value="1">打开次数</option>
+                                                                <option value="2">访问次数</option>
+                                                                <option value="3">访问人数</option>
+                                                                <option value="4">新用户数</option>
+                                                                <option value="5">人均停留时长</option>
+                                                        </select>
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                <option value="">最近30天</option>
+                                                                <option value="1">自定义</option>
+                                                                
+                                                            </select>
+                                                             2019/2/19-2019/2/20
+                                                             时间粒度
+                                                             <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                <option value="1">日</option>
+                                                                <option value="2">周</option>
+                                                                <option value="3">月</option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="realtime_visit_linechart" class="chart">
+                                                        </div>
+                                                        <br/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>
+                                                            <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                    <option value="1">新增留存</option>
+                                                                    <option value="2">活跃留存</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                <option value="">最近30天</option>
+                                                                <option value="1">自定义</option>
+                                                                
+                                                            </select>
+                                                             2019/2/19-2019/2/20
+                                                             时间粒度
+                                                             <select class="table-group-action-input form-control input-medium" name="product[tax_class]" style="display: inline-block;">
+                                                                <option value="1">日</option>
+                                                                <option value="2">周</option>
+                                                                <option value="3">月</option>
+                                                            </select>
+                                                        </div>
+                                                        <div id="chart_12" class="chart">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="tab-pane" id="tab_1_4">
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>性别及年龄分布
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" id="sex_age_select_1" name="type1">
+                                                                <option value="">活跃用户数</option>
+                                                                <option value="1">新增用户数</option>
+                                                            </select>
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" id="sex_age_select_2" name="type2">
+                                                                <option value="">昨天</option>
+                                                                <option value="1">最近7天</option>
+                                                                <option value="1">最近30天</option>
+                                                            </select>
+                                                            2019-01-30 - 2019-02-05
+                                                            <br/>
+                                                            <br/>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="chart" id="sex_donut_chart">
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <table class="table table-striped table-bordered table-hover" id="datatable_products2">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                 页面路径
+                                                                            </th>
+                                                                            <th>
+                                                                                 访问次数
+                                                                            </th>
+                                                                            <th>
+                                                                                 占比
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                 Trident
+                                                                            </td>
+                                                                            <td>
+                                                                                 Internet Explorer 4.0
+                                                                            </td>
+                                                                            <td>
+                                                                                 1%
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>地区分布
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" name="product[tax_class]">
+                                                                <option value="">活跃用户数</option>
+                                                                <option value="1">新增用户数</option>
+                                                            </select>
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" name="product[tax_class]">
+                                                                <option value="">昨天</option>
+                                                                <option value="1">最近7天</option>
+                                                                <option value="1">最近30天</option>
+                                                            </select>
+                                                            2019-01-30 - 2019-02-05
+                                                            <br/>
+                                                            <br/>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div id="map" class="chart" style="width: 700px;height: 500px;">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <table class="table table-striped table-bordered table-hover" id="datatable_products2">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                 页面路径
+                                                                            </th>
+                                                                            <th>
+                                                                                 访问次数
+                                                                            </th>
+                                                                            <th>
+                                                                                 占比
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                 Trident
+                                                                            </td>
+                                                                            <td>
+                                                                                 Internet Explorer 4.0
+                                                                            </td>
+                                                                            <td>
+                                                                                 1%
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <select class="table-group-action-input form-control input-medium" style="display: inline-block;" name="product[tax_class]">
+                                                                    <option value="">全国</option>
+                                                                </select>
+                                                                <table class="table table-striped table-bordered table-hover" id="datatable_products2">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                 页面路径
+                                                                            </th>
+                                                                            <th>
+                                                                                 访问次数
+                                                                            </th>
+                                                                            <th>
+                                                                                 占比
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                 Trident
+                                                                            </td>
+                                                                            <td>
+                                                                                 Internet Explorer 4.0
+                                                                            </td>
+                                                                            <td>
+                                                                                 1%
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>终端机型分布
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" name="product[tax_class]">
+                                                                <option value="">活跃用户数</option>
+                                                                <option value="1">新增用户数</option>
+                                                            </select>
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" name="product[tax_class]">
+                                                                <option value="">昨天</option>
+                                                                <option value="1">最近7天</option>
+                                                                <option value="1">最近30天</option>
+                                                            </select>
+                                                            2019-01-30 - 2019-02-05
+                                                            <br/>
+                                                            <br/>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div id="donut2" class="chart">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <table class="table table-striped table-bordered table-hover" id="datatable_products2">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                 页面路径
+                                                                            </th>
+                                                                            <th>
+                                                                                 访问次数
+                                                                            </th>
+                                                                            <th>
+                                                                                 占比
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                 Trident
+                                                                            </td>
+                                                                            <td>
+                                                                                 Internet Explorer 4.0
+                                                                            </td>
+                                                                            <td>
+                                                                                 1%
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+
+                                                <div class="portlet box yellow">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-gift"></i>性别分布
+                                                        </div>
+                                                        <div class="tools">
+                                                            <a href="javascript:;" class="collapse">
+                                                            </a>
+                                                            <a href="#portlet-config" data-toggle="modal" class="config">
+                                                            </a>
+                                                            <a href="javascript:;" class="reload">
+                                                            </a>
+                                                            <a href="javascript:;" class="remove">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="portlet-body">
+                                                        <div style="display: inline-block;">
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" name="product[tax_class]">
+                                                                <option value="">活跃用户数</option>
+                                                                <option value="1">新增用户数</option>
+                                                            </select>
+                                                            <select class="table-group-action-input form-control input-medium" style="display: inline-block;" name="product[tax_class]">
+                                                                <option value="">昨天</option>
+                                                                <option value="1">最近7天</option>
+                                                                <option value="1">最近30天</option>
+                                                            </select>
+                                                            2019-01-30 - 2019-02-05
+                                                            <br/>
+                                                            <br/>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <table class="table table-striped table-bordered table-hover" id="datatable_products2">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>
+                                                                                 性别
+                                                                            </th>
+                                                                            <th>
+                                                                                 活跃用户数
+                                                                            </th>
+                                                                            <th>
+                                                                                 占比
+                                                                            </th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                 xxx
+                                                                            </td>
+                                                                            <td>
+                                                                                 dsds
+                                                                            </td>
+                                                                            <td>
+                                                                                 1%
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--END TABS-->
+                                    </div>
+                                </div>
+                                <!-- END PORTLET -->
+                            <!-- </div> -->
+                        </div>
+
+                        
+                    </div>
+
+                    <!-- END PROFILE CONTENT -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+
+
+
+<script>
+    
+ 
+
+    jQuery(document).ready(function() {
+
+//         Metronic.init(); // init metronic core components
+// Layout.init(); // init current layout
+// QuickSidebar.init(); // init quick sidebar
+// Demo.init(); // init demo features
+   TableAdvanced.init();
+   ChartsAmcharts.init();
+
+   ChartsFlotcharts.init();
+   ChartsFlotcharts.initCharts();
+   ChartsFlotcharts.initPieCharts();
+   ChartsFlotcharts.initBarCharts();
+
+        EcommerceProducts.init();
+        
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<!-- <script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script> -->
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="{CONST|H_STATIC_URL}assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="{CONST|H_STATIC_URL}assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/pages/scripts/table-advanced.js"></script>
+
+
+
+
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/amcharts.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/serial.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/pie.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/radar.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/themes/light.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/themes/patterns.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amcharts/themes/chalk.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/ammap/ammap.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="{CONST|H_STATIC_URL}assets/admin/pages/scripts/charts-amcharts.js"></script>
+
+
+
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.resize.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.pie.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.stack.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.crosshair.min.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+<script src="{CONST|H_STATIC_URL}assets/admin/pages/scripts/charts-flotcharts.js"></script>
+<script src="{CONST|H_STATIC_URL}assets/global/plugins/echarts/build/dist/echarts.js"></script>
+
+
+
+
+
+
+
+
+
+

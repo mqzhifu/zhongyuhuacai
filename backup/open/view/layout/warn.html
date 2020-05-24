@@ -1,0 +1,16 @@
+<div class='warn-outBox'>
+    <div class='winbg'></div>
+    <div class='warn-inner'>
+        <img class='icon-img' src='{CONST|H_STATIC_URL}assets/open/img/un-done.png'/>
+        <span>账号实名制未完成</span>
+        <p>您的账号尚未完成账号实名制及财务信息审核，会对后续部分功能产生影响， 请您尽快前往开发者设置，完账号实名制和财务审核。</p>
+        <a href='/developer/company/'>前往开发者设置</a>
+    </div>
+</div>
+<script>
+    {if $this->_uid && !$this->_openuser}
+    {if $this->ctrl != 'doc' && ($this->ctrl != 'developer' || ($this->ac != 'company' && $this->ac != 'person' && $this->ac != 'submit' && $this->ac != 'openProtocolIndex'))}
+    $('.warn-outBox').fadeIn();
+    {/if}
+    {/if}
+</script>

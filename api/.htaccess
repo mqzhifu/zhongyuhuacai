@@ -1,0 +1,22 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+#RewriteRule ^(\w+)(/(\w+)?(/(.*)(\?(.*))?)?)? /app/$1/?_apppara=$3$5&$7 [QSA,PT,L]
+RewriteRule ^(\w+)/(\w+)/(.*) /index.php?ctrl=$1&ac=$2&$3 [QSA,PT,L]
+
+
+
+# 打开  mod_rewrite.so
+
+#添加
+#<FilesMatch "\.(ttf|otf|eot|woff|svg|woff2)$">
+#  <IfModule mod_headers.c>
+#    Header set Access-Control-Allow-Origin "*"
+#  </IfModule>
+#</FilesMatch>
+
+#更改  AllowOverride All
+

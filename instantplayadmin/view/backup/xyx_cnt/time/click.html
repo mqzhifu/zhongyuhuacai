@@ -1,0 +1,248 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="page-bar">
+                                <ul class="page-breadcrumb">
+                                    <li>
+                                        小游戏点击次数
+                                    </li>
+                                </ul>
+                                
+                            </div>
+                            <div class="actions">
+                                <div class="btn-group">
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <span>
+                                    </span>
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <th width="5%">
+                                            时间
+                                        </th>
+                                        <th width="5%">
+                                            游戏ID
+                                        </th>
+                                        <th width="5%">
+                                            点击次数
+                                        </th>
+                                        <th width="5%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="今天">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="今天">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <!-- <input type="text" class="form-control form-filter input-sm" name="gameid" > -->
+                                            <select class="form-control select2me form-filter input-sm" style="width: 300px !important;" id="game_id" data-placeholder="游戏名称" name="gameid">
+                                                <option value=""></option>
+                                                {foreach ($gameNameList as $k=>$v)}
+                                                    <option value="{$v['id']}">{$v['name']}</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <div class="margin-bottom-5">
+                                                <button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> 搜索</button>
+                                            </div>
+                                            <button class="btn btn-sm green filter-cancel"><i class="fa fa-times"></i> 重置</button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+<!-- 彈窗 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="width: 800px">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">详情</h4>
+        </div>
+        <!-- 表 -->
+        <div id="base-set" style="margin-left: 20px">
+            <div>
+                <table id="detail_tb" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>位置</th>
+                            <th>点击次数</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <hr style="width: 700px;">
+            
+        </div>
+        <div class="modal-footer-diy" align="center">
+          <button type="button" class="undo" data-dismiss="modal">确定</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from 
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/xyx_cnt/no/time/getClickData/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ 2,3]
+                    }],
+                    "order": [
+                        [1, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+
+    });
+
+    function getDetail(day, gameid){
+            $.ajax({
+                url:"/xyx_cnt/no/time/dayDetailByGameId/",
+                type:"post",
+                data:{
+                    gameid:gameid,
+                    selectDayTime:day,
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.code == 200){
+                        $('#detail_tb tbody').html("");
+                        var data1 = data.data;
+                        for(var i = 0; i < data1.length; i++){
+                            $('#detail_tb tbody').append("<tr><td>"+data1[i][0]+"</td><td>"+data1[i][1]+"</td></tr>");
+                        }
+
+                        $('#myModal').modal();
+                    }
+                }
+            });
+    }
+
+</script>
+
+<script>
+
+
+    if (!jQuery().datetimepicker) {
+        alert("error:333");
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2019-01-1 10:00",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10,
+        minView:"month"
+    });
+
+</script>

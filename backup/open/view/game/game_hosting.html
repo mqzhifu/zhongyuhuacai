@@ -1,0 +1,357 @@
+{include /layout/left_game.html}
+<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/gameHosting.css" />
+    <div class="iframeBox">
+        <div class="section">
+            <div class="title">管理托管素材<div class="add_Pro" data-toggle="modal" data-target="#myModal">上传版本</div></div>
+            <div class="titleSmall">已上传的压缩包素材</div>
+                <!--{foreach ($list["data"] as $item)}
+                <li>
+                    <span scope="row">{$item["version"]}</span>
+                    <span>{$item["name"]}</span>
+                    <span>{$item["size_mb"]}</span>
+                    <span>{$item["remark"]}</span>
+                    <span>{$item["created_at_date"]}</span>
+                    <span>{$item["status_msg"]}</span>
+                </li>
+                {/foreach}-->
+
+            <div class="grandTotal">
+                <div id="aa">
+                </div>
+                <div class="page">
+                    <em class="prevpage"></em><span class="indexPage">1</span> / <span class="allPage">3</span><em class="nextpage"></em>
+                    <input class="pageInput" type="text" />
+                    <button class="pageRun">跳转</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
+    <!--<div class="modal-dialog" role="document">-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                <!--<h4 class="modal-title" id="myModalLabel">上传游戏素材</h4>-->
+            <!--</div>-->
+            <!--<div class="modal-body" style="padding-left:60px ">-->
+                <!--<form class="form-horizontal" style="font-size: 15px;">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="control-label">请上传 .zip 文件。文件大小不得超过 50 MB。</label>-->
+                        <!--<input type="file" style="padding: 10px;" id="file">-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label for="remark" class="control-label"></label>-->
+                        <!--<div class="col-sm-22" style="width: 300px">-->
+                            <!--<input autocomplete="off" type="text" class="form-control" id="remark" placeholder="版本备注......">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label id="progress" class="control-label"></label>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="control-label">继续即代表你同意-->
+                            <!--<a target="_blank" href="/developer/openProtocolIndex/" style="color: #F04E58;">《开心小游戏开放平台服务协议》</a>-->
+                        <!--</label>-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</div>-->
+            <!--<div class="modal-footer-diy" style="padding-left: 250px">-->
+                <!--<button type="button" class="btn-modal-no btn btn-default" data-dismiss="modal">取消</button>-->
+                <!--<button id="uploadBtn" type="button" class="btn-modal-yes btn btn-primary" style="border:0;background:linear-gradient(0deg,rgba(217,53,63,1),rgba(241,79,89,1));">上传</button>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<div class="warn-outBox add_win">
+    <div class="winbg"></div>
+    <div class="warn-inner">
+        <div class="del_head">上传游戏素材
+            <div class="progressDiv"><span style="width: 0%;"></span></div>
+            <!--<img class="closeWin" src="img/closeBtn.png">-->
+            <img class="closeWin" src="{CONST|H_STATIC_URL}assets/open/img/closeBtn.png">
+
+        </div>
+        <div class="del_main">
+            <div class="game_name">请上传 .zip 文件。文件大小不得超过 50 MB</div>
+            <div style="position: relative;">
+                <input class="name_input" id="FileArea" type="text" placeholder="未选择任何文件" readonly="" />
+                <input id="fileInput" type="file">
+                <label for="fileInput" id="flieBtn">
+                    <div class="img-i1-1">选择文件</div>
+                </label>
+            </div>
+
+            <input id="remark" class="name_input" type="text" placeholder="版本备注" />
+            <div class="agree">继续即代表你同意<a href="/developer/openProtocolIndex/" target="_blank">《开心小游戏开放平台政策》</a></div>
+            <button type="button" class="btn-modal-no">取消</button>
+            <button id="uploadBtn" type="button" class="btn-modal-yes">上传</button>
+        </div>
+    </div>
+</div>
+<div class="warn-outBox successWin">
+    <div class="winbg"></div>
+    <div class="warn-inner" style="height:315px">
+        <img class="icon-img" src="{CONST|H_STATIC_URL}assets/open/img/info-success.png" alt="">
+        <!--<img class="closeWin" src="{CONST|H_STATIC_URL}assets/open/img/closeBtn.png">-->
+        <span>上传成功</span>
+    </div>
+</div>
+<div class="warn-outBox failWin">
+    <div class="winbg"></div>
+    <div class="warn-inner" style="height:315px">
+        <img class="icon-img" src="{CONST|H_STATIC_URL}assets/open/img/un-done.png" alt="">
+        <!--<img class="closeWin" src="{CONST|H_STATIC_URL}assets/open/img/closeBtn.png">-->
+        <span>上传失败</span>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $(".add_Pro").click(function(){
+            $(".add_win").show();
+        });
+        $(".btn-modal-no").click(function(){
+            $(".add_win").hide();
+        });
+        $("#fileInput").on("change", function () {
+            var obj = document.getElementById("fileInput");
+            var length = obj.files.length;
+            for (var i = 0; i < length; i++) {
+                $("#FileArea").html("");;
+                var temp = obj.files[i].name;
+            }
+            $("#FileArea").val(temp);
+        });
+
+        /*创建新游戏*/
+        $(".btn-modal-yes").click(function(){
+            //progress();
+
+        })
+       /* function progress(){
+            $(".progressDiv span").animate({
+                width:'100%'
+            },15000,function(){
+//                $(".add_win").hide();
+//                $(".successWin").show();
+                $(".del_main").removeClass("disabled");
+                $(".btn-modal-yes").text("上传");
+                $("#fileInput,.btn-modal-no,.btn-modal-yes,.warn-inner").attr("disabled",false);
+            })
+        }*/
+        /*$("body").bind("click",function(e){
+            if($(e.target).closest(".warn-inner").length == 0){
+                $(".successWin").hide();
+//                window.location.reload();
+            }
+        });*/
+        $("body").bind("click",function(e){
+            console.log(1);
+            if($(e.target).closest(".warn-inner").length == 0){
+                if($(".successWin").is(":visible")){
+                    $(".successWin").hide();
+                    window.location.reload();
+                }
+
+            }
+        });
+        $(".del_head .closeWin").click(function(){
+            $(".add_win").hide();
+        });
+
+        var gameid = "{$gameid}";
+        var uploading = false;
+
+        var uploadEvent = function() {
+            var material = document.getElementById("fileInput").files[0];
+            if (material === undefined) {
+                layer.alert("请选择上传文件");
+                uploading = false;
+                return false;
+            }
+
+            /*if (material.type != "application/x-zip-compressed"
+                && material.type != "application/zip") {
+                layer.alert("请上传 .zip文件");
+                uploading = false;
+                return false;
+            }*/
+
+            var obj = document.getElementById("fileInput");
+            var stuff = obj.value.match(/^(.*)(\.)(.{1,8})$/)[3];
+            console.log(stuff);
+            if (stuff != "zip") {
+                alert("文件类型不正确，请选择.zip文件！");
+                uploading = false;
+                return false;
+            }
+
+
+
+            if (material.size > 52428800) {
+                layer.alert("文件大小不得超过50MB");
+                uploading = false;
+                return false;
+            }
+            var remark = $.trim($("#remark").val());
+            if (remark === "") {
+                layer.alert("请填写备注");
+                uploading = false;
+                return false;
+            }
+
+            $(".del_main").addClass("disabled");
+            $("#fileInput,.btn-modal-no,.btn-modal-yes,.warn-inner").attr("disabled",true);
+            $(".btn-modal-yes").text("上传中");
+
+            var formData = new FormData();
+            formData.append("gameid", gameid);
+            formData.append("material", material);
+            formData.append("remark", remark);
+
+
+
+            /*$("#uploadBtn").css({"background":"#98A0B2","border-color":"adadad"});
+            $("#uploadBtn").html("上传中请稍后");*/
+
+            $.ajax({
+                url: "/game/hostingUpload/",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                xhr: function() {
+                    _xhr = $.ajaxSettings.xhr();
+                    if (_xhr.upload) {
+                        _xhr.upload.addEventListener("progress", function(e) {
+                            if (e.lengthComputable) {
+                                var percent = Math.floor(e.loaded / e.total * 100);
+                                if (percent < 100) {
+                                    $("#progress").html("上传中...（" + percent + "%）");
+                                    $(".progressDiv span").css("width",percent + "%");
+                                    console.log(percent);
+                                }
+                                if (percent >= 100) {
+                                    $("#progress").html("扫描中...请稍后");
+                                    $(".progressDiv span").css("width",percent + "%");
+                                    console.log(percent);
+                                }
+                            }
+                        }, false);
+                        return _xhr;
+                    }
+                },
+                success: function (res) {
+                    /*layer.alert(res.message,
+                        {title:'提示'},
+                        function(){
+                            location.reload();
+                    });
+                    uploading = false;*/
+                    $(".add_win").hide();
+                    $(".successWin").show();
+                    $(".del_main").removeClass("disabled");
+                    $(".btn-modal-yes").text("上传");
+                    $("#fileInput,.btn-modal-no,.btn-modal-yes,.warn-inner").attr("disabled",false);
+                },
+                error: function(res) {
+                    /*layer.alert(res.message,
+                        {title:'提示'},
+                        function(){
+                            location.reload();
+                    });
+                    uploading = false;*/
+                    $(".add_win").hide();
+                }
+            });
+        };
+
+        /*$(".closeWin").click(function(){
+            $(".successWin").hide();
+            window.location.reload();
+        });*/
+
+        // 绑定上传按钮事件
+        $("#uploadBtn").on("click", function() {
+            if (!uploading) {
+                uploading = true;
+                uploadEvent();
+            }
+        });
+
+        $(".nextpage").click(function(){
+            var page = parseInt($(".indexPage").html())+1;
+            if (page > totalPage) {
+                return;
+            }
+            $(".indexPage").html(page);
+            loadTable(page);
+
+        });
+
+        $(".prevpage").click(function(){
+            var page = $(".indexPage").html()-1;
+            if (page < 1) {
+                return;
+            }
+            $(".indexPage").html(page);
+            loadTable(page);
+        });
+
+        $(".searchBtn").click(function(){
+            $(".indexPage").html(1);
+            $(".pageInput").val('');
+            loadTable(1);
+        });
+
+        $(".pageRun").click(function(){
+            var page = $(".pageInput").val();
+            if (page > totalPage) {
+                page = totalPage;
+            } else if (page < 1) {
+                page = 1;
+            }
+            $(".indexPage").html(page);
+            loadTable(page);
+        });
+
+        loadTable(1);
+
+        function loadTable(page) {
+            var gameid = "{$gameid}";
+            $.ajax({
+                url: "/game/getHosting/",
+                type: "GET",
+                data: {gameid:gameid,page:page},
+                dataType:"json",
+                success: function (data) {
+                    totalPage = data.data.totalPage;
+                    if (totalPage == 0) {
+                        totalPage = 1;
+                    }
+                    var list = data.data.list;
+                    $(".allPage").html(totalPage);
+
+                    var html = "<ul class=\"paymentTitle\"><li>版本</li><li>名称</li><li>大小(M)</li><li>备注</li><li>日期</li><li>状态</li></ul>";
+                    if (list.length) {
+                        for (var i = 0; i < list.length; i++) {
+                            html += "<ul class=\"paymentMain\">"+"<li>"+"<span>"+list[i].version+"</span> <span>"+list[i].name+"</span> <span>"+list[i].size_mb+"</span> <span>"+list[i].remark+"</span> <span>"+list[i].created_at_date+"</span> <span>"+list[i].status_msg+"</span>"+"</li>"+"</ul>";
+                        }
+                    }
+                    $("#aa").html(html);
+                }
+            });
+        }
+
+    });
+</script>
+<script>
+    var docEl = document.documentElement,
+        resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+        recalc = function() {
+            docEl.style.fontSize = (docEl.clientWidth / 960) * 10 + 'px';
+        };
+
+    //绑定浏览器缩放与加载时间
+    window.addEventListener(resizeEvt, recalc, false);
+    document.addEventListener('DOMContentLoaded', recalc, false);
+</script>

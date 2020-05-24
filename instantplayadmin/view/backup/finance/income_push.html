@@ -1,0 +1,499 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="actions">
+                                <div class="btn-group">
+                                    
+
+                                    <!-- <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="export_data();">
+                                                Excel </a>
+                                        </li>
+                                        <li class="divider">
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                PDF </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                WORD </a>
+                                        </li>
+
+                                    </ul> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <span>
+                                    </span>
+                                    
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+
+                                        <th width="5%">
+                                            项目类别
+                                        </th>
+                                        <th width="5%">
+                                            结算周期
+                                        </th>
+                                        <th width="5%">
+                                            原始金额
+                                        </th>
+
+                                        <th width="5%">
+                                            暗扣金额
+                                        </th>
+                                        
+                                        <th width="5%">
+                                            可分成金额
+                                        </th>
+                                        <th width="10%">
+                                            创建时间
+                                        </th>
+                                        <th width="10%">
+                                            更新时间
+                                        </th>
+
+                                        <th width="5%">
+                                            邮箱设置
+                                        </th>
+                                    </tr>
+                                    <!-- <tr role="row" class="filter">
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        <td>
+                                        </td>
+                                        </td>
+                                    </tr> -->
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<div class="modal fade" id="cut_percent_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="width: 800px">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">收入系数设置</h4>
+        </div>
+        <div class="modal-body"  style="width: 800px;margin-left: 20px">
+            
+            <br/>
+            <br/>
+            <!-- 基本设置 -->
+            <div id="base-set" style="margin-left: 20px;margin-right: 40px;">
+                <div>
+                    <span>结算周期</span>
+                    <span style="margin-left: 20px">
+                        <input type="text" id="settlement_interval" disabled>
+                    </span>
+                </div>
+                <br/>
+                <div>
+                    <span>扣款比例</span>
+                    <span style="margin-left: 20px">
+                        <input type="text" id="cut_percent">
+                    </span>
+                    <span style="color: rgb(255,0,0);">*修改会动态改变内购结算或者收入结算实际金额,请勿频繁修改</span>
+                </div>
+            </div>
+          
+        </div>
+        <div class="modal-footer-diy" align="center">
+          <button type="button" class="cut_percent_modal_undo" data-dismiss="modal">取消</button>
+          <button type="button" class="cut_percent_save" >保存</button>
+        </div>
+      </div>
+    </div>
+    </div>
+
+<div class="modal fade" id="email_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="width: 800px">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">推送邮箱</h4>
+        </div>
+        <div class="modal-body"  style="width: 800px;margin-left: 20px">
+            
+            <br/>
+            <br/>
+            <!-- 基本设置 -->
+            <div id="base-set" style="margin-left: 20px;margin-right: 40px;">
+                <table class="table table-striped table-bordered table-hover" id="email_tb">
+                    <thead>
+                        <tr role="row" class="heading">
+                            <th width="5%">
+                                姓名
+                            </th>
+                            <th width="5%">
+                                邮箱
+                            </th>
+                            <th width="5%">
+                                操作
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                <!-- <table class="table table-bordered" id="ad_map_tb">
+                    <thead>
+                    <tr>
+                        <th>姓名</th>
+                        <th>邮箱</th>
+                        <td>操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td style="width: 17%">
+                           <div style="display: inline-block;">
+                                <div class="deleteDivBtn oprate-del" delete-ad-id="" delete-game-id="" style="display: inline-block;">
+                                删除
+                                    </div>
+                                    |
+                                    <div style="display: none;display: inline-block;" id="" class="editDivBtn oprate-edit"
+                                         edit-ad-id=""
+                                         edit-game-id="">确认修改
+                                    </div>
+                                    <div id="" class="clickEditDivBtn oprate-edit" click-edit-ad-id=""
+                                         click-edit-game-id="" style="display: inline-block;" >编辑
+                                    </div>
+                           </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table> -->
+                <button type="button" class="add" style="width: 100px;">添加</button>
+            </div>
+          
+        </div>
+        <div class="modal-footer-diy" align="center">
+          <!-- <button type="button" class="add_popularization_modal_undo" data-dismiss="modal">取消</button> -->
+          <!-- <button type="button" class="add_popularization_save" >保存修改</button> -->
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    var editid = 0;
+
+    var type = 0;//1 添加 2更新
+    
+
+    function set_cut_percent(obj){
+        var id = obj.getAttribute('data-id');
+        if(id){
+            editid = id;
+            var formData = new FormData();
+            formData.append('id', id);
+            $.ajax({
+                type: 'post',
+                url: '/finance/no/incomePush/getOne/',
+                dataType: 'json',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    if(data.code == 200){
+                        $('#settlement_interval').val(data.data);
+                        $('#cut_percent_modal').modal();   
+                    }else{
+                        alert(data.message);
+                    }
+                              
+                }
+            });
+        }
+    }
+
+    function onClickEditDivBtn(obj){
+        var id = obj.getAttribute('click-edit-ad-id');
+        obj.setAttribute('style','display:none');
+        $('.editDivBtn[edit-ad-id='+id+']').attr('style','display:inline-block;cursor:pointer;');
+        $('.system[ad-id='+id+']').removeAttr('disabled');
+        $('.outer_ad_id[ad-id='+id+']').removeAttr('disabled');
+    }
+
+    function onClickOkDivBtn(obj){
+        var id = obj.getAttribute('edit-ad-id');
+        if (!id) {
+            alert('参数有误！');
+            return false;
+        }
+        var name = $(".outer_ad_id[ad-id='"+id+"'").val();
+        var email = $(".system[ad-id='"+id+"'").val();
+        var postUrl = "/finance/no/incomePush/updateOneEmail/";
+        var postInfo = {
+            id: id,
+            name: name,
+            email: email,
+        };
+        $.ajax({
+            type: "post",
+            url: postUrl,
+            data: postInfo,
+            dataType: "json",
+            success: function (data, $status) {
+                if (data.code == 200) {
+                    $(".editDivBtn[edit-ad-id='"+id+"']").attr('style','display:none');
+                    $('.clickEditDivBtn[click-edit-ad-id='+id+']').attr('style','display:inline-block;cursor:pointer;');
+                    $('.system[ad-id='+id+']').attr('disabled','1');
+                    $('.outer_ad_id[ad-id='+id+']').attr('disabled','1');
+                    // alert('更新成功！');
+                } else {
+                    alert('更新失败，请重试!');
+                    return false;
+                }
+            },
+        });
+    }
+
+    function onClickDeleteDivBtn(obj){
+        if (!confirm("确认删除？")) {
+            return false;
+        }
+        var id = obj.getAttribute('delete-ad-id');
+        if (!id) {
+            alert('参数有误！');
+            return false;
+        }
+
+        var postUrl = "/finance/no/incomePush/delOneEmail/";
+        var postInfo = {
+            id: id
+        };
+        $.ajax({
+            type: "post",
+            url: postUrl,
+            data: postInfo,
+            dataType: "json",
+            success: function (data, $status) {
+                if (data.code == 200) {
+                    $("tr[tr-id='"+id+"']").remove();
+                } else {
+                    alert('删除失败，请重试!');
+                    return false;
+                }
+            },
+            error: function () {
+                return false;
+            }
+        });
+    }
+
+    function set_push_emails(obj){
+
+        var id = obj.getAttribute('data-id');
+        if(id){
+            editid = id;
+            var formData = new FormData();
+            formData.append('id', id);
+            $.ajax({
+                type: 'post',
+                url: '/finance/no/incomePush/getEmails/',
+                dataType: 'json',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    if(data.code == 200){
+                        $('#email_tb tbody').html("");
+                        var items = data.data; 
+                        for(var i = 0; i < items.length; i++){
+                            // $('#email_tb tbody').append('<tr><td>'+data.data[i]['name']+'</td><td>'+data.data[i]['email']+'</td><td><a>删除</a></td></tr>');
+                            $('#email_tb tbody').append("<tr tr-id='"+items[i]['id']+"'><td><input type='text' disabled ad-id='"+items[i]['id']+"' class='outer_ad_id' value='"+items[i]['name']+"'></td><td><input class='system' disabled ad-id='"+items[i]['id']+"' name='' value='"+items[i]['email']+"'></td><td>"
+                                +"<div style='display: inline-block;'><div class='deleteDivBtn oprate-del' delete-ad-id='"+items[i]['id']+"' style='display: inline-block;cursor:pointer;' onclick='onClickDeleteDivBtn(this)'>删除</div>|<div style='display: none;cursor:pointer;' class='editDivBtn oprate-edit' edit-ad-id='"+items[i]['id']+"' onclick='onClickOkDivBtn(this)'>确认</div><div class='clickEditDivBtn oprate-edit' click-edit-ad-id='"+items[i]['id']+"' style='display: inline-block;cursor:pointer;' onclick='onClickEditDivBtn(this)'>编辑</div></div></td></tr>");
+                        }
+                        $('#email_modal').modal();  
+
+                    }else{
+                        alert(data.message);
+                    }
+                              
+                }
+            });
+        }
+    }
+
+
+
+
+
+</script>
+
+
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from 
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/finance/no/incomePush/getList/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ 0,1,2,3,4,5,6,7]
+                    }],
+
+                }
+            });
+
+        
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+
+        $('.cut_percent_save').click(function(){
+            var cut_percent = $('#cut_percent').val();
+            if(cut_percent == 'undefined'){
+                alert("未填写扣款比例");
+                return false;
+            }
+
+            var formData = new FormData();
+            formData.append('id',editid);
+            formData.append('cut_percent', cut_percent);
+            $.ajax({
+                url:'/finance/no/incomePush/setCutPervent/',
+                type:'post',
+                dataType:'json',
+                data:formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        $('#cut_percent_modal_undo').click();
+                        location.href = '/finance/no/incomePush/index/';
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+        $('.add').click(function(){
+            var formData = new FormData();
+            formData.append('id',editid);
+            $.ajax({
+                url:'/finance/no/incomePush/addOneEmail/',
+                type:'post',
+                dataType:'json',
+                data:formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        $('#email_tb tbody').append("<tr tr-id='"+data.data+"'><td><input type='text' disabled ad-id='"+data.data+"' class='outer_ad_id' value=''></td><td><input class='system' disabled ad-id='"+data.data+"' name='' value=''></td><td>"
+                                +"<div style='display: inline-block;'><div class='deleteDivBtn oprate-del' delete-ad-id='"+data.data+"' style='display: inline-block;cursor:pointer;' onclick='onClickDeleteDivBtn(this)'>删除</div>|<div style='display: none;cursor:pointer;' class='editDivBtn oprate-edit' edit-ad-id='"+data.data+"' onclick='onClickOkDivBtn(this)'>确认</div><div class='clickEditDivBtn oprate-edit' click-edit-ad-id='"+data.data+"' style='display: inline-block;cursor:pointer;' onclick='onClickEditDivBtn(this)'>编辑</div></div></td></tr>");
+                        // $('#email_tb tbody').append('<tr><td></td><td></td><td><a>删除</a></td></tr>');
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+    });
+
+
+</script>

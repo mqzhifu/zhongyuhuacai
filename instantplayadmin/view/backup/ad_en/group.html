@@ -1,0 +1,854 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td {
+        white-space: normal;
+        word-wrap: break-word;
+        break-word: break-all;
+    }
+    .modal-body {
+        margin: 0;
+    }
+    .strategySelect {
+        width: 160px
+    }
+    .sort_input {
+        width: 40px;
+    }
+    
+    .sub-body {
+        margin-left: 20px;
+        margin-right: 40px;
+        font-weight: 400; 
+        font-size: 14px;
+    }
+    .title_span{
+        display: inline-block;
+        width: 100px;
+        margin-top: 10px;
+        margin-bottom: 10px;    
+    }
+    .name_input,.name_select {
+        display: inline-block;
+        width: 140px;
+        height: 24px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 40px;
+    }
+    .tb_input,.tb_select {
+        display: inline-block;
+        height: 24px;
+        width: 100%
+    }
+    .opt {
+        margin-right: 15px;
+    }
+    .unView {
+        display:none;
+    }
+    .view {
+        display:block;
+    }
+    .btnView {
+        display:inline-block;
+        cursor:pointer;
+    }
+    #ad_origin_tb {
+        margin-right: 100px;
+        width: 91%;
+    }
+</style>
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <span>
+                                    </span>
+                                    <button type="button" id="addGroup" class="btn btn-sm default blue">添加广告组</button>
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <th width="5%">
+                                            广告组名称
+                                        </th>
+                                        <th width="5%">
+                                            广告类型
+                                        </th>
+                                        <th width="5%">
+                                            创建时间
+                                        </th>
+                                        <th width="5%">
+                                            修改时间
+                                        </th>
+                                        <th width="5%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="name" >
+                                        </td>
+                                        <td>
+                                            <select name="ad_type" class="form-control form-filter input-sm">
+                                                <option value="">全部</option>
+                                            {foreach ($adTypeDesc as  $k=>$v)  }
+                                                <option value="{$k}">{$v}</option>
+                                            {/foreach}
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from_a" id="from_a" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to_a" id="to_a" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5" data-date-format="yyyy-mm-dd">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from_u" id="from_u" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to_u" id="to_u" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="margin-bottom-5">
+                                                <button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> 搜索</button>
+                                            </div>
+                                            <button class="btn btn-sm green filter-cancel"><i class="fa fa-times"></i> 重置</button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">广告组配置</h4>
+            </div>
+            
+            <div class="modal-body" style="width: 800px;margin-left: 34px">
+
+                <!-- 基本设置 -->
+                <div class="sub-body">
+                    <span class="title_span">广告组名称</span>
+                    <input type="text" id="group_name" class="name_input">
+                </div>
+
+                <div class="sub-body">
+                    <span class="title_span">广告类型</span>
+                    <select id="ad_type" class="name_select">
+                        <option value=0>请选择</option>
+                        {foreach ($adTypeDesc as $k=>$v)}
+                        <option value="{$k}">{$v}</option>
+                        {/foreach}
+                    </select>
+                </div>
+
+                <hr style="width: 700px;">
+
+                <div align="center">
+                    <table class="table table-bordered" id="ad_origin_tb">
+                        <thead>
+                            <tr>
+                                <th width="20%">广告商</th>
+                                <th width="50%">广告单元ID</th>
+                                <th width="30%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="add">添加</button>
+
+                <hr style="width: 700px;">
+            </div>
+
+            <div class="modal-footer-diy" align="center">
+                <button type="button" class="undo" style="margin-right: 20px" data-dismiss="modal">取消</button>
+                <button type="button" class="save">确认</button>
+            </div>
+
+            <br><br>
+            
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="strategyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">广告组策略</h4>
+            </div>
+            <div class="modal-body" style="width: 800px;margin-left: 20px">
+
+                <!-- 基本设置 -->
+                <div id="base-set" style="margin-left: 20px;margin-right: 60px;">
+                    <br>
+                    <div align="center">
+                        <table class="table table-bordered" id="strategyTable">
+                            <thead>
+                                <tr>
+                                    <th>广告商</th>
+                                    <th>广告单元ID</th>
+                                    <th>排序(倒序)</th>
+                                    <th>广告开关</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer-diy" align="center">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function () {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150, 999999],
+                        [10, 20, 50, 100, 150, '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/ad_en/no/group/getList/" // ajax source
+                    },
+                    "aoColumnDefs": [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable': false,
+                        'aTargets': [0, 1, 2, 3, 4],
+                    }],
+                    "order": [
+                        [0, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+    
+    var isNew = 1;
+    var group_id = 0;
+
+    var advertiser_option = "{foreach ($advertiser_type as $k=>$v)}<option value='{$k}'>{$v}</option>{/foreach}";
+
+    var status_option = "{foreach ($originStatusDesc as $k=>$v)}<option value='{$k}'>{$v}</option>{/foreach}"
+
+    jQuery(document).ready(function () {
+        EcommerceProducts.init();
+
+        $("#addGroup").click(function(){
+            group_id = 0;
+            isNew = 1;
+            clearModal();
+            $("#myModal").modal();
+        })
+
+        $(".save").click(function(){
+            var name = $("#group_name").val();
+            var ad_type = $("#ad_type").val();
+            if (!hasValue(name)) {
+                alert("请输入广告组名称");
+                return;
+            }
+            if (!hasValue(ad_type)) {
+                alert("请选择广告类型");
+                return;
+            }
+
+            var origins = [];
+            var ad_unit = {};
+            var advertiser = "";
+            var outer_id = "";
+            if (isNew) {
+                $("#ad_origin_tb tbody tr").each(function(){
+                    advertiser = $(this).find(".advertiser").val();
+                    outer_id = $(this).find(".outer_id").val();
+                    if (!advertiser || !outer_id) {
+                        alert("请补全广告单元信息");
+                        return;
+                    }
+                    ad_unit = {
+                        advertiser:advertiser,
+                        outer_id:outer_id
+                    };
+                    origins.push(ad_unit);
+                });
+            }
+
+            $.ajax({
+                url: '/ad_en/no/group/setGroup/',
+                type: 'post',
+                data: {
+                    group_id:group_id,
+                    name:name,
+                    ad_type:ad_type,
+                    origins:origins
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        if (isNew) {
+                            alert("添加成功");
+                        } else {
+                            alert("更新成功");
+                        }
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+        $('.add').click(function () {
+            var html = "<div class='optCancel opt btnView'>取消</div>";
+            if (!isNew) {
+                html += "<div class='editSubmit opt btnView'>确认</div>"+
+                        "<div class='delAdUnit opt unView'>删除</div>"+
+                        "<div class='editAdUnit opt unView'>编辑</div>";
+            }
+            $('#ad_origin_tb tbody').append(
+                "<tr>"+
+                    "<td>"+
+                        "<span class='advertiser_span unView'></span>"+
+                        "<select class='tb_select advertiser'>" + advertiser_option + "</select>"+
+                    "</td>"+
+                    "<td>"+
+                        "<span class='outer_id_span unView'></span>"+
+                        "<input type='text' class='tb_input outer_id'>"+
+                    "</td>"+
+                    "<td>"+
+                        html+
+                    "</td>"+
+                "</tr>"
+            );
+        });
+
+        // 取消按钮
+        $("#ad_origin_tb").on("click", ".optCancel", function (e) {
+            var $editElem = $(this);
+            var id = $editElem.parents("td").parents("tr").attr('attr-id');
+
+            if (id == '' || id == undefined) {
+                // 广告单元未保存 移除该行
+                $editElem.parents("td").parents("tr").remove();
+            } else {
+                // span 显示
+                $editElem.parents("td").siblings("td").children(".advertiser_span").removeClass("unView");
+                $editElem.parents("td").siblings("td").children(".outer_id_span").removeClass("unView");
+
+                // 输入 隐藏
+                $editElem.parents("td").siblings("td").children(".advertiser").addClass("unView");
+                $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+
+                // 按钮 隐藏 显示
+                $editElem.siblings(".editSubmit").removeClass("btnView").addClass("unView");
+                $editElem.removeClass("btnView").addClass("unView");
+
+                $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+            }
+        });
+
+
+        // 编辑按钮
+        $("#ad_origin_tb").on("click", ".editAdUnit", function (e) {
+            var $editElem = $(this);
+            // span 隐藏
+            $editElem.parents("td").siblings("td").children(".advertiser_span").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_id_span").addClass("unView");
+
+            // 输入 选中
+            var advertiser = $editElem.parents("td").siblings("td").children(".advertiser_span").html();
+
+            selectView($editElem.parents("td").siblings("td").children(".advertiser"), advertiser);
+
+            // 输入 显示
+            $editElem.parents("td").siblings("td").children(".advertiser").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_id").removeClass("unView");
+
+            // 按钮 隐藏 显示
+            $editElem.siblings(".optCancel").removeClass("unView").addClass("btnView");
+            $editElem.siblings(".editSubmit").removeClass("unView").addClass("btnView");
+
+            $editElem.siblings(".delAdUnit").removeClass("btnView").addClass("unView");
+            $editElem.removeClass("btnView").addClass("unView");
+        });
+
+        $("#ad_origin_tb").on("click", ".editSubmit", function (e) {
+            var $editElem = $(this);
+            var advertiser = $editElem.parents("td").siblings("td").children(".advertiser").val();
+            var outer_id = $editElem.parents("td").siblings("td").children(".outer_id").val();
+
+            if (!hasValue(advertiser) || !hasValue(outer_id)) {
+                alert("请将广告单元信息补充完整");
+                return;
+            }
+
+            var post_data = {
+                advertiser:advertiser, 
+                outer_id:outer_id,
+                group_id:group_id
+            };
+
+            var origin_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+
+            if (hasValue(origin_id)) {
+                post_data.origin_id = origin_id;
+            } 
+
+            $.ajax({
+                url: "/ad_en/no/group/setOrigin/",
+                type: 'post',
+                data: post_data,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        var id = data.data;
+                        $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                        // span 赋值
+                        var advertiserDesc = $editElem.parents("td").siblings("td").children(".advertiser").find("option:selected").html();
+                        
+                        $editElem.parents("td").siblings("td").children(".advertiser_span").html(advertiserDesc);
+                        $editElem.parents("td").siblings("td").children(".outer_id_span").html(outer_id);
+
+                        // span 显示
+                        $editElem.parents("td").siblings("td").children(".advertiser_span").removeClass("unView");
+                        $editElem.parents("td").siblings("td").children(".outer_id_span").removeClass("unView");
+
+                        // 输入 隐藏
+                        $editElem.parents("td").siblings("td").children(".advertiser").addClass("unView");
+                        $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+
+                        // 按钮 隐藏 显示
+                        $editElem.siblings(".optCancel").removeClass("btnView").addClass("unView");
+                        $editElem.removeClass("btnView").addClass("unView");
+
+                        $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                        $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+                    } else {
+                        alert(data.message);
+                    }
+                },
+            });
+
+        });
+
+        // 删除按钮 
+        $("#ad_origin_tb").on("click", ".delAdUnit", function (e) {
+            if (!confirm("确认删除该广告单元吗？")) {
+                return false;
+            }
+
+            var $editElem = $(this);
+            var origin_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+
+            $.ajax({
+                url: "/ad_en/no/group/deleteOrigin/",
+                type: 'post',
+                data: {origin_id:origin_id},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $editElem.parents("td").parents("tr").remove();
+                    } else {
+                        alert(data.message);
+                    }
+                },
+            });
+
+        });    
+
+
+        $("#strategyTable").on("click", ".strategyEdit", function (e) {
+            // span 隐藏
+            $(this).parents("td").siblings("td").children(".sort_span").addClass("unView");
+            $(this).parents("td").siblings("td").children(".status_span").addClass("unView");
+
+            // 输入 选中
+            var status = $(this).parents("td").siblings("td").children(".status_span").html();
+            selectView($(this).parents("td").siblings("td").children(".status"), status);
+
+            // 输入 显示
+            $(this).parents("td").siblings("td").children(".sort").removeClass("unView");
+            $(this).parents("td").siblings("td").children(".status").removeClass("unView");
+
+            // 按钮 隐藏 显示
+            $(this).siblings(".strategyCancel").removeClass("unView").addClass("btnView");
+            $(this).siblings(".strategySave").removeClass("unView").addClass("btnView");
+
+            $(this).removeClass("btnView").addClass("unView");
+        });
+
+        // 取消按钮
+        $("#strategyTable").on("click", ".strategyCancel", function (e) {
+            // span 显示
+            $(this).parents("td").siblings("td").children(".sort_span").removeClass("unView");
+            $(this).parents("td").siblings("td").children(".status_span").removeClass("unView");
+
+            // 输入 隐藏
+            $(this).parents("td").siblings("td").children(".sort").addClass("unView");
+            $(this).parents("td").siblings("td").children(".status").addClass("unView");
+
+            // 按钮 隐藏 显示
+            $(this).siblings(".strategyEdit").removeClass("unView").addClass("btnView");
+
+            $(this).siblings(".strategySave").removeClass("btnView").addClass("unView");
+            $(this).removeClass("btnView").addClass("unView");
+        });
+
+         $("#strategyTable").on("click", ".strategySave", function (e) {
+            var $editElem = $(this);
+            var sort = $editElem.parents("td").siblings("td").children(".sort").val();
+            var status = $editElem.parents("td").siblings("td").children(".status").val();
+
+            if ((sort!==0 && !hasValue(sort)) || !hasValue(status)) {
+                alert("请将信息补充完整");
+                return;
+            }
+
+            var origin_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+
+            if (!hasValue(origin_id)) {
+                alert("参数有误");
+                return;
+            }
+
+            var post_data = {
+                sort:sort, 
+                status:status,
+                origin_id:origin_id
+            };
+
+            $.ajax({
+                url: "/ad_en/no/group/setOrigin/",
+                type: 'post',
+                data: post_data,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        var id = data.data;
+                        $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                        // span 赋值
+                        var statusDesc = $editElem.parents("td").siblings("td").children(".status").find("option:selected").html();
+                        
+                        $editElem.parents("td").siblings("td").children(".status_span").html(statusDesc);
+                        $editElem.parents("td").siblings("td").children(".sort_span").html(sort);
+
+                        // span 显示
+                        $editElem.parents("td").siblings("td").children(".status_span").removeClass("unView");
+                        $editElem.parents("td").siblings("td").children(".sort_span").removeClass("unView");
+
+                        // 输入 隐藏
+                        $editElem.parents("td").siblings("td").children(".sort").addClass("unView");
+                        $editElem.parents("td").siblings("td").children(".status").addClass("unView");
+
+                        // 按钮 隐藏 显示
+                        $editElem.siblings(".strategyEdit").removeClass("unView").addClass("btnView");
+
+                        $editElem.siblings(".strategyCancel").removeClass("btnView").addClass("unView");
+                        $editElem.removeClass("btnView").addClass("unView");
+                    } else {
+                        alert(data.message);
+                    }
+                },
+            });
+
+        });
+
+    });
+
+    function getGroup(elem) {
+        group_id = $(elem).attr('attr-id');
+        if (!group_id) {
+            alert("参数有误");
+            return;
+        }
+        isNew = false;
+        clearModal();
+
+        $.ajax({
+            url: "/ad_en/no/group/getGroup/",
+            type: "GET",
+            data: {
+                group_id: group_id
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 200) {
+                    var group = data.data.group;
+                    var origins = data.data.origins;
+                    $('#group_name').val(group.name);
+                    $('#ad_type').val(group.ad_type);
+
+                    for (var i = 0; i < origins.length; i++) {
+
+                        $('#ad_origin_tb tbody').append(
+                            "<tr attr-id='" + origins[i].id + "'>"+
+                            "<td>"+
+                                "<span class='advertiser_span'>"+origins[i].advertiser_desc+"</span>"+
+                                "<select class='tb_select advertiser unView'>" + advertiser_option + "</select>"+
+                            "</td>"+
+                            "<td>"+
+                                "<span class='outer_id_span'>"+origins[i].outer_id+"</span>"+
+                                "<input type='text' class='tb_input outer_id unView' value="+origins[i].outer_id+">"+
+                            "</td>"+
+                            "<td>"+
+                                "<div class='optCancel opt unView'>取消</div>"+
+                                "<div class='editSubmit opt unView'>确认</div>"+
+                                "<div class='delAdUnit opt btnView'>删除</div>"+
+                                "<div class='editAdUnit opt btnView'>编辑</div>"+
+                            "</td>"+
+                            "</tr>"
+                        );
+                    }
+
+                    $('#myModal').modal();
+                } else {
+                    alert(data.message);
+                }
+            }
+        });
+    }
+
+    function selectView(selectElem, val) {
+        selectElem.find("option").each(function(){
+            if ($(this).html() == val) {
+                selectElem.val($(this).val());
+            }
+        });
+    }
+    function clearModal() {
+        $("#ad_type").val(0);
+        $("#group_name").val('');
+        $("#ad_origin_tb tbody").html('');
+    }
+
+
+    function getStrategy(obj) {
+        $('#strategyTable tbody').html('');
+        group_id = obj.getAttribute('attr-id');
+
+        if (hasValue(group_id)) {
+            $.ajax({
+                url: "/ad_en/no/group/getGroup/",
+                type: "GET",
+                data: {group_id:group_id},
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 200) {
+
+                        var origins = data.data.origins;
+                        for (var i = 0; i < origins.length; i++) {
+
+                            $('#strategyTable tbody').append(
+                                "<tr attr-id='" + origins[i].id + "'>"+
+                                    "<td>"+ origins[i].advertiser_desc +"</td>"+
+                                    "<td>"+ origins[i].outer_id +"</td>"+
+                                    "<td>"+
+                                        "<span class='sort_span'>"+origins[i].sort+"</span>"+
+                                        "<input type='text' class='tb_input sort unView' value="+origins[i].sort+">"+
+                                    "</td>"+
+                                    "<td>"+
+                                        "<span class='status_span'>"+origins[i].status_desc+"</span>"+
+                                        "<select class='tb_select status unView'>" + status_option + "</select>"+
+                                    "</td>"+
+                                    "<td>"+ 
+                                        "<div class='strategyCancel opt unView'>取消</div>"+
+                                        "<div class='strategySave opt unView'>确认</div>"+
+                                        "<div class='strategyEdit opt btnView'>编辑</div>"+
+                                    "</td>"+
+                                "</tr>");
+                        }
+
+                        $('#strategyModal').modal();
+                    }
+                }
+            });
+        }
+        
+    }
+
+
+    function strategyCancel(elem) {
+        var id = $(elem).attr('attr-id');
+        $(elem).attr('style', 'display:none');
+        $('.strategy_save[attr-id=' + id + ']').attr('style', 'display:none');
+        $('.strategy_edit[attr-id=' + id + ']').attr('style', 'display:inline-block;cursor:pointer;');
+        $('.status_select[attr-id=' + id + ']').attr('style', 'display:none');
+        $('.sort_input[attr-id=' + id + ']').attr('style', 'display:none');
+        $('.status_span[attr-id=' + id + ']').attr('style', 'display:block;');
+        $('.sort_span[attr-id=' + id + ']').attr('style', 'display:block;');
+    }
+
+    function strategySave(elem) {
+        var id = $(elem).attr('attr-id');
+        var status = $('.status_select[attr-id=' + id + ']').find("option:selected").val();
+        var sort = $('.sort_input[attr-id=' + id + ']').val();
+        if (id == '' || status == '' || sort == '') {
+            alert('参数有误');return;
+        }
+        $.ajax({
+            url: "/ad/manager/examine/saveStrategy/",
+            type: "GET",
+            data: {
+                id: id,
+                status: status,
+                sort: sort
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.code == 200) {
+                    $(elem).attr('style', 'display:none');
+                    $('.strategy_cancel[attr-id=' + id + ']').attr('style', 'display:none');
+                    $('.strategy_edit[attr-id=' + id + ']').attr('style', 'display:inline-block;cursor:pointer;');
+                    $('.status_select[attr-id=' + id + ']').attr('style', 'display:none');
+                    $('.sort_input[attr-id=' + id + ']').attr('style', 'display:none');
+                    status = $('.status_select[attr-id=' + id + ']').find("option:selected").html()
+                    $('.status_span[attr-id=' + id + ']').html(status);
+                    $('.sort_span[attr-id=' + id + ']').html(sort);
+                    $('.status_span[attr-id=' + id + ']').attr('style', 'display:block;');
+                    $('.sort_span[attr-id=' + id + ']').attr('style', 'display:block;');
+                } else {
+                    alert(data.message);return;
+                }
+            }
+        });
+        
+    }
+
+
+    function hasValue(val) {
+        if (!val || val==0 || val=='' || val==undefined) {
+            return false;
+        }
+        return true;
+    }
+
+</script>
+
+
+<script>
+    if (!jQuery().datetimepicker) {
+        alert(333);
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        minView: "month",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2019-01-01",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+</script>
+
+

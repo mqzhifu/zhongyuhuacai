@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/public.css" />
+		<link rel="stylesheet" href="css/developerProfile.css" />
+		<title></title>
+	</head>
+
+	<body>
+		<script>
+			var docEl = document.documentElement,
+				resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+				recalc = function() {
+					docEl.style.fontSize = (docEl.clientWidth / 960) * 10 + 'px';
+				};
+
+			//绑定浏览器缩放与加载时间
+			window.addEventListener(resizeEvt, recalc, false);
+			document.addEventListener('DOMContentLoaded', recalc, false);
+		</script>
+		<div class="login-head">
+			<div class="login-header">
+				<a href="../happy-game/welcome.html" class="fl">开心小游戏 · 开放平台</a>
+				<div class="linkUl">
+					<a class="active" href="#">首页</a>
+					<a href="#">文档资料</a>
+					<a href="#">游戏管理</a>
+					<a href="#">消息通知</a>
+					<a href="#">账号设置</a>
+				</div>
+				<div class="fr">
+					<dl class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						<dt>ao1117</dt>
+						<dd><img src="img/avatar.png" /></dd>
+					</dl>
+					<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						<li><img src="img/signOut.png" />退出登录</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="gameManage">
+			<ul class="nav-list">
+				<li class="levelLi">
+					<div class="first-level"><img class="level-icon" src="img/game_manage.png" />游戏管理<img class="level-click up" src="img/select-red.png" /></div>
+					<ul class="second-level">
+						<li>
+							<a>游戏列表</a>
+						</li>
+						<li>
+							<a>数据分析</a>
+						</li>
+						<li>
+							<a>广告分析</a>
+						</li>
+					</ul>
+				</li>
+				<li class="levelLi">
+					<div class="first-level"><img class="level-icon" src="img/financial.png" />财务管理<img class="level-click up" src="img/select-red.png" /></div>
+					<ul class="second-level">
+						<li>
+							<a>结算提现</a>
+						</li>
+					</ul>
+				</li>
+				<li class="levelLi">
+					<div class="first-level"><img class="level-icon" src="img/account.png" />账号设置<img class="level-click up" src="img/select-red.png" /></div>
+					<ul class="second-level">
+						<li>
+							<a>开发者资料</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<div class="iframeBox">
+				<div class="section">
+					<ul class="statisticsTitle">
+						<li><a href="baseInfo.html">基本设置</a></li>
+						<li><a href="accountInfo.html">账号信息</a></li>
+						<li class="active"><a href="financeInfo.html">财务信息</a></li>
+					</ul>
+				</div>
+				<div class="section">
+					<div class="review hidden"><img src="img/underreview.png" />审核中</div>
+					<div class="review"><img src="img/passed.png" />审核通过</div>
+					<div class="review hidden"><img src="img/unpassed.png" />审核不通过</div>
+					<div class="review hidden"><img src="img/unsubmitted.png" />未提交</div>
+				</div>
+				<div class="section">
+					<div class="section-title">基础信息</div>
+					<ul class="form-ul">
+						<li>
+							<div class="fl">开发者ID</div>
+							<div class="fr">2001</div>
+						</li>
+						<li>
+							<div class="fl">开发者类型</div>
+							<div class="fr">
+								<div class="company-link">公司账号</div>
+							</div>
+						</li>
+						<li>
+							<div class="fl">开发者名称（公司名称）</div>
+							<div class="fr">
+								北京aaaa公司
+							</div>
+						</li>
+						<li>
+							<div class="fl">开户行地址</div>
+							<div class="fr">
+								<select class="li-select select1">
+									<option>请选择</option>
+									<option>1</option>
+									<option>1</option>
+								</select>
+								<select class="li-select select2">
+									<option>请选择</option>
+									<option>1</option>
+									<option>1</option>
+								</select>
+								<select class="li-select select3">
+									<option>请选择</option>
+									<option>1</option>
+									<option>1</option>
+								</select>
+								<i class="prompt">不能为空</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">银行名称</div>
+							<div class="fr">
+								<select class="li-select select4">
+									<option>请选择</option>
+									<option>1</option>
+									<option>1</option>
+								</select>
+								<i class="prompt">不能为空</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">支行信息</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" placeholder="请填写支行名，如西二旗支行" /><i class="prompt">请输入支行信息</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">银行账号</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" /><i class="prompt">请输入银行账号</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">纳税登记号</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" /><i class="prompt">请输入纳税登记号</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">纳税登记证</div>
+							<div class="fr">
+								<div class="upload-box">
+									<img class="upload-img" src="img/jlH.png"  />
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="fl">纳税登记证</div>
+							<div class="fr">
+								<div class="upload-box">
+									<img class="upload-img1" onclick="$('#file1').click()" src="img/upload.png"  />
+									<input class="hide" type="file" id="file1" accept="image/*">
+									<span>文件格式为jpg、jpeg、bmp、或png，文件大小不超过2M，<a href="#">查看示例</a></span>
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="fl">纳税人类型</div>
+							<div class="fr">
+								<select class="li-select select5">
+									<option>请选择</option>
+									<option>1</option>
+									<option>1</option>
+								</select>
+								<i class="prompt">请选择纳税人类型</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">发票类型</div>
+							<div class="fr">
+								<select class="li-select select6">
+									<option>请选择</option>
+									<option>1</option>
+									<option>1</option>
+								</select>
+								<i class="prompt">请选择发票类型</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">银行卡正面扫描件</div>
+							<div class="fr">
+								<div class="upload-box">
+									<img class="upload-img" src="img/jlH.png"  />
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="fl">身份证号</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" /><i class="prompt">请输入正确的身份证号码</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">证件有效期</div>
+							<div class="fr">
+								<input class="li-input effective" id="test-laydate-start" type="text" /> - <input class="li-input effective" id="test-laydate-end" type="text" /><i class="prompt">不能为空</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">法人身份证正反面</div>
+							<div class="fr">
+								<div class="upload-box">
+									<img class="upload-img" src="img/jlH.png"  />
+								</div>
+							</div>
+						</li>
+						<li>
+							<div class="fl"></div>
+							<div class="fr">
+								<div class="upload-box">
+									<img class="upload-img" src="img/jlH.png"  />
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="section">
+					<div class="section-title">联系人信息</div>
+					<ul class="form-ul">
+						<li>
+							<div class="fl">联系人</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" /><i class="prompt">请输入联系人</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">联系地址</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" /><i class="prompt">请输入联系地址</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">联系邮箱</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" /><i class="prompt">请输入正确的联系邮箱</i>
+							</div>
+						</li>
+						<li>
+							<div class="fl">联系电话</div>
+							<div class="fr">
+								<input class="li-input file-input" type="text" /><i class="prompt">请输入正确的联系电话</i>
+							</div>
+						</li>
+					</ul>
+					<div class="formBtn">
+						<button type="button" class="btn-modal-yes">提交</button>
+						<button type="button" class="btn-modal-no">取消</button>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="laydate/laydate.js" ></script>
+		<script>
+			//layer.alert('内容');
+		  	var start = laydate.render({  
+		        elem: '#test-laydate-start',  
+		        done:function(value,date){
+		        	if(value!=''){
+		        		date.month=date.month-1;
+		        		end.config.min=date;
+		        	}
+		        }
+		    });  
+		    var end = laydate.render({  
+		        elem: '#test-laydate-end',   
+		        done:function(value,date){
+		        	if(value!=''){
+		        		date.month=date.month-1;
+		        		end.config.min=date;
+		        	}
+		        }
+		    }); 		   
+			/*菜单*/
+			$(".first-level").click(function() {
+				$(this).children(".level-click").toggleClass("up");
+				$(this).siblings(".second-level").stop(true, false).slideToggle();
+			});
+			/*菜单选择*/
+			$(".second-level li").click(function() {
+				$(".second-level li").removeClass("active")
+				$(this).addClass("active");
+			});
+			
+			/*协议选择*/
+			$("#protocol").click(function(){
+				if(this.checked){
+					$(".register-btn").attr("disabled",false).removeClass("unUse");
+				}else{
+					$(".register-btn").attr("disabled",true).addClass("unUse");
+				}
+			})
+			
+			$(".file-input").on("blur",function(){
+				if(!$(this).val()){
+					$(this).addClass("empty");
+					$(this).siblings(".prompt").show();
+				}else{
+					$(this).removeClass("empty");
+					$(this).siblings(".prompt").hide();
+				}
+			})
+			$(".effective").click(function(){
+				$(document).bind("click",function(e){     
+					console.log(1,$("#effective").val());
+			        if($(e.target).closest(".effective").length == 0&&$(e.target).closest(".layui-laydate1").length == 0){
+			           	if($("#test-laydate-start").val()==''||$("#test-laydate-end").val()==''){
+							$(".effective").siblings(".prompt").show();
+						}else{
+							$(".effective").siblings(".prompt").hide();
+						}
+			        }
+			    });
+			    $(".laydate-btns-confirm").click(function(){
+			    	if($("#test-laydate-start").val()==''||$("#test-laydate-end").val()==''){
+						$(".effective").siblings(".prompt").show();
+					}else{
+						$(".effective").siblings(".prompt").hide();
+					}
+			    })
+			})
+		</script>
+	</body>
+
+</html>

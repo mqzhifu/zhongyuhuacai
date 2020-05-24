@@ -1,0 +1,215 @@
+<div class="page-sidebar-wrapper">
+    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+    <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+    <div class="page-sidebar md-shadow-z-2-i  navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+        <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+        <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+        <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+        <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+        <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+        <ul class="page-sidebar-menu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+            <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+
+            <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+            <li class="sidebar-search-wrapper">
+                <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+                <!-- DOC: Apply "sidebar-search-bordered" class the below search form to have bordered search box -->
+                <!-- DOC: Apply "sidebar-search-bordered sidebar-search-solid" class the below search form to have bordered & solid search box -->
+                <form class="sidebar-search " action="extra_search.html" method="POST">
+                    <a href="javascript:;" class="remove">
+                        <i class="icon-close"></i>
+                    </a>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+							<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
+							</span>
+                    </div>
+                </form>
+                <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            </li>
+
+            <!--<li>-->
+                <!--<a href="javascript:;">-->
+                    <!--<i class="icon-settings"></i> Item 1 <span class="arrow"></span>-->
+                <!--</a>-->
+                <!--<ul class="sub-menu">-->
+                    <!--<li>-->
+                        <!--<a href="javascript:;">-->
+                            <!--<i class="icon-user"></i>-->
+                            <!--Sample Link 1 <span class="arrow"></span>-->
+                        <!--</a>-->
+                        <!--<ul class="sub-menu">-->
+                            <!--<li>-->
+                                <!--<a href="#"><i class="icon-power"></i> Sample Link 1</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#"><i class="icon-paper-plane"></i> Sample Link 1</a>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<a href="#"><i class="icon-star"></i> Sample Link 1</a>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#"><i class="icon-camera"></i> Sample Link 1</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#"><i class="icon-link"></i> Sample Link 2</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#"><i class="icon-pointer"></i> Sample Link 3</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</li>-->
+
+
+
+            <!--<li>-->
+                <!--<a href="javascript:;">-->
+                    <!--<i class="icon-globe"></i> Item 2 <span class="arrow"></span>-->
+                <!--</a>-->
+                <!--<ul class="sub-menu">-->
+                    <!--<li>-->
+                        <!--<a href="#"><i class="icon-tag"></i> Sample Link 1</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#"><i class="icon-pencil"></i> Sample Link 1</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#"><i class="icon-graph"></i> Sample Link 1</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</li>-->
+
+
+
+
+            {foreach ($menu as $k=>$v)}
+                <li class="{if !$k}start{elseif $k == count($menu) -1 }end{/if} {if ( $this->cate == $v['dir_name']) }active open ms-hover{/if}">
+                    <a href="javascript:;">
+                        <i class="fa {$v['icon']}"></i>
+                        <span class="title">{$v['name']}</span>
+                        <span class="selected"></span>
+                        <span class="arrow open"></span>
+                    </a>
+                    <ul class="sub-menu">
+                        {foreach ($v['sub'] as $k2=>$v2)}
+                            {if arrKeyIssetAndExist($v2,'dir_name')}
+                            <li class="{if ( $this->sub == $v2['dir_name']) }active open ms-hover{/if}">
+                                    <a href="javascript:;">
+                                        <i class="icon-home"></i>
+                                        <span class="title">{$v2['name']}</span>
+                                        <span class="selected"></span>
+                                        <span class="arrow open"></span>
+                                    </a>
+                                    <ul class="sub-menu">
+                                        {foreach ($v2['sub'] as $k3=>$v3)}
+                                            <li >
+                                                <a href="/{$v['dir_name']}/{$v2['dir_name']}/{$v3['ctrl']}/{$v3['ac']}/"><i class="icon-tag"></i>{$v3['name']}</a>
+                                            </li>
+                                        {/foreach}
+
+                                    </ul>
+                            </li>
+                            {else}
+                                <li>
+                                    <a href="/{$v['dir_name']}/no/{$v2['ctrl']}/{$v2['ac']}/">
+                                        <i class="icon-bar-chart"></i>
+                                        {$v2['name']}</a>
+                                </li>
+                            {/if}
+                        {/foreach}
+                    </ul>
+                </li>
+            {/foreach}
+
+
+
+
+
+            <li class="heading">
+                <h3 class="uppercase">华丽分割线</h3>
+            </li>
+
+            <!--<li class="">-->
+                <!--<a href="javascript:;">-->
+                    <!--<i class="icon-docs"></i>-->
+                    <!--<span class="title">日志</span>-->
+                    <!--<span class="arrow "></span>-->
+                <!--</a>-->
+                <!--<ul class="sub-menu">-->
+                    <!--<li>-->
+                        <!--<a href="/logAdmin/index/">-->
+                            <!--管理员</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/logAPI/index/">-->
+                            <!--API接口</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/power/log/login/index/">-->
+                            <!--登陆/登出</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/power/log/playedGames/index/">-->
+                            <!--玩过的游戏</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/logEmail/index/">-->
+                            <!--邮件</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/logSms/index/">-->
+                            <!--短信</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/logGoldcoin/index/">-->
+                            <!--金币</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="//index/">-->
+                            <!--钻石</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/logPoint/index/">-->
+                            <!--积分</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="/logPush/index/">-->
+                            <!--推送PUSH</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="/logShare/index/">-->
+                            <!--分享</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="/logUpgrade/index/">-->
+                            <!--升级</a>-->
+                    <!--</li>-->
+
+                    <!--<li>-->
+                        <!--<a href="/logLottery/index/">-->
+                            <!--抽奖</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="/logChest/index/">-->
+                            <!--宝箱</a>-->
+                    <!--</li>-->
+
+                <!--</ul>-->
+            <!--</li>-->
+
+
+
+
+
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+</div>

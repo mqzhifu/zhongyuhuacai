@@ -1,0 +1,93 @@
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/retrieve.css">
+		<div class="mainBox">
+			<img class="main-head" src="{CONST|H_STATIC_URL}assets/open/img/step3.png" />
+			<div class="mainInner">
+				<dl class="resetDl">
+					<dt>新密码</dt>
+					<dd>
+						<input class="reset-input newP" type="password" /><i class="prompt">请输入新密码</i>
+					</dd>
+					<dt>密码确认</dt>
+					<dd>
+						<input class="reset-input againP" type="password" /><i class="prompt">请输入确认密码</i>
+					</dd>
+				</dl>
+				<div class="btn-clup">
+					<div class="next-step">下一步</div>
+					<div class="prev-step">返回</div>
+				</div>
+			</div>
+			
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<script>
+			$(function(){
+				$(".reset-input").on("blur",function(){
+					$(".newP")
+					if(!$(this).val()){
+						$(this).addClass("empty");
+						$(this).siblings(".prompt").show();
+					}else{
+						$(this).removeClass("empty");
+						$(this).siblings(".prompt").hide();
+					}
+					if($(".newP").val()&&$(".againP").val()){
+						if($(".newP").val()!=$(".againP").val()){
+							$(".againP").siblings(".prompt").text("密码不一致");
+							
+							$(".againP").siblings(".prompt").show();
+						}
+					}
+				});
+				$(".next-step").click(function(){
+					if($(".reset-input").val()==''){
+						$(".reset-input").siblings(".prompt").show();
+					}
+					if($(".prompt").is(":visible")){
+						layer.alert("输入密码有误");
+						return;
+					}
+					var ps = $(".newP").val();
+		            var confirmPs = $(".againP").val();
+		            var upcode = localStorage.getItem("upcode");
+		            if (!upcode) {
+		            	layer.alert("非法访问");
+						return;
+		            }
+		            $.ajax({
+		                type: "POST",
+		                url: "/forgetPs/resetPs/",
+		                data: {ps:ps, confirmPs:confirmPs, upcode:upcode}, 
+		                dataType:'json',
+		                success: function(data){
+		                    if (data.code == 200) {
+		                    	localStorage.removeItem("phone");
+		                    	localStorage.removeItem("upcode");
+		                        location.href="/forgetPs/success/";
+		                    } else {
+		                        layer.alert(data.message);
+		                    }
+		                }
+		            });
+				});
+
+	        	$(".prev-step").click(function(){
+	        		window.history.go(-1);
+	        	});
+				
+			})
+			
+			
+		</script>
+	</body>
+</html>

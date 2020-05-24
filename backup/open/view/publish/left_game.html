@@ -1,0 +1,49 @@
+		<div class="gameManage">
+			<div class="manageHead">
+				<div class="gameSelect dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<img src="{if $gameInfo['icon_256']}{$gameInfo['icon_256']}{else}{CONST|H_STATIC_URL}assets/open/img/default_icon.png{/if}"  /><span>{$gameInfo["name"]}</span>
+				</div>
+				<ul class="dropdown-menu gameSelectUl" aria-labelledby="dropdownMenu">
+				</ul>
+				<div class="game_number">游戏编号：{$gameid}{if $os==1}<a href="/publish/index/os=1">返回安卓游戏列表</a>{/if}{if $os==2}<a href="/publish/index/os=2">返回IOS游戏列表</a>{/if}</div>
+				<div class="clearfix"></div>
+			</div>
+			<ul class="nav-list">
+				<li class="levelLi">
+					<div class="first-level">小游戏<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div>
+					<ul class="second-level">
+						<li {if $this->ctrl == 'publish' && ($this->ac == 'detail'||$this->ac == 'edit')}class="active"{/if} ><a href="/publish/detail/gameid={$gameid}">游戏详情</a></li>
+					</ul>
+				</li>
+				<li class="levelLi">
+					<div class="first-level">广告<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div>
+					<ul class="second-level">
+						<li {if $this->ctrl == 'publish' && ($this->ac == 'Ad'||$this->ac == 'addAd')}class="active"{/if}><a href="/publish/Ad/gameid={$gameid}">广告位管理</a></li>
+						<li {if $this->ctrl == 'publish' && $this->ac == 'income'}class="active"{/if}>
+							<a href="/publish/income/gameid={$gameid}">实际收入</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<script>
+				$(function(){
+					var gameType = {$os};
+					$.ajax({
+			            type: "POST",
+			            url: "/publish/getGames/",
+			            data:{os:gameType},
+			            dataType: "json",
+			            success: function (data) {
+			            	var games= data.data;
+				        	for(var i = 0; i < games.length; i++) {
+								if (games[i].icon_256 == '') {
+									games[i].icon_256 = "{CONST|H_STATIC_URL}assets/open/img/default_icon.png";
+								}
+								var html ='<li><a href="/publish/detail/gameid='+games[i].id+'"><img src="'+games[i].icon_256+'"/><span>'+games[i].name+'</span></a></li>';
+								$(".gameSelectUl").append(html);
+							}
+			            },
+			        });
+				});
+
+			</script>

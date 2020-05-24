@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{if isset($foreign) && $foreign==true}
+			<meta charset="UTF-8">
+			<meta name="description" content="HiFun开放平台">
+			<meta name="keywords" content="HiFun开放平台">
+			<title>HiFun开放平台</title>
+			{$css}
+			<script>
+				var _hmt = _hmt || [];
+				(function() {
+				  var hm = document.createElement("script");
+				  hm.src = "https://hm.baidu.com/hm.js?4f8d551938d97fca2162aca9ae8bbad1";
+				  var s = document.getElementsByTagName("script")[0];
+				  s.parentNode.insertBefore(hm, s);
+				})();
+			</script>
+
+			<!-- Global site tag (gtag.js) - Google Analytics -->
+			<script async src="https://www.googletagmanager.com/gtag/js?id=UA-141215137-1"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('config', 'UA-141215137-1');
+			</script>
+		{else}
+			<meta charset="UTF-8">
+			<meta name="description" content="开心小游戏开放平台,开心平台,kaixin001平台,kaixin api,android开心小游戏,小游戏开放平台,原创游戏,激励游戏,红包游戏,赚钱游戏,双人对战,经典传奇,IO游戏,休闲游戏,卓越的API能力,全新的游戏形态,秒开即玩,多样化的传播场景" />
+			<meta name="keywords" content="开心小游戏开放平台,开心平台,开心小游戏,开心小游戏大全,在线小游戏,单人游戏,单机游戏,双人对战,双人游戏,红包游戏,赚钱小游戏,2019红包,赚钱,好玩游戏,传奇游戏,IO游戏,休闲游戏,卓越的API能力,全新的游戏形态,秒开即玩,多样化的传播场景" />
+			<title>开心小游戏开放平台,开放平台,游戏平台,赚钱平台 - open.kaixin001.com</title>
+			{$css}
+			<script>
+				var _hmt = _hmt || [];
+				(function() {
+					var hm = document.createElement("script");
+					hm.src = "https://hm.baidu.com/hm.js?586c32a626640f1cdfcd00761f52f7a7";
+					var s = document.getElementsByTagName("script")[0];
+					s.parentNode.insertBefore(hm, s);
+				})();
+			</script>
+		{/if}
+	</head>
+	<body>
+		<div class="outBox">
+			<div class="welHead">
+				<div class="welHeader">
+					{if isset($foreign) && $foreign==true}
+					<div class="fl">HiFun · 开放平台</div>
+					{else}
+					<div class="fl">开心小游戏 · 开放平台</div>
+					{/if}
+					{if $this->isLogin()}
+					<div class="linkUl">
+						<a class="active" href="/">首页</a>
+						<a href="/doc/index/">文档资料</a>
+						<a href="/game/show/">游戏管理</a>
+					</div>
+					<div class="fr">
+						<div class="news"><a style="display: block;width: 100%;height: 100%;" href="/notice/index/"></a></div>	
+						<div class="setting"><a style="display: block;width: 100%;height: 100%;" href="/developer/base/"></a></div>
+						<!-- <div class="close"></div> -->
+						<div class="avatar dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-image: url({$avatar});"></div>
+						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				          <li><a href="/game/show/">查看所有游戏</a></li>
+				          <li><a href="/game/show/">添加新游戏</a></li>
+				          <li><a href="/developer/base/">开发者设置</a></li>
+				          <li><a href="/index/logout/">退出登录</a></li>
+				       </ul>
+					</div>
+					{else}
+					<div class="linkUl">
+						<a class="active" href="/">首页</a>
+						<a href="/doc/index/">文档资料</a>
+					</div>
+					{/if}
+				</div>
+			</div>
+			<div class="swiper-container white">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide slideOne">
+						<img class="move movea" src="{CONST|H_STATIC_URL}assets/open/img/triangle.png" />
+						<img class="move moveb" src="{CONST|H_STATIC_URL}assets/open/img/triangle2.png" />
+						<img class="move movec" src="{CONST|H_STATIC_URL}assets/open/img/triangle3.png" />
+						<img class="move moved" src="{CONST|H_STATIC_URL}assets/open/img/triangle4.png" />
+						<img class="move movee" src="{CONST|H_STATIC_URL}assets/open/img/add1.png" />
+						<img class="move movef" src="{CONST|H_STATIC_URL}assets/open/img/add2.png" />
+						<img class="move moveg" src="{CONST|H_STATIC_URL}assets/open/img/disc1.png" />
+						<img class="move moveh" src="{CONST|H_STATIC_URL}assets/open/img/disc2.png" />
+						<img class="move movei" src="{CONST|H_STATIC_URL}assets/open/img/disc3.png" />
+						<img class="move movej" src="{CONST|H_STATIC_URL}assets/open/img/disc4.png" />
+						<img src="{CONST|H_STATIC_URL}assets/open/img/computer.png" class="ani computer" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='0s' />
+						<img src="{CONST|H_STATIC_URL}assets/open/img/hand.png" class="ani hand" swiper-animate-effect='fadeInUpBig' swiper-animate-duration='0.5s'swiper-animate-delay='0.1s' />
+						<img src="{CONST|H_STATIC_URL}assets/open/img/kaixin.png" class="ani kaixin" swiper-animate-effect='fadeIn' swiper-animate-duration='0.5s'swiper-animate-delay='1.2s' />
+						<img src="{CONST|H_STATIC_URL}assets/open/img/column2.png" class="ani column2" swiper-animate-effect='fadeIn' swiper-animate-duration='0.5s'swiper-animate-delay='1.5s' />
+						<img src="{CONST|H_STATIC_URL}assets/open/img/column1.png" class="ani column1" swiper-animate-effect='fadeIn' swiper-animate-duration='0.5s'swiper-animate-delay='2s' />
+						<div class='ani text textOne' swiper-animate-effect='fadeInRight' swiper-animate-duration='0.5s'swiper-animate-delay='0.6s'>卓越的API能力</div>
+						<div class='ani text textTwo' swiper-animate-effect='fadeInRight' swiper-animate-duration='0.5s'swiper-animate-delay='0.7s'>全新的游戏形态</div>
+						<div class='ani text textThree' swiper-animate-effect='fadeInRight' swiper-animate-duration='0.5s'swiper-animate-delay='0.8s'>秒开即玩</div>
+						<div class='ani text textFour' swiper-animate-effect='fadeInRight' swiper-animate-duration='0.5s'swiper-animate-delay='1s'>多样化的传播场景</div>
+						{if $this->isLogin()}
+						<a class="ani logReg" href="/game/show/" swiper-animate-effect='fadeInUp' swiper-animate-duration='0.5s'swiper-animate-delay='1.2s'>立即接入</a>
+						{else}
+						{if isset($foreign) && $foreign==true}
+						<a class="ani logReg" href="/index/thirdLogin/" swiper-animate-effect='fadeInUp' swiper-animate-duration='0.5s'swiper-animate-delay='1.2s'>登录/注册</a>
+						{else}
+						<a class="ani logReg" href="/index/codeLogin/" swiper-animate-effect='fadeInUp' swiper-animate-duration='0.5s'swiper-animate-delay='1.2s'>登录/注册</a>
+						{/if}
+						{/if}
+					</div>
+					<div class="swiper-slide slideTwo">
+						<img class="people" src="{CONST|H_STATIC_URL}assets/open/img/page2bg.png" />
+						<img class="ani flower" src="{CONST|H_STATIC_URL}assets/open/img/flower.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='0s' />
+						<img class="ani saoma" src="{CONST|H_STATIC_URL}assets/open/img/saoma.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='0s' />
+						<img class="ani share" src="{CONST|H_STATIC_URL}assets/open/img/link.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='0.5s' />
+						<img class="ani sett" src="{CONST|H_STATIC_URL}assets/open/img/settings_.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='0.5s' />
+						<img class="ani message" src="{CONST|H_STATIC_URL}assets/open/img/message.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='1s' />
+						<img class="ani api" src="{CONST|H_STATIC_URL}assets/open/img/API.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='1s' />
+						<div class="ani text textTop">卓越的API能力</div>
+						<div class="ani text textBottom">提供帐号、支付、匹配对战、语音聊天、广告等平台服务，确保游戏快速上线，数据公开透明。</div>
+					</div>
+					<div class="swiper-slide slideThree">
+						<img class="bg" src="{CONST|H_STATIC_URL}assets/open/img/page3bg.png"/>
+						<img class="ani imga" src="{CONST|H_STATIC_URL}assets/open/img/tailgas.png" swiper-animate-effect='fadeIn' swiper-animate-duration='0.5s'swiper-animate-delay='0.5s' />
+						<img class="ani imgb" src="{CONST|H_STATIC_URL}assets/open/img/eat.png" swiper-animate-effect='fadeIn' swiper-animate-duration='0.5s'swiper-animate-delay='1s' />
+						<img class="ani imgc" src="{CONST|H_STATIC_URL}assets/open/img/grimace.png" swiper-animate-effect='fadeIn' swiper-animate-duration='0.5s'swiper-animate-delay='1s' />
+						<img class="ani imgd" src="{CONST|H_STATIC_URL}assets/open/img/message3.png" swiper-animate-effect='fadeInLeft' swiper-animate-duration='0.5s'swiper-animate-delay='1.5s' />
+						<img class="ani imge" src="{CONST|H_STATIC_URL}assets/open/img/lock.png" swiper-animate-effect='fadeInLeft' swiper-animate-duration='0.5s'swiper-animate-delay='1.5s' />
+						<img class="ani imgf" src="{CONST|H_STATIC_URL}assets/open/img/chess.png" swiper-animate-effect='fadeInLeft' swiper-animate-duration='0.5s'swiper-animate-delay='1.5s' />
+						<img class="ani imgi" src="{CONST|H_STATIC_URL}assets/open/img/rocket.png" swiper-animate-effect='fadeInUp' swiper-animate-duration='0.5s'swiper-animate-delay='0s' />
+						<img class="ani imgg" src="{CONST|H_STATIC_URL}assets/open/img/lighthouse.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='2s' />
+						<img class="ani imgh" src="{CONST|H_STATIC_URL}assets/open/img/target.png" swiper-animate-effect='bounceIn' swiper-animate-duration='0.5s'swiper-animate-delay='2s' />
+						<img class="ani imgj" src="{CONST|H_STATIC_URL}assets/open/img/message2.png" swiper-animate-effect='fadeInDown' swiper-animate-duration='0.5s'swiper-animate-delay='2s' />
+						<div class="ani text textTop">革命性的产品形态</div>
+						<div class="ani text textBottom">用户无需下载和安装，直接点击即可进入游戏。</div>
+					</div>
+					<div class="swiper-slide slideFour">
+						<img class="bg" src="{CONST|H_STATIC_URL}assets/open/img/page4bg.png"/>
+						<img class="ani imga" src="{CONST|H_STATIC_URL}assets/open/img/family.png" swiper-animate-effect='bounceInDown' swiper-animate-duration='0.7s'swiper-animate-delay='0s'  />
+						<img class="ani imgb" src="{CONST|H_STATIC_URL}assets/open/img/flower2.png" swiper-animate-effect='bounceInDown' swiper-animate-duration='0.7s'swiper-animate-delay='0s'   />
+						<img class="ani imgc" src="{CONST|H_STATIC_URL}assets/open/img/stars.png" swiper-animate-effect='bounceInLeft' swiper-animate-duration='1s'swiper-animate-delay='0.5s'    />						
+						<img class="ani imgd" src="{CONST|H_STATIC_URL}assets/open/img/message4.png" swiper-animate-effect='bounceInRight' swiper-animate-duration='1s'swiper-animate-delay='1s'    />
+						<img class="ani imge" src="{CONST|H_STATIC_URL}assets/open/img/heart.png" swiper-animate-effect='bounceInLeft' swiper-animate-duration='1s'swiper-animate-delay='0.5s'    />
+						<img class="ani imgf" src="{CONST|H_STATIC_URL}assets/open/img/magnifier.png" swiper-animate-effect='bounceInRight' swiper-animate-duration='1s'swiper-animate-delay='1s'    />
+						<div class="ani text textTop">海量的用户群</div>
+						<div class="ani text textBottom">海量用户群基础，提供强大的内容分发能力，多场景入口。</div>
+					</div>
+					<div class="swiper-slide slideFive">
+						<img class="bg" src="{CONST|H_STATIC_URL}assets/open/img/page5bg.png"/>
+						<img class="ani imga" src="{CONST|H_STATIC_URL}assets/open/img/part.png" swiper-animate-effect='fadeInDownBig' swiper-animate-duration='0.7s'swiper-animate-delay='0.7s'  />
+						<img class="ani imgb" src="{CONST|H_STATIC_URL}assets/open/img/star3.png" swiper-animate-effect='bounceInDown' swiper-animate-duration='0.7s'swiper-animate-delay='0.7s'  />
+						<img class="ani imgc" src="{CONST|H_STATIC_URL}assets/open/img/card.png" swiper-animate-effect='fadeInRight' swiper-animate-duration='0.7s'swiper-animate-delay='0s'  />
+						<img class="ani imgd" src="{CONST|H_STATIC_URL}assets/open/img/wrench.png" swiper-animate-effect='fadeInRight' swiper-animate-duration='0.7s'swiper-animate-delay='0s'  />
+						<img class="ani imge" src="{CONST|H_STATIC_URL}assets/open/img/message5.png" swiper-animate-effect='fadeInRight' swiper-animate-duration='0.7s'swiper-animate-delay='1.4s'  />
+						<div class="ani text textTop">更优越的用户体验</div>
+						<div class="ani text textBottom">底层引擎优化、沉浸式状态带来全新体验。</div>
+					</div>
+					<div class="swiper-slide slideSix">
+						<img class="step" src="{CONST|H_STATIC_URL}assets/open/img/step.png" />
+						<div class="textTop">接入流程</div>
+						<div class="textBottom">只需4步，快速创建您的游戏</div>
+						{if $this->isLogin()}
+						<a class="join" href="/game/show/">立即接入</a>
+						{else}
+						{if isset($foreign) && $foreign==true}
+						<a class="join" href="/index/thirdLogin/">立即接入</a>
+						{else}
+						<a class="join" href="/index/codeLogin/">立即接入</a>
+						{/if}
+						{/if}
+						<div class="footer">
+						   	<div class="qq">
+						        开心小游戏开放平台开发者QQ群：511374110
+						    </div>
+						    <div class="copyright">
+						        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+						    </div>
+						</div>
+					</div>
+				</div>
+				<div class="swiper-pagination"></div>
+				<div class="swiper-button-next nextPage"></div>
+			</div>
+			<!--<div class="nextPage"></div>-->
+			{$js}
+		</div>
+	</body>
+</html>

@@ -1,0 +1,371 @@
+<link href="http://{CONST|STATIC_URL}/assets/global/google/font.css" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css"/>
+<!-- END GLOBAL MANDATORY STYLES -->
+<!-- BEGIN THEME STYLES -->
+<link href="http://{CONST|STATIC_URL}/assets/global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/global/css/plugins.css" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
+<link id="style_color" href="http://{CONST|STATIC_URL}/assets/admin/layout/css/themes/darkblue.css" rel="stylesheet" type="text/css"/>
+<link href="http://{CONST|STATIC_URL}/assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
+<!-- END THEME STYLES -->
+<link rel="shortcut icon" href="favicon.ico"/>
+<script>
+    function linechart(id,data) {
+        if ($('#'+id).size() != 1) {
+            return;
+        }
+
+
+        var newdata = new Array();
+        for(var i = 0; i < data.length; i++){
+            newdata.push({
+                data: data[i].data,
+                label: data[i].label,
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0,
+            });
+        }
+
+        var plot = $.plot($("#"+id), newdata, {
+            series: {
+                lines: {
+                    show: true,
+                    lineWidth: 2,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.05
+                        }, {
+                            opacity: 0.01
+                        }]
+                    }
+                },
+                points: {
+                    show: true,
+                    radius: 3,
+                    lineWidth: 1
+                },
+                shadowSize: 2
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                tickColor: "#eee",
+                borderColor: "#eee",
+                borderWidth: 1
+            },
+            colors: ["#d12610", "#37b7f3", "#52e136"],
+            xaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            },
+            yaxis: {
+                ticks: 11,
+                tickDecimals: 0,
+                tickColor: "#eee",
+            }
+        });
+
+
+        function showTooltip(x, y, contents) {
+            $('<div id="tooltip">' + contents + '</div>').css({
+                position: 'absolute',
+                display: 'none',
+                top: y + 5,
+                left: x + 15,
+                border: '1px solid #333',
+                padding: '4px',
+                color: '#fff',
+                'border-radius': '3px',
+                'background-color': '#333',
+                opacity: 0.80
+            }).appendTo("body").fadeIn(200);
+        }
+
+        var previousPoint = null;
+        $("#"+id).bind("plothover", function(event, pos, item) {
+            $("#x").text(pos.x.toFixed(2));
+            $("#y").text(pos.y.toFixed(2));
+
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2),
+                        y = item.datapoint[1].toFixed(2);
+
+                    showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
+    }
+</script>
+<script>
+
+    jQuery(document).ready(function() {
+        // initiate layout and plugins
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        QuickSidebar.init(); // init quick sidebar
+        Demo.init(); // init demo features
+
+        /*$.ajax({
+            url:"/platform/no/datatotal/getGameActiveRank/",
+            type:"post",
+            dataType:"json",
+            success: function(data){
+                $('#active_rank_tb tbody').html("");
+                for (var i = 0; i <= data.data.length; i++) {
+                    $('#active_rank_tb tbody').append("<tr><td>"+(i+1)+"</td><td>"+data.data[i][0]+"</td><td>"+data.data[i][1]+"</td><td>"+data.data[i][2]+"</td></tr>");
+                }
+            }
+        });*/
+
+        function randValue() {
+            return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+        }
+
+        var pageviews = [
+            ["1", "1"],
+            ["2", randValue()],
+            ["3", 2 + randValue()],
+            ["4", 3 + randValue()],
+            ["5", 5 + randValue()],
+            ["6", 10 + randValue()],
+            ["7", 15 + randValue()],
+            ["8", 20 + randValue()],
+            ["9", 25 + randValue()],
+            ["10", 30 + randValue()],
+            ["11", 35 + randValue()],
+            ["12", 25 + randValue()],
+            ["13", 15 + randValue()],
+            ["14", 20 + randValue()],
+            ["15", 45 + randValue()],
+            ["16", 50 + randValue()],
+            ["17", 65 + randValue()],
+            ["18", 70 + randValue()],
+            ["19", 85 + randValue()],
+            ["20", 80 + randValue()],
+            ["21", 75 + randValue()],
+            ["22", 80 + randValue()],
+            ["23", 75 + randValue()],
+            ["24", 70 + randValue()],
+            ["25", 65 + randValue()],
+            ["26", 75 + randValue()],
+            ["27", 80 + randValue()],
+            ["28", 85 + randValue()],
+            ["29", 90 + randValue()],
+            ["30", 95 + randValue()]
+        ];
+
+        var testObj = [
+            {
+                data: pageviews,
+                label: "浏览量（PV）",
+            },
+        ];
+
+
+
+
+        // linechart("chart_2", testObj);
+        // linechart("chart_3", testObj);
+        linechart("open_week_active_linechart", testObj);
+        // linechart("open_month_active_linechart", testObj);
+        linechart("game_week_add_linechart", testObj);
+        linechart("game_month_add_linechart", testObj);
+        linechart("game_week_active_linechart", testObj);
+        linechart("game_month_active_linechart", testObj);
+        linechart("buy_week_flow_linechart", testObj);
+        linechart("buy_month_flow_linechart", testObj);
+        linechart("ad_week_flow_linechart", testObj);
+        linechart("ad_month_flow_linechart", testObj);
+        // linechart("active_linechart", testObj);
+        linechart("add_linechart", testObj);
+        linechart("rechargeable_linechart", testObj);
+
+
+    });
+</script>
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+<div class="page-container">
+    {include layout/left.html}
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body">
+                        <h4>历史趋势</h4><br><br>
+                        <div class="portlet light">
+                            <div class="portlet-title tabbable-line">
+                                <ul class="nav nav-tabs" style="float: left;">
+                                    <li class="">
+                                        <a href="" data-toggle="tab">
+                                            关键指标详解 </a>
+                                    </li>
+                                    <li class="active">
+                                        <a href="#tab2_1_1" data-toggle="tab">
+                                            浏览量（PV）</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab2_1_2" data-toggle="tab">
+                                            独立用户PV（UV） </a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab2_1_3" data-toggle="tab">
+                                            访问次数（VV）</a>
+                                    </li>
+                                    <li>
+                                        <a href="#tab2_1_4" data-toggle="tab">
+                                            独立</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="portlet-body">
+                                <!--BEGIN TABS-->
+                                <div class="tab-content">
+                                    <!--第一个框浏览量-->
+                                    <div class="tab-pane active" id="tab2_1_1">
+                                        <div class="col-md-8">
+                                            <div id="active_linechart" class="chart">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="portlet-body">
+                                                <div id="active_piechart" class="chart" style="height: 525px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--第二个框独立用户-->
+                                    <div class="tab-pane" id="tab2_1_2">
+                                        <div class="col-md-8">
+                                            <div id="add_linechart" class="chart">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="portlet-body">
+                                                <div id="add_piechart" class="chart" style="height: 525px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--第三个框访问次数-->
+                                    <div class="tab-pane" id="tab2_1_3">
+                                        <div class="col-md-8">
+                                            <div id="aa" class="chart">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="portlet-body">
+                                                <div id="" class="chart" style="height: 525px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--第四个框IP-->
+                                    <div class="tab-pane" id="tab2_1_4">
+                                        <div class="col-md-8">
+                                            <div id="rechargeable_linechart" class="chart">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="portlet-body">
+                                                <div id="rechargeable_piechart" class="chart" style="height: 525px;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--END TABS-->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $.ajax({
+        url:"/app_cnt/no/area/getGameActiveLine/",
+        type:"post",
+        data:$(this).serialize(),
+        dataType:"json",
+        success: function(data){
+            linechart("active_linechart", data.data);
+        }
+    });
+
+</script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+<!-- IMPORTANT! Load jquery-ui.min.js before bootstrap.min.js to fix bootstrap tooltip conflict with jquery ui tooltip -->
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script type="text/javascript" src="http://{CONST|STATIC_URL}/assets/global/plugins/select2/select2.min.js"></script>
+<script type="text/javascript" src="http://{CONST|STATIC_URL}/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="http://{CONST|STATIC_URL}/assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js"></script>
+<script type="text/javascript" src="http://{CONST|STATIC_URL}/assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js"></script>
+<script type="text/javascript" src="http://{CONST|STATIC_URL}/assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js"></script>
+<script type="text/javascript" src="http://{CONST|STATIC_URL}/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="http://{CONST|STATIC_URL}/assets/global/scripts/metronic.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/admin/layout/scripts/layout.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/admin/layout/scripts/quick-sidebar.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/admin/layout/scripts/demo.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/admin/pages/scripts/table-advanced.js"></script>
+
+
+
+
+<!-- END CORE PLUGINS -->
+<!-- BEGIN PAGE LEVEL PLUGINS -->
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amcharts/amcharts.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amcharts/serial.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amcharts/pie.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amcharts/radar.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amcharts/themes/light.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amcharts/themes/patterns.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amcharts/themes/chalk.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/ammap/ammap.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/ammap/maps/js/worldLow.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/amcharts/amstockcharts/amstock.js" type="text/javascript"></script>
+<!-- END PAGE LEVEL PLUGINS -->
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="http://{CONST|STATIC_URL}/assets/admin/pages/scripts/charts-amcharts.js"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/flot/jquery.flot.min.js"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/flot/jquery.flot.resize.min.js"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/flot/jquery.flot.pie.min.js"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/flot/jquery.flot.stack.min.js"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/flot/jquery.flot.crosshair.min.js"></script>
+<script src="http://{CONST|STATIC_URL}/assets/global/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
+<script src="http://{CONST|STATIC_URL}/assets/admin/pages/scripts/charts-flotcharts.js"></script>

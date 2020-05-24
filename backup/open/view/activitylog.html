@@ -1,0 +1,104 @@
+{include /layout/left_game.html}
+
+			<div class="iframeBox">
+				<div class="section">
+					<div class="title">活动日志</div>
+					<div class="grandTotal">
+						<table class="table">
+						</table>
+						<div class="page">
+							<em class="prevpage"></em><span class="indexPage">1</span> / <span class="allPage">3</span><em class="nextpage"></em>
+							<input class="pageInput" type="text" /> 
+							<button class="pageRun">跳转</button>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+			<div class="qq">
+				开心小游戏开放平台开发者QQ群：511374110
+			</div>
+			<div class="company">
+				北京开心人信息技术有限公司
+			</div>
+			<div class="copyright">
+				文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+			</div>
+		</div>
+		<script>
+			var totalPage = 0;
+			var gameid = {$gameid};
+			$(function() {
+				/*菜单*/
+				$(".first-level").click(function() {
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true, false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function() {
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+
+				$(".nextpage").click(function(){
+					var page = parseInt($(".indexPage").html())+1;
+					if (page > totalPage) {
+						return;
+					}
+					$(".indexPage").html(page);
+					loadTable(page);
+
+				});
+
+				$(".prevpage").click(function(){
+					var page = $(".indexPage").html()-1;
+					if (page < 1) {
+						return;
+					}
+					$(".indexPage").html(page);
+					loadTable(page);
+				});
+
+				$(".pageRun").click(function(){
+					var page = $(".pageInput").val();
+					if (page > totalPage) {
+						page = totalPage;
+					} else if (page < 1) {
+						page = 1;
+					}
+					$(".indexPage").html(page);
+					loadTable(page);
+				});
+
+				loadTable(1);
+			})
+
+			function loadTable(page) {
+				$.ajax({
+	                url: "/activityLog/getLogs/",
+	                type: "GET",
+	                data: {gameid:gameid,page:page},
+	                dataType:"json",
+	                success: function (data) {
+	                	totalPage = data.data.totalPage;
+	                	if (totalPage == 0) {
+	                		totalPage = 1;
+	                	}
+	                	$(".allPage").html(totalPage);
+
+	                	var logs = data.data.logs;
+			        	var html = '<tr class="TH"> <th>UID</th> <th>操作人</th> <th>操作内容</th> <th>时间</th> </tr>';
+			        	for (var i = 0; i < logs.length; i++) {
+			        		html += '<tr class="Td">  <td>'+logs[i].uid+'</td> <td>'+logs[i].nickname+'</td> <td>'+logs[i].desc+'</td> <td>'+logs[i].a_time+'</td></tr>';
+			        	}
+			        	$(".table").html(html);
+	                }
+	            });
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,50 @@
+<?php
+$db_config =  array(
+    'instantplay'=>
+        array(
+            'type'=>'mysql',
+            'timeout'=>30,
+            'persistence'=>true,
+            'masterSlave'=>true,
+            'master'=>array(
+                'host'=>'10.10.7.144',
+                'user'=>'games',
+                'pwd'=>'pu6zMh2CQ55Qxyx',
+                'port'=>'3306',
+                'db_name'=>'kxgame',
+                'db_preifx'=>'',
+                'char'=>'utf8',
+            ),
+            'slave'=>array(
+                'host'=>'10.10.7.144',
+                'user'=>'games',
+                'pwd'=>'pu6zMh2CQ55Qxyx',
+                'port'=>'3306',
+                'db_name'=>'kxgame',
+                'db_preifx'=>'',
+                'char'=>'utf8',
+            ),
+        ),
+    'kxgame_log'=>
+        array(
+            'master'=>array(
+                'host'=>'10.10.7.144',
+                'user'=>'games',
+                'pwd'=>'pu6zMh2CQ55Qxyx',
+                'port'=>'3306',
+                'db_name'=>'kxgame_log',
+                'db_preifx'=>'',
+                'char'=>'utf8',
+            ),
+            'slave'=>array(
+                'host'=>'10.10.7.144',
+                'user'=>'games',
+                'pwd'=>'pu6zMh2CQ55Qxyx',
+                'port'=>'3306',
+                'db_name'=>'kxgame_log',
+                'db_preifx'=>'',
+                'char'=>'utf8',
+            ),
+        ),
+);
+$GLOBALS['db_config'] = $db_config;

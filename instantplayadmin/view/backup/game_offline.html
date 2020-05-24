@@ -1,0 +1,587 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <!-- <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-share"></i> 导出 <i class="fa fa-angle-down"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="export_data();">
+                                                Excel </a>
+                                        </li>
+                                        <li class="divider">
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                PDF </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                WORD </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <span>
+                                    </span>
+                                    <select class="table-group-action-input form-control input-inline input-small input-sm">
+                                        <option value="">选择</option>
+                                        <!--<option value="delete">批量删除</option>-->
+                                    </select>
+                                    <!--<button class="btn btn-sm yellow table-group-action-submit"><i class="fa fa-check"></i> 提交</button>-->
+                                    <!--<button type="button" class="btn btn-sm btn-warning" onclick="all_del();">全删除</button>-->
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <!-- <th width="2%">
+                                            <input type="checkbox" class="group-checkable">
+                                        </th> -->
+                                        <th width="3%">
+                                            游戏ID
+                                        </th>
+                                        <th width="3%">
+                                            版本号
+                                        </th>
+                                        <th width="3%">
+                                            排序
+                                        </th>
+
+                                        <th width="3%">
+                                            游戏
+                                        </th>
+
+                                        <th width="3%">
+                                            分类
+                                        </th>
+
+                                        <th width="3%">
+                                            状态
+                                        </th>
+
+                                        <th width="3%">
+                                            类型
+                                        </th>
+
+                                        <th width="3%">
+                                            开发者名称
+                                        </th>
+
+                                        <th width="3%">
+                                            联系人
+                                        </th>
+
+                                        <th width="3%">
+                                            联系电话
+                                        </th>
+
+                                        <th width="3%">
+                                            软著备案
+                                        </th>
+
+                                        <th width="3%">
+                                            证件信息
+                                        </th>
+                                        
+                                        <th width="8%">
+                                            添加时间
+                                        </th>
+
+                                        <th width="8%">
+                                            更新时间
+                                        </th>
+
+                                        <th width="3%">
+                                            商品ID
+                                        </th>
+
+                                        <th width="3%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="game_id" >
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="name" >
+                                        </td>
+                                        <td>
+                                        </td>
+                                        
+                                        
+                                        <td></td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="type"" >
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="contact" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="phone" >
+                                        </td>
+                                        <td></td>
+
+                                        <td></td>
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="a_time_from" id="a_time_from" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="a_time_to" id="a_time_to" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="u_time_from" id="a_time_from" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="u_time_to" id="a_time_to" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        
+                                        <td></td>
+                                        <td>
+                                            <div class="margin-bottom-5">
+                                                <button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> 搜索</button>
+                                            </div>
+                                            <button class="btn btn-sm green filter-cancel"><i class="fa fa-times"></i> 重置</button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<!-- 彈窗 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content" style="width: 800px">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="myModalLabel">游戏名称</h4>
+                </div>
+                <div class="modal-body"  style="width: 800px;margin-left: 20px">
+                    <input id="btn-set" type="button" style="background:#FFFFFF;" name="" value="
+基本设置" />
+                    <input id="btn-img" type="button" style="background:#FFFFFF;" name="" value="
+图片资源" />
+                    <input id="btn-quality" type="button" style="background:#FFFFFF;" name="" value="资质信息" />
+                    <br/>
+                    <br/>
+                <!-- 基本设置 -->
+                <div id="base-set" style="margin-left: 20px">
+                    <div>
+                        <span>游戏ID</span><span class="game_id" style="margin-left: 20px"></span>
+                        <span style="margin-left: 20px">游戏KEY</span><span class="game_key" style="margin-left: 20px"></span>
+                    </div>
+                    <hr style="width: 700px;">
+                    <div>
+                        <span>游戏名称</span><span class="game_name"style="margin-left: 20px"></span>
+                        <span style="margin-left: 20px">屏幕方向</span><span class="screen" style="margin-left: 20px"></span>
+
+                    </div>
+                    <hr style="width: 700px;">
+                    <div>
+                        <span>简介</span><span class="intro" style="margin-left: 20px"></span>
+                        
+                    </div>
+                    <hr style="width: 700px;">
+                    <div>
+                        <span>状态</span><span style="margin-left: 20px">
+                            <!-- <select  class="status" name="">
+                                <option value="">{$a}</option>
+                                <option value="">dsdsds</option>
+                                {if isset($onlineDesc)}
+                                    {foreach ($onlineDesc as $k=>$v)}
+                                        <option value="{$k}">{$v}</option>
+                                    {/foreach}
+                                {/if}
+                            </select> -->
+                            <select name="status" class="status">
+                                {if isset($onlineDesc)}
+                                    {foreach ($onlineDesc as $k=>$v)}
+                                        <option value="{$k}">{$v}</option>
+                                    {/foreach}
+                                {/if}
+                            </select>
+                        </span>
+                        <span style="margin-left: 70px">在app隐藏(针对游戏)</span><span style="margin-left: 20px">
+                            <select name="hide" class="hide1">
+                                {if isset($hideDesc)}
+                                    {foreach ($hideDesc as $k=>$v)}
+                                        <option value="{$k}">{$v}</option>
+                                    {/foreach}
+                                {/if}
+                            </select>
+                        </span>
+                    </div>
+                    <hr style="width: 700px;">
+                    <div style="background-color: beige;width: 300px;height: 40px">
+                        <span>版本更新内容：</span><span id = "game_updates" class="" style="margin-left: 5px"></span>
+                    </div>
+                </div>
+                <!-- 图片资源 -->
+                <div id="img-src" style="display: none;">
+                    <div class="gutter-box">
+                        <Card bordered={false}>
+                            <div class="img-secs row">
+                                <div class="img-sec col-md-4">
+                                    <div class="img-title">应用图标 (256 x 256)</div>
+                                    <label for="icon_256" id="icon_256_label" style="margin-right: 75px;">
+                                        <img id="icon_256_preview" class="img-i1-1"
+                                        >
+                                        <div id="background_color_1" class="img-i1-2"></div>
+                                    </label>
+                                    
+                                </div>
+                                <div class="img-sec col-md-4">
+                                    <div class="img-title">应用图标 (128 x 128)</div>
+                                    <label for="icon_128" id="icon_128_label" style="margin-right: 75px;">
+                                        <img id="icon_128_preview" class="img-i2-1"
+                                        >
+                                    </label>
+                                </div>
+                                <div class="img-sec col-md-4">
+                                    <div class="img-title">游戏启动页</div>
+                                    <label for="startup" id="startup_label", style="margin-right: 75px;">
+                                        <img id="startup_preview" class="img-i3-1"
+                                        >
+                                    </label>
+                                </div>
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+                <!-- 资质信息 -->
+                <div id="qualification-info" style="display: none;">
+                    <div class="gutter-box">
+                        <Card bordered={false}>
+                            <div class="img-secs row">
+                                <div class="img-sec col-md-4">
+                                    <div class="img-title">营业执照</div>
+                                    <label for="icon_128" id="icon_128_label" style="margin-right: 75px;">
+                                        <img id="business_preview" class="img-i2-1"
+                                        >
+                                    </label>
+                                </div>
+                                <div class="img-sec col-md-4">
+                                    <div class="img-title">法人身份证</div>
+                                    <label for="icon_128" id="icon_128_label" style="margin-right: 75px;">
+                                        <img id="idcard_preview" class="img-i2-1"
+                                        >
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="img-secs row">
+                                <div class="img-sec col-md-4" style="display: inline-block;">
+                                    <div class="img-title">软著</div>
+                                    <label for="icon_128" id="icon_128_label" style="margin-right: 75px;">
+                                        <img id="copyright_preview" class="img-i2-1"
+                                        >
+                                    </label>
+                                </div>
+                                <div class="img-sec col-md-4" style="display: inline-block;">
+                                    <div class="img-title">授权书（选填）</div>
+                                    <label for="icon_128" id="icon_128_label" style="margin-right: 75px;">
+                                        <img id="authorization_preview" class="img-i2-1"
+                                        >
+                                    </label>
+                                </div>
+                                
+                            </div>
+                        </Card>
+                    </div>
+                </div>
+                  
+                  
+                </div>
+                <div class="modal-footer-diy" align="center">
+                  <button type="button" class="undo" data-dismiss="modal">取消</button>
+                  <button type="button" class="save" >保存修改</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+<script>
+
+    var currentId = 0;
+    var currentGameId = 0;
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/game/no/game/getOffline/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : [ 1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+                    }],
+                    "order": [
+                        [0, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                        function(){
+                            ids += ($(this).val())+",";
+                        }
+                    );
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/?ac=delBat&ids="+ids ,
+                        dataType: 'json',
+                        success: function(data){
+                            grid.setAjaxParam("customActionType", "group_action");
+                            grid.setAjaxParam("customActionName", action.val());
+                            grid.setAjaxParam("id", grid.getSelectedRows());
+                            grid.getDataTable().ajax.reload();
+                            grid.clearAjaxParams();
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+        $('#btn-set').click(function(){
+            $('#base-set').show();
+            $('#img-src').hide();
+            $('#qualification-info').hide();
+        });
+        $('#btn-img').click(function(){
+            $('#img-src').show();
+            $('#base-set').hide();
+            $('#qualification-info').hide();
+        });
+        $('#btn-quality').click(function(){
+            $('#qualification-info').show();
+            $('#img-src').hide();
+            $('#base-set').hide();
+        });
+
+        $('.save').click(function(){
+            var formData = new FormData();
+            formData.append('status', $('.status').val());
+            formData.append('operationType', '2');
+            formData.append('id', currentId);
+            formData.append('gameid', currentGameId);
+
+            formData.append('hide', $('.hide1').val());
+            $.ajax({
+                url:'/game/no/game/save/',
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        $('.undo').click();
+                        location.reload();
+                    }
+                },
+
+            });
+        });
+    });
+
+    function getDetail(obj){
+        var id = obj.getAttribute('data-id');
+        var gameid = obj.getAttribute('game-id');
+        if(id !== undefined){
+            currentId = id;
+            currentGameId = gameid;
+            $.ajax({
+                url:"/game/no/game/getDetails/",
+                type:"post",
+                data:{
+                    id:id,
+                    gameid:gameid,
+                },
+                dataType:"json",
+                success:function(data){
+                    if(data.code == 200){
+                        $('.game_id').text(data.data.game_id);
+                        $('.game_key').text(data.data.game_key);
+                        $('.game_name').text(data.data.game_name);
+                        $('.screen').text(data.data.game_screen);
+                        $('.intro').text(data.data.game_intro);
+                        // $('.status').text(data.data.status);
+                        $('.status').val(data.data.status);
+                        // $('.updates').attr('value', data.data.game_updates);
+                        $('#game_updates').text(data.data.game_updates);
+                        $('#icon_256_preview').attr('src', data.data.icon_256);
+                        $('#icon_128_preview').attr('src', data.data.icon_128);
+                        $('#startup_preview').attr('src', data.data.startup);
+                        $('#business_preview').attr('src', data.data.business);
+                        $('#idcard_preview').attr('src', data.data.idcard_img);
+                        $('#authorization_preview').attr('src', data.data.authorization);
+                        $('#copyright_preview').attr('src', data.data.soft_copyright);
+
+                        var color = data.data.background_color;
+                        if (color) {
+                            $('#background_color_1').attr('style', "background-color:"+color);
+                        }
+
+                        $('.hide1').val(data.data.hide);
+                        $('#myModal').modal();
+                    }
+                }
+            });
+        }
+    }
+
+
+
+    if (!jQuery().datetimepicker) {
+        alert("error:333");
+    }
+
+    $(".form_datetime").datetimepicker({
+        minView: "month",
+        isRTL: Metronic.isRTL(),
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+
+</script>

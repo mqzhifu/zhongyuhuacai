@@ -1,0 +1,17 @@
+		<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/gameAndroid.css" />
+		<div class="gameManage">
+			<ul class="nav-list">
+				<li class="levelLi">
+					<div class="first-level"><img class="level-icon" src="{CONST|H_STATIC_URL}assets/open/img/game_manage.png" />管理列表<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div>
+					<ul class="second-level">
+						<li {if $this->ctrl == 'publish' && $this->ac == 'index'}class="active"{/if} ><a href="/publish/index/os={$os}">{if $os==1}安卓{/if}{if $os==2}IOS{/if}游戏列表</a></li>
+						<li {if $this->ctrl == 'publish' && $this->ac == 'summary'}class="active"{/if} ><a href="/publish/summary/os={$os}">实际收入汇总</a></li>
+					</ul>
+				</li>
+				<li class="levelLi">
+					<div class="first-level"><img class="level-icon" src="{CONST|H_STATIC_URL}assets/open/img/account.png" />账号设置<img class="level-click up" src="{CONST|H_STATIC_URL}assets/open/img/select-red.png" /></div>
+					<ul class="second-level">
+						<li><a href="/developer/base/">开发者资料</a></li>
+					</ul>
+				</li>
+			</ul>

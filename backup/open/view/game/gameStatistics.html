@@ -1,0 +1,1047 @@
+{include /layout/left_game.html}
+			<link rel="stylesheet" href="{CONST|H_STATIC_URL}assets/open/css/gameStatistics.css" />
+			<div class="iframeBox">
+				<ul class="statisticsTitle">
+					<li class="active">概括</li>
+					<li>实时统计</li>
+					<li>访问分析</li>
+					<li>收入分析</li>
+					<!-- <li>用户画像</li> -->
+				</ul>
+				<div class="statisticsBody">
+					<div class="statisticsLi general active">
+						<div class="lastDay">
+							<div class="title">昨日概况</div>
+							<ul class="lastDayUl">
+								<li>
+									<p class="lastDayTitle">累计注册用户数</p>
+									<p id="accumulate_reg_lastDay" class="lastDayNum"></p>
+									<span class="day">日<em id="increase_rate_day"></em></span>
+									<span class="week">周<em id="increase_rate_week"></em></span>
+									<span class="month">月<em id="increase_rate_month"></em></span>
+								</li>
+								<li>
+									<p class="lastDayTitle">活跃用户数</p>
+									<p id="active_user_lastDay" class="lastDayNum"></p>
+									<span class="day">日<em id="increase_rate_day2"></em></span>
+									<span class="week">周<em id="increase_rate_week2"></em></span>
+									<span class="month">月<em id="increase_rate_month2"></em></span>
+								</li>
+								<li>
+									<p class="lastDayTitle">新增注册用户数</p>
+									<p id="reg_lastDay" class="lastDayNum"></p>
+									<span class="day">日<em id="increase_rate_day3"></em></span>
+									<span class="week">周<em id="increase_rate_week3"></em></span>
+									<span class="month">月<em id="increase_rate_month3"></em></span>
+								</li>
+								<li>
+									<p class="lastDayTitle">人均停留时长</p>
+									<p id="online_time_lastDay" class="lastDayNum"></p>
+									<span class="day">日<em id="increase_rate_day4"></em></span>
+									<span class="week">周<em id="increase_rate_week4"></em></span>
+									<span class="month">月<em id="increase_rate_month4"></em></span>
+								</li>
+							</ul>
+						</div>
+						<div class="section">
+							<div class="title">近30天访问趋势</div>
+							<select id="visitselect" class="activeUser">
+								{foreach ($visitSelection30 as $k=>$v) }
+								<option value="{$k}">{$v}</option>
+								{/foreach}
+							</select>
+							<div id="general" style="width: 940px;height:400px;"></div>
+							<!-- <p id="summary_line1_echartName" class="echartName"><i></i>2019-01-21至2019-02-19活跃用户</p> -->
+						</div>
+						<div class="section">
+							<div class="title">近30天收入趋势</div>
+							<select id="incomeselect" class="activeUser">
+								{foreach ($incomeSelection30 as $k=>$v) }
+								<option value="{$k}">{$v}</option>
+								{/foreach}
+							</select>
+							<div id="general2" style="width: 940px;height:400px;"></div>
+							<!-- <p id="summary_line2_echartName" class="echartName"><i></i>2019-01-21至2019-02-19单日总收入</p> -->
+						</div>
+					</div>
+					<div class="statisticsLi realtime">
+						<div class="section">
+							<div class="title">实时趋势</div>
+							<select id="realtime_dateType" class="activeUser laydate1">
+								<option value="1">最近24小时</option>
+								<option value="0">自定义</option>
+							</select>
+							<div class="dateInterval">
+								<input class="laydateInput" id="realtime_from" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="realtime_to" type="text" placeholder="结束时间" />
+								<span id="realtime_searchBtn" class="searchBtn">搜索</span>
+							</div>
+							<em class="granularity">时间粒度</em>
+							<select id="realtime_granularity" class="activeUser">
+								<option value="1">1小时</option>
+								<option value="2">5分钟</option>
+							</select>
+							<div id="realtime" style="width: 940px;height:400px;"></div>
+							<!-- <p id="realtime_line_echartName" class="echartName"><i></i>12时至13时 实时访问次数</p> -->
+						</div>
+					</div>
+					<div class="statisticsLi access">
+						<div class="section">
+							<select id="visit_line_type" class="activeUser">
+								{foreach ($visitLineDesc as $k=>$v)}
+									<option value="{$k}">{$v}</option>
+								{/foreach}
+								<!-- <option>累计注册用户数</option>
+								<option>活跃用户数</option>
+								<option>访问次数</option>
+								<option>新增注册用户数</option>
+								<option>人均停留时长</option>
+								<option>分享次数</option>
+								<option>分享用户数</option> -->
+							</select>
+							<select id="visit_line_dateType" class="activeUser laydate2">
+								<option value="2">最近7天</option>
+								<option value="1">最近30天</option>
+								<option value="3">自定义</option>
+							</select>
+							<div class="dateInterval">
+								<input class="laydateInput" id="visit_line_from" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="visit_line_to" type="text" placeholder="结束时间" />
+								<span id="visit_line_searchBtn" class="searchBtn">搜索</span>
+							</div>
+<!--							<button class="activeUser" style="float: right;margin-right: 40px;">按时间对比</button>-->
+							<div id="total" style="width: 940px;height:400px;"></div>
+							<!-- <p id="visit_line1_echartName" class="echartName"><i></i>2019-01-21至2019-02-19累计注册用户数</p> -->
+						</div>
+						<div class="grandTotal">
+							<table id="visit_t1" class="table">
+								<tr> <th>日期</th> <th>累计注册用户数</th> <th>活跃用户数</th> <th>访问次数</th> <th>新增注册用户数</th> <th>人均停留时长</th> <th>分享次数</th> <th>分享用户数</th> </tr>
+
+							</table>
+							<div class="page">
+							<em id="prevpage_visit_t1" class="prevpage"></em><span id="indexPage_visit_t1" class="indexPage">1</span> / <span id="allPage_visit_t1" class="allPage">1</span><em id="nextpage_visit_t1" class="nextpage"></em>
+							<input id="pageInput_visit_t1" class="pageInput" type="text" /> 
+							<button id="pageRun_visit_t1" class="pageRun">跳转</button>
+							</div>
+						</div>
+						<!-- <div class="section">
+							<div class="title">新增注册用户数</div>
+							<select id="visit_new_reg_date_type" class="activeUser laydate3">
+								<option value="4">昨日</option>
+								<option value="2">上周</option>
+								<option value="1">上月</option>
+								<option value="3">自定义</option>
+							</select>
+							<div class="dateInterval">
+								<input class="laydateInput" id="visit_new_reg_from" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="visit_new_reg_to" type="text" placeholder="结束时间" />
+								<span id="visit_new_reg_searchBtn" class="searchBtn">搜索</span>
+							</div>
+							<div id="pieAdd" style="width: 940px;height:400px;"></div>
+							<p class="echartName">访问来源</p>
+						</div> -->
+						<div class="section">
+							<div class="title">新增用户留存</div>
+							<select id="visit_line2_dateType" class="activeUser laydate4">
+								<option value="2">最近7天</option>
+								<option value="1">最近30天</option>
+								<option value="3">自定义</option>
+							</select>
+							<div class="dateInterval">
+								<input class="laydateInput" id="visit_line2_from" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="visit_line2_to" type="text" placeholder="结束时间" />
+								<span id="visit_line2_searchBtn" class="searchBtn">搜索</span>
+							</div>
+							<em class="granularity">留存</em>
+							<select id="visit_line2_granularity" class="activeUser">
+								<option value="1">次日留存</option>
+								<option value="3">三日留存</option>
+								<option value="7">七日留存</option>
+							</select>
+							<!--<button class="activeUser" style="float: right;margin-right: 40px;">按时间对比</button>-->
+							<div id="newUser" style="width: 940px;height:400px;"></div>
+							<!-- <p id="visit_line2_echartName" class="echartName"><i></i>2019-01-21至2019-02-19新增用户留存</p> -->
+						</div>
+						<div class="grandTotal">
+							<table id="visit_t2" class="table">
+								<tr> <th>日期</th> <th>活跃用户数</th> <th>新增注册用户数</th> <th>七日留存率</th></tr>
+
+								
+							</table>
+							<div class="page">
+							<em id="prevpage_visit_t2" class="prevpage"></em><span id="indexPage_visit_t2" class="indexPage">1</span> / <span id="allPage_visit_t2" class="allPage">1</span><em id="nextpage_visit_t2" class="nextpage"></em>
+							<input id="pageInput_visit_t2" class="pageInput" type="text" /> 
+							<button id="pageRun_visit_t2" class="pageRun">跳转</button>
+							</div>
+						</div>
+					</div>
+					<div class="statisticsLi income">
+						<div class="section">
+							<select id="income_line_type" class="activeUser">
+								<option value="1">单日总收入</option>
+								<option value="2">累计总收入</option>
+								<option value="3">付费用户数</option>
+								<option value="4">抽次付费用户数</option>
+								<option value="5">渗透率</option>
+								<option value="6">平均付费用户收入</option>
+								<option value="7">平均用户输入</option>
+								<option value="8">首付占比</option>
+							</select>
+							<select id="income_line_ostype" class="activeUser">
+								<option value="0">全部</option>
+								<option value="1">安卓</option>
+								<option value="2">IOS</option>
+							</select>
+							<select id="income_line_datetype" class="activeUser laydate5">
+								<option value="2">最近7天</option>
+								<option value="1">最近30天</option>
+								<option value="3">自定义</option>
+							</select>
+							<div class="dateInterval">
+								<input class="laydateInput" id="income_line_from" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="income_line_to" type="text" placeholder="结束时间" />
+								<span id="income_line_searchBtn" class="searchBtn">搜索</span>
+
+							</div>
+							<!--<button class="activeUser" style="float: right;margin-right: 40px;">按时间对比</button>-->
+							<div id="income" style="width: 940px;height:400px;"></div>
+							<!-- <p id="income_line_echartName" class="echartName"><i></i>2019-01-21至2019-02-19累计注册用户数</p> -->
+						</div>
+						<div class="grandTotal" style="margin-top: 0;">
+							<table id="income_table" class="table">
+								<tr> <th>维度</th> <th>全部</th> <th>安卓</th> <th>IOS</th></tr>
+								<tr> <td>单日总收入</td><td>200</td><td>200</td> <td>200</td> </tr>
+								<tr> <td>付费用户数</td><td>200</td><td>200</td> <td>200</td> </tr>
+								<tr> <td>首次付费用户数</td><td>200</td><td>200</td> <td>200</td> </tr>
+								<tr> <td>平均用户收入</td><td>200</td><td>200</td> <td>200</td> </tr>
+								<tr> <td>首付占比</td><td>200</td><td>200</td> <td>200</td> </tr>
+								<tr> <td>渗透率</td><td>200</td><td>200</td> <td>200</td> </tr>
+								<tr> <td>累计总收入</td><td>200</td><td>200</td> <td>200</td> </tr>
+								
+							</table>
+						</div>
+						<div class="section">
+							<div class="title">支付订单</div>
+							<div class="orderTitle">
+								<dl>
+									<dt>创建时间：</dt>
+									<dd class="orderDateDd">
+										<i typeid="3">3个月</i>
+										<i typeid="2" class="active">1个月</i>
+										<i typeid="1">今天</i>
+									</dd>
+								</dl>
+								<div class="dateInterval">
+									<input class="laydateInput" id="laydate-start6" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="laydate-end6" type="text" placeholder="结束时间" />
+								</div>
+								<div class="exportBtn">导出列表</div>
+							</div>
+							<div class="orderMain">
+								<div class="orderMainTitle">
+									<span>订单号</span>
+									<span>创建时间</span>
+									<span>金额（元）</span>
+								</div>
+								<ul class="orderMainUl">
+									
+								</ul>
+								<div class="page">
+									<em id="prevpage_income_t1" class="prevpage"></em><span id="indexPage_income_t1" class="indexPage">1</span> / <span id="allPage_income_t1" class="allPage">1</span><em id="nextpage_income_t1" class="nextpage"></em>
+									<input id="pageInput_income_t1" class="pageInput" type="text" /> 
+									<button id="pageRun_income_t1" class="pageRun">跳转</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="statisticsLi portrait">
+						<div class="section">
+							<div class="title">性别与年龄分布</div>
+							<div>
+								<select class="activeUser">
+									<option>新增注册用户数</option>
+									<option>活跃用户数</option>
+								</select>
+								<select class="activeUser">
+									<option>昨日</option>
+									<option>上周</option>
+									<option>上月</option>
+								</select>
+							</div>		
+							<div class="sexBox">
+								<div class="fl">
+									<div id="sexPie" style="width: 400px;height:300px;"></div>
+									<p class="echartName">性别分布</p>
+								</div>
+								<div class="fr">
+									<div id="ageColumn" style="width: 540px;height:300px;"></div>
+									<p class="echartName">年龄分布</p>
+								</div>
+							</div>
+							<div class="title">省份与城市</div>
+							<div>
+								<select class="activeUser">
+									<option>新增注册用户数</option>
+									<option>活跃用户数</option>
+								</select>
+								<select class="activeUser">
+									<option>昨日</option>
+									<option>上周</option>
+									<option>上月</option>
+								</select>
+							</div>
+							<div class="mapBox">
+								<div class="fl">
+									<div id="userMap" style="width: 540px;height:500px;"></div>
+								</div>
+								<div class="fr">
+									<div class="userTableTitle ">
+										<span>省份</span>
+										<span>用户数</span>
+										<span></span>
+									</div>
+									<ul class="userTableMain ">
+										<li><div>广东省</div><div>828</div><div><span style="width: 30%;"></span></div></li>
+										<li><div>浙江省</div><div>828</div><div><span style="width: 28%;"></span></div></li>
+										<li><div>江苏省</div><div>828</div><div><span style="width: 26%;"></span></div></li>
+										<li><div>山东省</div><div>828</div><div><span style="width: 24%;"></span></div></li>
+										<li><div>河南省</div><div>828</div><div><span style="width: 22%;"></span></div></li>
+										<li><div>河北省</div><div>828</div><div><span style="width: 20%;"></span></div></li>
+										<li><div>北京市</div><div>828</div><div><span style="width: 15%;"></span></div></li>
+										<li><div>安徽省</div><div>828</div><div><span style="width: 10%;"></span></div></li>
+										<li><div>福建省</div><div>828</div><div><span style="width: 5%;"></span></div></li>
+										<li><div>四川省</div><div>828</div><div><span style="width: 5%;"></span></div></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="section">
+							<div class="userTableTitle big">
+								<span>省份</span>
+								<span>用户数</span>
+								<span></span>
+							</div>
+							<ul class="userTableMain big">
+								<li><div>广东省</div><div>828</div><div><span style="width: 30%;"></span></div></li>
+								<li><div>浙江省</div><div>828</div><div><span style="width: 28%;"></span></div></li>
+								<li><div>江苏省</div><div>828</div><div><span style="width: 26%;"></span></div></li>
+								<li><div>山东省</div><div>828</div><div><span style="width: 24%;"></span></div></li>
+								<li><div>河南省</div><div>828</div><div><span style="width: 22%;"></span></div></li>
+								<li><div>河北省</div><div>828</div><div><span style="width: 20%;"></span></div></li>
+								<li><div>北京市</div><div>828</div><div><span style="width: 15%;"></span></div></li>
+								<li><div>安徽省</div><div>828</div><div><span style="width: 10%;"></span></div></li>
+								<li><div>福建省</div><div>828</div><div><span style="width: 5%;"></span></div></li>
+								<li><div>四川省</div><div>828</div><div><span style="width: 5%;"></span></div></li>
+							</ul>
+							<div class="page" style="margin-right: ;">
+								<em class="prevpage hide"></em>1 / 3<em class="nextpage"></em>
+								<input class="pageInput" type="text" /> 
+								<button class="pageRun">跳转</button>
+							</div>
+						</div>
+						<div class="section">
+							<div class="title">机型</div>
+							<div>
+								<select class="activeUser">
+									<option>新增注册用户数</option>
+									<option>活跃用户数</option>
+								</select>
+								<select class="activeUser">
+									<option>昨日</option>
+									<option>上周</option>
+									<option>上月</option>
+								</select>
+							</div>
+							<div id="modelPie" style="width: 940px;height:400px;"></div>
+							<p class="echartName">机型</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+
+		<script>
+			// income
+			var totalPage = 0;
+
+			var visitTable1Data = [];
+			function loadTable(page) {
+				if(visitTable1Data[page*20-20]){
+					var html = "<tr> <th>日期</th> <th>累计注册用户数</th> <th>活跃用户数</th> <th>访问次数</th> <th>新增注册用户数</th> <th>人均停留时长</th> <th>分享次数</th> <th>分享用户数</th> </tr>";
+					var from = page*20-20;
+					var to = page*20;
+
+					to = Math.min(to, visitTable1Data.length);
+					var d = visitTable1Data;
+	                	for (var i = from; i < to; i++) {
+	                		html += "<tr> <td>"+d[i][0]+"</td> <td>"+d[i][1]+"</td> <td>"+d[i][2]+"</td> <td>"+d[i][3]+"</td> <td>"+d[i][4]+"</td> <td>"+d[i][5]+"</td><td>"+d[i][6]+"</td> <td>"+d[i][7]+"</td></tr>";
+	                	}
+	                $("#visit_t1").html(html);
+				}
+				
+			}
+
+			var visitTable2Data = [];
+			function loadTable2(page) {
+				if(visitTable2Data[page*20-20]){
+					var html = "<tr> <th>日期</th> <th>次日留存</th> <th>三日留存</th> <th>七日留存率</th></tr>";
+					var from = page*20-20;
+					var to = page*20;
+
+					to = Math.min(to, visitTable2Data.length);
+					var d = visitTable2Data;
+	                	for (var i = from; i < to; i++) {
+	                		html += "<tr> <td>"+d[i][0]+"</td> <td>"+d[i][1]+"</td> <td>"+d[i][2]+"</td> <td>"+d[i][3]+"</td> </tr>";
+	                	}
+	                $("#visit_t2").html(html);
+				}
+				
+			}
+
+			function loadTable3(page,dateType) {
+				$.ajax({
+	                url: "/statistics/getOrderData/",
+	                type: "GET",
+	                data: {page:page,dateType:dateType,gameid:"{$gameid}"},
+	                dataType:"json",
+	                success: function (data) {
+	                	totalPage = data.data.totalPage;
+	                	if (totalPage == 0) {
+	                		totalPage = 1;
+	                	}
+	                	var list = data.data.list;
+	                	$("#allPage_income_t1").html(totalPage);
+
+	                	var html = "";
+	                	$("#indexPage_income_t1").html(page);
+	                    if (list.length) {
+
+	                    	for (var i = 0; i < list.length; i++) {
+	                    		html += "<li><div class='orderLiTop'><span>"+list[i]['in_trade_no']+"</span><span>"+list[i]['done_time']+"</span><span>"+list[i]['money']+"</span></div><div class='orderLiBottom'><p><span>平台用户ID</span>"+list[i]['uid']+"</p><p><span>第三方订单号</span>"+list[i]['out_trade_no']+"</p><p><span>描述</span>"+list[i]['goods_name']+"</p></div></li>";
+	                    	}
+	                    }
+	                    $('.orderMainUl').html(html);
+	                }
+	            });
+			}
+
+			$(function(){  
+				// 基于准备好的dom，初始化echarts实例
+		       	
+		       	
+	       		
+	       		
+	       		
+	       		
+            	var pieObj=[{value:400, name:'其他小程序'},{value:1300, name:'其他'},{value:500, name:'搜索'}];
+            	var pieObj2=[{value:173, name:'男'},{value:73, name:'女'}];
+            	var columnObj={
+					data_num:['17岁以下','18-24岁','25-29岁','30-39岁','40-49岁','50岁以上','未知'],
+				    data_date:[25, 75, 55, 45, 35, 15, 5]
+		       	}
+            	var mapObj={
+            		min:100,
+            		max:1000,
+            		data:[
+		                {name: '北京',value: Math.round(Math.random()*1000)},
+		                {name: '天津',value: Math.round(Math.random()*1000)},
+		                {name: '上海',value: Math.round(Math.random()*1000)},
+		                {name: '重庆',value: Math.round(Math.random()*1000)},
+		                {name: '河北',value: Math.round(Math.random()*1000)},
+		                {name: '河南',value: Math.round(Math.random()*1000)},
+		                {name: '云南',value: Math.round(Math.random()*1000)},
+		                {name: '辽宁',value: Math.round(Math.random()*1000)},
+		                {name: '黑龙江',value: Math.round(Math.random()*1000)},
+		                {name: '湖南',value: Math.round(Math.random()*1000)},
+		                {name: '安徽',value: Math.round(Math.random()*1000)},
+		                {name: '山东',value: Math.round(Math.random()*1000)},
+		                {name: '新疆',value: Math.round(Math.random()*1000)},
+		                {name: '江苏',value: Math.round(Math.random()*1000)},
+		                {name: '浙江',value: Math.round(Math.random()*1000)},
+		                {name: '江西',value: Math.round(Math.random()*1000)},
+		                {name: '湖北',value: Math.round(Math.random()*1000)},
+		                {name: '广西',value: Math.round(Math.random()*1000)},
+		                {name: '甘肃',value: Math.round(Math.random()*1000)},
+		                {name: '山西',value: Math.round(Math.random()*1000)},
+		                {name: '内蒙古',value: Math.round(Math.random()*1000)},
+		                {name: '陕西',value: Math.round(Math.random()*1000)},
+		                {name: '吉林',value: Math.round(Math.random()*1000)},
+		                {name: '福建',value: Math.round(Math.random()*1000)},
+		                {name: '贵州',value: Math.round(Math.random()*1000)},
+		                {name: '广东',value: Math.round(Math.random()*1000)},
+		                {name: '青海',value: Math.round(Math.random()*1000)},
+		                {name: '西藏',value: Math.round(Math.random()*1000)},
+		                {name: '四川',value: Math.round(Math.random()*1000)},
+		                {name: '宁夏',value: Math.round(Math.random()*1000)},
+		                {name: '海南',value: Math.round(Math.random()*1000)},
+		                {name: '台湾',value: Math.round(Math.random()*1000)},
+		                {name: '香港',value: Math.round(Math.random()*1000)},
+		                {name: '澳门',value: Math.round(Math.random()*1000)},
+		                {name: '南海诸岛',value: Math.round(Math.random()*1000)}
+		            ]
+            	}
+            	var pieObj3=[
+            		{value:307, name:'iphone 6'},
+            		{value:286, name:'iphone 6s'},
+            		{value:256, name:'iphone X'},
+            		{value:254, name:'iphone 7'},
+            		{value:251, name:'iphone 7 Plus'},
+            		{value:236, name:'iphone 6s Plus'},
+            		{value:193, name:'iphone 8 Plus'},
+            		{value:138, name:'iphone 6 Plus'},
+            		{value:117, name:'unknown'},
+            		{value:116, name:'MI 8'},
+            		{value:103, name:'iphone 5s'},
+            		{value:101, name:'iphone 8'},
+            		{value:78, name:'MI 6'},
+            		{value:76, name:'vivo X9'},
+            		{value:73, name:'OPPO R9s'},
+            		{value:73, name:'PACM00'},
+            		{value:73, name:'vivo X20A'},
+            		{value:72, name:'OPPO A57'},
+            		{value:63, name:'COL-AL10'},
+            		{value:62, name:'vivo X21A'},
+            		{value:55, name:'iphone XS Max'},
+            		{value:54, name:'OPPO A83'},
+            		{value:53, name:'OPPO R11'},
+            		{value:51, name:'EML-AL00'},
+        			
+        		];
+            	// drawLine('general',lineObj);//绘制折线一
+            	// drawLine('general2',lineObj2);//绘制折线二
+            	// drawLine('realtime',lineObj3);//绘制折线三
+            	// drawLine('total',lineObj4);//绘制折线四
+            	// drawPie('pieAdd',pieObj);//绘制饼
+            	// drawLine('newUser',lineObj5);//绘制折线武
+            	// drawLine('income',lineObj6);//绘制折线六
+            	drawPie('sexPie',pieObj2);//绘制饼
+            	drawColumn('ageColumn',columnObj);//绘制饼
+            	drawMap('userMap',mapObj.max,mapObj.min,mapObj.data);//绘制地图
+            	drawPie('modelPie',pieObj3);//绘制地图
+		        
+		        var visitT1TotalPage = 0;
+            	$("#nextpage_visit_t1").click(function(){
+					var page = parseInt($("#indexPage_visit_t1").html())+1;
+					if (page > visitT1TotalPage) {
+						return;
+					}
+					$("#indexPage_visit_t1").html(page);
+					loadTable(page);
+
+				});
+
+				$("#prevpage_visit_t1").click(function(){
+					var page = $("#indexPage_visit_t1").html()-1;
+					if (page < 1) {
+						return;
+					}
+					$("#indexPage_visit_t1").html(page);
+					loadTable(page);
+				});
+
+				$("#pageRun_visit_t1").click(function(){
+					var page = $("#pageInput_visit_t1").val();
+					if (page > visitT1TotalPage) {
+						page = visitT1TotalPage;
+					} else if (page < 1) {
+						page = 1;
+					}
+					$("#indexPage_visit_t1").html(page);
+					loadTable(page);
+				});
+
+
+				var visitT2TotalPage = 0;
+            	$("#nextpage_visit_t2").click(function(){
+					var page = parseInt($("#indexPage_visit_t2").html())+1;
+					if (page > visitT2TotalPage) {
+						return;
+					}
+					$("#indexPage_visit_t2").html(page);
+					loadTable2(page);
+
+				});
+
+				$("#prevpage_visit_t2").click(function(){
+					var page = $("#indexPage_visit_t2").html()-1;
+					if (page < 1) {
+						return;
+					}
+					$("#indexPage_visit_t2").html(page);
+					loadTable2(page);
+				});
+
+				$("#pageRun_visit_t2").click(function(){
+					var page = $("#pageInput_visit_t2").val();
+					if (page > visitT2TotalPage) {
+						page = visitT2TotalPage;
+					} else if (page < 1) {
+						page = 1;
+					}
+					$("#indexPage_visit_t2").html(page);
+					loadTable2(page);
+				});
+			
+				//income
+				$("#nextpage_income_t1").click(function(){
+					var page = parseInt($("#indexPage_income_t1").html())+1;
+					if (page > totalPage) {
+						return;
+					}
+					$("#indexPage_income_t1").html(page);
+					loadTable3(page, 1);
+
+				});
+
+				$("#prevpage_income_t1").click(function(){
+					var page = $("#indexPage_income_t1").html()-1;
+					if (page < 1) {
+						return;
+					}
+					$("#indexPage_income_t1").html(page);
+					loadTable3(page, 1);
+				});
+
+
+
+				$("#pageRun_income_t1").click(function(){
+					var page = $("#pageInput_income_t1").val();
+					if (page > totalPage) {
+						page = totalPage;
+					} else if (page < 1) {
+						page = 1;
+					}
+					$("#indexPage_income_t1").html(page);
+					loadTable3(page, 1);
+				});
+
+		        // 概况
+		        function refreshYesterdaySummary(){
+		        	$.ajax({
+	                    url: "/statistics/getYesterdaySummary/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}"
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                            var data = res.data;
+	                            $('#accumulate_reg_lastDay').html(data[0][0]);
+	                            $('#increase_rate_day').html(data[0][1]+"%");
+	                            $('#increase_rate_day').attr('class',data[0][1]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_week').html(data[0][2]+"%");
+	                            $('#increase_rate_week').attr('class',data[0][2]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_month').html(data[0][3]+"%");
+	                            $('#increase_rate_month').attr('class',data[0][3]>=0 ? "rise" : "decline");
+
+	                            $('#active_user_lastDay').html(data[1][0]);
+	                            $('#increase_rate_day2').html(data[1][1]+"%");
+	                            $('#increase_rate_day2').attr('class',data[1][1]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_week2').html(data[1][2]+"%");
+	                            $('#increase_rate_week2').attr('class',data[1][2]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_month2').html(data[1][3]+"%");
+	                            $('#increase_rate_month2').attr('class',data[1][3]>=0 ? "rise" : "decline");
+
+	                            $('#reg_lastDay').html(data[2][0]);
+	                            $('#increase_rate_day3').html(data[2][1]+"%");
+	                            $('#increase_rate_day3').attr('class',data[2][1]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_week3').html(data[2][2]+"%");
+	                            $('#increase_rate_week3').attr('class',data[2][2]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_month3').html(data[2][3]+"%");
+	                            $('#increase_rate_month3').attr('class',data[2][3]>=0 ? "rise" : "decline");
+
+	                            $('#online_time_lastDay').html(data[3][0]);
+	                            $('#increase_rate_day4').html(data[3][1]+"%");
+	                            $('#increase_rate_day4').attr('class',data[3][1]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_week4').html(data[3][2]+"%");
+	                            $('#increase_rate_week4').attr('class',data[3][2]>=0 ? "rise" : "decline");
+	                            $('#increase_rate_month4').html(data[3][3]+"%");
+	                            $('#increase_rate_month4').attr('class',data[3][3]>=0 ? "rise" : "decline");
+	                        }
+	                    }
+	                });
+		        }
+		        
+		        function refresh30Visit(){
+		        	$.ajax({
+	                    url: "/statistics/getRecentThirtyDayVisitData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	type:$('#visitselect').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	drawLine('general',res.data);
+	                        	// $('#summary_line1_echartName').html()
+	                        }
+	                    }
+	                });
+		        }
+
+                function refresh30Income(){
+                	$.ajax({
+	                    url: "/statistics/getRecentThirtyDayIncomeData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	type:$('#incomeselect').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	drawLine('general2',res.data);
+	                        }
+	                    }
+	                });
+                }
+
+                var clickSummary = function(){
+
+                	refreshYesterdaySummary();
+                	refresh30Visit();
+                	refresh30Income();
+                }
+                clickSummary();
+                $('#visitselect').change(function(){
+                	refresh30Visit();
+                });
+
+                $('#incomeselect').change(function(){
+                	refresh30Income();
+                });
+
+                // 实时统计
+                
+                function refreshRealTime(){
+                	$.ajax({
+	                    url: "/statistics/realtime/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	dateType:$('#realtime_dateType').val(),
+	                    	from:$('#realtime_from').val(),
+	                    	to:$('#realtime_to').val(),
+	                    	granularity:$('#realtime_granularity').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	drawLine('realtime',res.data);
+	                        }
+	                    }
+	                });
+                }
+                var clickRealTime = function(){
+                	refreshRealTime();
+                };
+                $('#realtime_searchBtn').click(function(){
+                	refreshRealTime();
+                });
+                $('#realtime_dateType').change(function(){
+                	refreshRealTime();
+                });
+
+                $('#realtime_granularity').change(function(){
+                	refreshRealTime();
+                });
+
+                // 访问分析 
+                function refreshVisitLine(){
+                	$.ajax({
+	                    url: "/statistics/getVisitLineData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	dateType:$('#visit_line_dateType').val(),
+							type:$('#visit_line_type').val(),	                    	
+	                    	from:$('#visit_line_from').val(),
+	                    	to:$('#visit_line_to').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	drawLine('total',res.data);
+	                        }
+	                    }
+	                });
+                }
+
+                function refreshVistTable1(){
+                	$.ajax({
+	                    url: "/statistics/getVisitTableData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	dateType:$('#visit_line_dateType').val(),
+	                    	from:$('#visit_line_from').val(),
+	                    	to:$('#visit_line_to').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	var html = "<tr> <th>日期</th> <th>累计注册用户数</th> <th>活跃用户数</th> <th>访问次数</th> <th>新增注册用户数</th> <th>人均停留时长</th> <th>分享次数</th> <th>分享用户数</th> </tr>";
+	                        	var list = res.data;
+	                        	visitTable1Data = res.data;
+	                        	visitT1TotalPage = Math.ceil(list.length/20);
+	                        	if(list.length){
+	                        		$('#allPage_visit_t1').html(Math.ceil(list.length/20));	
+	                        	}else{
+		                        	$('#allPage_visit_t1').html(0);
+	                        	}
+			                    if (list.length) {
+			                    	for (var i = 0; i < (list.length<20?list.length:20); i++) {
+			                    		html += "<tr> <td>"+list[i][0]+"</td> <td>"+list[i][1]+"</td> <td>"+list[i][2]+"</td> <td>"+list[i][3]+"</td> <td>"+list[i][4]+"</td> <td>"+list[i][5]+"</td><td>"+list[i][6]+"</td> <td>"+list[i][7]+"</td></tr>";
+			                    	}
+			                    }
+			                    $("#visit_t1").html(html);
+	                        }
+	                    }
+	                });
+                }
+
+                // function refreshNewRegPie(){
+                // 	$.ajax({
+	               //      url: "/statistics/getVisitPieData/",
+	               //      type: "POST",
+	               //      data:{
+	               //      	gameid:"{$gameid}",
+	               //      	dateType:$('#visit_new_reg_date_type').val(),
+	               //      	from:$('#visit_new_reg_from').val(),
+	               //      	to:$('#visit_new_reg_to').val()
+	               //      },
+	               //      dataType:"json",
+	               //      success: function(res) {
+	               //          if (res.code == 200) {
+	               //          	drawPie('pieAdd',res.data);
+	               //          }
+	               //      }
+	               //  });
+                // }
+                function refreshVisitLine2(){
+                	$.ajax({
+	                    url: "/statistics/getVisitRetentionLineData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	dateType:$('#visit_line2_dateType').val(),
+							type:$('#visit_line2_granularity').val(),	                    	
+	                    	from:$('#visit_line2_from').val(),
+	                    	to:$('#visit_line2_to').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	drawLine('newUser',res.data);
+	                        }
+	                    }
+	                });
+                }
+                function refreshVisitTable2(){
+                	$.ajax({
+	                    url: "/statistics/getVisitRetentionTableData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	dateType:$('#visit_line2_dateType').val(),
+	                    	from:$('#visit_line2_from').val(),
+	                    	to:$('#visit_line2_to').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	var html = "<tr> <th>日期</th> <th>次日留存</th> <th>三日留存</th> <th>七日留存率</th></tr>";
+	                        	var list = res.data;
+	                        	visitTable2Data = res.data;
+	                        	visitT2TotalPage = Math.ceil(list.length/20);
+	                        	if(list.length){
+	                        		$('#allPage_visit_t2').html(Math.ceil(list.length/20));	
+	                        	}else{
+		                        	$('#allPage_visit_t2').html(0);
+	                        	}
+			                    if (list.length) {
+			                    	for (var i = 0; i < (list.length<20?list.length:20); i++) {
+			                    		html += "<tr> <td>"+list[i][0]+"</td> <td>"+list[i][1]+"</td> <td>"+list[i][2]+"</td> <td>"+list[i][3]+"</td> </tr>";
+			                    	}
+			                    }
+			                    $("#visit_t2").html(html);
+	                        }
+	                    }
+	                });
+                }
+                $('#visit_line_searchBtn').click(function(){
+                	refreshVisitLine();
+                	refreshVistTable1();
+                });
+                // $('#visit_new_reg_searchBtn').click(function(){
+                // 	refreshNewRegPie();
+                // });
+                $('#visit_line2_searchBtn').click(function(){
+                	refreshVisitLine2();
+                	refreshVisitTable2();
+                });
+
+                $('#visit_line_type').change(function(){
+                	refreshVisitLine();
+                });
+                $('#visit_line_dateType').change(function(){
+                	refreshVisitLine();
+                	refreshVistTable1();
+                });
+                // $('#visit_new_reg_date_type').change(function(){
+                // 	refreshNewRegPie();
+                // });
+                $('#visit_line2_dateType').change(function(){
+                	refreshVisitLine2();
+                	refreshVisitTable2();
+                });
+                $('#visit_line2_granularity').change(function(){
+                	refreshVisitLine2();
+                });
+
+                var clickVisit = function(){
+                	refreshVisitLine();
+                	refreshVistTable1();
+                	// refreshNewRegPie();
+                	refreshVisitLine2();
+                	refreshVisitTable2();
+                }
+
+                // 收入分析
+                function refreshIncomeLine(){
+                	$.ajax({
+	                    url: "/statistics/getPurchaseLineData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	dateType:$('#income_line_datetype').val(),
+							type:$('#income_line_type').val(),
+							osType:$('#income_line_ostype').val(),	
+	                    	from:$('#income_line_from').val(),
+	                    	to:$('#income_line_to').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	drawLine('income',res.data);
+	                        }
+	                    }
+	                });
+                }
+                function refreshIncomeTable(){
+                	$.ajax({
+	                    url: "/statistics/getPurchaseTableData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+	                    	dateType:$('#income_line_datetype').val(),
+	                    	from:$('#income_line_from').val(),
+	                    	to:$('#income_line_to').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	var html = "<tr> <th>维度</th> <th>全部</th> <th>安卓</th> <th>IOS</th></tr>";
+	                        	var list = res.data;
+	                        	for(var i = 0; i < list.length; i++){
+	                        		html += "<tr><td>"+list[i][0]+"</td><td>"+list[i][1]+"</td><td>"+list[i][2]+"</td><td>"+list[i][3]+"</td></tr>";
+	                        	}
+	                        	$('#income_table').html(html);
+	                        }
+	                    }
+	                });
+                }
+                $('#income_line_searchBtn').change(function(){
+                	refreshIncomeLine();
+                	refreshIncomeTable();
+                });
+
+                $('#income_line_datetype').change(function(){
+                	refreshIncomeLine();
+                	refreshIncomeTable();
+                });
+                $('#income_line_type').change(function(){
+                	refreshIncomeLine();
+                });
+                $('#income_line_ostype').change(function(){
+                	refreshIncomeLine();
+                });
+
+                $('#income_line_searchBtn').click(function(){
+                	refreshIncomeLine();
+                	refreshIncomeTable();
+                });
+                var clickIncome = function(){
+                	loadTable3(1,$(".orderDateDd i[class='active']").attr("typeid"));
+                	refreshIncomeLine();
+                	refreshIncomeTable();
+                }
+
+                // 用户画像
+                var clickPortrayal = function(){
+
+                }
+
+                /*菜单*/
+				$(".first-level").click(function(){
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true,false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function(){
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});	
+				$(".statisticsTitle li").click(function(){
+					var this_index=$(this).index();
+					if(this_index == 0){
+						clickSummary();
+					}else if(this_index == 1){
+						clickRealTime();
+					}else if(this_index == 2){
+						clickVisit();
+					}else if(this_index == 3){
+						clickIncome();
+					}else if(this_index == 4){
+						clickPortrayal();
+					}
+					$(this).addClass("active").siblings("li").removeClass("active");
+					$(".statisticsBody").find(".statisticsLi").eq(this_index).show().siblings(".statisticsLi").hide()
+				});
+				$(".orderDateDd i").click(function(){
+					$(this).addClass("active").siblings("i").removeClass("active");
+					var thisIndex=$(this).index();
+					  var thisVal=$(".orderDateDd i").eq(thisIndex).attr("typeid");
+					  // console.log(thisVal);
+					  loadTable3(1,thisVal);
+				})
+                 $(".orderMainUl").on("click","li",function(){
+				  	$(this).toggleClass("open").siblings("li").removeClass("open");
+				 })
+
+				 $('.exportBtn').click(function(){
+			        var gameid = "{$gameid}";
+			        var dateType = $(".orderDateDd i[class='active']").attr("typeid");
+			        var url = "/statistics/export/?dateType="
+			        +dateType
+			        +"&gameid="
+			        +gameid;
+
+			        window.open(url);
+				 });
+		        
+			})			
+
+
+		
+		</script>
+	</body>
+</html>

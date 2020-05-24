@@ -1,0 +1,47 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+{include layout/left.html}
+<div class="page-container">
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-cogs"></i>回复操作
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet-body">
+                        <div class="table-container">
+                            <form id="send_rule_form" action="/app_manager/no/feedback/edit/?id={$result['id']}" method="post" autocomplete="off">
+                                <tr>
+                                <td>玩家信息</td>
+                            </tr><br>
+                            <tr>
+                                <td>用户ID：</td>{$result["uid"]}
+                                <td>昵称：</td>{$result["contact"]}
+                                <td>状态：</td>{$result["status"]}
+                            </tr><br>
+                            <tr>
+                                <td>反馈内容：</td>{$result["content"]}
+                            </tr><br>
+                            <div>
+                                回复：
+                            </div>
+                                <textarea name="content_back" rows="3" cols="20">
+
+                                </textarea>
+                            <div>
+                                <input type="submit">
+                            </div>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+</div>
+</div>

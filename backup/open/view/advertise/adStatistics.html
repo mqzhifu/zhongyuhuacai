@@ -1,0 +1,234 @@
+{include /layout/left_game.html}
+			<div class="iframeBox">
+				<div class="statisticsBody">
+					<div class="statisticsLi">
+						<div class="section">
+							<div class="title">关键指标趋势图</div>
+							<div>
+								<select id="line_ad_type" class="activeUser">
+									<option value="0">全部类型</option>
+									<option value="1">全屏视频广告</option>
+									<option value="3">Banner广告</option>
+									<option value="2">激励视频广告</option>
+								</select>
+								<select id="line_func_type" class="activeUser">
+									<option value="1">展示数</option>
+									<option value="2">点击量</option>
+									<option value="3">点击率(%)</option>
+									<option value="4">预估收入(元)</option>
+								</select>
+								<div class="dateInterval">
+									<input class="laydateInput" id="laydate-start" type="text" placeholder="开始时间" /> - <input class="laydateInput" id="laydate-end" type="text" placeholder="结束时间" />
+								</div>
+								<span class="searchBtn">搜索</span>
+							</div>
+							
+							<div id="general" style="width: 940px;height:400px;"></div>
+						</div>
+						<div class="section">
+							<div class="title">广告指标明细</div>
+							<select id="tb_ad_type" class="activeUser">
+								<option value="0">全部类型</option>
+								<option value="1">全屏视频广告</option>
+								<option value="3">Banner广告</option>
+								<option value="2">激励视频广告</option>
+							</select>
+							
+							<div class="grandTotal">
+								<table id="ad_tb" class="table">
+									<tr> <th>日期</th> <th>展示数</th> <th>点击量</th> <th>点击率</th> <th>预估收入（元）</th></tr>
+								</table>
+								<div class="page">
+									<em id="prevpage_visit_t1" class="prevpage"></em><span id="indexPage_visit_t1" class="indexPage">1</span> / <span id="allPage_visit_t1" class="allPage">1</span><em id="nextpage_visit_t1" class="nextpage"></em>
+									<input id="pageInput_visit_t1" class="pageInput" type="text" /> 
+									<button id="pageRun_visit_t1" class="pageRun">跳转</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="footer">
+		    <div class="qq">
+		        开心小游戏开放平台开发者QQ群：511374110
+		    </div>
+		    <div class="company">
+		        北京开心人信息技术有限公司
+		    </div>
+		    <div class="copyright">
+		        文网文[2009]157号(甲)&nbsp;&nbsp;&nbsp;&nbsp;京ICP证080482号&nbsp;&nbsp;&nbsp;&nbsp;京公网安备1100003号&nbsp;&nbsp;&nbsp;&nbsp;(京)-非经营性-2009-0009
+		    </div>
+		</div>
+		<script>
+			var pageLen = 10;
+			var visitTable1Data = [];
+			function loadTable(page) {
+				if(visitTable1Data[page*pageLen-pageLen]){
+					var html = "<tr> <th>日期</th> <th>展示数</th> <th>点击量</th> <th>点击率</th> <th>预估收入（元）</th></tr>";
+					var from = page*pageLen-pageLen;
+					var to = page*pageLen;
+
+					to = Math.min(to, visitTable1Data.length);
+					var d = visitTable1Data;
+	                	for (var i = from; i < to; i++) {
+	                		html += "<tr> <td>"+d[i][0]+"</td> <td>"+d[i][1]+"</td> <td>"+d[i][2]+"</td> <td>"+d[i][3]+"</td> <td>"+d[i][4]+"</td></tr>";
+	                	}
+	                $("#ad_tb").html(html);
+				}
+				
+			}
+
+
+			$(function(){
+				var start= laydate.render({  
+			        elem: '#laydate-start',
+			        done:function(value,date){
+			        	if(value!=''){
+			        		date.month=date.month-1;
+			        		end.config.min=date;
+			        	}
+			    	}
+			    });  
+			    var end = laydate.render({  
+			        elem: '#laydate-end',   
+			        done:function(value,date){
+			        	if(value!=''){
+			        		date.month=date.month-1;
+			        		start.config.max=date;
+			        	}
+			        }
+			    });
+				/*菜单*/
+				$(".first-level").click(function(){
+					$(this).children(".level-click").toggleClass("up");
+					$(this).siblings(".second-level").stop(true,false).slideToggle();
+				});
+				/*菜单选择*/
+				$(".second-level li").click(function(){
+					$(".second-level li").removeClass("active")
+					$(this).addClass("active");
+				});
+				  
+
+            	var visitT1TotalPage = 0;
+            	$("#nextpage_visit_t1").click(function(){
+					var page = parseInt($("#indexPage_visit_t1").html())+1;
+					if (page > visitT1TotalPage) {
+						return;
+					}
+					$("#indexPage_visit_t1").html(page);
+					loadTable(page);
+
+				});
+
+				$("#prevpage_visit_t1").click(function(){
+					var page = $("#indexPage_visit_t1").html()-1;
+					if (page < 1) {
+						return;
+					}
+					$("#indexPage_visit_t1").html(page);
+					loadTable(page);
+				});
+
+				$("#pageRun_visit_t1").click(function(){
+					var page = $("#pageInput_visit_t1").val();
+					if (page > visitT1TotalPage) {
+						page = visitT1TotalPage;
+					} else if (page < 1) {
+						page = 1;
+					}
+					$("#indexPage_visit_t1").html(page);
+					loadTable(page);
+				});
+
+            	function refreshAdLine(){
+                	$.ajax({
+	                    url: "/advertise/getLineData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+							type:$('#line_func_type').val(),
+							adType:$('#line_ad_type').val(),	
+	                    	from:$('#laydate-start').val(),
+	                    	to:$('#laydate-end').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	drawLine('general',res.data);
+	                        }
+	                    }
+	                });
+                }
+
+                function refreshAdTable(){
+                	$.ajax({
+	                    url: "/advertise/getTableData/",
+	                    type: "POST",
+	                    data:{
+	                    	gameid:"{$gameid}",
+							type:1,
+							adType:$('#tb_ad_type').val(),	
+	                    	from:$('#laydate-start').val(),
+	                    	to:$('#laydate-end').val()
+	                    },
+	                    dataType:"json",
+	                    success: function(res) {
+	                        if (res.code == 200) {
+	                        	$("#ad_tb").html("");
+	                        	var html = "<tr> <th>日期</th> <th>展示数</th> <th>点击量</th> <th>点击率</th> <th>预估收入（元）</th></tr>";
+	                        	
+	                        	
+	                        	var list = res.data;
+	                        	visitTable1Data = res.data;
+	                        	visitT1TotalPage = Math.ceil(list.length/10);
+	                        	$("#indexPage_visit_t1").html(1);
+	                        	if(list.length){
+	                        		$('#allPage_visit_t1').html(Math.ceil(list.length/10));	
+	                        	}else{
+		                        	$('#allPage_visit_t1').html(1);
+	                        	}
+                        		if (list.length) {
+			                    	for (var i = 0; i < (list.length<10?list.length:10); i++) {
+			                    		html += "<tr> <td>"+list[i][0]+"</td> <td>"+list[i][1]+"</td> <td>"+list[i][2]+"</td> <td>"+list[i][3]+"</td> <td>"+list[i][4]+"</td></tr>";
+			                    	}
+			                    }
+			                    
+			                    $("#ad_tb").html(html);
+	                        }
+	                    }
+	                });
+                }
+
+                $('#tb_ad_type').change(function(){
+                	if($('#laydate-end').val() && $('#laydate-start').val()){
+	                	refreshAdTable();
+                	}
+                });
+
+                $('#line_ad_type').change(function(){
+                	if($('#laydate-end').val() && $('#laydate-start').val()){
+                		refreshAdLine();
+                	}
+                });
+
+                $('#line_func_type').change(function(){
+                	if($('#laydate-end').val() && $('#laydate-start').val()){
+                		refreshAdLine();
+                	}
+                });
+
+                
+
+                $('.searchBtn').click(function(){
+                	if($('#laydate-end').val() && $('#laydate-start').val()){
+                		refreshAdLine();
+                		refreshAdTable();
+                	}
+                });
+			})			
+		</script>
+	</body>
+</html>

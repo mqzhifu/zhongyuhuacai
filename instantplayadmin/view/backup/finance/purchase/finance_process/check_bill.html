@@ -1,0 +1,345 @@
+<style type="text/css">
+    .row.static-info {
+        margin: 10px;
+    }
+</style>
+
+
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {include layout/left.html}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Modal title</h4>
+                        </div>
+                        <div class="modal-body">
+                            Widget settings form goes here
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn blue">Save changes</button>
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- BEGIN STYLE CUSTOMIZER -->
+            <!-- END STYLE CUSTOMIZER -->
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                Check Bill <small>view details</small>
+            </h3>
+            <br/>
+            <!-- END PAGE HEADER-->
+            <!-- BEGIN PAGE CONTENT-->
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Begin: life time stats -->
+                    <div class="portlet">
+
+
+                        <div class="portlet-body">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_1">
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-title">
+                                                        <div class="caption">
+                                                            <i class="fa fa-cogs"></i>查看票据
+                                                        </div>
+                                                        <!--<div class="actions">-->
+                                                            <!--<a href="javascript:;" class="btn btn-default btn-sm">-->
+                                                                <!--<i class="fa fa-pencil"></i> Edit </a>-->
+                                                        <!--</div>-->
+                                                    </div>
+                                                {include finance/base.html}
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                合同开始日期
+                                                            </div>
+                                                            <div class="col-md-7 value">{$finance['contract_start_date']}
+                                                            </div>
+                                                        </div>
+                                                            
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                合同结束日期
+                                                            </div>
+                                                            <div class="col-md-7 value">{$finance['contract_end_date']}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                账期
+                                                            </div>
+                                                            <div class="col-md-7 value">{$account_period[$finance['account_period']]}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                签约主体
+                                                            </div>
+                                                            <div class="col-md-7 value">{$contract_body[$finance['contract_body']]}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name" style="font-weight: 600;">
+                                                                请根据合同主协议填写以下内容
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                游戏分成比例
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <!-- <input id="divide" type="text" readonly name="" style="width: 10%" value=""> -->
+                                                                {$finance['divide']*100}
+                                                                %
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                通道费
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <!-- <input id="slotting_allowance" readonly type="text" name="" style="width: 10%" value=""> -->
+                                                                {$finance['slotting_allowance']*100}
+                                                                %
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                原始金额
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="original_revenue" readonly type="text" name="" style="width: 25%" value="{$bill['original_revenue']}">
+                                                                元
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                原始客户应收
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="settle_revenue" readonly type="text" name="" style="width: 25%" value="{$bill['settle_revenue']}">
+                                                                元
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                实际客户应收
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="after_tax" readonly type="text" name="" style="width: 25%" value="{$bill['after_tax']}">
+                                                                元
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                可分成金额
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <input id="cut_revenue" readonly type="text" name="" style="width: 25%" value="{$bill['cut_revenue']}">
+                                                                元
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                结算状态变更
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <select id="settlementStatus" class="form-control form-filter input-sm" style="width: 30%">
+                                                                    {foreach ($payStatus as  $k=>$v)  }
+                                                                    <option value="{$k}">{$v}</option>
+                                                                    {/foreach}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                查看对账单电子版<br><small>(盖有对方公章的版本)</small>
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button id="show-bill" class="btn btn-icon-only yellow " value="{$bill['bill_img']}" title="查看上传文件"><i class="fa fa-search"></i> </button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                查看发票电子版
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button id="show-invoice" class="btn btn-icon-only yellow " value="{$bill['invoice_img']}" title="查看上传文件"><i class="fa fa-search"></i> </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                <button id="cancel" type="button" class="btn btn-sm yellow"><i class="fa fa-times"></i> 返回</button>
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button id='settle_submit' class="btn btn-sm blue filter-cancel"><i class="fa fa-check"></i> 确认</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                        
+                                                </div>
+                                            </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+    <!-- BEGIN QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
+</div>
+
+<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:2;width:100%;height:100%;display:none;">
+    <div id="innerdiv" style="position:absolute;">
+            <img id="bigimg" style="border:5px solid #fff;text-align: center;" src="" />
+    </div>
+</div>  
+    
+<script>
+    $(document).ready(function(){
+        $("#cancel").click(function(){
+            window.history.back(-1); 
+        });
+        $(".btn.btn-sm.blue.filter-submit.margin-bottom").click(function(){
+            var src = $(this).val();
+            showImg(src);
+        });
+        $("#outerdiv").click(function(){//再次点击淡出消失弹出层  
+            $(this).fadeOut("fast");  
+        }); 
+
+        $("#show-bill").click(function(){
+            showImg($(this).val());
+        });
+
+
+        $("#show-invoice").click(function(){
+            showImg($(this).val());
+        });
+
+
+        $("#settle_submit").click(function(){
+            var status = $("#settlementStatus").find("option:selected").val();
+            if (status == '') {
+                alert("请选择收票状态");return;
+            }
+
+            if(confirm('确定要执行操作吗')==true){
+
+                $.ajax({
+                    type: "POST",
+                    url: "/finance/purchase/businessProcess/save/",
+                    data: {
+                        id: {$id},
+                        status: status
+                    },
+
+                    dataType:'json',
+                    success: function(data){
+                        if (data == 200) {
+                            alert("操作成功");
+                            window.history.back(-1); 
+                        } else {
+                            alert("操作失败");
+                            window.history.back(-1); 
+                        }
+                        
+                    }
+                });
+
+            }
+        });
+
+    });
+    
+    function showImg(src) {
+        $('#bigimg').attr("src", src);
+        /*获取当前点击图片的真实大小，并显示弹出层及大图*/  
+        $('#bigimg').load(function(){  
+            var windowW = $(window).width();//获取当前窗口宽度  
+            var windowH = $(window).height();//获取当前窗口高度  
+            var realWidth = this.width;//获取图片真实宽度  
+            var realHeight = this.height;//获取图片真实高度  
+            var imgWidth, imgHeight;  
+            var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放  
+              
+            if(realHeight>windowH*scale) {//判断图片高度  
+                imgHeight = windowH*scale;//如大于窗口高度，图片高度进行缩放  
+                imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度  
+                if(imgWidth>windowW*scale) {//如宽度扔大于窗口宽度  
+                    imgWidth = windowW*scale;//再对宽度进行缩放  
+                }  
+            } else if(realWidth>windowW*scale) {//如图片高度合适，判断图片宽度  
+                imgWidth = windowW*scale;//如大于窗口宽度，图片宽度进行缩放  
+                imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度  
+            } else {//如果图片真实高度和宽度都符合要求，高宽不变  
+                imgWidth = realWidth;  
+                imgHeight = realHeight;  
+            }  
+                $('#bigimg').css("width",imgWidth);//以最终的宽度对图片缩放  
+              
+            var w = (windowW-imgWidth)/2;//计算图片与窗口左边距  
+            var h = (windowH-imgHeight)/2;//计算图片与窗口上边距  
+            $("#innerdiv").css({"top":h, "left":w});//设置#innerdiv的top和left属性  
+            $("#outerdiv").fadeIn("fast");//淡入显示#outerdiv及.pimg  
+        });
+    }
+
+</script>

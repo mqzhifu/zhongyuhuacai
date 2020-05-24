@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+//4001 - 获取/查看其它，用户基础信息
+message getOneRequest {
+	int32 toUid=1;
+}
+
+//4003 - 是否已绑定过
+message isBindRequest {
+	int32 type=1;
+	string unicode=2;
+}
+
+//4003 - 举报用户
+message reportUserRequest {
+	int32 toUid=1;
+	string content=2;
+}
+
+//4003 - 拉黑
+message addBlackRequest {
+	int32 toUid=1;
+}
+
+//4003 - 移除黑名单
+message cancelBlackRequest {
+	int32 toUid=1;
+}
+
+//4003 - 添加-免打扰
+message addBotherRequest {
+	int32 toUid=1;
+}
+
+//4003 - 取消-免打扰
+message cancelBotherRequest {
+	int32 toUid=1;
+}
+
+//4009 - 读取用户手机联系人，写入DB
+message setUserSystemContactRequest {
+	string list=1;
+}
+
+//4011 - 更改基础信息
+message upInfoRequest {
+	string nickname=1;
+	string sex=2;
+	string sign=3;
+	string summary=4;
+	string ps=5;
+}
+
+//4011 - 修改头像
+message upAvatarRequest {
+	string avatar=1;
+}
+
+//4013 - 更改消息推送状态
+message setPushRequest {
+	int32 status=1;
+}
+
+//4015 - 隐藏GPD信息
+message setHiddenGpsRequest {
+	int32 status=1;
+}
+
+//4017 - 黑名单列表
+message blackListRequest {
+}
+
+//5013 - 获取提现卷列表
+message getCouponListRequest {
+}
+

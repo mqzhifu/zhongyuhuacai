@@ -1,0 +1,957 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td {
+        white-space: normal;
+        word-wrap: break-word;
+        break-word: break-all;
+    }
+    .ad_detail {
+        width: 360px;
+        display: block;
+        height: 30px;
+    }
+    .ad_table span {
+        display: inline-block;
+        width: 70px;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .ad_table span+input{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .ad_table span+select{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .modal-body {
+        margin: 0;
+    }
+    .strategySelect {
+        width: 160px
+    }
+    .sort_input {
+        width: 40px;
+    }
+    select:disabled {
+        border: 1px solid #DDD;
+        background-color: #F5F5F5;
+        color: #ACA899;
+    }
+    .opt {
+        margin-right: 10px;
+    }
+    .unView {
+        display:none;
+    }
+    .view {
+        display:block;
+    }
+    .btnView {
+        display:inline-block;
+        cursor:pointer;
+    }
+    .settUl dt{
+        font-weight: normal;
+    }
+    .settUl dt i,.settUl dt em{
+        font-style: normal;
+    }
+    .settLi>span{
+        display:block;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    .settUl .game_name,.settUl .settNotice{
+        display: block;
+        margin:10px 0;
+    }
+    .settUl {
+        margin-left: 20px;
+    }
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <!-- <div class="table-actions-wrapper">
+                                    <span>
+                                    </span>
+                                    <select class="table-group-action-input form-control input-inline input-small input-sm">
+                                        <option value="">选择</option>
+                                    </select>
+                                </div> -->
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <!-- <th width="2%">
+                                            <input type="checkbox" class="group-checkable">
+                                        </th> -->
+                                        <th width="3%">
+                                            游戏ID
+                                        </th>
+                                        <th width="3%">
+                                            游戏名称
+                                        </th>
+                                        <th width="3%">
+                                            开发者类型
+                                        </th>
+                                        <th width="3%">
+                                            开发者名称
+                                        </th>
+
+
+                                        <th width="3%">
+                                            广告位名称
+                                        </th>
+
+                                        <th width="3%">
+                                            广告位ID
+                                        </th>
+
+                                        <th width="3%">
+                                            广告类型
+                                        </th>
+
+                                        <th width="3%">
+                                            广告状态
+                                        </th>
+
+                                        <th width="5%">
+                                            创建时间
+                                        </th>
+
+                                        <th width="5%">
+                                            更新时间
+                                        </th>
+
+                                        <th width="15%">
+                                            管理
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="game_id"
+                                                   onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                        </td>
+                                        <td>
+
+                                            <input type="text" class="form-control form-filter input-sm" name="name"
+                                                   onkeyup="this.value=this.value.replace(/\s+/g,'')">
+                                        </td>
+                                        <td>
+                                            <select name="type" class="form-control form-filter input-sm">
+                                                <option value="">全部</option>
+                                                {foreach ($developerType as $k=>$v) }
+
+
+                                                <option value="{$k}">{$v}</option>
+
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="company">
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="title">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="id">
+                                        </td>
+                                        <td>
+                                            <select name="advertise_type" class="form-control form-filter input-sm">
+                                                <option value="">全部</option>
+                                                {foreach ($advertise_type as $k=>$v) }
+                                                <option value="{$k}">{$v}</option>
+                                                {/foreach}
+                                            </select>
+                                        </td>
+                                        <td></td>
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm"
+                                                       style="height: 34px" readonly name="from" id="from"
+                                                       placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <button class="btn default date-set" type="button"
+                                                            style="margin-right: 0"><i
+                                                            class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm"
+                                                       style="height: 34px" readonly name="to" id="to" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <button class="btn default date-set" type="button"
+                                                            style="margin-right: 0"><i
+                                                            class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm"
+                                                       style="height: 34px" readonly name="from1" id="from1"
+                                                       placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <button class="btn default date-set" type="button"
+                                                            style="margin-right: 0"><i
+                                                            class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm"
+                                                       style="height: 34px" readonly name="to1" id="to1"
+                                                       placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <button class="btn default date-set" type="button"
+                                                            style="margin-right: 0"><i
+                                                            class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="margin-bottom-5">
+                                                <button class="btn btn-sm yellow filter-submit margin-bottom"><i
+                                                        class="fa fa-search"></i> 搜索
+                                                </button>
+                                            </div>
+                                            <button class="btn btn-sm green filter-cancel"><i class="fa fa-times"></i>
+                                                重置
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<!-- 彈窗 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">编辑</h4>
+            </div>
+            <div class="modal-body" style="width: 800px;margin-left: 20px">
+
+                <br/>
+                <br/>
+                <!-- 基本设置 -->
+                <div id="base-set" style="margin-left: 20px;margin-right: 60px;">
+                    <table class="ad_table">
+                        <tr>
+                            <td>
+                                <div>
+                                    <span>游戏ID</span>
+                                    <input type="text" disabled id="game_id">
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <span>游戏名称</span>
+                                    <input type="text" disabled id="game_name">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <hr style="width: 700px;">
+                   
+                    <table class="ad_table">
+                        <tr>
+                            <td>
+                                <div>
+                                    <span >广告位名称</span>
+                                    <input type="text" disabled id="ad_name">
+                                    
+                                </div>
+                            </td>
+                            <td>
+                                <div>
+                                    <span>广告位ID</span>
+                                    <input type="text" disabled id="ad_id">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div>
+                                    <span>广告类型</span>
+                                    <input type="text" disabled id="ad_type">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <hr style="width: 700px;">
+
+                    <div class="basicMessage">
+
+                        <div class="settLi">
+                            <span>频次设置</span>
+                            <div>
+                                <label for="radio3_1"><input type="radio" class="input_check" id="radio3_1" value="1" name="adSet" checked="">广告之间的间隔</label>
+                                <label for="radio3_2"> <input type="radio" class="input_check" id="radio3_2" value="2" name="adSet">广告时间的间隔</label>
+                                <label for="radio3_3"><input type="radio" class="input_check" id="radio3_3" value="3" name="adSet">无限制</label>
+                            </div>
+                        </div>
+                        <div class="settLi">
+                            <dl class="settUl">
+                                <dt class="active">
+                                    <div class="game_name">广告之间的间隔时间（单位“秒”）</div>
+                                    <div>
+                                        <input id="interval" type="text" value="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  />
+                                    </div>
+                                    <i class="settNotice">注：设置每位用户在一次播放完广告后间隔多久进行下一次的广告播放。</i>
+                                </dt>
+                                <dt>
+                                    <div class="game_name">时间段内广告最多可出现的次数</div>
+                                    <div>
+                                        <input id="times" type="text" maxlength="3" value="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  oninput="if(value>100)value=100;if(value!='' && value==0)value=1"/><em>（请输入1-100之间的数字）</em>
+                                    </div>
+                                    <div class="game_name">时间段（小时）</div>
+                                    <div>
+                                        <input id="period" type="text" maxlength="2" value="" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" oninput="if(value>48)value=48;if(value!='' && value==0)value=1" /><em>（请输入1-48之间的数字）</em>
+                                    </div>
+                                    <i class="settNotice">注：设置每位用户在设定时间段内可能看到自动播放广告的频率。</i>
+                                </dt>
+                                <dt>
+                                    <div class="game_name">无设置</div>
+                                    <i class="settNotice">注：无间隔、频率的设置，根据游戏的设定播放广告</i>
+                                </dt>
+                            </dl>
+                        </div>
+                    </div>
+                    <div align="center">
+                        <table class="table table-bordered" id="ad_map_tb">
+                            <thead>
+                            <tr>
+                                <th>渠道</th>
+                                <th>系统</th>
+                                <th>广告组</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="add">添加</button>
+                    {if $this->ac == 'audit'}
+                    <br/>
+                    <br/>
+                    <select name="name" class="form-control form-filter input-sm " id="ad_status" style="width: 120px">
+                        <option value=0 selected>选择审核状态</option>
+                        {foreach ($statusDesc as $k=>$v)}
+                        <option value="{$k}">{$v}</option>
+                        {/foreach}
+                    </select>
+                    <div id='pass_reason' style="display: none;">
+                        <br/>
+                        <textarea style="width: 300px;height:100px" id="reason_area" placeholder="不通过原因"></textarea>
+                    </div>
+                    {/if}
+                </div>
+                <br/>
+            </div>
+            <div class="modal-footer-diy" align="center">
+                <button type="button" class="undo" style="margin-right: 10px" data-dismiss="modal">取消</button>
+                <button type="button" class="save">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="system_select_option" style="display: none;">
+    {foreach ($system as $k=>$v) }
+    <option value='{$k}'>{$v}</option>
+    {/foreach}
+</div>
+<div id="advertiser_type_select_option" style="display: none;">
+    {foreach ($advertiser_type as $k=>$v)}
+    <option value='{$k}'>{$v}</option>
+    {/foreach}
+</div>
+<div id="ad_channel_select_option" style="display: none;">
+    {foreach ($ad_channel as $k=>$v)}
+    <option value='{$k}'>{$v}</option>
+    {/foreach}
+</div>
+
+
+<script>
+
+    var ac = "{$this->ac}";
+    var url = "/ad/manager/foreignAd/getList/status=";
+    if (ac == 'ok') {
+        url += 3;
+    } else if (ac == 'audit') {
+        url += 1;
+    } else if (ac == 'pause') {
+        url += 2;
+    } else if (ac == 'delete') {
+        url += 4;
+    }  
+
+    var adType = 0;
+    var changeAdStrategy = false;
+
+    var group_option = "";
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function () {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150, 999999],
+                        [10, 20, 50, 100, 150, '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": url // ajax source
+                    },
+                    "aoColumnDefs": [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable': true,
+                        'aTargets': [],
+                    }],
+                    "order": [
+                        [0, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    function pause(obj) {
+        if (!confirm("确认暂停？")) {
+            return false;
+        }
+        var status = 2;
+        var id = obj.getAttribute('data-id');
+        var formData = new FormData();
+        formData.append('status', status);
+        formData.append('id', id);
+        $.ajax({
+            url: '/ad/manager/foreignAd/auditAd/',
+            type: 'post',
+            data: formData,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.code == 200) {
+                    location.href = '/ad/manager/foreignAd/ok/';
+                }
+            },
+
+        });
+    }
+
+    function recover(obj) {
+        if (!confirm("确认恢复为有效状态？")) {
+            return false;
+        }
+        var status = 3;
+        var id = obj.getAttribute('data-id');
+        var formData = new FormData();
+        formData.append('status', status);
+        formData.append('id', id);
+        $.ajax({
+            url: '/ad/manager/foreignAd/auditAd/',
+            type: 'post',
+            data: formData,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                if (data.code == 200) {
+                    location.href = '/ad/manager/foreignAd/pause/';
+                }
+            },
+
+        });
+
+    }
+
+    function recover2(obj){
+        if (!confirm("确认恢复为暂停状态？")) {
+            return false;
+        }
+        var status = 2;
+        var id = obj.getAttribute('data-id');
+        var formData = new FormData();
+        formData.append('status', status);
+        formData.append('id', id);
+        $.ajax({
+            url:'/ad/manager/foreignAd/auditAd/',
+            type:'post',
+            data:formData,
+            dataType:'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                if(data.code == 200){
+                    location.href = '/ad/manager/foreignAd/delete/';
+                }
+            },
+
+        });
+    }
+
+    jQuery(document).ready(function () {
+        EcommerceProducts.init();
+
+        $('#ad_status').on('change', function () {
+            if ($(this).val() == 2) {
+                $('#pass_reason').attr('style', 'display:block');
+            } else {
+                $('#pass_reason').attr('style', 'display:none');
+            }
+        });
+
+        $('.save').click(function () {
+            var formData = new FormData();
+            if (ac == 'audit') {
+                var status = $('#ad_status').val();
+
+                if (status == 0 || status == '' || status == undefined) {
+                    alert("请选择审核状态");
+                    return;
+                }
+                formData.append('status', status);
+                formData.append('reason', $('#reason_area').val());
+            }
+
+            // 广告频次设置
+            if (adType == 1 && changeAdStrategy===true) {
+                var frequencyType = 0;
+                var interval = 0;
+                var times = 0;
+                var period = 0;
+
+                frequencyType = $('input[name="adSet"]:checked').val();
+                if (!frequencyType) {
+                    alert('请设定广告频次');
+                    return false;
+                } else if (frequencyType == 1) {
+                    interval = $("#interval").val();
+                    if (!interval) {
+                        alert('请设定广告间隔');
+                        return false;
+                    }
+                } else if (frequencyType == 2) {
+                    times = $("#times").val();
+                    if (!times) {
+                        alert('请设定广告展示次数');
+                        return false;
+                    }
+                    period = $("#period").val();
+                    if (!period) {
+                        alert('请设定时间段');
+                        return false;
+                    }
+                }
+                formData.append('frequencyType', frequencyType);
+                formData.append('interval', interval);
+                formData.append('times', times);
+                formData.append('period', period);
+            }
+            var id = $('#ad_id').val();
+            formData.append('id', id);
+            $.ajax({
+                url: '/ad/manager/foreignAd/auditAd/',
+                type: 'post',
+                data: formData,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.code == 200) {
+                        alert("更新成功");
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+        $('.add').click(function () {
+            $('#ad_map_tb tbody').append(
+                "<tr>"+
+                    "<td>"+
+                        "<span class='channel_span unView'></span>"+
+                        "<select class='channel'>" + $('#ad_channel_select_option').html() + "</select>"+
+                    "</td>"+
+                    "<td>"+
+                        "<span class='system_span unView'></span>"+
+                        "<select class='system'>" + $('#system_select_option').html() + "</select>"+
+                    "</td>"+
+                    "<td>"+
+                        "<span class='group_span unView'></span>"+
+                        "<select class='group'>" + group_option + "</select>"+
+                    "</td>"+
+                    "<td>"+
+                        "<div class='optCancel opt btnView'>取消</div>"+
+                        "<div class='editSubmit opt btnView'>确认</div>"+
+                        "<div class='delAdUnit opt unView'>删除</div>"+
+                        "<div class='editAdUnit opt unView'>编辑</div>"+
+                    "</td>"+
+                "</tr>"
+            );
+        });
+
+
+        $("#ad_map_tb").on("click", ".editSubmit", function (e) {
+            var $editElem = $(this);
+            var channel = $editElem.parents("td").siblings("td").children(".channel").val();
+            var system = $editElem.parents("td").siblings("td").children(".system").val();
+            var group_id = $editElem.parents("td").siblings("td").children(".group").val();
+
+            if (channel == '' || system == '' || group_id == '') {
+                alert("请将广告单元信息补充完整");
+                return;
+            }
+            var inner_id = $('#ad_id').val();
+
+            var url = "/ad/manager/foreignAd/setADMap/";
+            var post_data = {
+                inner_id:inner_id,
+                channel:channel, 
+                os:system, 
+                group_id:group_id
+            };
+
+
+            var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+
+            if (attr_id) {
+                post_data.id = attr_id;
+            } 
+
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: post_data,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        var id = data.data;
+                        $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                        // span 赋值
+                        var channelDesc = $editElem.parents("td").siblings("td").children(".channel").find("option:selected").html();
+                        var systemDesc = $editElem.parents("td").siblings("td").children(".system").find("option:selected").html();
+                        var group = $editElem.parents("td").siblings("td").children(".group").find("option:selected").html();
+                        $editElem.parents("td").siblings("td").children(".channel_span").html(channelDesc);
+                        $editElem.parents("td").siblings("td").children(".system_span").html(systemDesc);
+                        $editElem.parents("td").siblings("td").children(".group_span").html(group);
+
+                        // span 显示
+                        $editElem.parents("td").siblings("td").children(".channel_span").removeClass("unView");
+                        $editElem.parents("td").siblings("td").children(".system_span").removeClass("unView");
+                        $editElem.parents("td").siblings("td").children(".group_span").removeClass("unView");
+
+                        // 输入 隐藏
+                        $editElem.parents("td").siblings("td").children(".channel").addClass("unView");
+                        $editElem.parents("td").siblings("td").children(".advertiser").addClass("unView");
+                        $editElem.parents("td").siblings("td").children(".system").addClass("unView");
+                        $editElem.parents("td").siblings("td").children(".group").addClass("unView");
+
+                        // 按钮 隐藏 显示
+                        $editElem.siblings(".optCancel").removeClass("btnView").addClass("unView");
+                        $editElem.removeClass("btnView").addClass("unView");
+
+                        $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                        $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+                    } else {
+                        alert(data.message);
+                    }
+                },
+            });
+
+        });
+
+        // 取消按钮
+        $("#ad_map_tb").on("click", ".optCancel", function (e) {
+            var $editElem = $(this);
+            var id = $editElem.parents("td").parents("tr").attr('attr-id');
+
+            if (id == '' || id == undefined) {
+                // 广告单元未保存 移除该行
+                $editElem.parents("td").parents("tr").remove();
+            } else {
+                // span 显示
+                $editElem.parents("td").siblings("td").children(".channel_span").removeClass("unView");
+                $editElem.parents("td").siblings("td").children(".system_span").removeClass("unView");
+                $editElem.parents("td").siblings("td").children(".group_span").removeClass("unView");
+
+                // 输入 隐藏
+                $editElem.parents("td").siblings("td").children(".channel").addClass("unView");
+                $editElem.parents("td").siblings("td").children(".system").addClass("unView");
+                $editElem.parents("td").siblings("td").children(".group").addClass("unView");
+
+                // 按钮 隐藏 显示
+                $editElem.siblings(".editSubmit").removeClass("btnView").addClass("unView");
+                $editElem.removeClass("btnView").addClass("unView");
+
+                $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+            }
+        });
+
+
+        // 编辑按钮
+        $("#ad_map_tb").on("click", ".editAdUnit", function (e) {
+            var $editElem = $(this);
+            // span 隐藏
+            $editElem.parents("td").siblings("td").children(".channel_span").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".system_span").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".group_span").addClass("unView");
+
+            // 输入 选中
+            var channel = $editElem.parents("td").siblings("td").children(".channel_span").html();
+            var system = $editElem.parents("td").siblings("td").children(".system_span").html();
+            var group = $editElem.parents("td").siblings("td").children(".group_span").html();
+
+            selectView($editElem.parents("td").siblings("td").children(".channel"), channel);
+            selectView($editElem.parents("td").siblings("td").children(".system"), system);
+            selectView($editElem.parents("td").siblings("td").children(".group"), group);
+
+            // 输入 显示
+            $editElem.parents("td").siblings("td").children(".channel").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".system").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".group").removeClass("unView");
+
+            // 按钮 隐藏 显示
+            $editElem.siblings(".optCancel").removeClass("unView").addClass("btnView");
+            $editElem.siblings(".editSubmit").removeClass("unView").addClass("btnView");
+
+            $editElem.siblings(".delAdUnit").removeClass("btnView").addClass("unView");
+            $editElem.removeClass("btnView").addClass("unView");
+        });
+
+        // 删除按钮 
+        $("#ad_map_tb").on("click", ".delAdUnit", function (e) {
+            if (!confirm("确认删除该广告单元吗？")) {
+                return false;
+            }
+
+            var $editElem = $(this);
+            var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+
+            $.ajax({
+                url: "/ad/manager/foreignAd/deleteADMap/",
+                type: 'post',
+                data: {ad_map_id:attr_id},
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code == 200) {
+                        $editElem.parents("td").parents("tr").remove();
+                    } else {
+                        alert(data.message);
+                    }
+                },
+            });
+
+        });        
+
+    });
+
+    function switchAd2(){
+        var indexSetting=$('input[name="adSet"]:checked').val();
+        $(".settUl").find("dt").eq(indexSetting-1).show().siblings("dt").hide();
+    };
+    switchAd2();
+    $('input[name="adSet"]').change(function() {
+        changeAdStrategy = true;
+        switchAd2();
+    });
+
+    function selectView(selectElem, val) {
+        selectElem.find("option").each(function(){
+            if ($(this).html() == val) {
+                $(this).attr("selected", true);
+            }
+        });
+    }
+
+    function getDetail(obj) {
+        var id = obj.getAttribute('data-id');
+        if (id !== undefined) {
+            currentId = id;
+            $.ajax({
+                url: "/ad/manager/foreignAd/getDetails/",
+                type: "post",
+                data: {
+                    id: id
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 200) {
+                        group_option = "";
+                        var groups = data.data.groups;
+
+                        for (var i = 0; i < groups.length; i++) {
+                            group_option += "<option value="+groups[i].id+">"+groups[i].name+"</option>";
+                        }
+
+                        $('#game_id').val(data.data['base']['game_id']);
+                        $('#game_name').val(data.data['base']['name']);
+                        $('#ad_name').val(data.data['base']['title']);
+                        $('#ad_id').val(data.data['base']['id']);
+                        $('#ad_type').val(data.data['base']['advertise_type_desc']);
+                        $('#ad_map_tb tbody').html("");
+
+                        adType = data.data['base']['advertise_type'];
+
+                        if (adType == 1) {
+                            $('input[name="adSet"]').each(function() {
+                                if (data.data.base.frequency_type == $(this).val()) {
+                                    $(this).attr("checked",true);
+                                    $(this).parents("span").addClass("checked");
+                                    switchAd2();
+                                } else {
+                                    $(this).parents("span").removeClass("checked");
+                                }
+                                if (data.data.base.frequency_type == 1) {
+                                    $("#interval").val(data.data.base.interval);
+                                } else if (data.data.base.frequency_type == 2) {
+                                    $("#times").val(data.data.base.times);
+                                    $("#period").val(data.data.base.period);
+                                }
+                            });
+                            $(".basicMessage").show();
+                        } else {
+                            $(".basicMessage").hide();
+                        }
+
+                        var items = data.data['real_ad_data'];
+                        for (var i = 0; i < items.length; i++) {
+
+                            $('#ad_map_tb tbody').append(
+                                "<tr attr-id='" + items[i].id + "'>"+
+                                "<td>"+
+                                    "<span class='channel_span'>"+items[i].channel_desc+"</span>"+
+                                    "<select class='channel unView'>" + $('#ad_channel_select_option').html() + "</select>"+
+                                "</td>"+
+                                "<td>"+
+                                    "<span class='system_span'>"+items[i].system_desc+"</span>"+
+                                    "<select class='system unView'>" + $('#system_select_option').html() + "</select>"+
+                                "</td>"+
+                                "<td>"+
+                                    "<span class='group_span'>"+items[i].name+"</span>"+
+                                    "<select class='group unView'>" + group_option + "</select>"+
+                                "</td>"+
+                                "<td>"+
+                                    "<div class='optCancel opt unView'>取消</div>"+
+                                    "<div class='editSubmit opt unView'>确认</div>"+
+                                    "<div class='delAdUnit opt btnView'>删除</div>"+
+                                    "<div class='editAdUnit opt btnView'>编辑</div>"+
+                                "</td>"+
+                                "</tr>");
+                        }
+
+                        // initEvent();
+
+                        $('#myModal').modal();
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+<script>
+    if (!jQuery().datetimepicker) {
+        alert(333);
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        minView: "month",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2019-01-01",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+</script>

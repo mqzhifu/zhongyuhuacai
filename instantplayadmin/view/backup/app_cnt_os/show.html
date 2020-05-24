@@ -1,0 +1,620 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="actions">
+                                <div class="btn-group">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+                                    <span>
+                                    </span>
+                                    <a class="btn btn-default btn-circle" href="javascript:;" id="add_game" data-toggle="dropdown">
+                                        添加礼品卡
+                                    </a>
+                                    <!--<a class="btn btn-default btn-circle" href="javascript:;" id="add_popularization" data-toggle="dropdown" style="margin-left: 10px;">添加展示位</a>-->
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+
+                                        <th width="5%">
+                                            ID
+                                        </th>
+                                        <th width="5%">
+                                            商品名称
+                                        </th>
+                                        <th width="5%">
+                                            商品价格
+                                        </th>
+                                        <th width="5%">
+                                            商品描述
+                                        </th>
+                                        <th width="10%">
+                                            兑换所需金币
+                                        </th>
+                                        <th width="10%">
+                                            图片
+                                        </th>
+                                        <th width="5%">
+                                            状态
+                                        </th>
+
+                                        <th width="5%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+
+                                        </td>
+
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-circle blue btn-sm" style="display: inline-block;"><i class="fa fa-search"></i> 搜索</button><button class="btn btn-circle green btn-sm" style="display: inline-block;"><i class="fa fa-times"></i> 重置</button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<div class="modal fade" id="add_game_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 align="center" class="modal-title" id="myModalLabel"><span style="font-weight: bold">添加礼品卡</span></h5>
+            </div>
+            <div class="modal-body"  style="width: 800px;margin-left: 20px">
+                <!-- 基本设置 -->
+                <div id="base-set1" style="margin-left: 20px;margin-right: 40px;">
+                    <div>
+                        <span><label>商品名称</label> </span><span style="margin-left: 20px"><input  type="text" id="gift_card_name" style="width: 150px" placeholder="必填"></span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span><label>商品价值</label> </span><span style="margin-left: 20px"><input  type="text" onkeyup="this.value=this.value.replace(/[^0-9\.]\D*$/,'')" id="gift_card_value" style="width: 150px" placeholder="必填"></span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span><label>商品描述</label> </span><span style="margin-left: 20px"><input  type="text" id="gift_desc" style="width: 150px" placeholder="必填"></span>
+                    </div>
+                    <br/>
+                    <div id="">
+                        <span><label>兑换所需金币</label> </span><span style="margin-left: 20px"><input  oninput="myGanged()" type="text" id="change_gold" style="width: 150px" placeholder="必填"></span><span style="color: #9EACCA">注：自动计算</span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span>图片地址</span>
+                        <span style="margin-left: 20px" id ='img_spac'>
+                        <input id='upload_input' type="file" name="banner_img" style="display:none;">
+                        <input id='upload' type="button" value="点击上传"/>
+                        <button class='view' value="">预览</button>
+                    </span>
+                        <span style="margin-left: 20px;display:none;" id='url_span'>
+                        <input name="url" type="text" id='img_url'/>
+                    </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer-diy" align="center">
+                <button type="button" style="background-color: #b92c28" class="add_game_modal_undo" data-dismiss="modal"><span style="color: white">取消</span></button>
+                <button type="button" style="background-color: #4cae4c" class="add_game_save" ><span style="color: white">保存</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add_game_modal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h5 class="modal-title" id="myModalLabel1" align="center"><span style="font-weight: bold">修改礼品卡配置信息</span></h5>
+            </div>
+            <div class="modal-body"  style="width: 800px;margin-left: 20px">
+                <!-- 基本设置 -->
+                <div id="base-set11" style="margin-left: 20px;margin-right: 40px;">
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">商品名称</span>
+                        <span style="margin-left: 20px">
+                            <input type="text" id="id1" readonly>
+                        </span>
+                    </div>
+                    <br>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">商品名称</span>
+                        <span style="margin-left: 20px">
+                            <input type="text" id="gift_card_name1">
+                        </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">商品价格</span>
+                        <span style="margin-left: 20px">
+                            <input  type="text" onkeyup="this.value=this.value.replace(/[^0-9\.]\D*$/,'')" id="gift_card_value1">
+                        </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">商品描述</span>
+                        <span style="margin-left: 20px">
+                            <input type="text" id="gift_desc1">
+                        </span>
+                    </div>
+                    <br/>
+                    <div>
+                        <span style="    display: inline-block;width: 70px;">所需金币</span>
+                        <span style="margin-left: 20px">
+                            <input type="text" id="change_gold1"><span style="color: #9EACCA">注：自动计算</span>
+                        </span>
+                    </div>
+                    <br>
+                    <div>
+                        <span style="display: inline-block;width: 70px;">图片上传</span>
+                        <span style="margin-left: 20px" id ='img_spac1'>
+                        <input id='upload_input1' type="file" name="" style="display:none;">
+                        <input id='upload1' type="button" value="点击上传"/>
+                        <button class='view1' value="" style="display: inline-block;">预览</button>
+                    </span>
+                        <span style="margin-left: 20px;display:none;" id='url_span1'>
+                        <input name="url1" type="text" id='img_url1'/>
+                    </span>
+                    </div>
+                    <br/>
+                </div>
+
+            </div>
+            <div class="modal-footer-diy" align="center">
+                <button type="button" class="add_game_modal_undo" data-dismiss="modal" style="background-color: #b92c28"><span style="color: white">取消</span></button>
+                <button type="button" class="add_game_save1" style="background-color: #3e8f3e"><span style="color: white  ">保存</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div id="outerdiv" style="position:fixed;top:0;left:0;background:rgba(0,0,0,0.7);z-index:20000;width:100%;height:100%;display:none;">
+    <div id="innerdiv" style="position:absolute;">
+        <img id="bigimg" style="border:5px solid #fff;text-align: center;" src="" />
+    </div>
+</div>
+<script>
+    var editid = 0;
+    var img_upload_type = 1;//1 图片 2图片url
+
+    var type = 0;//1 添加 2更新
+    function one_del(obj){
+        if (!confirm("确认删除？")) {
+            return false;
+        }
+        $.ajax({
+            type: 'post',
+            url: '/app_cnt_os/no/moneyOs/delone/',
+            data: {
+                id:obj.getAttribute('data-id')
+            },
+            dataType: 'json',
+            success: function(data){
+                if(data.code == 200){
+                    location.href = '/app_cnt_os/no/moneyOs/index/';
+                }else{
+                    alert(data.message);
+                }
+            }
+        });
+    }
+
+    function showImg(src) {
+        $('#bigimg').attr("src", src);
+        /*获取当前点击图片的真实大小，并显示弹出层及大图*/
+        $('#bigimg').load(function(){
+            var windowW = $(window).width();//获取当前窗口宽度
+            var windowH = $(window).height();//获取当前窗口高度
+            var realWidth = this.width;//获取图片真实宽度
+            var realHeight = this.height;//获取图片真实高度
+            var imgWidth, imgHeight;
+            var scale = 0.8;//缩放尺寸，当图片真实宽度和高度大于窗口宽度和高度时进行缩放
+
+            if(realHeight>windowH*scale) {//判断图片高度
+                imgHeight = windowH*scale;//如大于窗口高度，图片高度进行缩放
+                imgWidth = imgHeight/realHeight*realWidth;//等比例缩放宽度
+                if(imgWidth>windowW*scale) {//如宽度扔大于窗口宽度
+                    imgWidth = windowW*scale;//再对宽度进行缩放
+                }
+            } else if(realWidth>windowW*scale) {//如图片高度合适，判断图片宽度
+                imgWidth = windowW*scale;//如大于窗口宽度，图片宽度进行缩放
+                imgHeight = imgWidth/realWidth*realHeight;//等比例缩放高度
+            } else {//如果图片真实高度和宽度都符合要求，高宽不变
+                imgWidth = realWidth;
+                imgHeight = realHeight;
+            }
+            $('#bigimg').css("width",imgWidth);//以最终的宽度对图片缩放
+
+            var w = (windowW-imgWidth)/2;//计算图片与窗口左边距
+            var h = (windowH-imgHeight)/2;//计算图片与窗口上边距
+            $("#innerdiv").css({"top":h, "left":w});//设置#innerdiv的top和left属性
+            $("#outerdiv").fadeIn("fast");//淡入显示#outerdiv及.pimg
+        });
+    }
+
+
+    function getObjectURL(file) {
+        var url = null;
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+
+
+</script>
+
+
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/app_cnt_os/no/moneyOs/getList/" // ajax source
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : []
+                    }],
+                    "order": [
+                        [0, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                        function(){
+                            ids += ($(this).val())+",";
+                        }
+                    );
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/?ac=delBat&ids="+ids ,
+                        dataType: 'json',
+                        success: function(data){
+                            grid.setAjaxParam("customActionType", "group_action");
+                            grid.setAjaxParam("customActionName", action.val());
+                            grid.setAjaxParam("id", grid.getSelectedRows());
+                            grid.getDataTable().ajax.reload();
+                            grid.clearAjaxParams();
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+                handleProducts();
+                initPickers();
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+        $(".view1").click(function(){
+            var src = $(this).val();
+            showImg(src);
+        });
+
+        $(".view").click(function(){
+            var src = $(this).val();
+            showImg(src);
+        });
+        $("#outerdiv").click(function(){//再次点击淡出消失弹出层
+            $(this).fadeOut("fast");
+        });
+
+        $('#upload').click(function(){
+            $('#upload_input').click();
+            $('#upload_input').on('change', function(){
+                var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+                if (objUrl) {
+                    $('.view').val(objUrl);
+                }
+            });
+        });
+
+        $('#upload1').click(function(){
+            $('#upload_input1').click();
+            $('#upload_input1').on('change', function(){
+                var objUrl = getObjectURL(this.files[0]); //获取图片的路径，该路径不是图片在本地的路径
+                if (objUrl) {
+                    $('.view1').val(objUrl);
+                }
+            });
+        });
+
+        $('#add_game').click(function(){
+            // $('#add_game_modal').modal();
+            type = 1;
+            $.ajax({
+                type: 'post',
+                url: '/promotion/no/banner/getBannerColumn/',
+                dataType: 'json',
+                success: function(data){
+                    if(data.code==200){
+                        $('#game_id').val("");
+                        $('#start_launch_time').val("");
+                        $('#end_launch_time').val("");
+                        //$('#weight').val("");
+                        $('#name').val("");
+                        $('#img_link').val("");
+                        $('.view').val("");
+                        $('#img_url').val("");
+
+                        $('#banner_column_select').html("");
+                        for(var i = 0; i < data.data.length; i++){
+                            $('#banner_column_select').append('<option value="'+data.data[i]['id']+'">'+data.data[i]['id']+'</option>');
+                        }
+                        $('#add_game_modal').modal();
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            });
+
+
+        });
+
+
+        $('.add_game_save').click(function(){
+            var formData = new FormData();
+//            var gift_card_id = $('#gift_card_id').val();
+            var gift_card_name = $('#gift_card_name').val();
+            var gift_card_value = $('#gift_card_value').val();
+            var gift_desc = $('#gift_desc').val();
+            var change_gold = $('#change_gold').val();
+
+
+//            formData.append('gift_card_id', gift_card_id);
+            formData.append('gift_card_name', gift_card_name);
+            formData.append('gift_card_value', gift_card_value);
+            formData.append('change_gold', change_gold);
+            formData.append('gift_desc', gift_desc);
+            var file1 = $('#upload_input')[0].files[0];
+            if(file1!='undefined'){
+                formData.append('img', file1);
+            }
+            formData.append('img_url', $('#img_url').val());
+            var url =  '/app_cnt_os/no/moneyOs/addOne/';
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        alert('添加成功！');
+                        location.href = '/app_cnt_os/no/moneyOs/index/';
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+        $('.add_game_save1').click(function(){
+            var formData = new FormData();
+            var id = $('#id1').val();
+            var gift_card_name = $('#gift_card_name1').val();
+            var gift_card_value = $('#gift_card_value1').val();
+            var gift_desc = $('#gift_desc1').val();
+            var change_gold = $('#change_gold1').val();
+
+            formData.append('id', id);
+            formData.append('gift_card_name', gift_card_name);
+            formData.append('gift_card_value', gift_card_value);
+            formData.append('change_gold', change_gold);
+            formData.append('gift_desc', gift_desc);
+            var file2 = $('#upload_input1')[0].files[0];
+            if(file2!='undefined'){
+                formData.append('img1', file2);
+            }
+            var url =  '/app_cnt_os/no/moneyOs/upOne/';
+            $.ajax({
+                url:url,
+                type:'post',
+                data:formData,
+                dataType:'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success:function(data){
+                    if(data.code == 200){
+                        alert('编辑成功！');
+                        location.href = '/app_cnt_os/no/moneyOs/index/';
+                    }else{
+                        alert(data.message);
+                    }
+                },
+
+            });
+        });
+
+    });
+
+
+</script>
+
+<script>
+    // 只能输入数字
+    $("[data-tag='inputNumber']").each(function (index, value) {
+        $(this).on("keyup", function () {
+            this.value = this.value.replace(/\D/g,'');
+        });
+    });
+
+</script>
+
+<script>
+    document.getElementById("gift_card_value").oninput=function(){
+        myGanged();
+    };
+    function myGanged() {
+        $oldNum = document.getElementById("gift_card_value").value;
+        document.getElementById("change_gold").value=$oldNum*100000;
+    }
+
+    document.getElementById("gift_card_value1").oninput=function(){
+        myGanged1();
+    };
+    function myGanged1() {
+        $oldNum = document.getElementById("gift_card_value1").value;
+        document.getElementById("change_gold1").value=$oldNum*100000;
+    }
+</script>
+
+<script>
+    function editNew(obj){
+        type = 2;
+        var formData = new FormData();
+        formData.append('id', obj.getAttribute('data-id'));
+        editid = obj.getAttribute('data-id');
+        $.ajax({
+            type: 'post',
+            url: '/app_cnt_os/no/moneyOs/getOne/',
+            dataType: 'json',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(data){
+                if(data.code == 200){
+                    $('#id1').val(data.data['data1']['id']);
+                    $('#gift_card_name1').val(data.data['data1']['gift_card_name']);
+                    $('#gift_card_value1').val(data.data['data1']['gift_card_value']);
+                    $('#gift_desc1').val(data.data['data1']['gift_desc']);
+                    $('#change_gold1').val(data.data['data1']['change_gold']);
+                    $('.view1').val(data.data['data1']['img_url']);
+                    $('#add_game_modal1').modal();
+                }else{
+                    alert(data.message);
+                }
+
+            }
+        });
+    }
+</script>

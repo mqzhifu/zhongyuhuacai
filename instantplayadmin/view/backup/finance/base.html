@@ -1,0 +1,270 @@
+
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开发者ID
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['uid']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开发者类型
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$accountType[$developer['type']]}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开发者名称
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {if $developer['type']==1}{$developer['company']}
+                                                                {else}{$developer['contact']}
+                                                                {/if}
+                                                            </div>
+                                                        </div>
+                                                        {if $developer['type']==1}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                企业营业执照号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['business_number']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                注册地址
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['company_addr_province']} {$developer['company_addr_city']} {$developer['company_addr_district']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                营业执照扫描件
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$developer['business']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 预览</button>
+                                                            </div>
+                                                        </div>
+                                                        {else}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                身份证号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['idcard_number']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                证件有效期
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['idcard_start_date']} 至 {$developer['idcard_end_date']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                身份证（正反面）
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$developer['idcard_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 正面</button>
+                                                                <button value="{$developer['idcard2_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 反面</button>
+                                                            </div>
+                                                        </div>
+                                                        {/if}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系人
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['contact']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系电话
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['phone']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系邮箱
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['email']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                联系地址
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['address']}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开户名称
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {if $developer['type']==1}{$developer['company']}
+                                                                {else}{$developer['account_holder']}
+                                                                {/if}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开户行所在地
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['bank_province']} {$openFinance['bank_city']} {$openFinance['bank_district']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                开户银行
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['bank_name']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                支行信息
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['branch_name']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                银行账号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['bank_account']}
+                                                            </div>
+                                                        </div>
+
+                                                        {if $developer['type']==1}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                纳税登记号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['tax_number']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                纳税登记证
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$openFinance['tax_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 预览</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                纳税人类型
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['tax_type']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                发票类型
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['invoice_type']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                税率
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['tax_rate']}%
+                                                            </div>
+                                                        </div>
+                                                        {else}
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                银行卡正面扫描件
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$openFinance['bank_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 预览</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                身份证号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$openFinance['idcard_number']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                原开户人身份证（正反面）
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$openFinance['idcard_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 预览</button>
+                                                                <button value="{$openFinance['idcard2_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 预览</button>
+                                                            </div>
+                                                        </div>
+                                                        {/if}
+                                                    </div>
+                                                </div>
+                                                
+                                                {if $developer['type']==1}
+                                                <div class="portlet yellow-crusta box" style="margin-bottom: 0px;">
+                                                    <div class="portlet-body">
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                法人姓名
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['legal_person']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                法人身份证号
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['idcard_number']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                证件有效期
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                {$developer['idcard_start_date']} 至 {$developer['idcard_end_date']}
+                                                            </div>
+                                                        </div>
+                                                        <div class="row static-info">
+                                                            <div class="col-md-5 name">
+                                                                法人身份证（正反面）
+                                                            </div>
+                                                            <div class="col-md-7 value">
+                                                                <button value="{$developer['idcard_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 正面</button>
+                                                                <button value="{$developer['idcard2_img']}" class="btn btn-sm blue filter-submit margin-bottom"><i class="fa fa-search"></i> 反面</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {/if}

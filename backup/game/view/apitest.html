@@ -1,0 +1,114 @@
+<html>
+
+
+<body>
+
+
+<script src="http://{CONST|STATIC_URL}/js/jquery-3.3.1.js"></script>
+<script src="http://{CONST|STATIC_URL}/js/md5.js"></script>
+
+<table>
+    <tr>
+
+        <td>描述</td>
+        <td>方法名</td>
+        <td>控制器</td>
+        <td>登陆</td>
+        <td>模块</td>
+    </tr>
+
+
+    <tr>
+        <td>{$method['title']}</td>
+        <td>{$c}</td>
+        <td>{$a}</td>
+        <td>{if $is_login}是{else}否{/if}</td>
+        <td>{$method['module']}</td>
+        <td>
+
+        </td>
+    </tr>
+
+</table>
+
+<br/><br/>
+
+<form id="myform" method="post" action="/{$c}/{$a}/" enctype="multipart/form-data">
+    {if $para}
+    <table>
+        <tr><td>参数名</td><td>描述</td><td>必填</td></tr>
+
+
+        {foreach ($para as $k2=>$v2) }
+        <tr>
+            <td>{$v2['name']}</td>
+            <td>{$v2['title']}</td>
+            <td>{$v2['must']}</td>
+            <td>
+
+                {if $v2['name'] == 'fileInputName'}
+                    <input name="{$v2['name']}" id="{$v2['name']}" type="file" />
+                {else}
+                    <input name="{$v2['name']}" id="{$v2['name']}" value="{$v2['default']}" />
+                {/if}
+
+                {if $v2['name'] == 'imgCode'}
+                <img src="/system/getVerifierImg/unicode=123" />
+                {/if}
+
+            </td>
+            {if $v2['name'] == 'token'}
+                <td>{$v2['info']['id']},{$v2['info']['name']}</td>
+            {/if}
+        </tr>
+        {/foreach}
+
+        <tr>
+            <td><input type="button" onclick="sub()" value="提交" /></td>
+            <td><input type="button" onclick="makeUrl();" value="生成URL" /></td>
+        </tr>
+    </table>
+    <div id="url"></div>
+    {/if}
+
+</form>
+
+<script>
+
+    function sub(){
+        $("#myform").find('input').each(function(){
+            if($(this).attr('name') == 'ps'){
+                var v = $(this).val();
+                v = hex_md5(v);
+                $(this).val(v);
+            }
+        });
+        $("#myform").submit();
+    }
+
+    function makeUrl(){
+        // $("#myform");
+        var url = "/{$c}/{$a}/";
+        $("#myform").find('input').each(function(){
+            if($(this).val() == '提交' || $(this).val() == '生成URL'){
+                return 0;
+            }
+            if($(this).attr('name') == 'ps'){
+                var v = $(this).val();
+                v = hex_md5(v);
+                $(this).val(v);
+            }
+
+            url += $(this).attr('name') +"=" +$(this).val() +"&";
+        });
+
+        alert(url);
+    }
+
+</script>
+
+
+</body>
+
+
+</html>
