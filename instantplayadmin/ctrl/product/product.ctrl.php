@@ -117,6 +117,7 @@ class ProductCtrl extends BaseCtrl{
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
         $this->addHookJS("product/product_add_hook.html");
+        $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/product/product_add.html");
     }
 
