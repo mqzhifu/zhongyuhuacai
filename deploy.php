@@ -3,7 +3,7 @@
 class Deployment {
 
     public $serect = 'zzzzxiao'; //webhooks中配置的密钥
-
+    public $logPath = "";
     public function deploy()
     {
         $requestBody = file_get_contents('php://input'); //每次推送的时候，会接收到post过来的数据。
