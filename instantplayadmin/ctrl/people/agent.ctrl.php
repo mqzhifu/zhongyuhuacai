@@ -113,7 +113,7 @@ class AgentCtrl extends BaseCtrl{
             $data = AgentModel::db()->getAll($where . $order . $limit);
 
             foreach($data as $k=>$v){
-                
+
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
