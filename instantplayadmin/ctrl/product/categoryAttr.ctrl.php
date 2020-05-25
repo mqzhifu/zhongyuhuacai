@@ -40,7 +40,7 @@ class CategoryAttrCtrl extends BaseCtrl{
             );
 
             $newId = ProductCategoryAttrModel::db()->add($data);
-            var_dump($newId);exit;
+            $this->ok("成功",$this->_backListUrl);
         }
 
         $this->assign("category",$category);

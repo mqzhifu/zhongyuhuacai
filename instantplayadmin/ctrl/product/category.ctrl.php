@@ -29,7 +29,7 @@ class CategoryCtrl extends BaseCtrl{
             );
 
             $newId = ProductCategoryModel::db()->add($data);
-            var_dump($newId);exit;
+            $this->ok("成功",$this->_backListUrl);
         }
         $this->addHookJS("/product/category_add_hook.html");
         $this->display("/product/category_add.html");
