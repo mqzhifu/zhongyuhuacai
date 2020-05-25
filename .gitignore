@@ -3,6 +3,7 @@ storage/log/*
 storage/session/*
 storage/view_c/*
 storage/product_tb/*
+storage/deploy/*
 
 /doc
 /static
