@@ -6,11 +6,9 @@ storage/product_tb/*
 
 /doc
 /static
+/static/upload/
 
 configcenter/api/env/local
 configcenter/instantplayadmin/env/local
-
-
-static/upload/
 
 kernel/plugins/structure/testData
