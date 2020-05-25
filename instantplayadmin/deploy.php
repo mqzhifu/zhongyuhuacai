@@ -103,7 +103,7 @@ class Deployment {
         $this->execShell("php {$this->projectDir}init_env.php pre");
 
 
-        $this->execShell("chown -R www:www {$this->projectDir} ");
+//        $this->execShell("chown -R www:www {$this->projectDir} ");
 //        $res = shell_exec("cd /home/www/instantplay && git pull 2>&1");
     }
 
