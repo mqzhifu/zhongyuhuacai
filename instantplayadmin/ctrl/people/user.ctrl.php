@@ -128,7 +128,7 @@ class UserCtrl extends BaseCtrl{
                 'a_time'=>time(),
                 'city_code'=> _g('city'),
                 'county_code'=> _g('county'),
-                'town_code'=> _g('street'),
+                'town_code'=> _g('town'),
                 'province_code'=> _g('province'),
             );
 
