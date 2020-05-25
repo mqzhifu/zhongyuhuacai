@@ -67,7 +67,7 @@
             var streetData = ajaxStreetData;
             var optionHtml = "<option value=''>请选择</option>";
             for(var i=0;i<streetData.length;i++){
-                optionHtml += "<option value='"+streetData[i]['town_code']+"'>"+streetData[i]['short_name']+"</option>";
+                optionHtml += "<option value='"+streetData[i]['code']+"'>"+streetData[i]['short_name']+"</option>";
             }
             $("#town").html(optionHtml);
         }else{
