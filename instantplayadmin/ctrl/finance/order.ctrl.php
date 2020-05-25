@@ -70,7 +70,7 @@ class OrderCtrl extends BaseCtrl{
             $data['pid'] = $goods['pid'];
 
             $newId = OrderModel::db()->add($data);
-            var_dump($newId);exit;
+            $this->ok($newId,"",$this->_backListUrl);
         }
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
