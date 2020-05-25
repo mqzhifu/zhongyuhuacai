@@ -123,7 +123,7 @@ class UserProductLikedCtrl extends BaseCtrl{
 
             $newId = UserModel::db()->add($data);
 
-            var_dump($newId);exit;
+            $this->ok($newId,"",$this->_backListUrl);
 
         }
 
@@ -132,21 +132,21 @@ class UserProductLikedCtrl extends BaseCtrl{
 
 
 
-        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
-        $this->assign("cityJs",$cityJs);
-        $this->assign("countyJs",$countryJs);
-
-        $this->assign("sexOption",UserModel::getSexOptions());
-        $this->assign("typeOption",UserModel::getTypeOptions());
-        $this->assign("statusOpen",UserModel::STATUS_DESC);
-
+//        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
+//        $this->assign("cityJs",$cityJs);
+//        $this->assign("countyJs",$countryJs);
+//
+//        $this->assign("sexOption",UserModel::getSexOptions());
+//        $this->assign("typeOption",UserModel::getTypeOptions());
+//        $this->assign("statusOpen",UserModel::STATUS_DESC);
+//
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/people/user_add_hook.html");
-        $this->addHookJS("/layout/place.js.html");
-        $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_add.html");
+        $this->addHookJS("/people/user_liked_add_hook.html");
+//        $this->addHookJS("/layout/place.js.html");
+//        $this->addHookJS("/layout/file_upload.js.html");
+        $this->display("/people/user_liked_add.html");
     }
 
     function detail(){
