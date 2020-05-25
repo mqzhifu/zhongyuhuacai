@@ -133,7 +133,7 @@ class AgentCtrl extends BaseCtrl{
                 $records["data"][] = $row;
             }
         }
-
+ 
         $records["recordsTotal"] = $iTotalRecords;
         $records["recordsFiltered"] = $iTotalRecords;
 
