@@ -122,7 +122,7 @@ class UserCtrl extends BaseCtrl{
                 'sex'=> _g('sex'),
                 'email'=> _g('email'),
 //                'birthday'=> _g('birthday'),
-                'status'=>_g('status'),
+//                'status'=>_g('status'),
                 'type'=>_g('type'),
 //                'third_uid'=>_g('third_uid'),
                 'a_time'=>time(),
