@@ -35,7 +35,20 @@ class ImageCtrl extends BaseCtrl{
 
     }
 
-    function foreachDir($dir){
+    function getFileContent(){
+        $rootPath = get_static_url() . "upload";
+        $filePath = _g('file_path');
+        $filePath = substr($filePath,1);
+        $fullDir = $rootPath . $filePath;
+//        $content = file_get_contents($fullDir);
+//        $content = str_replace("\t","&nbsp;&nbsp;&nbsp;&nbsp;",$content);
+//        $content = str_replace("\n","<br/>",$content);
+//        $content = str_replace("    ","&nbsp;&nbsp;&nbsp;&nbsp;",$content);
+
+        echo $fullDir;
+    }
+
+    function foreachDir($dir,$parent = "/"){
 
         $dirTreeHtml = "";
         foreach ($dir as $k=>$v){
@@ -55,11 +68,11 @@ class ImageCtrl extends BaseCtrl{
                     $empty = ' , "icon" : "fa fa-folder icon-state-danger"  ';
                 }
 
-                $dirTreeHtml .= '<li data-jstree=\'{ "opened" : true '.$empty.' }\'>'.$k."({$this->_desc[$k]})(总数量:$num)".'<ul>' . $this->foreachDir($v) ."</ul></li>";
+                $dirTreeHtml .= '<li data-jstree=\'{ "opened" : true '.$empty.' }\'>'.$k."({$this->_desc[$k]})(总数量:$num)".'<ul>' . $this->foreachDir($v ,$parent .DS .$k) ."</ul></li>";
             }else{
                 if($v != 'desc.txt'){
                     //{ "icon" : "fa fa-briefcase icon-state-success " }
-                    $dirTreeHtml .= '<li data-jstree=\'{ "icon" : "fa fa-file-image-o icon-state-success "}\'>'.$v.'</li>';
+                    $dirTreeHtml .= '<li data-jstree=\'{ "icon" : "fa fa-file-image-o icon-state-success "}\'><span onclick="show_file_content(this)" data= "'.$parent.'"  >  '.$v.'</span></li>';
                 }
             }
         }
