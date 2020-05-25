@@ -1,0 +1,213 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <!-- <div class="actions">
+                                <div class="btn-group">
+                                    <a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-share"></i> 导出 <i class="fa fa-angle-down"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu pull-right">
+                                        <li>
+                                            <a href="javascript:void(0);" onclick="export_data();">
+                                                Excel </a>
+                                        </li>
+                                        <li class="divider">
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                PDF </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                WORD </a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="portlet-body">
+
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+
+
+
+                                    <div class="portlet blue-hoki box">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-cogs"></i>文件目录
+                                            </div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse">
+                                                </a>
+                                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                                </a>
+                                                <a href="javascript:;" class="reload">
+                                                </a>
+                                                <a href="javascript:;" class="remove">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div id="tree_1" class="tree-demo">
+                                                <ul>
+                                                    {$dirTreeHtml}
+                                                    <!--<li>-->
+                                                        <!--Root node 1-->
+                                                        <!--<ul>-->
+                                                            <!--<li data-jstree='{ "selected" : true }'>-->
+                                                                <!--<a href="javascript:;">-->
+                                                                    <!--Initially selected </a>-->
+                                                            <!--</li>-->
+                                                            <!--<li data-jstree='{ "icon" : "fa fa-briefcase icon-state-success " }'>-->
+                                                                <!--custom icon URL-->
+                                                            <!--</li>-->
+                                                            <!--<li data-jstree='{ "opened" : true }'>-->
+                                                                <!--initially open-->
+                                                                <!--<ul>-->
+                                                                    <!--<li data-jstree='{ "disabled" : true }'>-->
+                                                                        <!--Disabled Node-->
+                                                                    <!--</li>-->
+                                                                    <!--<li data-jstree='{ "type" : "file" }'>-->
+                                                                        <!--Another node-->
+                                                                    <!--</li>-->
+                                                                <!--</ul>-->
+                                                            <!--</li>-->
+                                                            <!--<li data-jstree='{ "icon" : "fa fa-warning icon-state-danger" }'>-->
+                                                                <!--Custom icon class (bootstrap)-->
+                                                            <!--</li>-->
+                                                        <!--</ul>-->
+                                                    <!--</li>-->
+                                                    <!--<li data-jstree='{ "type" : "file" }'>-->
+                                                        <!--<a href="http://www.jstree.com">-->
+                                                            <!--Clickanle link node </a>-->
+                                                    <!--</li>-->
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-6">
+                                    <!-- BEGIN ALERTS PORTLET-->
+                                    <div class="portlet yellow box">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-cogs"></i>Notes
+                                            </div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse">
+                                                </a>
+                                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                                </a>
+                                                <a href="javascript:;" class="reload">
+                                                </a>
+                                                <a href="javascript:;" class="remove">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body" id="file_content">
+
+                                            请选择左侧文件
+                                            <!--<div class="note note-success">-->
+                                                <!--<h4 class="block">Success! Some Header Goes Here</h4>-->
+                                                <!--<p>-->
+                                                    <!--Duis mollis, est non commodo luctus, nisi erat mattis consectetur purus sit amet porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.-->
+                                                <!--</p>-->
+                                            <!--</div>-->
+                                            <!--<div class="note note-info">-->
+                                                <!--<h4 class="block">Info! Some Header Goes Here</h4>-->
+                                                <!--<p>-->
+                                                    <!--Duis mollis, est non commodo luctus, nisi erat porttitor ligula, mattis consectetur purus sit amet eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum.-->
+                                                <!--</p>-->
+                                            <!--</div>-->
+                                            <!--<div class="note note-danger">-->
+                                                <!--<h4 class="block">Danger! Some Header Goes Here</h4>-->
+                                                <!--<p>-->
+                                                    <!--Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit mattis consectetur purus sit amet.\ Cras mattis consectetur purus sit amet fermentum.-->
+                                                <!--</p>-->
+                                            <!--</div>-->
+                                            <!--<div class="note note-warning">-->
+                                                <!--<h4 class="block">Warning! Some Header Goes Here</h4>-->
+                                                <!--<p>-->
+                                                    <!--Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit mattis consectetur purus sit amet. Cras mattis consectetur purus sit amet fermentum.-->
+                                                <!--</p>-->
+                                            <!--</div>-->
+                                        </div>
+                                    </div>
+                                    <!-- END ALERTS PORTLET-->
+                                </div>
+
+
+
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+<script>
+
+    jQuery(document).ready(function() {
+        UITree.init();
+
+
+    });
+
+    function  show_file_content(obj){
+        var path = $(obj).attr("data") + "/";
+        path += $(obj).html().trim();
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            //contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : "/system/no/configcenter/getFileContent/",
+            //数据，json字符串
+            // data : JSON.stringify(list),
+            data : "file_path="+(path),
+            //请求成功
+            success : function(result) {
+                // console.log(result);
+                // alert(result);
+                $("#file_content").html(result);
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
+    }
+
+</script>
