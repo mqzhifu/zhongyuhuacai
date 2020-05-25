@@ -67,6 +67,7 @@ class BaseCtrl{
 
         $ctrlFilePath = explode("/",$request['ctrlFilePath']);
         $ctrlFilePath = $ctrlFilePath[count($ctrlFilePath) -2];
+        $ctrlFilePath = ucfirst($ctrlFilePath);
         $this->_backListUrl =DS .$ctrlFilePath.DS ."no". DS . substr(get_called_class(),0,strlen(get_called_class())-4) . DS . "index".DS;
         $this->_addPostUrl =DS .$ctrlFilePath.DS ."no". DS . substr(get_called_class(),0,strlen(get_called_class())-4) . DS . "add".DS ."opt=1";
         $this->_addUrl =DS .$ctrlFilePath.DS ."no". DS . substr(get_called_class(),0,strlen(get_called_class())-4) . DS . "add".DS ;
