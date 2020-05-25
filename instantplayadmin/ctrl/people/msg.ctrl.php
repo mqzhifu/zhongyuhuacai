@@ -60,8 +60,8 @@ class MsgCtrl extends BaseCtrl{
                 'category'=>$category,
             );
 
-            $msg = MsgModel::db()->add($data);
-            var_dump($msg);exit;
+            $newId = MsgModel::db()->add($data);
+            $this->ok($newId,"",$this->_backListUrl);
         }
 
         $categoryOptions = MsgModel::getCategorySelectOptionHtml();
