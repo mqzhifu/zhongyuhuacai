@@ -15,7 +15,7 @@
                     <div class="portlet box green">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-gift"></i>添加代理
+                                <i class="fa fa-gift"></i>添加点赞
                             </div>
                             <div class="actions">
                                 <a href="{$this->_backListUrl}" class="btn btn-default btn-sm">
@@ -29,118 +29,41 @@
                                 <div class="form-body">
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">类型 <span class="required">
+                                        <label class="control-label col-md-3">pid <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
                                             <div class="input-icon right">
                                                 <i class="fa"></i>
-                                                <select name="type" class="form-control">
-                                                    <option value="">请选择</option>
-                                                    {$typeOptions}
-                                                </select>
+                                                <input type="text" name="pid"  class="form-control" value="" />
                                             </div>
                                         </div>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">分类  <span class="required">
+                                        <label class="control-label col-md-3">gid <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
                                             <div class="input-icon right">
                                                 <i class="fa"></i>
-                                                <select name="category" class="form-control">
-                                                    <option value="">请选择</option>
-                                                    {$categoryOptions}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!--<div class="form-group last">-->
-                                        <!--<label class="control-label col-md-3">头像</label>-->
-                                        <!--<div class="col-md-9">-->
-                                            <!--<div class="fileinput fileinput-new" data-provides="fileinput">-->
-                                                <!--<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">-->
-                                                    <!--<img src="{CONST|H_STATIC_URL}/noimg.png" alt=""/>-->
-                                                <!--</div>-->
-                                                <!--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">-->
-                                                <!--</div>-->
-                                                <!--<div>-->
-													<!--<span class="btn default btn-file">-->
-													<!--<span class="fileinput-new">-->
-													<!--选择图片</span>-->
-													<!--<span class="fileinput-exists">-->
-													<!--更改 </span>-->
-													<!--<input type="file" name="pic">-->
-													<!--</span>-->
-                                                    <!--<a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">-->
-                                                        <!--移除 </a>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                            <!--&lt;!&ndash;<div class="clearfix margin-top-10">&ndash;&gt;-->
-                                            <!--&lt;!&ndash;<span class="label label-danger">&ndash;&gt;-->
-                                            <!--&lt;!&ndash;NOTE! </span>&ndash;&gt;-->
-                                            <!--&lt;!&ndash;Image preview only works in IE10+, FF3.6+, Safari6.0+, Chrome6.0+ and Opera11.1+. In older browsers the filename is shown instead.&ndash;&gt;-->
-                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-
-
-
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">接收者UID <span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="input-icon right">
-                                                <i class="fa"></i>
-                                                <input type="text" name="to_uid"  class="form-control" value="" />
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">发送者UID <span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="input-icon right">
-                                                <i class="fa"></i>
-                                                <input type="text" name="from_uid"  class="form-control" value="" />
+                                                <input type="text" name="gid"  class="form-control" value="" />
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">标题 <span class="required">
+                                        <label class="control-label col-md-3">uid <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
                                             <div class="input-icon right">
                                                 <i class="fa"></i>
-                                                <input type="text" name="title"  class="form-control" value="" />
+                                                <input type="text" name="uid"  class="form-control" value="" />
                                             </div>
                                         </div>
                                     </div>
-
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">内容 <span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="input-icon right">
-                                                <i class="fa"></i>
-                                                <textarea name="content" class="form-control"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
 
 
                                 </div>

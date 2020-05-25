@@ -96,35 +96,14 @@ class UserProductLikedCtrl extends BaseCtrl{
     function add(){
         if(_g('opt')){
             $data =array(
-                'uname'=> _g('uname'),
-                'realname'=> _g('realname'),
-                'nickname'=> _g('nickname'),
-                'mobile'=> _g('mobile'),
-                'sex'=> _g('sex'),
-                'email'=> _g('email'),
-                'birthday'=> _g('birthday'),
-                'status'=>_g('status'),
-                'type'=>_g('type'),
-                'third_uid'=>_g('third_uid'),
+                'pid'=> _g('pid'),
+                'gid'=> _g('gid'),
+                'uid'=> _g('uid'),
                 'a_time'=>time(),
-                'city_code'=> _g('city'),
-                'county_code'=> _g('county'),
-                'town_code'=> _g('street'),
-                'province_code'=> _g('province'),
             );
 
-            $uploadService = new UploadService();
-            $uploadRs = $uploadService->avatar('pic');
-            if($uploadRs['code'] != 200){
-                exit(" uploadService->avatar error ".json_encode($uploadRs));
-            }
-
-            $data['avatar'] = $uploadRs['msg'];
-
-            $newId = UserModel::db()->add($data);
-
+            $newId = UserLikedModel::db()->add($data);
             $this->ok($newId,"",$this->_backListUrl);
-
         }
 
         $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
