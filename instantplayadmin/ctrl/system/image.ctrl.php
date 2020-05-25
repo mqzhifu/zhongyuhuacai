@@ -6,7 +6,11 @@ class ImageCtrl extends BaseCtrl{
         $config = ConfigCenter::get(APP_NAME,"img");
         $this->_desc = $config['upload_path_desc'];
 
-        $dir = my_dir( FILE_UPLOAD_DIR);
+        $dir = FILE_UPLOAD_DIR;
+        if(get_os() =="WIN"){
+            $dir = "D:\www\zhongyuhuacai_static\upload/";
+        }
+        $dir = my_dir( $dir);
 //        var_dump($dir);exit;
 //        foreach ($dir as $k=>$v){
 //            echo $k ." ";

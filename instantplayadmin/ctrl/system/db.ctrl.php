@@ -7,7 +7,11 @@ class DbCtrl extends BaseCtrl{
 //        <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/jstree/dist/themes/default/style.min.css"/>
 //        <script src="../../assets/admin/pages/scripts/ui-tree.js"></script>
 
-        $dir = my_dir(BASE_DIR .DS ."doc");
+        $dir = BASE_DIR .DS ."doc";
+        if(get_os() =="WIN"){
+            $dir = "D:\www\zhongyuhuacai_doc";
+        }
+        $dir = my_dir($dir);
 
 //        foreach ($dir as $k=>$v){
 //            echo $k ." ";
@@ -36,6 +40,9 @@ class DbCtrl extends BaseCtrl{
 
         $dirTreeHtml = "";
         foreach ($dir as $k=>$v){
+            if($k == '.git'){
+                continue;
+            }
             if(is_array($v)){
                 $dirTreeHtml .= '<li data-jstree=\'{ "opened" : true }\'>'.$k.'<ul>' . $this->foreachDir($v) ."</ul></li>";
             }else{
