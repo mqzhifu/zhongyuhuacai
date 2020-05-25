@@ -80,8 +80,9 @@ class Deployment {
     function execShell($cmd){
         $output = null;
         $this->write_log("exec shell commend:$cmd");
-        exec($cmd.' 2>&1',$output,$status);
-//        $out = shell_exec($shell);
+//        exec($cmd.' 2>&1',$output,$status);
+        $status = 0 ;
+        $output = shell_exec($cmd);
         if(is_array($output)){
             foreach ($output as $k=>$v){
                 $this->write_log("out:".json_encode($v) . " status:$status" );
@@ -101,7 +102,7 @@ class Deployment {
         $this->staticSoftLink();
         $this->execShell("chmod 777 -R {$this->uploadDir} ");
         $this->execShell("php {$this->projectDir}init_env.php pre");
-         
+
 
 
 //        $this->execShell("chown -R www:www {$this->projectDir} ");
