@@ -114,6 +114,7 @@ class AgentCtrl extends BaseCtrl{
 
             foreach($data as $k=>$v){
                 
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
