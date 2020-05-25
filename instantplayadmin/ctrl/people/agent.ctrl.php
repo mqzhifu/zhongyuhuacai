@@ -138,6 +138,7 @@ class AgentCtrl extends BaseCtrl{
             }
         }
 
+
         
         $records["recordsTotal"] = $iTotalRecords;
         $records["recordsFiltered"] = $iTotalRecords;
