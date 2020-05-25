@@ -108,11 +108,12 @@ class AgentCtrl extends BaseCtrl{
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            
+
             $limit = " limit $iDisplayStart,$end";
             $data = AgentModel::db()->getAll($where . $order . $limit);
 
             foreach($data as $k=>$v){
+                
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
