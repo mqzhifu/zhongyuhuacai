@@ -209,7 +209,7 @@ class AgentCtrl extends BaseCtrl{
 
             $newId = AgentModel::add($data);
 
-            var_dump($newId);exit;
+            $this->ok($newId,$this->_backListUrl);
 
         }
 
