@@ -101,7 +101,7 @@ class Deployment {
         $this->staticSoftLink();
         $this->execShell("chmod 777 -R {$this->uploadDir} ");
         $this->execShell("php {$this->projectDir}init_env.php pre");
-        
+         
 
 
 //        $this->execShell("chown -R www:www {$this->projectDir} ");
