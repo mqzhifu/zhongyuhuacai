@@ -48,10 +48,10 @@ class AgentModel {
 
     static function getAddrStrById($agentUid){
         $agent = self::db()->getById($agentUid);
-        $province = AreaProvinceModel::getNameByCode($agent['province_id']);
-        $city = AreaCityModel::getNameByCode($agent['city_id']);
-        $county = AreaCountyModel::getNameByCode($agent['county_id']);
-        $street = AreaStreetModel::getNameByCode($agent['towns_id']);
+        $province = AreaProvinceModel::getNameByCode($agent['province_code']);
+        $city = AreaCityModel::getNameByCode($agent['city_code']);
+        $county = AreaCountyModel::getNameByCode($agent['county_code']);
+        $street = AreaStreetModel::getNameByCode($agent['towns_code']);
         $addrStr = $province . "-" .  $city  . "-" . $county  . "-" .$street . "-" .$agent['address'] ;
         return $addrStr;
     }
