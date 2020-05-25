@@ -8,19 +8,22 @@ class Deployment {
     {
         $requestBody = file_get_contents('php://input'); //每次推送的时候，会接收到post过来的数据。
         $this->write_log($requestBody);
-        //$payload = json_decode($requestBody, true);    //将数据转成数组，方便取值。
+        $requestBodyUrlDecode = urldecode($requestBody);
+        $payload = substr(8,$requestBodyUrlDecode);
+        $payload = json_decode($payload, true);    //将数据转成数组，方便取值。
         //if(empty($payload)){
         //写日志
         //      $this->write_log('send fail from github is empty');exit;
         //}else{
         //获取github推送代码时经过哈希加密密钥的值
-        //      $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
+            $this->write_log($_SERVER);
+              $signature = $_SERVER['HTTP_X_HUB_SIGNATURE'];
         //}
 
-        //if (strlen($signature) > 8 && $this->isFromGithub($requestBody,$signature)) {
+        $this->write_log($payload);
+
+//        if ($signature && strlen($signature) > 8 && $this->isFromGithub($requestBody,$signature)) {
         //验证密钥是否正确，如果正确执行命令。
-
-
 
 //        $res = shell_exec("cd /home/www/instantplay && git pull 2>&1");
 //        $res_log = "\n -------------------------".PHP_EOL;
@@ -35,7 +38,7 @@ class Deployment {
         //}else{
         //      $this->write_log('git 提交失败！');
         //      abort(403);
-        //}
+//        }
     }
 
     public function isFromGithub($payload,$signature)
@@ -58,4 +61,6 @@ $deploy = new Deployment();
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     //触发此代码的时候，git是以post方式触发
     $signature = $deploy->deploy();
+}else{
+    $deploy->write_log("err: not POST request.");
 }
