@@ -66,6 +66,36 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group last">
+                                        <label class="control-label col-md-3">工厂图片</label>
+                                        <div class="col-md-9">
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                                    <img src="{CONST|H_STATIC_URL}/noimg.png" alt=""/>
+                                                </div>
+                                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+                                                </div>
+                                                <div>
+													<span class="btn default btn-file">
+													<span class="fileinput-new">
+													选择图片</span>
+													<span class="fileinput-exists">
+													更改 </span>
+													<input type="file" name="pic">
+													</span>
+                                                    <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">
+                                                        移除 </a>
+                                                </div>
+                                            </div>
+                                            <!--<div class="clearfix margin-top-10">-->
+                                            <!--<span class="label label-danger">-->
+                                            <!--NOTE! </span>-->
+                                            <!--Image preview only works in IE10+, FF3.6+, Safari6.0+, Chrome6.0+ and Opera11.1+. In older browsers the filename is shown instead.-->
+                                            <!--</div>-->
+                                        </div>
+                                    </div>
+
+
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3">身份证号<span class="required">

@@ -64,6 +64,7 @@ class FactoryCtrl extends BaseCtrl{
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
         $this->addHookJS("/people/factory_add_hook.html");
+        $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/people/factory_add.html");
     }
 

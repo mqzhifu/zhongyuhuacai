@@ -211,7 +211,7 @@ class AgentCtrl extends BaseCtrl{
 
             $this->ok($newId,$this->_backListUrl);
 
-            
+
         }
 
         $sexOption = UserModel::getSexOptions();
