@@ -47,7 +47,7 @@ class FactoryCtrl extends BaseCtrl{
 
             $data['pic'] = $uploadRs['msg'];
 
-            $newId = AgentModel::add($data);
+            $newId = FactoryModel::add($data);
 
             $this->ok($newId,"",$this->_backListUrl);
 
