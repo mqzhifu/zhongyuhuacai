@@ -142,7 +142,7 @@ class UserCtrl extends BaseCtrl{
 
             $newId = UserModel::db()->add($data);
 
-            $this->ok("成功",$this->backUrl);
+            $this->ok("成功",$this->_backListUrl);
 
         }
 
