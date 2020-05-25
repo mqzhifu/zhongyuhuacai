@@ -121,7 +121,7 @@ class UserCtrl extends BaseCtrl{
                 'mobile'=> _g('mobile'),
                 'sex'=> _g('sex'),
                 'email'=> _g('email'),
-                'birthday'=> _g('birthday'),
+//                'birthday'=> _g('birthday'),
                 'status'=>_g('status'),
                 'type'=>_g('type'),
 //                'third_uid'=>_g('third_uid'),
