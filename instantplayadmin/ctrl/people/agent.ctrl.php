@@ -117,6 +117,7 @@ class AgentCtrl extends BaseCtrl{
                     $v['id'],
                     $v['title'],
                     $v['real_name'],
+                    
                     AgentModel::STATUS[$v['status']],
                     AreaProvinceModel::db()->getOneByOneField('code',$v['province_code'])['short_name'],
                     AreaCityModel::db()->getOneByOneField('code',$v['city_code'])['short_name'],
@@ -139,7 +140,7 @@ class AgentCtrl extends BaseCtrl{
         }
 
 
-        
+
         $records["recordsTotal"] = $iTotalRecords;
         $records["recordsFiltered"] = $iTotalRecords;
 
