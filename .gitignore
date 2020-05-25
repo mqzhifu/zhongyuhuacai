@@ -5,7 +5,7 @@ storage/view_c/*
 storage/product_tb/*
 
 doc/*
-static/*
+static
 
 configcenter/api/env/local
 configcenter/instantplayadmin/env/local

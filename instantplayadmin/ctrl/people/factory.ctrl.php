@@ -57,11 +57,14 @@ class FactoryCtrl extends BaseCtrl{
         $this->assign("cityJs",$cityJs);
         $this->assign("countyJs",$countryJs);
 
+
+//        $this->assign("sexOptions",FactoryModel::)
+
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/people/agent_add_hook.html");
-        $this->display("/people/agent_add.html");
+        $this->addHookJS("/people/factory_add_hook.html");
+        $this->display("/people/factory_add.html");
     }
 
     function getWhere(){
