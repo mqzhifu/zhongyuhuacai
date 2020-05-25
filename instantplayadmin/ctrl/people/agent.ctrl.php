@@ -59,7 +59,7 @@ class AgentCtrl extends BaseCtrl{
     }
 
 
-    
+
     function getList(){
         //初始化返回数据格式
         $records = array('data'=>[],'draw'=>$_REQUEST['draw']);
