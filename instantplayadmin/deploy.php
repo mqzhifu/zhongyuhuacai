@@ -3,7 +3,7 @@
 class Deployment {
 
     public $serect = 'zzzzxiao'; //webhooks中配置的密钥
-    public $logPath = "";
+    public $logPath = "/home/www/zhongyuhuacai/storage/deploy";
     public function deploy()
     {
         $requestBody = file_get_contents('php://input'); //每次推送的时候，会接收到post过来的数据。
@@ -19,13 +19,19 @@ class Deployment {
 
         //if (strlen($signature) > 8 && $this->isFromGithub($requestBody,$signature)) {
         //验证密钥是否正确，如果正确执行命令。
-        $res = shell_exec("cd /home/www/instantplay && git pull 2>&1");
-        $res_log = "\n -------------------------".PHP_EOL;
-        $res_log .= '['.$payload['commits'][0]['author']['name'] . ']' . '向[' . $payload['repository']['name'] . ']项目的' .
-            $payload['ref'] . '分支'.$_SERVER['X-GitHub-Event'].'了代码。commit信息是：'.$payload['commits']['message'].'。详细信息如下：' . PHP_EOL;
-        $res_log .= $res.PHP_EOL;
-        http_response_code(200);
-        $this->write_log($res_log);
+
+
+
+//        $res = shell_exec("cd /home/www/instantplay && git pull 2>&1");
+//        $res_log = "\n -------------------------".PHP_EOL;
+//        $res_log .= '['.$payload['commits'][0]['author']['name'] . ']' . '向[' . $payload['repository']['name'] . ']项目的' .
+//            $payload['ref'] . '分支'.$_SERVER['X-GitHub-Event'].'了代码。commit信息是：'.$payload['commits']['message'].'。详细信息如下：' . PHP_EOL;
+//        $res_log .= $res.PHP_EOL;
+//        http_response_code(200);
+//        $this->write_log($res_log);
+
+
+
         //}else{
         //      $this->write_log('git 提交失败！');
         //      abort(403);
@@ -41,7 +47,7 @@ class Deployment {
 
     public function write_log($data)
     {
-        $fd = fopen("/tmp/git.log","a+");
+        $fd = fopen($this->logPath."/".date("Ymd").".log","a+");
         fwrite($fd,json_encode($data));
         // 此处加载日志类，用来记录git push信息，可以自行写。
     }
