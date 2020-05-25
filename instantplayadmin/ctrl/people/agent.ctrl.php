@@ -101,7 +101,7 @@ class AgentCtrl extends BaseCtrl{
             $iDisplayStart = intval($_REQUEST['start']);//limit 起始
 
 
-            
+
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
