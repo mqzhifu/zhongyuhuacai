@@ -103,7 +103,7 @@ class ProductCtrl extends BaseCtrl{
 
             ProductModel::addOne($data,$categoryAttrNull,$categoryAttrPara);
 
-            exit("成功");
+            $this->ok("成功",$this->_backListUrl);
         }
 
         $factory = FactoryModel::db()->getById(FACTORY_UID_DEFAULT);
