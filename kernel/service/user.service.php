@@ -1144,10 +1144,10 @@ class UserService{
 
         $data['realname'] = "";
         $data['id_card_no'] = "";
-        $data['county_code'] = "";
-        $data['province_code'] = "";
-        $data['city_code'] = "";
-        $data['town_code'] = "";
+        $data['county_code'] = 0;
+        $data['province_code'] = 0;
+        $data['city_code'] = 0;
+        $data['town_code'] = 0;
 
         $data['email'] = "";
         $data['inner_type'] = UserModel::INNER_TYPE_HUMAN;
