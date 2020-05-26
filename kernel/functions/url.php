@@ -1,5 +1,20 @@
 <?php
-function get_product_url( $tmpPath , $protocol = 'http'){
+
+function get_admin_project_name(){
+    return "instantplayadmin";
+}
+
+function get_base_upload_url( $protocol = HTTP_PROTOCOL){
+    $staticUrl = get_static_url($protocol);
+    return $staticUrl . DS . "upload" . DS;
+}
+
+function get_admin_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
+    $base =  get_base_upload_url($protocol).get_admin_project_name() . DS . get_upload_cdn_evn() .  DS;
+    return $base.$module.DS . $tmpPath;
+}
+
+function get_product_url( $tmpPath , $protocol = HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
     }
@@ -7,61 +22,74 @@ function get_product_url( $tmpPath , $protocol = 'http'){
         return $tmpPath;
     }
 
-    $staticUrl = get_static_url($protocol);
-    $url =  $staticUrl . DS . "upload" . DS .APP_NAME . DS . get_upload_cdn_evn() .  DS."product".DS . $tmpPath;
-    return $url;
+    return get_admin_upload_url($tmpPath,"product",$protocol);
 }
 
-function get_agent_url( $tmpPath , $protocol = 'http'){
+function get_agent_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
     }
-    $staticUrl = get_static_url($protocol);
-    $url =  $staticUrl . DS . "upload" . DS .APP_NAME . DS . get_upload_cdn_evn() .  DS."agent".DS . $tmpPath;
-    return $url;
+    return get_admin_upload_url($tmpPath,"agent",$protocol);
 }
 
-function get_banner_url( $tmpPath , $protocol = 'http'){
+function get_banner_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
     }
-    $staticUrl = get_static_url($protocol);
-    $url =  $staticUrl . DS . "upload" . DS .APP_NAME . DS . get_upload_cdn_evn() .  DS."banner".DS . $tmpPath;
-    return $url;
+    return get_admin_upload_url($tmpPath,"banner",$protocol);
 }
 
-function get_category_attr_para_url( $tmpPath , $protocol = 'http'){
+function get_category_attr_para_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
     }
-    $staticUrl = get_static_url($protocol);
-    $url =  $staticUrl . DS . "upload" . DS .APP_NAME . DS . get_upload_cdn_evn() .  DS."category_attr_para".DS . $tmpPath;
-    return $url;
+    return get_admin_upload_url($tmpPath,"category_attr_para",$protocol);
 }
 
-
-
-function get_avatar_url_by_uid($uid){
-    $user = UserModel::db()->getById($uid);
-}
-
-function get_avatar_url($tmp_path,$protocol = 'http'){
-    if(!$tmp_path){
+function get_avatar_url($tmpPath,$protocol = 'http'){
+    if(!$tmpPath){
         return get_default_user_url();
     }
 
-    if(substr($tmp_path,0,4) == "http"){
-        return $tmp_path;
+    if(substr($tmpPath,0,4) == "http"){
+        return $tmpPath;
     }
-    $staticUrl = get_static_url($protocol);
-    $url =  $staticUrl . DS . "upload" . DS .APP_NAME . DS . get_upload_cdn_evn() .  DS."avatar".DS . $tmp_path;
-    return $url;
+
+    return get_admin_upload_url($tmpPath,"avatar",$protocol);
+}
+
+function get_factory_url( $tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return false;
+    }
+    return get_admin_upload_url($tmpPath,"factory",$protocol);
+}
+
+function get_feedback_url( $tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return false;
+    }
+    return get_admin_upload_url($tmpPath,"feedback",$protocol);
+}
+
+function get_comment_url( $tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return false;
+    }
+    return get_afactory_url($tmpPath,"comment",$protocol);
 }
 
 function get_default_user_url(){
     $staticUrl = get_static_url("http");
     return $staticUrl . "/nouser.png";
 }
+
+
+//function get_avatar_url_by_uid($uid){
+//    $user = UserModel::db()->getById($uid);
+//}
+
+
 
 
 
