@@ -18,31 +18,28 @@ $main = array(
         'fromEmail'=>'wangdongyan@kaixin-inc.com',
     ),
 
-    'loginAPIExcept'=>        $arr = array(
+    'loginAPIExcept'=> array(
 //        array("login","webSocketLogin",),
-//        array("login","cellphoneSMS",),
-//        array("login","guest",),
-//
-//        array("system","sendSMS",),
-//
+
+            array("login",'wxLittleLoginByCode'),//小程序登陆
+            array("login","guest",),//游客登陆
+            array("login","index",),//手机/邮箱/用户名 + 密码
+            array("login","cellphoneSMS",),//手机验证码登陆
+            array("login","third",),//其它，3方平台登陆
+
+
+            array("user","reg",),//注册
+
 //        array(   'index','getServer',),
 //        array(   'index','testProtoBuf',),
 //        array(   'index','getUiShowConfig',),
 //        array(   'system','getAppUpgradeInfo',),
-//
-//        array("game","recommendIndex",),
-//        array("game","getRecommends",),
-//        array("game","topOnline",),
-//        array("game","exceptRecommendIndex",),
-//        array("game","getList",),
-//        array("bank","WXPayCallback",),
-//        array("bank","aliPayCallback",),
+
+//        array("system","sendSMS",),
+
 //        array("wxopen","push",),
 //        array("qqLogin","login"),
 //        array("qqLogin","getUserinfo"),
-//
-//        array("system","banner",),
-
     ),
 
 

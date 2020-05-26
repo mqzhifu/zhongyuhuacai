@@ -89,7 +89,7 @@ function get_request_one($request,$key,$default){
         return $default;
     }
 
-    return $request;
+    return $request[$key];
 }
 
 function mysql_gps_distance_field($lat,$lon,$latFieldName,$lonFieldName){

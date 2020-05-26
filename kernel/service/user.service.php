@@ -11,15 +11,22 @@ class UserService{
     // $ps:有些注册类型，可能需要填写密码
     function register($name,$ps = '',$type ,$userInfo = null){
         if(!$name){
-            return out_pc(8009, "未填写 用户名/手机号/邮箱/三方ID");
+            return out_pc(8009);
         }
 
+        if(!UserModel::keyInRegType($type)){
+            return out_pc(8103);
+        }
+
+        if(!$type){
+            return out_pc(8004);
+        }
 //        if(!$type){
 //            $type = $this->calcTypeByUname($name);
 //        }else{
-//            if(!UserModel::keyInRegType($type)){
-//                return out_pc(8103);
-//            }
+            if(!UserModel::keyInRegType($type)){
+                return out_pc(8103);
+            }
 //        }
 
         $data = $this->getUserDataInit();
@@ -91,7 +98,6 @@ class UserService{
                 $data['google_uid'] = $name;
             }
         }
-
         if($userInfo){
             if(arrKeyIssetAndExist($userInfo,'avatar')){
                 $data['avatar'] = $userInfo['avatar'];
@@ -129,9 +135,10 @@ class UserService{
         $rs = $this->selfLogin($name,$ps,$type);
         return $rs;
     }
-
+    //手机 - 验证码 登陆
     function loginCellphoneSMS($cellphone,$smsCode,$imgCode = 0){
         $rs = $this->selfLogin($cellphone,null,null,$smsCode);
+        return $rs;
 //        $rs = $this->selfLogin($cellphone,$ps,UserModel::$_type_cellphone_ps);
 //        if($rs['code'] != 200){
 //            return out_pc($rs['code'],$rs['msg']);
@@ -162,8 +169,6 @@ class UserService{
     //$smsCode：如果是手机登陆方式，短信验证码必填
     function loginRegister($name,$ps,$type,$clientInfo = null ,$thirdInfo = null,$smsCode = 0,$loginUid = 0){
         $reg = 0;
-//        $task = new TaskService();
-
         if($this->getTypeMethod($type) == "self"){
             $rs = $this->selfLogin($name,$ps,$type,$smsCode);
         }elseif($this->getTypeMethod($type) == "guest"){
@@ -210,71 +215,68 @@ class UserService{
         }elseif($rs['code']==1006){//验证都没有问题，但是用户不存在，需要将当前游客绑定到该账号下
             LogLib::appWriteFileHash($clientInfo);
             $reg = 1;
-            if(!arrKeyIssetAndExist( $clientInfo,'app_version' ) || $clientInfo['app_version'] <= '1.0.6'){
-                $rs = $this->register($name,$ps,$type,$clientInfo);
-                if($rs['code'] == 200){
-                    $user = $rs['msg'];
-                    //3方登陆，可能会拿到用户一些基础信息，需要再更新一下
-                    if($this->getTypeMethod($type) == "third"){
-                        $thirdInfo['type'] = $type;
-
-
-                        if($type == UserModel::$_type_wechat){
-                            $thirdInfo['wechat_uid'] = $name;
-                        }elseif($type == UserModel::$_type_qq){
-                            $thirdInfo['qq_uid'] = $name;
-                        }elseif($type == UserModel::$_type_facebook){
-                            $thirdInfo['facebook_uid'] = $name;
-                        }elseif($type == UserModel::$_type_google){
-                            $thirdInfo['google_uid'] = $name;
-                        }
-
-//                        LogLib::appWriteFileHash(["----------------",$user['id'],$thirdInfo]);
-
-                        $this->upUserInfo($user['id'],$thirdInfo);
-//                        LogLib::appWriteFileHash($rs);
-                    }elseif($type == UserModel::$_type_cellphone){
-                        $data = array('nickname'=>"玩家".substr($name,-4),'type'=>$type,'cellphone'=>$name);
-                        $this->upUserInfo($user['id'],$data);
-                    }
-                    $task->addUserGrowUpTask($user['id']);
-                }
-            }else{
-                $user = $this->getUinfoById($loginUid);
-                //3方登陆，可能会拿到用户一些基础信息，需要再更新一下
-                if($this->getTypeMethod($type) == "third"){
-                    $thirdInfo['type'] = $type;
-
-
-                    if($type == UserModel::$_type_wechat){
-                        $thirdInfo['wechat_uid'] = $name;
-                        if(arrKeyIssetAndExist($thirdInfo,'unionId'))
-                            $thirdInfo['wx_union_id'] = $thirdInfo['unionId'];
-                    }elseif($type == UserModel::$_type_qq){
-                        $thirdInfo['qq_uid'] = $name;
-                        if(arrKeyIssetAndExist($thirdInfo,'unionId'))
-                            $thirdInfo['qq_union_id'] = $thirdInfo['unionId'];
-                    }elseif($type == UserModel::$_type_facebook){
-                        $thirdInfo['facebook_uid'] = $name;
-                    }elseif($type == UserModel::$_type_google){
-                        $thirdInfo['google_uid'] = $name;
-                    }
-
-                    LogLib::appWriteFileHash(["----------------",$loginUid,$thirdInfo]);
-
-                    $rs = $this->upUserInfo($loginUid,$thirdInfo);
-                    LogLib::appWriteFileHash($rs);
-                }elseif($type == UserModel::$_type_cellphone){
-                    $data = array('nickname'=>"玩家".substr($name,-4),'type'=>$type,'cellphone'=>$name);
-                    $this->upUserInfo($loginUid,$data);
-                }
-            }
+//            if(!arrKeyIssetAndExist( $clientInfo,'app_version' ) || $clientInfo['app_version'] <= '1.0.6'){
+//                $rs = $this->register($name,$ps,$type,$clientInfo);
+//                if($rs['code'] == 200){
+//                    $user = $rs['msg'];
+//                    //3方登陆，可能会拿到用户一些基础信息，需要再更新一下
+//                    if($this->getTypeMethod($type) == "third"){
+//                        $thirdInfo['type'] = $type;
+//
+//
+//                        if($type == UserModel::$_type_wechat){
+//                            $thirdInfo['wechat_uid'] = $name;
+//                        }elseif($type == UserModel::$_type_qq){
+//                            $thirdInfo['qq_uid'] = $name;
+//                        }elseif($type == UserModel::$_type_facebook){
+//                            $thirdInfo['facebook_uid'] = $name;
+//                        }elseif($type == UserModel::$_type_google){
+//                            $thirdInfo['google_uid'] = $name;
+//                        }
+//                        $this->upUserInfo($user['id'],$thirdInfo);
+////                        LogLib::appWriteFileHash($rs);
+//                    }elseif($type == UserModel::$_type_cellphone){
+//                        $data = array('nickname'=>"玩家".substr($name,-4),'type'=>$type,'cellphone'=>$name);
+//                        $this->upUserInfo($user['id'],$data);
+//                    }
+//                    $task->addUserGrowUpTask($user['id']);
+//                }
+//            }else{
+//                $user = $this->getUinfoById($loginUid);
+//                //3方登陆，可能会拿到用户一些基础信息，需要再更新一下
+//                if($this->getTypeMethod($type) == "third"){
+//                    $thirdInfo['type'] = $type;
+//
+//
+//                    if($type == UserModel::$_type_wechat){
+//                        $thirdInfo['wechat_uid'] = $name;
+//                        if(arrKeyIssetAndExist($thirdInfo,'unionId'))
+//                            $thirdInfo['wx_union_id'] = $thirdInfo['unionId'];
+//                    }elseif($type == UserModel::$_type_qq){
+//                        $thirdInfo['qq_uid'] = $name;
+//                        if(arrKeyIssetAndExist($thirdInfo,'unionId'))
+//                            $thirdInfo['qq_union_id'] = $thirdInfo['unionId'];
+//                    }elseif($type == UserModel::$_type_facebook){
+//                        $thirdInfo['facebook_uid'] = $name;
+//                    }elseif($type == UserModel::$_type_google){
+//                        $thirdInfo['google_uid'] = $name;
+//                    }
+//
+//                    LogLib::appWriteFileHash(["----------------",$loginUid,$thirdInfo]);
+//
+//                    $rs = $this->upUserInfo($loginUid,$thirdInfo);
+//                    LogLib::appWriteFileHash($rs);
+//                }elseif($type == UserModel::$_type_cellphone){
+//                    $data = array('nickname'=>"玩家".substr($name,-4),'type'=>$type,'cellphone'=>$name);
+//                    $this->upUserInfo($loginUid,$data);
+//                }
+//            }
         }else{
             return out_pc($rs['code'],$rs['msg']);
         }
 
-        $this->loginRecord($user,$clientInfo,$type);
-        $token = $this->createToken($user['id']);
+//        $this->loginRecord($user,$clientInfo,$type);
+//        $token = $this->createToken($user['id']);
 
         return out_pc(200,array('token'=>$token,'isReg'=>$reg,'uid'=>$user['id']));
     }
@@ -600,9 +602,9 @@ class UserService{
         if($rs){
             $type = UserModel::$_type_cellphone;
         }elseif(FilterLib::regex($name,'email')){
-            $type = 4;
+            $type = UserModel::$_type_email;
         }else{
-            $type = 5;
+            $type = UserModel::$_type_name;
         }
         return $type;
     }
@@ -1130,44 +1132,27 @@ class UserService{
 
         $data['uname'] = '';
         $data['a_time'] = time();
-        $data['u_time'] = time();
+//        $data['u_time'] = time();
         $data['inner_type']= UserModel::INNER_TYPE_HUMAN;
         $data['nickname'] = "";
         $data['sex'] = 0;
         $data['avatar'] = "";
 
-//        $data['point'] = 0;
-//        $data['birthday'] = 0;
-//        $data['goldcoin'] = 0;
-//        $data['diamond'] = 0;
-//        $data['vip_endtime'] = 0;
-//        $data['push_type'] = 0;
-
-//        if(!arrKeyIssetAndExist($data,'cellphone'))
-//            $data['cellphone'] = "";
-//        if(!arrKeyIssetAndExist($data,'ps'))
-//            $data['ps'] = "";
-
-//        $data['third_uid'] = "";
-        $data['real_name'] = "";
-        $data['id_card_no'] = "";
-        $data['country'] = "";
-        $data['province'] = "";
-        $data['city'] = "";
-        $data['tags'] = "";
-        $data['school'] = "";
-        $data['education'] = 0;
-        $data['push_token'] = "";
-        $data['email'] = "";
+        $data['mobile'] = "";
         $data['ps'] = "";
+
+
+        $data['realname'] = "";
+        $data['id_card_no'] = "";
+        $data['county_code'] = "";
+        $data['province_code'] = "";
+        $data['city_code'] = "";
+        $data['town_code'] = "";
+
+        $data['email'] = "";
         $data['inner_type'] = UserModel::INNER_TYPE_HUMAN;
-//        $data['point'] = 1000;//测试用
-//        $area= AreaLib::getByIp();
-//        $data['province'] =$area['province'];
-//        $data['city'] =$area['city'];
-//        $data['country'] =$area['country'];
-//        $data['IP'] =$area['IP'];
-//        $data['client_info'] =json_encode($clientInfo);
+        $data['ip'] =get_client_ip();
+
         return $data;
     }
 

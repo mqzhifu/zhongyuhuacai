@@ -24,7 +24,7 @@ class BaseCtrl {
 //
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){
-            return $this->out($tokenRs['code'],$tokenRs['msg']);
+            out_ajax ($tokenRs['code'],$tokenRs['msg']);
         }
 
 //        if(arrKeyIssetAndExist($this->uinfo,'id')){
@@ -51,6 +51,14 @@ class BaseCtrl {
                 return $this->out(5001);
             }
         }
+        $data = array(
+            'a_time'=>time(),
+            'ctrl'=>$request['ctrl'],
+            'ac'=>$request['ac'],
+            'uid'=>$this->uid,
+            'client_info'=>json_encode(get_client_info()),
+        );
+        UserLogModel::db()->add($data);
 //        //每日 任务初始化
 //        $this->taskService->addUserDailyTask($this->uid);
     }

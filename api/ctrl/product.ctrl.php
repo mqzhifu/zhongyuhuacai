@@ -12,6 +12,10 @@ class ProductCtrl extends BaseCtrl  {
     function getListAllCategory(){
 
     }
+    //搜索
+    function search($keyword){
+
+    }
     //产品详情
     function getOneDetail(){
 

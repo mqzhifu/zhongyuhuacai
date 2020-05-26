@@ -24,11 +24,6 @@ class IndexCtrl extends BaseCtrl  {
         $data = BannerModel::db()->getAll();
         out_ajax(200,$data);
     }
-    //    $keyword:目前仅支持UID
-    function search($keyword){
-        $data = ProductModel::search($keyword);
-        out_ajax(200,$data);
-    }
 
 //    function getAppVersionInfo($versionCode = 0){
 //

@@ -109,6 +109,9 @@ class LoginCtrl extends BaseCtrl {
         return $this->out($rs['code'],$rs['msg']);
     }
 
+
+    //web socket ========================相关============================================================================
+
     //断开连接
     function onClose($fd){
         $mysqlId = $GLOBALS['mysql_id']->get($this->uid,'mysql_id');

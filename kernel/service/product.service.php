@@ -10,6 +10,11 @@ class ProductService{
     function getListByCategory(){
 
     }
+    function search($keyword){
+        $data = ProductModel::search($keyword);
+        out_ajax(200,$data);
+    }
+
 
     function getDetail($request){
         $pid = get_request_one($request['oid'],0);

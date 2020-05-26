@@ -31,4 +31,8 @@ class WxLittleCallbackCtrl{
             return false;
         }
     }
+    //支付回调
+    function pay(){
+
+    }
 }
