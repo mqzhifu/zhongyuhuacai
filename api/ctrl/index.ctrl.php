@@ -2,35 +2,7 @@
 class IndexCtrl extends BaseCtrl  {
 
     function index(){
-        //接口统计
-
-        //小程序里
-
-        //首页/分类页
-            //获取banner
-            //获取分类列表
-            //获取推荐列表
-            //一个分类下的所有商品
-            //所有产品 列表 -  支持各种维度搜索条件   分类>价格 销量
-            //搜索商品
-
-
-        //产品/商品
-            //产品点赞
-            //产品收藏
-            //产品评论
-            //产品详情页  基础信息调取   商品属性调取
-
-        //用户相关
-
-        //用户进入小程序,获取OPENID，传给后端注册/登陆，换取token
-        //反馈问题
-        //下单页，汇总信息
         //调取支付
-        //个人中心 - 订单列表
-        //个人中心 - 编辑信息
-        //站内信 消息 列表
-        //退款
 
 
         //代理
@@ -46,21 +18,10 @@ class IndexCtrl extends BaseCtrl  {
         //编辑个人信息
         //提现列表
         //发起提现
-
-
-
-        return $this->out(200,"PING OK !");
     }
 
     function getBannerList(){
         $data = BannerModel::db()->getAll();
-        out_ajax(200,$data);
-    }
-
-    function getCategoryList(){}
-
-    function getRecommendProductList(){
-        $data = ProductModel::getRecommendList();
         out_ajax(200,$data);
     }
     //    $keyword:目前仅支持UID

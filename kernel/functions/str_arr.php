@@ -80,6 +80,18 @@ function intToStr($uid){
 
 }
 
+function get_request_one($request,$key,$default){
+    if(!$request || !$key){
+        return $default;
+    }
+
+    if(!isset($request[$key])){
+        return $default;
+    }
+
+    return $request;
+}
+
 function mysql_gps_distance_field($lat,$lon,$latFieldName,$lonFieldName){
     $str = '
     ROUND(
