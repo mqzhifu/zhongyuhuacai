@@ -56,7 +56,20 @@ class UploadService
         $rs = $lib->upLoadOneFile($postInputName,'factory',array('png','jpg','bmp'),0);
         return $rs;
     }
+    //循环遍历，整个 图片上传目录，所有的已上传的图片
+    function getAllUploadImage(){
+        $dir = $this->getFileUploadDir();
+        $dir = my_dir( $dir);
+        return $dir;
+    }
 
+    function getFileUploadDir(){
+        $dir = FILE_UPLOAD_DIR;
+        if(get_os() =="WIN"){
+            $dir = "D:\www\zhongyuhuacai_static\upload/";
+        }
+        return $dir;
+    }
 
 
 
