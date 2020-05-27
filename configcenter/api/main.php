@@ -139,4 +139,5 @@ $main = array(
 
 );
 
-$GLOBALS[APP_NAME]['main'] = $main;
+//$GLOBALS[APP_NAME]['main'] = $main;
+return $main;

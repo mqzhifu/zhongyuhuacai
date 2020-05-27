@@ -17,7 +17,7 @@ class TemplateLib{
         array('preg'=>'{/foreach}',     'replace'=>' } ',                 ),
         array('preg'=>'{loop (.*) (.*) (.*)}','replace'=>'if(is_array(\\1)){ foreach(\\1 as \\2 => \\3){',),
         array('preg'=>'{/loop}',        'replace'=>' }} ',                ),
-        array('preg'=>'{continue}','replace'=>'continue;',),
+        array('preg'=>'{continue}',     'replace'=>' continue; ',),
         array('preg'=>'{break}','replace'=>'break;',),
         //日常
         array('preg'=>'{_(.*)}',        'replace'=>' echo \\1;',                ),

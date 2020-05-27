@@ -4,8 +4,8 @@
 <body>
 
 
-<script src="http://{CONST|STATIC_URL}/js/jquery-3.3.1.js"></script>
-<script src="http://{CONST|STATIC_URL}/js/md5.js"></script>
+<script src="http://{CONST|STATIC_URL}//js/jquery-3.3.1.js"></script>
+<script src="http://{CONST|STATIC_URL}//js/md5.js"></script>
 
 <table>
     <tr>
@@ -60,7 +60,7 @@
 
             </td>
             {if $v2['name'] == 'token'}
-                <td>{$v2['info']['id']},{$v2['info']['name']}</td>
+                <td>{$v2['info']['id']},{$v2['info']['uname']}</td>
             {/if}
         </tr>
         {/foreach}

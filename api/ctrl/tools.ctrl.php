@@ -2,22 +2,24 @@
 class ToolsCtrl {
     public $request = null;
 
-    function __construct($request){
-        $this->request = $request;
+    public $_api = null;
+    public $_err_code = null;
+    public $_main = null;
+    public $_redis_key = null;
+    function __construct(){
         //接口配置信息
-        include_once APP_CONFIG_DIR.DS."api.php";
+        $this->_api = ConfigCenter::get(APP_NAME,"api");
         //所有错误码
-        include_once APP_CONFIG_DIR.DS."api_err_code.php";
+        $this->_err_code = ConfigCenter::get(APP_NAME,"err_code");
         //主-配置文件
-        include_once APP_CONFIG_DIR.DS."main.php";
+        $this->_main = ConfigCenter::get(APP_NAME,"main");
         //redis所有key的配置文件
-        include_once APP_CONFIG_DIR.DS."rediskey.php";
-
-        include_once APP_CONFIG_DIR.DS."lang".DS .LANG.DS ."err.php";
-        include_once APP_CONFIG_DIR.DS."lang".DS .LANG.DS ."desc.php";
+        $this->_redis_key = ConfigCenter::get(APP_NAME,"rediskey");
     }
 
-    function index(){echo "im index";}
+    function index(){
+        echo "im index";exit;
+    }
 
 
     function createProtoBuf(){
@@ -104,7 +106,7 @@ class ToolsCtrl {
     }
 
 
-    function wsjson(){
+    function webSocketJson(){
         $client = new WsclientLib();
         $ip = "49.51.252.214";
         $port = "9500";
@@ -183,9 +185,7 @@ class ToolsCtrl {
             $ac = $this->ac;
         }
 
-
-        $arr = $GLOBALS[APP_NAME]['main']['loginAPIExcept'];
-
+        $arr = $this->_main['loginAPIExcept'];
         foreach($arr as $k=>$v){
             if($v[0] == $ctrl && $v[1] == $ac){
                 return 1;
@@ -195,19 +195,18 @@ class ToolsCtrl {
         return 0;
     }
 
-    function apilist(){
-        if(!$this->request['code']){
+    function apilist($request){
+        if(!$request['code']){
             exit("code err1");
         }
 
-        if($this->request['code'] != 'mqzhifu'){
+        if($request['code'] != 'mqzhifu'){
             exit("code err2");
         }
 
         $st = getAppSmarty();
 
-        $api =$GLOBALS[APP_NAME]['api'];
-
+        $api = $this->_api;
         $moduleCnt = 0;
         $methodCnt = 0;
         foreach($api as $k=>$module){
@@ -224,7 +223,6 @@ class ToolsCtrl {
                     $api[$k][$k2]['is_login'] = "是";
                 }
             }
-
         }
         $index_html = $st->compile("apilist.html");
 
@@ -293,7 +291,11 @@ class ToolsCtrl {
         }
     }
 
-    function apitest($c,$a,$code){
+    function apitest($request){
+        $code = $request['code'];
+        $c = $request['c'];
+        $a = $request['a'];
+
         if(!$code){
             exit("code err1");
         }
@@ -303,13 +305,14 @@ class ToolsCtrl {
         }
 
         $this->userService = new UserService();
-        include_once APP_CONFIG.DS."api.php";
 //        $token = _g('token');
 
         $token = "sre6YYCuxJSHz4qVfdup2g";
-        $tokenInfo = TokenLib::getUid($token);
+        $tokenInfo = TokenLib::getDecode($token);
+        $tokenInfo = array('uid'=>1);
+
         $info = $this->userService->getUinfoById($tokenInfo['uid']);
-        $api = $GLOBALS['api'];
+        $api = $this->_api;
         $method = null;
         foreach($api as $k=>$module){
             if($c != $k){
@@ -349,17 +352,15 @@ class ToolsCtrl {
             }
         }
 
-
         //需要登陆的接口
         if($is_login == 1){
             $para[] =array('name'=>'token',"title"=>'token','must'=>'必填','default'=>$token,'info'=>$info,'title'=>'token');
         }
 
-
-
         $st = getAppSmarty();
         $index_html = $st->compile("apitest.html");
         include $index_html;
+        exit;
     }
 
 
@@ -410,15 +411,15 @@ class ToolsCtrl {
     }
 
     function getCodeDesc(){
-        $code = $GLOBALS['code'];
+        $code = $this->_err_code;
         $st = getAppSmarty();
         $index_html = $st->compile("code.html");
 
         $client_data_struct = get_client_data_struct();
 //        var_dump($client_data_struct);exit;
-        $typeDesc = GoldcoinLogModel::getTypeDesc();
+//        $typeDesc = GoldcoinLogModel::getTypeDesc();
 //        var_dump($typeDesc);exit;
-        $typeDescTitle = GoldcoinLogModel::getTypeTitle();
+//        $typeDescTitle = GoldcoinLogModel::getTypeTitle();
 
 
         $UserTypeDesc = UserModel::getTypeDesc();

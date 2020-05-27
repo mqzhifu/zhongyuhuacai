@@ -13,7 +13,7 @@ class UserCtrl extends BaseCtrl  {
         out_ajax($rs['code'],$rs['msg']);
     }
 
-    function getDetail(){
+    function getOneDetail(){
 
     }
     //用户反馈
@@ -21,11 +21,11 @@ class UserCtrl extends BaseCtrl  {
 
     }
 
-    function editInfo(){
+    function upInfo(){
 
     }
 
-    function editAvatar(){
+    function upAvatar(){
 
     }
     //已收藏的产品列表

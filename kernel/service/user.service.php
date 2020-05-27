@@ -480,9 +480,9 @@ class UserService{
             return out_pc(8002);
         }
 
-        if(!$appName){
-            $appName = IS_NAME;
-        }
+//        if(!$appName){
+//            $appName = IS_NAME;
+//        }
 
         $uid = intval($uid);
         if(!is_int($uid)){

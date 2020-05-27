@@ -1,6 +1,6 @@
 <?php
 class OrderCtrl extends BaseCtrl  {
-    function getUserList(){
+    function getListByUser(){
 
     }
     function doing(){
