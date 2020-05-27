@@ -71,7 +71,6 @@ class Z{
         ConfigCenter::getEnv(APP_NAME,"mysql_".LANG);
         ConfigCenter::getEnv(APP_NAME,"redis_".LANG);
 
-
         ConfigCenter::get(APP_NAME,"constant");
 	}
 	//指令行方式运行RUN_ENV

@@ -76,7 +76,7 @@ function get_comment_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
     }
-    return get_afactory_url($tmpPath,"comment",$protocol);
+    return get_admin_upload_url($tmpPath,"comment",$protocol);
 }
 
 function get_default_user_url(){

@@ -3,37 +3,61 @@
 class ProductService{
 
     function getRecommendList(){
-        $data = ProductModel::getRecommendList();
-        out_ajax(200,$data);
+        $list = ProductModel::getRecommendList();
+        $list = $this->format($list);
+        return out_pc(200,$list);
     }
 
-    function getListByCategory(){
-
-    }
-    function search($keyword){
-        $data = ProductModel::search($keyword);
-        out_ajax(200,$data);
+    function getListByCategory($categoryId){
+        $list = ProductModel::getListByCategory($categoryId);
+        $list = $this->format($list);
+        return out_pc(200,$list);
     }
 
-
-    function getDetail($request){
-        $pid = get_request_one($request['oid'],0);
-        if(!$pid){
-
+    function getOneDetail($id,$includeGoods){
+        if(!$id){
+            return out_pc(8072);
         }
 
-        $product = ProductModel::db()->getById($pid);
+        $product = ProductModel::db()->getById($id);
         if(!$product){
-
+            return out_pc(1026);
         }
 
-        $goods = $this->getGoodsListByPid($pid);
-        if(!$goods){
-
+        if($includeGoods == 2){
+            return out_pc(200,$product);
         }
+
+
+        $goods = $this->getGoodsListByPid($id);
+        $product['goods_list'] = $goods;
+        return out_pc(200,$product);
     }
 
     function getGoodsListByPid($pid){
         return GoodsModel::db()->getAll(" pid = $pid ");
+    }
+
+    function search($keyword){
+        $list = ProductModel::search($keyword);
+        $list = $this->format($list);
+        return out_pc(200,$list);
+    }
+
+    function format($list){
+        if(!$list){
+            return $list;
+        }
+
+        $data = null;
+        foreach ($list as $k=>$v){
+            $row = $v;
+            if(arrKeyIssetAndExist($v,'pic')){
+                $row['pic'] = get_product_url($v['pic']);
+            }
+            $data[] = $row;
+        }
+
+        return $data;
     }
 }

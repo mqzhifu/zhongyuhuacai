@@ -165,13 +165,22 @@ class ProductModel {
         return $addId;
     }
 
-    function getRecommendList(){
-	    return self::db()->getAll(" recommend = ".self::RECOMMEND_TRUE . " order by sort desc");
+    static function getDefaultOrder(){
+        return " order by sort desc ";
+    }
+
+    static function getRecommendList(){
+	    return self::db()->getAll(" recommend = ".self::RECOMMEND_TRUE .  self::getDefaultOrder());
+    }
+
+    static function getListByCategory($categoryId){
+        return self::db()->getAll(" category_id = ".$categoryId  .  self::getDefaultOrder());
     }
 
     function search($keyword){
         $data = self::db()->getAll(" title like '%$keyword%' or `desc` like '%$keyword%' ");
         return $data;
     }
+
 
 }

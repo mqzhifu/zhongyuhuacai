@@ -2,7 +2,7 @@
 
 class OrderService{
     //下单入口
-    function doing($request){
+    function doing($uid,$gid,$num){
         $num = get_request_one($request['num'],0);
         $gid = get_request_one($request['gid'],0);
 
@@ -20,11 +20,19 @@ class OrderService{
         }
     }
     //用户订单列表
-    function getUserList($request){
-
+    function getUserList($uid){
+        return OrderModel::getListByUid($uid);
     }
     //支付完成 - 通知订单变更状态
-    function finish(){
+    function finish($id){
 
+    }
+
+    function refund($id){
+
+    }
+
+    function getOneDetail($id){
+        return OrderModel::db()->getById($id);
     }
 }

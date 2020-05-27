@@ -6,9 +6,9 @@ class BaseCtrl {
     public $request = null;
 
     public $userService = null;
-    public $imSevice =null;
+    public $productService =null;
     public $systemService =null;
-
+    public $orderService = null;
     function __construct($request){
         $this->request = $request;
 //        $this->checkSign();
@@ -20,8 +20,10 @@ class BaseCtrl {
 
 //        //实例化 用户 服务 控制器
         $this->userService = new UserService();
-//        $this->systemService = new SystemService();
-//
+        $this->systemService = new SystemService();
+        $this->productService = new ProductService();
+        $this->orderService = new OrderService();
+
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){
             out_ajax ($tokenRs['code'],$tokenRs['msg']);

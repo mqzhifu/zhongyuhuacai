@@ -19,15 +19,15 @@ $arr = array(
             ),
             'return'=>array(
                 'array_key_number_two'=>array("must"=>1,'list'=>array(
-                    'banner_location' => array('type'=>'int','title'=>'Banner位置（1、游戏页面顶部轮播；2、任务页面顶部轮播；3、任务页面中部滑动；4、我的页面中部轮播）','must'=>1),
-                    'relative_path' => array('type'=>'int','title'=>'跳转类型（1、站内游戏；2、邀请好友；3、任务页面；4、金币欢乐送；5、幸运大抽奖；6、开心刮一刮；7、好友加成；8、签到有奖；9、奖金排行榜；10、开心抽一抽；11、铲铲队；12、福利红包；13：开心大轮盘；14：开心翻翻卡）','must'=>1),
-                    'game_id'=>  array('type'=>'int','title'=>'游戏ID（非游戏类别时，展示0）','must'=>1),
-                    'img'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
-                    'img_link'=>  array('type'=>'string','title'=>'图片链接','must'=>1),
-                    'is_relative'=>  array('type'=>'int','title'=>'链接地址1站内2非站内（目前只有站内,默认返回1）','must'=>1),
+//                    'type' => array('type'=>'int','title'=>'Banner位置（1、游戏页面顶部轮播；2、任务页面顶部轮播；3、任务页面中部滑动；4、我的页面中部轮播）','must'=>1),
+                    'id' => array('type'=>'int','title'=>'id','must'=>1),
+                    'title'=>  array('type'=>'int','title'=>'标题-描述','must'=>1),
+                    'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                    'pid'=>  array('type'=>'string','title'=>'产品ID','must'=>1),
+//                    'is_relative'=>  array('type'=>'int','title'=>'链接地址1站内2非站内（目前只有站内,默认返回1）','must'=>1),
                     //'relative_path'=>  array('type'=>'string','title'=>'APP内跳转地址（1：游戏，2：邀请，3：任务，4：金币欢乐送）','must'=>1),
 //                    'weight'=>  array('type'=>'int','title'=>'排序（数字越小，展示位置越靠前）','must'=>1),
-                    'banner_name'=>  array('type'=>'string','title'=>'跳转类型中文名称','must'=>1),
+//                    'banner_name'=>  array('type'=>'string','title'=>'跳转类型中文名称','must'=>1),
                 )
                 ),
             ),
@@ -49,7 +49,9 @@ $arr = array(
         'getListByCategory'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'获取一个分类下的所有产品',
-            'request'=>array(),
+            'request'=>array(
+                'category_id'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'分类'),
+            ),
             'return'=>array(
             ),
         ),
@@ -58,9 +60,27 @@ $arr = array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'产品详情页',
             'request'=>array(
-                'id'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'id'),
+                'id'=>array(           'type'=>'int','must'=>1,'default'=>100001,'title'=>'产品ID'),
+                'include_goods'=>array('type'=>'int','must'=>1,'default'=>2,     'title'=>'是否包含商品1是2否'),
             ),
             'return'=>array(
+                'id' => array('type'=>'int','title'=>'id','must'=>1),
+                'title' => array('type'=>'string','title'=>'标题','must'=>1),
+                'subtitle' => array('type'=>'string','title'=>'副标题','must'=>1),
+                'desc' => array('type'=>'string','title'=>'详细描述','must'=>1),
+                'brand' => array('type'=>'string','title'=>'品牌','must'=>1),
+                'attribute' => array('type'=>'string','title'=>'属性','must'=>1),
+                'notice' => array('type'=>'string','title'=>'购买须知','must'=>1),
+                'category_id' => array('type'=>'int','title'=>'分类ID','must'=>1),
+                'status' => array('type'=>'int','title'=>'状态','must'=>1),
+                'recommend' => array('type'=>'int','title'=>'是否推荐首页','must'=>1),
+                'pv' => array('type'=>'int','title'=>'总访问数','must'=>1),
+                'uv' => array('type'=>'int','title'=>'总用户访问数','must'=>1),
+                'pic' => array('type'=>'string','title'=>'详情描述图片','must'=>1),
+                'lowest_price' => array('type'=>'int','title'=>'最低价格','must'=>1),
+                'category_attr_null' => array('type'=>'int','title'=>'产品没有任何属性参数','must'=>1),
+                'goods_total' => array('type'=>'int','title'=>'包含多少个商品数','must'=>1),
+                'goods_list' => array('type'=>'string','title'=>'包含的商品列表','must'=>1),
             ),
         ),
 
@@ -68,9 +88,15 @@ $arr = array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'获取评论列表',
             'request'=>array(
-                'id'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'id'),
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'产品ID'),
             ),
             'return'=>array(
+                'id' => array('type'=>'int','title'=>'id','must'=>1),
+                'pic' => array('type'=>'string','title'=>'图片','must'=>1),
+                'title' => array('type'=>'string','title'=>'标题','must'=>1),
+                'content' => array('type'=>'string','title'=>'内容','must'=>1),
+                'uid' => array('type'=>'string','title'=>'用户ID','must'=>1),
+                'a_time' => array('type'=>'string','title'=>'添加时间','must'=>1),
             ),
         ),
 
@@ -78,7 +104,7 @@ $arr = array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'点赞',
             'request'=>array(
-                'id'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'id'),
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
             ),
             'return'=>array(
             ),
@@ -88,7 +114,7 @@ $arr = array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'收藏',
             'request'=>array(
-                'id'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'id'),
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
             ),
             'return'=>array(
             ),
@@ -98,7 +124,10 @@ $arr = array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'评论',
             'request'=>array(
-                'id'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'id'),
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
+                'title' => array('type'=>'string','title'=>'标题','must'=>1),
+                'content' => array('type'=>'string','title'=>'内容','must'=>1),
+                'pic' => array('type'=>'string','title'=>'图片','must'=>1),
             ),
             'return'=>array(
             ),
@@ -106,18 +135,18 @@ $arr = array(
 
         'search'=>array(
             'ws'=>array('request_code'=>1009,'response_code'=>1010),
-            'title'=>'关键词搜索，目前仅支持:UID',
+            'title'=>'搜索产品',
             'request'=>array(
                 'keyword'=>array('type'=>'string','must'=>1,'default'=>100001,'title'=>'关键词'),
             ),
             'return'=>array(
-                'array_key_number_two'=>array("must"=>0,'list'=>array(
-                    'uid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'用户ID'),
-                    'isFollow'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否已关注你，1是2否'),
-                    'nickname'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'昵称'),
-                    'avatar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'头像'),
-                    'sex'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'0未知1男2女'),
-                ),),
+//                'array_key_number_two'=>array("must"=>0,'list'=>array(
+//                    'uid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'用户ID'),
+//                    'isFollow'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否已关注你，1是2否'),
+//                    'nickname'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'昵称'),
+//                    'avatar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'头像'),
+//                    'sex'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'0未知1男2女'),
+//                ),),
             ),
         ),
     ),
@@ -125,44 +154,35 @@ $arr = array(
     'pay'=>array(
         'title'=>'支付',
 
-        'index'=>array(
+        'wxLittle'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'test',
-            'request'=>array(),
-            'return'=>array(
-            ),
-        ),
-
-        'recommendList'=>array(
-            'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'推荐列表',
-            'request'=>array(),
-            'return'=>array(
-            ),
-        ),
-
-        'getOne'=>array(
-            'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'商品详情页',
-            'request'=>array(),
-            'return'=>array(
-            ),
-        ),
-
-        'search'=>array(
-            'ws'=>array('request_code'=>1009,'response_code'=>1010),
-            'title'=>'关键词搜索，目前仅支持:UID',
+            'title'=>'小程序',
             'request'=>array(
-                'keyword'=>array('type'=>'string','must'=>1,'default'=>100001,'title'=>'关键词'),
+                'oid'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'订单ID'),
             ),
             'return'=>array(
-                'array_key_number_two'=>array("must"=>0,'list'=>array(
-                    'uid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'用户ID'),
-                    'isFollow'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否已关注你，1是2否'),
-                    'nickname'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'昵称'),
-                    'avatar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'头像'),
-                    'sex'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'0未知1男2女'),
-                ),),
+            ),
+        ),
+    ),
+
+    'wxLittleCallback'=>array(
+        'title'=>'小程序回调',
+
+        'receive'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'用户消息',
+            'request'=>array(
+            ),
+            'return'=>array(
+            ),
+        ),
+
+        'pay'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'支付回调',
+            'request'=>array(
+            ),
+            'return'=>array(
             ),
         ),
     ),

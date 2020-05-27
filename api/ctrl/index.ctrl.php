@@ -21,7 +21,7 @@ class IndexCtrl extends BaseCtrl  {
     }
 
     function getBannerList(){
-        $data = BannerModel::db()->getAll();
+        $data = BannerModel::getIndexList();
         out_ajax(200,$data);
     }
 
