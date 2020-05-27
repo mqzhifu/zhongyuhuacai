@@ -7,6 +7,25 @@
 <script src="http://{CONST|STATIC_URL}//js/jquery-3.3.1.js"></script>
 <script src="http://{CONST|STATIC_URL}//js/md5.js"></script>
 
+
+<table>
+    <tr>
+        <td>uid</td>
+        <td><input type="text" id="tokenUid" /> </td>
+    </tr>
+    <tr>
+        <td>
+            生成的token
+        </td>
+        <td id="uidToToken">
+
+        </td>
+    </tr>
+    <tr>
+    <td><input type="button" value="生成token" onclick="makeToken()" /> </td>
+    </tr>
+</table>
+
 <table>
     <tr>
 
@@ -60,7 +79,7 @@
 
             </td>
             {if $v2['name'] == 'token'}
-                <td>{$v2['info']['id']},{$v2['info']['uname']}</td>
+                <td>uid:{$v2['info']['id']},uname:{$v2['info']['uname']}</td>
             {/if}
         </tr>
         {/foreach}
@@ -105,6 +124,34 @@
         });
 
         alert(url);
+    }
+
+    function makeToken(){
+        var uid = $("#tokenUid").val();
+        if(!uid){
+            return alert(" uid is null");
+        }
+
+        $.ajax({
+            //请求方式
+            type : "POST",
+            //请求的媒体类型
+            // contentType: "application/json;charset=UTF-8",
+            //请求地址
+            url : "/tools/uidTransferToken/code=mqzhifu&uid="+uid,
+            //数据，json字符串
+            // data : JSON.stringify(list),
+            //请求成功
+            success : function(result) {
+                $("#uidToToken").html(result);
+                console.log(result);
+            },
+            //请求失败，包含具体的错误信息
+            error : function(e){
+                console.log(e.status);
+                console.log(e.responseText);
+            }
+        });
     }
 
 </script>

@@ -18,8 +18,10 @@ class RedisPHPLib{
         return self::$_inc;
     }
 
-    function __construct($config){
-        $this->_config = $config;
+    function __construct($config = null){
+        if($config){
+            $this->_config = $config;
+        }
     }
 
     function getServerConnFD($config_key = null){

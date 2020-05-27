@@ -282,9 +282,12 @@ class UserService{
     }
 
     function createToken($uid){
+        $kernelRedisObj = new RedisPHPLib($GLOBALS[KERNEL_NAME]['redis']['instantplay']);
+
         $token = TokenLib::create($uid);
-//        $key = RedisPHPLib::getAppKeyById($GLOBALS['rediskey']['token']['key'],$uid);
-//        RedisPHPLib::set($key,$token,$GLOBALS['rediskey']['token']['expire']);
+        $redusKey = ConfigCenter::get(APP_NAME,"rediskey");
+        $key = $kernelRedisObj->getAppKeyById($redusKey['token']['key'],$uid);
+        $kernelRedisObj->set($key,$token,$redusKey['token']['expire']);
         return $token;
     }
 

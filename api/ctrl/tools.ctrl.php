@@ -6,7 +6,15 @@ class ToolsCtrl {
     public $_err_code = null;
     public $_main = null;
     public $_redis_key = null;
-    function __construct(){
+    function __construct($request){
+        $this->request = $request;
+        if(!arrKeyIssetAndExist($request,'code')){
+            exit("auth code is null");
+        }
+
+        if($request['code'] != 'mqzhifu'){
+            exit("auth code is err.");
+        }
         //接口配置信息
         $this->_api = ConfigCenter::get(APP_NAME,"api");
         //所有错误码
@@ -364,14 +372,17 @@ class ToolsCtrl {
     }
 
 
-    function uidTransferToken($uid){
+    function uidTransferToken(){
+        $uid = $this->request['uid'];
         if(!$uid){
             exit("uid 为空");
         }
         $user = UserModel::db()->getById($uid);
-        var_dump($user);
-
-        $token = TokenLib::create(UserModel::$_type_wechat.$uid);
+        if(!$user){
+            exit("uid not in db");
+        }
+        $service = new UserService();
+        $token = $service->createToken($uid);
         echo $token;
     }
 
