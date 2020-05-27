@@ -139,6 +139,7 @@ class ToolsCtrl {
         }
         $tokenInfo = TokenLib::getDecode($token);
         $info = $this->userService->getUinfoById($tokenInfo['uid']);
+        $info = $info['msg'];
         $api = $this->_api;
         $method = null;
         foreach($api as $k=>$module){

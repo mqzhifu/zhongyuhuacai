@@ -58,6 +58,15 @@ function getAccessToken(){
 function uidToOpenId(){
 
 }
+
+function get_order_rand_no(){
+    return rand(100000,999999).date("YmdHis").rand(100000,999999);
+}
+
+function get_rand_uniq_str(){
+    return uniqid(time());
+}
+
 //uid 转换成一个特殊的字符，可以decode ，算是一层加密吧
 function intToStr($uid){
 

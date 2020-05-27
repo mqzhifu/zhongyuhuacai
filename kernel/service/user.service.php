@@ -514,11 +514,12 @@ class UserService{
 
         $user = UserModel::db()->getById($uid);
         if(!$user){
-            return false;
+            return out_pc(1000);
         }
+        if(arrKeyIssetAndExist($user,'avatar'))
+            $user['avatar'] = get_avatar_url($user['avatar']);
 
-        $user['avatar'] = getUserAvatar($user);
-
+        return out_pc(200,$user);
 //        if(!arrKeyIssetAndExist($user,'avatar')){
 //            $user['avatar'] = "默认图占位符";
 //        }

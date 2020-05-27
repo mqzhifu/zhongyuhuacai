@@ -6,6 +6,8 @@ class WithdrawModel {
     static $_db_key = "instantplay";
 
 
+
+
     static function db(){
         if(self::$_db)
             return self::$_db;

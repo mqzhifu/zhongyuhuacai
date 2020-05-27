@@ -34,6 +34,16 @@ class UploadService
         $rs = $lib->upLoadOneFile($postInputName,'avatar',array('png','jpg','bmp'),0);
         return $rs;
     }
+
+    function delAvatar($tmpPath){
+            $path = $this->getAdminProjectDir() .DS  . "avatar".DS .$tmpPath;
+            if(!file_exists($path)){
+                ajax_out(8122);
+            }
+            $rs = unlink($path);
+            return out_pc(200,$rs);
+    }
+
     function banner($postInputName){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();

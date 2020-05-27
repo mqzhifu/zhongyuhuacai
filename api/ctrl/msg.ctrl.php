@@ -2,7 +2,9 @@
 class MsgCtrl extends BaseCtrl  {
     //一个用户下的所有站内信列表
     function getListByUser(){
-
+        $list = $this->msgService->getList();
+        out_ajax($rs['code'],$rs['msg']);
+        getListByUser
     }
     //一条消息的详情
     function detail(){

@@ -177,7 +177,7 @@ class ProductModel {
         return self::db()->getAll(" category_id = ".$categoryId  .  self::getDefaultOrder());
     }
 
-    function search($keyword){
+    static function search($keyword){
         $data = self::db()->getAll(" title like '%$keyword%' or `desc` like '%$keyword%' ");
         return $data;
     }

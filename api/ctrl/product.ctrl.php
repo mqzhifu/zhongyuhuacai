@@ -28,7 +28,8 @@ class ProductCtrl extends BaseCtrl  {
 
     }
     //搜索
-    function search($keyword){
+    function search(){
+        $keyword = $this->request['keyword'];
         $data = $this->productService->search($keyword);
         out_ajax($data['code'],$data['msg']);
     }
@@ -67,6 +68,7 @@ class ProductCtrl extends BaseCtrl  {
             'a_time'=>time(),
             'pid'=>$pid,
             'uid'=>$this->uid,
+            'pic'=>"",
         );
         $newId = UserCommentModel::db()->add($data);
         out_ajax(200,$newId);

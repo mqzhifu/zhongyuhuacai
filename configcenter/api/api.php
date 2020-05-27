@@ -125,9 +125,9 @@ $arr = array(
             'title'=>'评论',
             'request'=>array(
                 'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
-                'title' => array('type'=>'string','title'=>'标题','must'=>1),
-                'content' => array('type'=>'string','title'=>'内容','must'=>1),
-                'pic' => array('type'=>'string','title'=>'图片','must'=>1),
+                'title' => array('type'=>'string','title'=>'标题','default'=>"",'must'=>1),
+                'content' => array('type'=>'string','title'=>'内容','default'=>"",'must'=>1),
+                'pic' => array('type'=>'string','title'=>'图片','default'=>"",'must'=>1),
             ),
             'return'=>array(
             ),
@@ -225,7 +225,8 @@ $arr = array(
             'title'=>'下单',
             'request'=>array(
                 'gid'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'商品ID'),
-                'nyum'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'购买数量'),
+                'num'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'购买数量'),
+                'agent_uid'=>array('type'=>'int','must'=>0,'default'=>100001,'title'=>'代理ID'),
             ),
             'return'=>array(
                 'array_key_number_two'=>array("must"=>0,'list'=>array(
@@ -390,11 +391,10 @@ $arr = array(
             'ws'=>array('request_code'=>4011,'response_code'=>4012),
             'request'=>array(
                 'nickname'=>array('type'=>'string','must'=>1,'default'=>"张3必疯",'title'=>'昵称'),
-//                'avatar'=>array('type'=>'string','must'=>1,'default'=>'https://images.liqucn.com/img/h22/h41/img_localize_e30c5fce43d7465ff694ae224e621f29_200x200.png','title'=>'头像地址'),
-                'sex'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'性别1男2女'),
-                'sign'=>array('type'=>'string','must'=>1,'default'=>"每天必疯3次，疯呀疯",'title'=>'个性签名'),
-                'summary'=>array('type'=>'string','must'=>1,'default'=>'啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊','title'=>'简介'),
                 'ps'=>array('type'=>'string','must'=>1,'default'=>"e10adc3949ba59abbe56e057f20f883e",'title'=>'密码，MD5格式'),
+                'sex'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'性别1男2女'),
+//                'sign'=>array('type'=>'string','must'=>1,'default'=>"每天必疯3次，疯呀疯",'title'=>'个性签名'),
+//                'summary'=>array('type'=>'string','must'=>1,'default'=>'啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊','title'=>'简介'),
             ),
             'return'=>array(
                 'scalar'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'成功/失败'),
@@ -413,10 +413,14 @@ $arr = array(
         ),
 
         'feedback'=>array(
-            'title'=>'反馈',
+            'title'=>'发起反馈',
             'ws'=>array('request_code'=>4011,'response_code'=>4012),
             'request'=>array(
-                'avatar'=>array('type'=>'string','must'=>1,'default'=>'二进制','title'=>'头像二进制流'),
+                'title'=>array('type'=>'string','must'=>1,'default'=>"",'title'=>'标题'),
+                'content'=>array('type'=>'string','must'=>1,'default'=>'','title'=>'内容'),
+                'mobile'=>array('type'=>'string','must'=>1,'default'=>'','title'=>'手机号'),
+                'pic'=>array('type'=>'string','must'=>1,'default'=>'二进制','title'=>'图片'),
+
             ),
             'return'=>array(
                 'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'头像'),
@@ -427,7 +431,6 @@ $arr = array(
             'title'=>'反馈',
             'ws'=>array('request_code'=>4011,'response_code'=>4012),
             'request'=>array(
-                'avatar'=>array('type'=>'string','must'=>1,'default'=>'二进制','title'=>'头像二进制流'),
             ),
             'return'=>array(
                 'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'头像'),
@@ -579,7 +582,7 @@ $arr = array(
             ),
         ),
 
-        'unreadList'=>array(
+        'unreadNum'=>array(
             'title'=>'未读数',
             'ws'=>array('request_code'=>1403,'response_code'=>1404),
             'request'=>array(

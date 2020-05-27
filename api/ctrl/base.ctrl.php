@@ -9,6 +9,8 @@ class BaseCtrl {
     public $productService =null;
     public $systemService =null;
     public $orderService = null;
+    public $uploadService = null;
+    public $msgService = null;
     function __construct($request){
         $this->request = $request;
 //        $this->checkSign();
@@ -23,6 +25,9 @@ class BaseCtrl {
         $this->systemService = new SystemService();
         $this->productService = new ProductService();
         $this->orderService = new OrderService();
+        $this->uploadService = new UploadService();
+        $this->msgService = new MsgService();
+
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){
