@@ -9,7 +9,7 @@ class MsgService {
         }
 
 
-        $where = " to_uid = $uid ";
+        $where = " to_uid = $uid and to_del = ".MsgModel::DEL_TO_FALSE;
 
         //收件人 未删除
 //        $where = " to_del = 2 ";
@@ -30,30 +30,45 @@ class MsgService {
 //        $strangerMsgCateIds =   MsgModel::$_cate_stranger_im_game ." , ".  MsgModel::$_cate_stranger_im_img ." , ". MsgModel::$_cate_stranger_im_text." , ". MsgModel::$_cate_stranger_im_voice;
 //        $where .= " cate not in ( $strangerMsgCateIds )";
 
-        $strangerLastMsg = 0;
+//        $strangerLastMsg = 0;
         $list = MsgModel::db()->getAll($where . " order by a_time desc ");
-        if(!$list){
-            return out_pc(200);
-        }
+        $list = $this->format($list);
+        return out_pc(200,$list);
 
-        $rs = array();
-        foreach($list as $k=>$v){
-            //陌生人的消息 要聚合，只显示最后一条就够了
-            if(MsgModel::keyInCateStranger($v['category'])){
-                if($strangerLastMsg){
-                    continue;
-                }else{
-                    $strangerLastMsg = 1;
-                }
-            }
-
-            $rs[] = $v;
-        }
-
-        return out_pc(200,$rs);
+//        $rs = array();
+//        foreach($list as $k=>$v){
+//            //陌生人的消息 要聚合，只显示最后一条就够了
+//            if(MsgModel::keyInCateStranger($v['category'])){
+//                if($strangerLastMsg){
+//                    continue;
+//                }else{
+//                    $strangerLastMsg = 1;
+//                }
+//            }
+//
+//            $rs[] = $v;
+//        }
+//
+//        return out_pc(200,$rs);
 
     }
+    function format($list){
+        if(!$list){
+            return $list;
+        }
 
+        $userService = new UserService();
+
+        $rs = null;
+        foreach ($list as $k=>$v){
+            $user = $userService->getUinfoById($v['from_uid']);
+            $rs[$k]['from_uid_nickname'] = $user['nickname'];
+            $user = $userService->getUinfoById($v['to_uid']);
+            $rs[$k]['to_uid_nickname'] = $user['nickname'];
+        }
+
+        return $rs;
+    }
 
     //点到点时，添加用这个
     //type,1:用户之间，3系统对用户
@@ -301,6 +316,17 @@ class MsgService {
 //    }
 
 
+    function getOneDetail($id){
+        $info = MsgModel::db()->getById($id);
+        if(!$info){
+            return out();
+        }
+
+        $data = array("is_read"=>MsgModel::FROM_READ_TRUE);
+        MsgModel::db()->upById($id,$data);
+        return out_pc(200,$info);
+    }
+
 
     /**
      * 获取未读消息数
@@ -313,14 +339,22 @@ class MsgService {
      * 4用户标签发送<br>
      * @return int 未读消息数
      */
-    function getUserUnreadNum($uid,$type = 0){
-        $key = RedisPHPLib::getAppKeyById($GLOBALS['rediskey']['msgUnread']['key'],$uid);
-        $cnt =  RedisPHPLib::getServerConnFD()->get($key);
-        if(!$cnt){
-            $cnt= 0;
+    function getUserUnreadNum($uid){
+        $list = MsgModel::db()->getAll(" to_uid = $uid and is_read = ".MsgModel::FROM_READ_FALSE);
+        $unread = 0;
+        if($list){
+            $unread = count($unread);
         }
 
-        return $cnt;
+        return out_pc(200,$unread);
+
+//        $key = RedisPHPLib::getAppKeyById($GLOBALS['rediskey']['msgUnread']['key'],$uid);
+//        $cnt =  RedisPHPLib::getServerConnFD()->get($key);
+//        if(!$cnt){
+//            $cnt= 0;
+//        }
+//
+//        return $cnt;
 
 //        $unread_num = 0;
 //        if(!$type){
