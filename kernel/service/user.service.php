@@ -469,6 +469,7 @@ class UserService{
         }else{
             return false;
         }
+        LogLib::inc()->debug($where);
 //        return UserModel::db()->getRow("type = $type and third_uid = '$thirdUid'");
         return UserModel::db()->getRow($where);
     }
