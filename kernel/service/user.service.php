@@ -10,6 +10,8 @@ class UserService{
     // $data:用户信息,目前注册基本都是最简，详细信息后续面再补
     // $ps:有些注册类型，可能需要填写密码
     function register($name,$ps = '',$type ,$userInfo = null){
+        LogLib::inc()->debug("start reg : $name $ps $type  " );
+        LogLib::inc()->debug($userInfo );
         if(!$name){
             return out_pc(8009);
         }

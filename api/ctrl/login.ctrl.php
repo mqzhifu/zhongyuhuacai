@@ -34,13 +34,18 @@ class LoginCtrl extends BaseCtrl {
         $code = $request['code'];
         $WxLittleLib = new WxLittleLib();
         $wxCallbackData = $WxLittleLib->getSessionOpenIdByCode($code);
+
+        LogLib::inc()->debug($wxCallbackData);
 //        var_dump($wxData);
 //        var_dump($request);
-        $sessionKey = $wxCallbackData['session_key'];
+
+        $sessionKey = "aaa";
+//        $sessionKey = $wxCallbackData['session_key'];
         $openId = $wxCallbackData['openid'];
 
         $loginData = array('thirdId'=>$openId,'type'=>UserModel::$_type_wechat);
         $loginRs = $this->third($loginData);
+        LogLib::inc()->debug($loginRs);
         if($loginRs['code'] == 200){
             out_ajax(200,$loginRs['msg']);
         }
@@ -52,6 +57,7 @@ class LoginCtrl extends BaseCtrl {
             $newUserInfo = $this->userService->register($openId,"",UserModel::$_type_wechat,$userInfo);
 //            var_dump("new uid :",$newUserInfo['id']);
             $token = $this->createToken($newUserInfo['id']);
+            LogLib::inc()->debug("create token:$token");
             out_ajax(200,$token);
         }else{
             exit("未知错误");

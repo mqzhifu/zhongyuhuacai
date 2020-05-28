@@ -43,6 +43,12 @@ class LogLib {
         $this->write($dir,$content);
     }
 
+    function debug($content){
+        $dir = LOG_PATH.DS .APP_NAME .DS."debug";
+        $this->write($dir,$content);
+    }
+
+
     //根据时间，HASH分散存储
     //实际上用了seasLog扩展，基本没用了这个方法
     function write($dir,$content){
