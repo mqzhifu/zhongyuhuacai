@@ -82,6 +82,7 @@ class LoginCtrl extends BaseCtrl {
     }
 
     function third($request){
+        LogLib::inc()->debug("start login third");
         $thirdId = $request['thirdId'];
         $type = $request['type'];
         if(!$thirdId){

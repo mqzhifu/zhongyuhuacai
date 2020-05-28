@@ -154,6 +154,7 @@ class UserService{
     }
      //3方登陆
     function thirdLogin($thirdUid,$thirdType){
+        LogLib::inc()->debug("start thirdLogin $thirdUid $thirdType");
         $user = $this->getThirdUser($thirdUid,$thirdType);
         if($user){
 //            $this->loginRecord($user,$clientInfo,$type);
@@ -455,6 +456,7 @@ class UserService{
     }
     //根据TYPE，获取3方来源的类型，再根据字段值匹配
     function getThirdUser($thirdUid,$type){
+        LogLib::inc()->debug("start getThirdUser:$thirdUid $type " );
         if($type == UserModel::$_type_qq){
             $where = " qq_uid = '$thirdUid'";
         }elseif($type == UserModel::$_type_wechat){
