@@ -156,6 +156,7 @@ class UserService{
     function thirdLogin($thirdUid,$thirdType){
         LogLib::inc()->debug("start thirdLogin $thirdUid $thirdType");
         $user = $this->getThirdUser($thirdUid,$thirdType);
+        LogLib::inc()->debug($user);
         if($user){
 //            $this->loginRecord($user,$clientInfo,$type);
             $token = $this->createToken($user['id']);
