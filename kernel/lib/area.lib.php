@@ -60,6 +60,8 @@ class AreaLib  {
         }
 
         $arr['result']['formatted_address'];
+
+        return  $arr['result']['formatted_address'];
 //        $arr['result']['business'];
 //         $arr['addressComponent']['province'];
 //         $arr['addressComponent']['city'];
