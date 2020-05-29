@@ -44,10 +44,17 @@ class UploadService
             return out_pc(200,$rs);
     }
 
-    function banner($postInputName){
+    function banner($postInputName,$fileName = ""){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();
-        $rs = $lib->upLoadOneFile($postInputName,'banner',array('png','jpg','bmp'),0);
+        $rs = $lib->upLoadOneFile($postInputName,'banner',array('png','jpg','bmp'),0,$fileName);
+        return $rs;
+    }
+
+    function category($postInputName){
+        $lib = new ImageUpLoadLib();
+        $lib->path = $this->getAdminProjectDir();
+        $rs = $lib->upLoadOneFile($postInputName,'category',array('png','jpg','bmp'),0);
         return $rs;
     }
 

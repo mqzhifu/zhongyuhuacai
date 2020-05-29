@@ -4,4 +4,4 @@ define('DOMAIN_URL', "local.z-a.com");
 //静态文件域名
 define ('STATIC_URL', "local.z-s.com");
 //http协议
-define ('HTTP_PROTOCOL', "http://");
+define ('HTTP_PROTOCOL', "http");

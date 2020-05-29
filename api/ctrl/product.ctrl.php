@@ -3,6 +3,11 @@ class ProductCtrl extends BaseCtrl  {
     function __construct($request){
         parent::__construct($request);
     }
+
+    function getAllCategory(){
+        $list = ProductCategoryModel::db()->getAll();
+        out_ajax(200,$list);
+    }
     //获取 后台 推荐的商品的列表
     function getRecommendList(){
         $list = $this->productService->getRecommendList();

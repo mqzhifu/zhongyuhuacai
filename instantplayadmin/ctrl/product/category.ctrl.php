@@ -8,10 +8,6 @@ class CategoryCtrl extends BaseCtrl{
     }
 
 
-    function getList(){
-        $this->getData();
-    }
-
     function add(){
         if(_g("opt")){
             $name = _g("name");
@@ -29,9 +25,20 @@ class CategoryCtrl extends BaseCtrl{
             );
 
             $newId = ProductCategoryModel::db()->add($data);
-            $this->ok("成功",$this->_backListUrl);
+
+            $uploadService = new UploadService();
+            $uploadRs = $uploadService->banner('pic',$newId);
+            if($uploadRs['code'] != 200){
+                exit(" uploadService->banner error ".json_encode($uploadRs));
+            }
+
+            $data['pic'] = $uploadRs['msg'];
+
+            $this->ok($newId,$this->_backListUrl);
         }
+
         $this->addHookJS("/product/category_add_hook.html");
+        $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/product/category_add.html");
     }
 
@@ -58,7 +65,7 @@ class CategoryCtrl extends BaseCtrl{
     }
 
 
-    function getData(){
+    function getList(){
         $records = array();
         $records["data"] = array();
         $sEcho = _g("draw");
@@ -102,6 +109,9 @@ class CategoryCtrl extends BaseCtrl{
                     $v['id'],
                     $v['name'],
                     $attr,
+                    "<img width=20 height=20 src='".get_category_url($v['pic'])."' />",
+                    $v['is_show_index'],
+
                     '<a href="/product/no/categoryAttr/add/cid='.$v['id'].'" class="btn yellow btn-xs margin-bottom-5"><i class="fa fa-edit"></i> 添加属性 </a>',
                 );
 

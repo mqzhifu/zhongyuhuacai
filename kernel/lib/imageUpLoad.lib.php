@@ -14,7 +14,7 @@ class ImageUpLoadLib{
 
     }
 
-    function realUpLoadOneFile($postInputName,$path ,$allowFileTypes = array(),$useHash = 0){
+    function realUpLoadOneFile($postInputName,$path ,$allowFileTypes = array(),$useHash = 0,$fileName = ""){
         $errInfo = " upLoadOneFile ";
         if(!is_dir($path))
             exit($errInfo." path not dir");
@@ -90,6 +90,10 @@ class ImageUpLoadLib{
         }
 
         $createFileName = date("YmdHis")."_" .rand(1000,9999);
+        if($fileName){
+            $createFileName = $fileName;
+        }
+
         if($useHash){
             //年月日-小时分秒+4位随机数
 
@@ -114,7 +118,7 @@ class ImageUpLoadLib{
     //$path:文件上传路径
     //$fileType：文件类型|文件扩展名
     //$postNames:input name
-    function upLoadOneFile($postInputName,$module ,$allowFileTypes = array(),$useHash = 0 ){
+    function upLoadOneFile($postInputName,$module ,$allowFileTypes = array(),$useHash = 0 ,$fileName = "" ){
         $errInfo = " upLoadOneFile ";
         if(!$module){
             exit($errInfo." module is null");
@@ -123,7 +127,7 @@ class ImageUpLoadLib{
 
 
         $path = $this->path . DS . get_upload_cdn_evn() . DS .$module;
-        return $this->realUpLoadOneFile($postInputName,$path,$allowFileTypes,$useHash);
+        return $this->realUpLoadOneFile($postInputName,$path,$allowFileTypes,$useHash,$fileName);
     }
 	//上传多文件
 	function upLoad(){

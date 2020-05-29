@@ -39,6 +39,15 @@ function get_banner_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     return get_admin_upload_url($tmpPath,"banner",$protocol);
 }
 
+function get_category_url( $tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return false;
+    }
+    return get_admin_upload_url($tmpPath,"category",$protocol);
+}
+
+
+
 function get_category_attr_para_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
