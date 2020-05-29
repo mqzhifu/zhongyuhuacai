@@ -29,6 +29,7 @@ class IndexCtrl extends BaseCtrl  {
         $data = array(
             'latitude'=>$latitude,'longitude'=>$longitude,'uid'=>$this->uid,'gps_parser_addr'=>$addr,'a_time'=>time(),
         );
+        wxLocationModel::db()->add($data);
 
     }
 
