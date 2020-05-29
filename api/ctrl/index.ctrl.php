@@ -21,8 +21,14 @@ class IndexCtrl extends BaseCtrl  {
     }
 
 
-    function location(){
-        $url = "http://api.map.baidu.com/location/ip?ak=B6zZCrUZ6bSSFPKcCirUGeRPWC9HIxsy&ip=103.25.28.182";
+    function wxPushLocation($request){
+        $latitude = $request['latitude'];
+        $longitude = $request['longitude'];
+        $addr = AreaLib::getByGPS($latitude,$longitude);
+
+        $data = array(
+            'latitude'=>$latitude,'longitude'=>$longitude,'uid'=>$this->uid,'gps_parser_addr'=>$addr,'a_time'=>time(),
+        );
 
     }
 

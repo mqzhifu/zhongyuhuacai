@@ -42,6 +42,32 @@ class AreaLib  {
 
     }
 
+    static function getByGPS($latitude,$longitude){
+        if(!$latitude || !$longitude){
+            return "空";
+        }
+
+        $url = "http://api.map.baidu.com/reverse_geocoding/v3/?ak=".self::$ak."&output=json&coordtype=wgs84ll&location=$latitude,$longitude";
+        $res = @file_get_contents($url);
+        //解析json
+        $arr = json_decode($res,true);
+        if(!$arr){
+            return "百度解析IP失败(-1)-$latitude,$longitude";
+        }
+
+        if($arr['status'] !== 0){
+            return "百度解析IP失败(-2)-$latitude,$longitude";
+        }
+
+        $arr['result']['formatted_address'];
+//        $arr['result']['business'];
+//         $arr['addressComponent']['province'];
+//         $arr['addressComponent']['city'];
+//         $arr['addressComponent']['town'];
+//         $arr['addressComponent']['street']
+
+    }
+
     static function getByIp($ip = ""){
 //        $json = "{\"address\":\"CN|\u5317\u4eac|\u5317\u4eac|None|UNICOM|0|0\",\"content\":{\"address\":\"\u5317\u4eac\u5e02\",\"address_detail\":{\"city\":\"\u5317\u4eac\u5e02\",\"city_code\":131,\"district\":\"\",\"province\":\"\u5317\u4eac\u5e02\",\"street\":\"\",\"street_number\":\"\"},\"point\":{\"x\":\"116.40387397\",\"y\":\"39.91488908\"}},\"status\":0}";
 //        $json  = json_decode($json,true);
