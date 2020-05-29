@@ -22,7 +22,7 @@ class inserTBDb{
         //2：生成产品信息
         //3：生成商品信息
 
-//        $this->insertProductCategoryAttrPara($products);
+        $this->insertProductCategoryAttrPara($products);
         $this->insertProduct($products);
 
         $endTime = time();
