@@ -9,7 +9,8 @@ class ProductCtrl extends BaseCtrl  {
         if($list){
             foreach ($list as $k=>$v){
                 if(arrKeyIssetAndExist($v,'pic')){
-                    $list[$k]['pic'] = get_category_url($v['pic']);
+                    $pic = explode(",",$v['pic']);
+                    $list[$k]['pic'] = get_category_url($pic[0]['pic']);
                 }else{
                     $list[$k]['pic'] = "";
                 }
@@ -19,8 +20,17 @@ class ProductCtrl extends BaseCtrl  {
     }
     //获取 后台 推荐的商品的列表
     function getRecommendList(){
-        $list = $this->productService->getRecommendList();
-        out_ajax($list['code'],$list['msg']);
+        $rs = $this->productService->getRecommendList();
+        if(!$rs['msg']){
+            out_ajax($rs['code'],$rs['msg']);
+        }
+        $data = null;
+        foreach ($rs['msg'] as $k=>$v){
+            $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$v['pic']);
+        }
+
+        out_ajax(200,$data);
+
     }
     //获取一个分类下的所有商品列表
     function getListByCategory(){
