@@ -18,9 +18,9 @@ function get_web_client_data(){
         return -1;
     }
     //静态资源的请求，就没必要记录了
-    if(STATIC_URL == $_SERVER['HTTP_HOST']){
-        return -2;
-    }
+//    if(STATIC_URL == $_SERVER['HTTP_HOST']){
+//        return -2;
+//    }
 
     $ip = get_client_ip();
 

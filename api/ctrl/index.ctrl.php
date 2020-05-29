@@ -20,6 +20,12 @@ class IndexCtrl extends BaseCtrl  {
         //发起提现
     }
 
+
+    function location(){
+        $url = "http://api.map.baidu.com/location/ip?ak=tquZekAQHGIyQzVze7MmmpTfU2VBveuS&ip=";
+
+    }
+
     function getBannerList(){
         $data = BannerModel::getIndexList();
         out_ajax(200,$data);
