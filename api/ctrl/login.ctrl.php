@@ -86,19 +86,19 @@ class LoginCtrl extends BaseCtrl {
         $thirdId = $request['thirdId'];
         $type = $request['type'];
         if(!$thirdId){
-            return $this->out(8030);
+            return out_pc(8030);
         }
 
         if(!$type){
-            return $this->out(8004);
+            return out_pc(8004);
         }
 
         if(!UserModel::keyInRegType($type)){
-            return $this->out(8210);
+            return out_pc(8210);
         }
 
         if($this->userService->getTypeMethod($type) != UserModel::$_type_cate_third){
-            return $this->out(8242);
+            return out_pc(8242);
         }
 
 //        $thirdInfo = array(
@@ -113,7 +113,7 @@ class LoginCtrl extends BaseCtrl {
 //        }
 
         $rs = $this->userService->thirdLogin($thirdId,$type);
-        return $this->out($rs['code'],$rs['msg']);
+        return out_pc($rs['code'],$rs['msg']);
     }
 
 
