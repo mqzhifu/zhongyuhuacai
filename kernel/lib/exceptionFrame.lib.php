@@ -80,10 +80,16 @@ class ExceptionFrameLib extends Exception {
         $type = getErrInfo($errno);
         $str  = "[type]: $type"."[msg]: $errstr "."[file]: $errfile "."[line]: $errline";
 
+
 	    if(RUN_ENV == 'WEBSOCKET'){
             LogLib::wsWriteFileHash([$str]);
         }else{
             LogLib::inc()->error($str);
+            $debugInfo = debug_backtrace();
+            foreach ($debugInfo as $k=>$v){
+                LogLib::inc()->error($v);
+            }
+
             if(!DEBUG){
                 $arr = array("code"=>9992,"msg"=>'appError');
                 echo json_encode($arr);
