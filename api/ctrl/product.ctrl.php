@@ -31,7 +31,7 @@ class ProductCtrl extends BaseCtrl  {
                 $pic = explode(",",$v['pic']);
                 $pic = get_product_url($pic[0]);
             }
-            $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$pic);
+            $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$pic,'lowest_price'=>$v['lowest_price'],'title'=>$v['title']);
         }
 
         out_ajax(200,$data);
