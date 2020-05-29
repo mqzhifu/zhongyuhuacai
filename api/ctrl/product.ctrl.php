@@ -26,7 +26,12 @@ class ProductCtrl extends BaseCtrl  {
         }
         $data = null;
         foreach ($rs['msg'] as $k=>$v){
-            $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$v['pic']);
+            $pic = "";
+            if(arrKeyIssetAndExist($v,'pic')){
+                $pic = explode(",",$v['pic']);
+                $pic = get_category_url($pic[0]['pic']);
+            }
+            $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$pic);
         }
 
         out_ajax(200,$data);
