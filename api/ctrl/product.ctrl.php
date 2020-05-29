@@ -5,7 +5,7 @@ class ProductCtrl extends BaseCtrl  {
     }
 
     function getAllCategory(){
-        $list = ProductCategoryModel::db()->getAll();
+        $list = ProductCategoryModel::db()->getAll(" is_show_index = 1 ");
         if($list){
             foreach ($list as $k=>$v){
                 if(arrKeyIssetAndExist($v,'pic')){
