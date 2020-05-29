@@ -58,13 +58,14 @@ class BaseCtrl {
                 return $this->out(5001);
             }
         }
+        $ipArea = AreaLib::getByIp();
         $data = array(
             'a_time'=>time(),
             'ctrl'=>$request['ctrl'],
             'ac'=>$request['ac'],
             'uid'=>$this->uid,
             'client_info'=>json_encode(get_client_info()),
-            'ip_parser'=>AreaLib::getByIp(),
+            'ip_parser'=>json_encode($ipArea,JSON_UNESCAPED_UNICODE),
         );
         UserLogModel::db()->add($data);
 //        //每日 任务初始化
