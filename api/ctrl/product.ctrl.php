@@ -6,6 +6,13 @@ class ProductCtrl extends BaseCtrl  {
 
     function getAllCategory(){
         $list = ProductCategoryModel::db()->getAll();
+        if($list){
+            foreach ($list as $k=>$v){
+                if(arrKeyIssetAndExist($v,'pic')){
+                    $list[$k]['pic'] = get_category_url($v['pic']);
+                }
+            }
+        }
         out_ajax(200,$list);
     }
     //获取 后台 推荐的商品的列表
