@@ -9,8 +9,8 @@ class ProductCtrl extends BaseCtrl  {
         if($list){
             foreach ($list as $k=>$v){
                 if(arrKeyIssetAndExist($v,'pic')){
-                    $pic = explode(",",$v['pic']);
-                    $list[$k]['pic'] = get_category_url($pic[0]['pic']);
+//                    $pic = explode(",",$v['pic']);
+                    $list[$k]['pic'] = get_category_url($v['pic']);
                 }else{
                     $list[$k]['pic'] = "";
                 }
