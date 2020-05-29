@@ -64,6 +64,7 @@ class BaseCtrl {
             'ac'=>$request['ac'],
             'uid'=>$this->uid,
             'client_info'=>json_encode(get_client_info()),
+            'ip_parser'=>AreaLib::getByIp(),
         );
         UserLogModel::db()->add($data);
 //        //每日 任务初始化

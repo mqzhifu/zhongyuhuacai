@@ -22,7 +22,7 @@ class IndexCtrl extends BaseCtrl  {
 
 
     function location(){
-        $url = "http://api.map.baidu.com/location/ip?ak=tquZekAQHGIyQzVze7MmmpTfU2VBveuS&ip=";
+        $url = "http://api.map.baidu.com/location/ip?ak=B6zZCrUZ6bSSFPKcCirUGeRPWC9HIxsy&ip=103.25.28.182";
 
     }
 
