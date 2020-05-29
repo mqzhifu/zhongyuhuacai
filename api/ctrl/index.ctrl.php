@@ -30,7 +30,7 @@ class IndexCtrl extends BaseCtrl  {
             'latitude'=>$latitude,'longitude'=>$longitude,'uid'=>$this->uid,'gps_parser_addr'=>$addr,'a_time'=>time(),
         );
         $newId = wxLocationModel::db()->add($data);
-        out_ajax(200,$newId);
+        out_ajax(200,[$newId,$addr]);
     }
 
     function getBannerList(){
