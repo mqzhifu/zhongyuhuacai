@@ -29,7 +29,7 @@ class ProductCtrl extends BaseCtrl  {
             $pic = "";
             if(arrKeyIssetAndExist($v,'pic')){
                 $pic = explode(",",$v['pic']);
-                $pic = get_category_url($pic[0]);
+                $pic = get_product_url($pic[0]);
             }
             $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$pic);
         }
