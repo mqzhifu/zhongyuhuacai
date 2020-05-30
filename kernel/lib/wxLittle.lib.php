@@ -20,7 +20,7 @@ class WxLittleLib{
 
     function checkError($data){
         if(arrKeyIssetAndExist($data,'errcode')){
-            out(" WxLittleLib error:".$data['errcode'] . " , errmsg:".$data['errmsg']);
+            out_ajax (8337," WxLittleLib error:".$data['errcode'] . " , errmsg:".$data['errmsg']);
         }
     }
 
