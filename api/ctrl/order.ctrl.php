@@ -8,22 +8,22 @@ class OrderCtrl extends BaseCtrl  {
 //        $num = get_request_one($request['num'],0);
 //        $gid = get_request_one($request['gid'],0);
 
-        $agentUid = $this->request['agent_uid'];
-        $gid = $this->request['gid'];
-        $num = $this->request['num'];
+        $agentUid =get_request_one( $this->request,'agent_uid',0);
+        $gid = get_request_one( $this->request,'gid',0);
+        $num = get_request_one( $this->request,'num',0);
 
         $oid = $this->orderService->doing($this->uid,$gid,$num,$agentUid);
         return out_pc(200,$oid);
     }
 
     function getOneDetail(){
-        $id = $this->request['id'];
+        $id = $agentUid =get_request_one( $this->request,'id',0);
         $order = $this->orderService->getOneDetail($id);
         return out_pc(200,$order);
     }
 
     function refund(){
-        $id = $this->request['id'];
+        $id = $agentUid =get_request_one( $this->request,'id',0);
         $this->orderService->refund($id);
     }
 

@@ -34,6 +34,19 @@ class ProductService{
         return out_pc(200,$product);
     }
 
+    function formatShow($list){
+        $data = null;
+        foreach ( $list as $k=>$v){
+            $pic = "";
+            if(arrKeyIssetAndExist($v,'pic')){
+                $pic = explode(",",$v['pic']);
+                $pic = get_product_url($pic[0]);
+            }
+            $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$pic,'lowest_price'=>$v['lowest_price'],'title'=>$v['title'],'user_buy_total'=>$v['user_buy_total']);
+        }
+        return $data;
+    }
+
     function getGoodsListByPid($pid){
         return GoodsModel::db()->getAll(" pid = $pid ");
     }

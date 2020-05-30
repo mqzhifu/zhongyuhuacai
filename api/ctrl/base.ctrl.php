@@ -55,7 +55,7 @@ class BaseCtrl {
         $isLogin = $this->loginAPIExcept($request['ctrl'],$request['ac']);
         if($isLogin){
             if(!$this->uinfo){
-                return $this->out(5001);
+                return out_ajax(5001);
             }
         }
         $ip = get_client_ip();
@@ -136,17 +136,17 @@ class BaseCtrl {
 
     //有些接口，必须是登陆后，才能访问~有些不需要
     function loginAPIExcept($ctrl ,$ac ){
-        $arr = $GLOBALS[APP_NAME]['main']['loginAPIExcept'];
+        $arr =  ConfigCenter::get(APP_NAME,"main")['loginAPIExcept'];
         if(!$arr){
-            return 0;
+            return 1;
         }
         foreach($arr as $k=>$v){
             if($v[0] == $ctrl && $v[1] == $ac){
-                return 1;
+                return 0;
             }
         }
 
-        return 0;
+        return 1;
     }
     //判断登陆，初始化用户信息
     function initUserLoginInfoByToken(){

@@ -269,9 +269,9 @@ function out_pc($code = 200,$msg = '',$appKey = APP_NAME){
     return array('code'=>$code,'msg'=>$msg);
 }
 function out_ajax($code = 500,$msg = "",$appKey = APP_NAME){
-//    header('Content-Type:application/json; charset=utf-8');
     if($msg === ""){
-        $msg = $GLOBALS['code'][$code];
+        $errCode = ConfigCenter::get(APP_NAME,"err_code");
+        $msg = $errCode[$code];
     }
     echo json_encode(array('code'=>$code,'msg'=>$msg));
     exit;

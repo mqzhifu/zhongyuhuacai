@@ -24,25 +24,16 @@ class ProductCtrl extends BaseCtrl  {
         if(!$rs['msg']){
             out_ajax($rs['code'],$rs['msg']);
         }
-        $data = null;
-        foreach ($rs['msg'] as $k=>$v){
-            $pic = "";
-            if(arrKeyIssetAndExist($v,'pic')){
-                $pic = explode(",",$v['pic']);
-                $pic = get_product_url($pic[0]);
-            }
-            $data[] = array('goods_total'=>$v['lowest_price'],'goods_total'=>$v['goods_total'],'pic'=>$pic,'lowest_price'=>$v['lowest_price'],'title'=>$v['title']);
-        }
 
-        out_ajax(200,$data);
-
+        out_ajax(200,$this->productService->formatShow($rs['msg']));
     }
+
     //获取一个分类下的所有商品列表
     function getListByCategory(){
         //分类>价格 销量
         $categoryId = $this->request['category_id'];
         $list = $this->productService->getListByCategory($categoryId);
-        out_ajax($list['code'],$list['msg']);
+        out_ajax($list['code'],$this->productService->formatShow($list['msg']));
     }
     //产品详情
     function getOneDetail(){

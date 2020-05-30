@@ -20,14 +20,18 @@ class OrderService{
             return out_pc(8336);
         }
 
+        $product = ProductModel::db()->getById($goods['pid']);
+        if(!$product){
+            return out_pc(1026);
+        }
+        $agentAddress = "";
         if($agentUid){
             $agent = AgentModel::db()->getById($agentUid);
             if(!$agent){
                 return out_pc(1028);
             }
+            $agentAddress = AgentModel::getAddrStrById($agentUid);
         }
-
-        $agentAddr = AgentModel::getAddrStrById($agentUid);
 
         $order = array(
             'no'=>get_order_rand_no(),
@@ -41,12 +45,19 @@ class OrderService{
             'pay_time'=>0,
             'express_no'=>"",
             'agent_uid'=>$agentUid,
-            'address_agent'=>$agentAddr,
+            'address_agent'=>$agentAddress,
             'agent_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_STATUS_WAIT,
             'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
         );
 
         $newId = OrderModel::db()->add($order);
+
+        $data = array("order_num"=>array(1),'consume_total'=>array($goods['sale_price']));
+        UserModel::db()->upById($uid,$data);
+
+        $data = array("user_buy_total"=>array(1));
+        ProductModel::db()->upById($goods['pid'],$data);
+
         return out_pc(200,$newId);
 
     }
