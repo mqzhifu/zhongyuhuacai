@@ -1,6 +1,6 @@
 <?php
 // 将图像等比放大或缩小
-class imgResizeLib{
+class ImgResizeLib{
 
     private $src;
     private $image;
@@ -11,20 +11,79 @@ class imgResizeLib{
     private $newWidth;
     private $newHeight;
 
-    // 文件路径名，期待文件的宽度
-    public function __construct($fileName, $newWidth){
 
-        $this->src = $fileName;
-        $this->newWidth = $newWidth;
-        $this->imageType = exif_imagetype($fileName);
-        $this->image = $this->openImage($this->src);
-        if($this->image){
-            $this->width = imagesx($this->image);
-            $this->height = imagesy($this->image);
+    public function __construct($oldPathFile, $newPathFile , $newWidth , $newHeight){
+        list($oldWidth,$oldHeidht,$oldExt) = getimagesize($oldPathFile);
+        if($newWidth >= $oldWidth ){
+            exit("new width >= old width");
+        }
+        if($newHeight >= $oldHeidht ){
+            exit("new width >= old width");
         }
 
+        switch($oldExt){
+            case 1:
+                //生成gIF格式画布
+                $oldImg = imagecreatefromgif($oldPathFile);
+                break;
+            case 2:
+                //生成jpg格式画布
+                $oldImg = imagecreatefromjpeg($oldPathFile);
+                break;
+            case 3:
+                //生成png格式画布
+                $oldImg = imagecreatefrompng($oldPathFile);
+                break;
+            default:
+                exit("ext type is err.");
+        }
 
+        if($oldWidth > $oldHeidht){
+            $calcNewWidth = $oldWidth/$newWidth;
+            $newW = $oldWidth/$calcNewWidth;
+            $newH = $oldHeidht/$calcNewWidth;
+        }else{
+            $b = $oldHeidht/$newHeight;
+            $newW = $oldWidth/$b;
+            $newH = $oldHeidht/$b;;
+        }
+
+        $newImg = imagecreatetruecolor($newW,$newH);
+        imagecopyresampLED($newImg,$oldImg,0,0,0,0,$newW,$newH,$oldWidth,$oldHeidht);
+
+
+        switch($oldExt){
+            case 1:
+                //生成gIF格式画布
+                imagegif($newImg,$newPathFile . ".gif");
+                break;
+            case 2:
+                //生成jpg格式画布
+                imagejpeg($newImg,$newPathFile . ".jpg");
+                break;
+            case 3:
+                //生成png格式画布
+                imagepng($newImg,$newPathFile. ".png");
+                break;
+            default:
+                exit("ext type is err.");
+        }
+
+        imagedestroy($oldImg);
+        imagedestroy($newImg);
     }
+    // 文件路径名，期待文件的宽度
+//    public function __construct($fileName, $newWidth){
+//
+//        $this->src = $fileName;
+//        $this->newWidth = $newWidth;
+//        $this->imageType = exif_imagetype($fileName);
+//        $this->image = $this->openImage($this->src);
+//        if($this->image){
+//            $this->width = imagesx($this->image);
+//            $this->height = imagesy($this->image);
+//        }
+//    }
 
 
     private function openImage($file){
@@ -81,10 +140,3 @@ class imgResizeLib{
     }
 
 }
-
-
-$img1 = new resize('GD/img/logo.png',50);
-$img1->resizeImage();
-
-
-?>

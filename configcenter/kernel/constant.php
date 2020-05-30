@@ -80,6 +80,8 @@ define("APP_SMARTY_COMPILE_DIR",STORAGE_DIR.DS."view_c".DS.APP_NAME.DS );
 //项目-文件上传路径
 define('APP_FILE_UPLOAD_DIR', FILE_UPLOAD_DIR . DS .APP_NAME);
 
+//图片处理 - 等比例缩小
+define('IMG_RESIZE', STORAGE_DIR . DS ."img_resize");
 
 //项目-文件上传路径
 define('APP_SHELL_DIR', APP_DIR . DS . "shell");
