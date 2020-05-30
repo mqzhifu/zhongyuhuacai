@@ -31,7 +31,10 @@ class LoginCtrl extends BaseCtrl {
     }
 
     function wxLittleLoginByCode($request){
-        $code = $request['code'];
+        $code = get_request_one( $this->request,'code',0);
+        if(!$code){
+
+        }
         $WxLittleLib = new WxLittleLib();
         $wxCallbackData = $WxLittleLib->getSessionOpenIdByCode($code);
 
