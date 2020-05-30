@@ -24,9 +24,12 @@ class ProductService{
             return out_pc(1026);
         }
 
-        if($includeGoods == 2){
-            return out_pc(200,$product);
+        if($includeGoods){
+            if($includeGoods == 2){
+                return out_pc(200,$product);
+            }
         }
+
 
 
         $goods = $this->getGoodsListByPid($id);
