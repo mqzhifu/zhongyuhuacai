@@ -287,15 +287,11 @@ class UserService{
 
     function createToken($uid){
         LogLib::inc()->debug("start create token");
-        $kernelRedisObj = new RedisPHPLib($GLOBALS[KERNEL_NAME]['redis']['instantplay']);
-
         $token = TokenLib::create($uid);
         LogLib::inc()->debug("create token:".$token);
 
-        $redusKey = ConfigCenter::get(APP_NAME,"rediskey");
-        $key = $kernelRedisObj->getAppKeyById($redusKey['token']['key'],$uid);
-        LogLib::inc()->debug("set token redis:".$key . " ".$redusKey['token']['expire']);
-        $kernelRedisObj->set($key,$token,$redusKey['token']['expire']);
+        RedisOptLib::setToken($uid,$token);
+
         return $token;
     }
 

@@ -44,6 +44,22 @@ class RedisOptLib{
         return $redisToken;
     }
 
+    static function setToken($uid,$token){
+        $key = self::plusKernelPre( self::$_kernelRedisKeyConfig['token']['key'] );
+        $key = self::$_redis->getAppKeyById($key,$uid);
+
+        $redisToken = self::$_redis->set($key,$token,self::$_kernelRedisKeyConfig['token']['expire']);
+        return $redisToken;
+
+//        $kernelRedisObj = new RedisPHPLib($GLOBALS[KERNEL_NAME]['redis']['instantplay']);
+//        $key = $kernelRedisObj->getAppKeyById($redusKey['token']['key'],$uid);
+//        LogLib::inc()->debug("set token redis:".$key . " ".$redusKey['token']['expire']);
+//        $kernelRedisObj->set($key,$token,$redusKey['token']['expire']);
+//        $redusKey = ConfigCenter::get(APP_NAME,"rediskey");
+    }
+
+
+
     static function delToken($uid){
         $key = RedisPHPLib::getAppKeyById($GLOBALS['rediskey']['token']['key'],$uid);
         $redisToken = RedisPHPLib::del($key);
