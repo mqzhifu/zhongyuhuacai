@@ -36,26 +36,22 @@ class DbLib{
     protected function checkConnect() {
         $dbFD = ContainerLib::get($this->_configMapKey);
         if(!$dbFD){
-            $masterFD = $this->setOneMysqliConnect($this->_config['master']);
-            $slaveFD = null;
-            if( arrKeyIssetAndExist($this->_config,'masterSlave') ){//是否开启主从模式
-                $slaveFD = $this->setOneMysqliConnect($this->_config['slave']);
-            }
-            $this->_masterFD = $masterFD;
-            $this->_slaveFD = $slaveFD;
-
-            $ContainerInfo = array(
-                "connTime"=>time(),'masterFD'=>$masterFD,"slaveFD"=>$slaveFD,
-            );
-            ContainerLib::set($this->_configMapKey,$ContainerInfo);
+            $this->conn();
         }else{
-            if(!$this->_masterFD){
-                $this->_masterFD = $dbFD['masterFD'];
+            //缓存连接一个小时
+            if(time()  - $dbFD['connTime'] >=  60 * 60 ){
+                LogLib::inc()->debug(" mysql conn sock fd timeout. reconnect!!!");
+                $this->conn();
+            }else{
+                if(!$this->_masterFD){
+                    $this->_masterFD = $dbFD['masterFD'];
+                }
+
+                if(!$this->_slaveFD){
+                    $this->_slaveFD = $dbFD['slaveFD'];
+                }
             }
 
-            if(!$this->_slaveFD){
-                $this->_slaveFD = $dbFD['slaveFD'];
-            }
 //            if(time()  - $dbFD['connTime'] >=  $this->_config['timeout']){
 //                self::$_poll[$this->configKey] = null;
 //                $dbFD = $this->getDbFD( $this->_config);
@@ -66,6 +62,21 @@ class DbLib{
 //                $this->mSlaveFD = $dbFD['s'];
 //            }
         }
+    }
+
+    function conn(){
+        $masterFD = $this->setOneMysqliConnect($this->_config['master']);
+        $slaveFD = null;
+        if( arrKeyIssetAndExist($this->_config,'masterSlave') ){//是否开启主从模式
+            $slaveFD = $this->setOneMysqliConnect($this->_config['slave']);
+        }
+        $this->_masterFD = $masterFD;
+        $this->_slaveFD = $slaveFD;
+
+        $ContainerInfo = array(
+            "connTime"=>time(),'masterFD'=>$masterFD,"slaveFD"=>$slaveFD,
+        );
+        ContainerLib::set($this->_configMapKey,$ContainerInfo);
     }
 
     function setOneMysqliConnect($config){
