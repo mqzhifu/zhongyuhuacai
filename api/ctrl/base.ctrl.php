@@ -58,14 +58,20 @@ class BaseCtrl {
                 return $this->out(5001);
             }
         }
-        $ipArea = AreaLib::getByIp();
+        $ip = get_client_ip();
+        $ipBaiduParserAddress = RedisOptLib::getBaiduIpParser($ip);
+        if(!$ipBaiduParserAddress){
+            $ipBaiduParserAddress = AreaLib::getByIp($ip);
+            RedisOptLib::setBaiduIpParser($ip,$ipBaiduParserAddress);
+        }
+
         $data = array(
             'a_time'=>time(),
             'ctrl'=>$request['ctrl'],
             'ac'=>$request['ac'],
             'uid'=>$this->uid,
             'client_info'=>json_encode(get_client_info()),
-            'ip_parser'=>json_encode($ipArea,JSON_UNESCAPED_UNICODE),
+            'ip_parser'=>json_encode($ipBaiduParserAddress,JSON_UNESCAPED_UNICODE),
         );
         UserLogModel::db()->add($data);
 //        //每日 任务初始化

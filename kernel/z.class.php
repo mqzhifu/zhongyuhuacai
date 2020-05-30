@@ -129,8 +129,11 @@ class Z{
         $router = new RouterLib();
 
         //获取redis 实例，并缓存到容器里.主要是给kernel 网关 过滤数据
-        $kernelRedisObj = new RedisPHPLib($GLOBALS[KERNEL_NAME]['redis']['instantplay']);
-        ContainerLib::set("kernelRedisObj",$kernelRedisObj);
+        $redisConfig = ConfigCenter::getEnv(KERNEL_NAME,"redis_".LANG)['zhongyuhuacai'];
+        $kernelRedisObj = new RedisPHPLib($redisConfig);
+        RedisOptLib::init($kernelRedisObj);
+//        var_dump(RedisOptLib::getToken(1));exit;
+//        ContainerLib::set("kernelRedisObj",$kernelRedisObj);
 
         try{
             $rs = $router->check();

@@ -182,7 +182,7 @@ class RouterLib{
 	}
 
 	function action(){
-        $rid = $this->getRequestId();
+        $rid = RedisOptLib::getRequestId();
         $this->requestId = $rid;
         $this->para['request_id'] = $rid;
 
@@ -198,17 +198,6 @@ class RouterLib{
 //        $rs = $me->invokeArgs($class,'aaa');
         $rs = call_user_func(array($class,$this->ac),$this->para);
         return $rs;
-    }
-
-    function getRequestId(){
-        $key = ContainerLib::get("kernelRedisObj")->getAppKeyById($GLOBALS[KERNEL_NAME]['rediskey']['request_id']['key'], "" , KERNEL_NAME);
-        $script = "redis.call('incr', KEYS[1]) ; return  redis.call('get', KEYS[1])";
-        $execRs = ContainerLib::get("kernelRedisObj")->eval($script,array($key),1);
-
-//        var_dump($execRs);
-//        $t = RedisPHPLib::getServerConnFD()->get($key);
-//        var_dump($t);exit;
-        return $execRs;
     }
 
     //添加 请求日志 mysql

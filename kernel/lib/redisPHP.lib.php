@@ -2,43 +2,56 @@
 
 class RedisPHPLib{
     public $redis_obj = null;//redis实例化时静态变量
-//	public $host = '127.0.0.1';
-//	public $port = '6379';
     public  $conn = null;
     public  $delimiter = "##";
     public  $conn_pool = null;
     public $_config = null;
     static $_inc = null;
-    static function inc(){
+    static function inc($config = null){
         if(self::$_inc){
             return self::$_inc;
         }
 
-        self::$_inc = new self();
+        if(!$config){
+            exit("new RedisPHPLib ,config is null");
+        }
+
+        self::$_inc = new self($config);
         return self::$_inc;
     }
 
-    function __construct($config = null){
-        if($config){
-            $this->_config = $config;
-        }
+    function __construct( $config ){
+        $this->_config = $config;
     }
 
-    function getServerConnFD($config_key = null){
+//    function getServerConnFD($config_key = null){
+    function getServerConnFD(){
         if($this->conn){
             return $this->conn;
         }
-        if(!$config_key){
-            $config = $this->_config;
-        }else{
-            $config = $GLOBALS['redis'][DEF_REDIS_CONN];
-        }
+//        if(!$config_key){
+//            $config = $this->_config;
+//        }
+//        else{
+//            $config = $GLOBALS['redis'][DEF_REDIS_CONN];
+//        }
 
         $this->conn = new Redis();
-        $this->conn ->pconnect($config['host'],$config['port'] ,20 );
-        if(isset($config['ps']) && $config['ps']){
-            $this->conn->auth($config['ps']);
+        $connTimeout = 10;
+        if(arrKeyIssetAndExist($this->_config,'conn_timeout')){
+            $connTimeout = $this->_config['conn_timeout'];
         }
+        if(arrKeyIssetAndExist($this->_config,'conn_persistence')){
+            $this->conn ->pconnect($this->_config['host'],$this->_config['port'] ,$connTimeout );
+        }else{
+            $this->conn ->connect($this->_config['host'],$this->_config['port'] ,$connTimeout );
+        }
+
+        if(isset($this->_config['ps']) && $this->_config['ps']){
+            $this->conn->auth($this->_config['ps']);
+        }
+
+        $this->conn->select($this->_config['db_number']);
 
         return $this->conn;
     }
@@ -79,15 +92,15 @@ class RedisPHPLib{
 //    }
 
 
-     function getAppKeyById($key,$id = null,$appName = null){
-        if(!$appName){
-            $appName = APP_NAME;
-        }
+     function getAppKeyById($key,$id = null){
+//        if(!$appName){
+//            $appName = APP_NAME;
+//        }
 
         if($id){
-            $key = $appName."_".$key."_".$id;
+            $key = $key."_".$id;
         }else{
-            $key = $appName."_".$key;
+            $key = $key;
         }
 
         return $key;
@@ -204,7 +217,7 @@ class RedisPHPLib{
 //    }
 
     //hash end
-    function eval($script,$key,$num){
+    function evalLua($script,$key,$num){
         return $this->getServerConnFD()->eval($script,$key,$num);
     }
 

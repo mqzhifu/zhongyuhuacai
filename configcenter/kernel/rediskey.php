@@ -7,5 +7,5 @@ $key = array(
     //登陆token
     'token'=>array('key'=>'token','expire'=> 30 * 24 * 60 * 60),
 );
-$GLOBALS[KERNEL_NAME]['rediskey'] = $key;
-
+//$GLOBALS[KERNEL_NAME]['rediskey'] = $key;
+return $key;

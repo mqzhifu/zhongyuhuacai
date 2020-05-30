@@ -46,6 +46,8 @@ $key = array(
     'userinfo'=>array('key'=>'uinfo','expire'=> 3 * 24 * 60 * 60),
     //登陆token
     'token'=>array('key'=>'token','expire'=> 30 * 24 * 60 * 60),
+    //baidu_ip_maping
+    'baiduIPMap'=>array('key'=>'baiduIPMap','expire'=> 30 * 24 * 60 * 60 , 'isJson'=>1),
     //提现时候的  锁
     'getMoneyLock'=>array('key'=>'moneyLock','expire'=>10),
     //签到时候的 锁
