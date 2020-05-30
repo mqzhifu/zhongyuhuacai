@@ -4,6 +4,7 @@ storage/session/*
 storage/view_c/*
 storage/product_tb/*
 storage/deploy/*
+storage/img_resize/*
 
 /doc
 /static
