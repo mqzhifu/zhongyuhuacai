@@ -178,6 +178,7 @@ return array(
     8072=>'pid is null',
     8073=>'gid is null',
     8074=>'wxLittleLogin code is null',
+    8975=>"title is null",
 ////    5003=>'token验证错误',
 ////    5004=>'key验证错误',
 //    8101=>'邮箱格式错误',

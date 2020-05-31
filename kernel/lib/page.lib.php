@@ -36,7 +36,6 @@ class PageLib{
         if(!$mCurrPage){
             $mCurrPage = 1;
         }
-
 	    //总页数
         $totalPage = ceil($totalDataCnt / $everyPageCnt);
         if(1 == $totalPage ){//只有一页
@@ -278,5 +277,3 @@ class PageLib{
 //$limit = $page->getLimit();
 //var_dump($limit);
 //echo $page->mResult['showHtml'];
-
-?>

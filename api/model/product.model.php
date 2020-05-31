@@ -49,17 +49,17 @@ class ProductModel {
     const CATE_ATTR_NULL_FALSE = 2;
 
 
-	static function db(){
-		if(self::$_db)
-			return self::$_db;
+    static function db(){
+        if(self::$_db)
+            return self::$_db;
 
-		self::$_db = new DbLib(self::$_db_key,self::$_table,self::$_pk);
-		return self::$_db;
-	}
-	
-	public static function __callStatic($func, $arguments){
-		return call_user_func_array(array(self::db(),$func), $arguments);
-	}
+        self::$_db = new DbLib(self::$_db_key,self::$_table,self::$_pk);
+        return self::$_db;
+    }
+    public static function __callStatic($func, $arguments){
+        return call_user_func_array(array(self::db(),$func), $arguments);
+    }
+
 
 	static function getStatusDescById($id){
         return self::STATUS[$id];
@@ -169,13 +169,9 @@ class ProductModel {
         return " order by sort desc ";
     }
 
-    static function getRecommendList(){
-	    return self::db()->getAll(" recommend = ".self::RECOMMEND_TRUE .  self::getDefaultOrder());
-    }
-
-    static function getListByCategory($categoryId){
-        return self::db()->getAll(" category_id = ".$categoryId  .  self::getDefaultOrder());
-    }
+//    static function getListByCategory($categoryId){
+//        return self::db()->getAll(" category_id = ".$categoryId  .  self::getDefaultOrder());
+//    }
 
     static function search($keyword){
         $data = self::db()->getAll(" title like '%$keyword%' or `desc` like '%$keyword%' ");

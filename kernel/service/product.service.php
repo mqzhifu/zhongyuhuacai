@@ -1,17 +1,52 @@
 <?php
 
 class ProductService{
+    public $limit = 10;
 
-    function getRecommendList(){
-        $list = ProductModel::getRecommendList();
+    function getListByDb($where,$start,$limit){
+        return ProductModel::db()->getAll($where  . ProductModel::getDefaultOrder() . " limit $start,$limit"   );
+    }
+    function getListCntByDb($where){
+        return ProductModel::db()->getCount($where );
+    }
+
+    function getRecommendList($page,$limit){
+        $where = " recommend = ".ProductModel::RECOMMEND_TRUE;
+        $cnt = $this->getListCntByDb($where);
+        if(!$cnt){
+            return  out_pc(200,null);
+        }
+
+        if(!$limit){
+            $limit = $this->limit;
+        }
+
+        $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
+        $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end']);
         $list = $this->format($list);
         return out_pc(200,$list);
     }
 
-    function getListByCategory($categoryId){
-        $list = ProductModel::getListByCategory($categoryId);
+    function getListByCategory($categoryId,$page,$limit){
+        $where = " category_id = ".$categoryId;
+        $cnt = $this->getListCntByDb($where);
+        if(!$cnt){
+            return  out_pc(200,null);
+        }
+
+        if(!$limit){
+            $limit = $this->limit;
+        }
+
+        $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
+        $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end']);
         $list = $this->format($list);
         return out_pc(200,$list);
+
+
+//        $list = ProductModel::getListByCategory($categoryId);
+//        $list = $this->format($list);
+//        return out_pc(200,$list);
     }
 
     function getOneDetail($id,$includeGoods){
@@ -24,13 +59,34 @@ class ProductService{
             return out_pc(1026);
         }
 
+
+
+        //处理 产品 属性-参数
+        $attribute = $product['attribute'];
+        $attribute = json_decode($attribute,true);
+        $categoryAttrArr = null;
+        $categoryAttrParaArr = null;
+        foreach ($attribute as $k=>$v){
+            $categoryAttr = ProductCategoryAttrModel::db()->getById($k);
+            $categoryAttrArr[$categoryAttr['id']] = $categoryAttr;
+            $tmpArr = null;
+            foreach ($v as $k2=>$v2){
+                $tmpArr[] = ProductCategoryAttrParaModel::db()->getById($v2);
+            }
+            $categoryAttrParaArr[$categoryAttr['id']] = $tmpArr;
+        }
+
+        $product['categoryAttrArr'] = $categoryAttrArr;
+        $product['categoryAttrParaArr'] = $categoryAttrParaArr;
+        //处理 产品 属性-参数
+
+
+
         if($includeGoods){
             if($includeGoods == 2){
                 return out_pc(200,$product);
             }
         }
-
-
 
         $goods = $this->getGoodsListByPid($id);
         $product['goods_list'] = $goods;

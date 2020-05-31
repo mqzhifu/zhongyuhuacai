@@ -78,6 +78,12 @@ class ProductCtrl extends BaseCtrl{
             $data['uv'] =0;
             $data['lowest_price'] = 0;
             $data['factory_uid'] = _g("factory_uid");
+            $data['goods_total'] = 0;
+            $data['user_buy_total'] = 0;
+            $data['user_up_total'] = 0;
+            $data['user_collect_total'] = 0;
+            $data['user_comment_total'] = 0;
+
 
             //两个参数，只会有一个是存在的,categoryAttrNull:为特殊参数，空属性
             $categoryAttrPara  = _g("categoryAttrPara");

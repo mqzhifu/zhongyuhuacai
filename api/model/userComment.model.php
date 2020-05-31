@@ -25,26 +25,7 @@ class UserCommentModel {
 
     static function getListByPid($pid){
         $list = self::db()->getAll(" pid = $pid");
-        $list = self::format($list);
         return $list;
     }
-
-    static  function format($list){
-        if(!$list){
-            return $list;
-        }
-
-        $data = null;
-        foreach ($list as $k=>$v){
-            $row = $v;
-            if(arrKeyIssetAndExist($v,'pic')){
-                $row['pic'] = get_comment_url($v['pic']);
-            }
-            $data[] = $row;
-        }
-
-        return $data;
-    }
-
 
 }

@@ -11,6 +11,10 @@ class BaseCtrl {
     public $orderService = null;
     public $uploadService = null;
     public $msgService = null;
+    public $commentService = null;
+    public $upService = null;
+    public $collectService = null;
+
     function __construct($request){
         $this->request = $request;
 //        $this->checkSign();
@@ -27,6 +31,9 @@ class BaseCtrl {
         $this->orderService = new OrderService();
         $this->uploadService = new UploadService();
         $this->msgService = new MsgService();
+        $this->commentService =  new CommentService();
+        $this->upService = new UpService();
+        $this->collectService =  new CollectService();
 
 
         $tokenRs = $this->initUserLoginInfoByToken();
