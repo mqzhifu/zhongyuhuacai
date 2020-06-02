@@ -96,16 +96,25 @@ class ProductCtrl extends BaseCtrl{
                 $this->notice("categoryAttrPara is null ");
             }
 
-
-
-
-            $uploadService = new UploadService();
-            $uploadRs = $uploadService->product('pic');
-            if($uploadRs['code'] != 200){
-                exit(" uploadService->product error ".json_encode($uploadRs));
+            $pics = _g("pics");
+            $pic = "";
+            if($pics){
+                $pic = "";
+                foreach ($pics as $k=>$v){
+                    $pic .= $v . ",";
+                }
+                $pic = substr($pic,0,strlen($pic)-1);
             }
+            $data['pic'] = $pic;
 
-            $data['pic'] = $uploadRs['msg'];
+//            $uploadService = new UploadService();
+//            $uploadRs = $uploadService->product('pic');
+//            if($uploadRs['code'] != 200){
+//                exit(" uploadService->product error ".json_encode($uploadRs));
+//            }
+
+
+//            $data['pic'] = $uploadRs['msg'];
 
             ProductModel::addOne($data,$categoryAttrNull,$categoryAttrPara);
 
@@ -121,6 +130,9 @@ class ProductCtrl extends BaseCtrl{
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+
+        $this->addJs("/assets/global/plugins/dropzone/dropzone.js");
+        $this->addCss("/assets/global/plugins/dropzone/css/dropzone.css" );
 
         $this->addHookJS("product/product_add_hook.html");
         $this->addHookJS("/layout/file_upload.js.html");
@@ -386,5 +398,135 @@ class ProductCtrl extends BaseCtrl{
         return $where;
     }
 
+    function multipleUploadOneImg(){
+//        if(!$id){
+//            exit("id is null");
+//        }
+//
+//        $product = ProductModel::db()->getById($id);
+//        if(!$product){
+//            exit("pid not in db.");
+//        }
+
+
+        $uploadService = new UploadService();
+        $uploadRs = $uploadService->product('pic');
+        if($uploadRs['code'] != 200){
+            exit(" uploadService->product error ".json_encode($uploadRs));
+        }
+
+        echo out_ajax(200,$uploadRs['msg']);
+
+//        $newPicSrc = "";
+//        if(arrKeyIssetAndExist($product,'pic')){
+//            $newPicSrc = $product['pic'] . "," .$uploadRs['msg'];
+//        }else{
+//            $newPicSrc = $uploadRs['msg'];
+//        }
+//        ProductModel::db()->upById($id,array("pic"=>$newPicSrc));
+    }
+
+    function multipleDelOneImg($id,$imgSrc){
+        if(!$id){
+            exit("id is null");
+        }
+
+        $product = ProductModel::db()->getById($id);
+        if(!$product){
+            exit("pid not in db.");
+        }
+
+        if(arrKeyIssetAndExist($product,'pic')){
+            if (strpos($product['pic'], $imgSrc) !== false ) {
+                $newPicSrc = "";
+                if(strpos($product['pic'], $imgSrc . ",") !== false){
+                    $newPicSrc = str_replace($imgSrc . ",","",$product['pic']);
+                }else{
+                    $newPicSrc = str_replace($imgSrc,"",$product['pic']);
+                }
+
+                ProductModel::db()->upById($id,array("pic"=>$newPicSrc));
+            }else{
+                exit("not found..");
+            }
+
+        }else{
+            exit(" product pic is null,no need del");
+        }
+    }
+
+
+    function testDropImgUpload(){
+//<script src="../../assets/global/plugins/dropzone/dropzone.js"></script>
+
+
+//        $this->addJs('/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js');
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/vendor/tmpl.min.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/vendor/load-image.min.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/blueimp-gallery/jquery.blueimp-gallery.min.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-process.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-image.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-audio.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-video.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-validate.js");
+//        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-ui.js");
+
+        $this->addJs("/assets/global/plugins/dropzone/dropzone.js");
+        $this->addCss("/assets/global/plugins/dropzone/css/dropzone.css" );
+
+
+        $this->display("/product/test_drop_img_upload.html");
+    }
+
+    function testMultipleImgUpload(){
+//        <link href="../../assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css" rel="stylesheet"/>
+//<link href="../../assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css" rel="stylesheet"/>
+//<link href="../../assets/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css" rel="stylesheet"/>
+
+        $this->addCss('/assets/global/plugins/jquery-file-upload/blueimp-gallery/blueimp-gallery.min.css');
+        $this->addCss('/assets/global/plugins/jquery-file-upload/css/jquery.fileupload.css');
+        $this->addCss('/assets/global/plugins/jquery-file-upload/css/jquery.fileupload-ui.css');
+
+        //        <script src="../../assets/global/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/vendor/tmpl.min.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/vendor/load-image.min.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/blueimp-gallery/jquery.blueimp-gallery.min.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.fileupload-process.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.fileupload-image.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.fileupload-audio.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.fileupload-video.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+//        <script src="../../assets/global/plugins/jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+
+
+
+        $this->addJs('/assets/global/plugins/fancybox/source/jquery.fancybox.pack.js');
+
+        $this->addJs('/assets/global/plugins/jquery-file-upload/js/vendor/jquery.ui.widget.js');
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/vendor/tmpl.min.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/vendor/load-image.min.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/vendor/canvas-to-blob.min.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/blueimp-gallery/jquery.blueimp-gallery.min.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.iframe-transport.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-process.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-image.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-audio.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-video.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-validate.js");
+        $this->addJs("/assets/global/plugins/jquery-file-upload/js/jquery.fileupload-ui.js");
+//        $this->addJs("/assets/admin/pages/scripts/form-fileupload.js");
+
+        $this->addHookJS("product/test_multiple_img_upload_hook.html");
+        $this->display("/product/test_multiple_img_upload.html");
+    }
 
 }

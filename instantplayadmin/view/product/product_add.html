@@ -25,6 +25,7 @@
                         <div class="portlet-body form">
                             <!-- BEGIN FORM-->
                             <form action="?opt=1" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
+
                                 <input type="hidden" value="{$factory['id']}" name="factory_uid" />
                                 <div class="form-body">
                                     <div class="alert alert-danger display-hide">
@@ -93,34 +94,29 @@
                                     </div>
 
 
-                                    <div class="form-group last">
-                                        <label class="control-label col-md-3">头像</label>
-                                        <div class="col-md-9">
-                                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                                    <img src="{CONST|H_STATIC_URL}/noimg.png" alt=""/>
-                                                </div>
-                                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
-                                                </div>
-                                                <div>
-													<span class="btn default btn-file">
-													<span class="fileinput-new">
-													选择图片</span>
-													<span class="fileinput-exists">
-													更改 </span>
-													<input type="file" name="pic">
-													</span>
-                                                    <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">
-                                                        移除 </a>
-                                                </div>
-                                            </div>
-                                            <!--<div class="clearfix margin-top-10">-->
-                                            <!--<span class="label label-danger">-->
-                                            <!--NOTE! </span>-->
-                                            <!--Image preview only works in IE10+, FF3.6+, Safari6.0+, Chrome6.0+ and Opera11.1+. In older browsers the filename is shown instead.-->
+                                    <!--<div class="form-group last">-->
+                                        <!--<label class="control-label col-md-3">头像</label>-->
+                                        <!--<div class="col-md-9">-->
+                                            <!--<div class="fileinput fileinput-new" data-provides="fileinput">-->
+                                                <!--<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">-->
+                                                    <!--<img src="{CONST|H_STATIC_URL}/noimg.png" alt=""/>-->
+                                                <!--</div>-->
+                                                <!--<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">-->
+                                                <!--</div>-->
+                                                <!--<div>-->
+													<!--<span class="btn default btn-file">-->
+													<!--<span class="fileinput-new">-->
+													<!--选择图片</span>-->
+													<!--<span class="fileinput-exists">-->
+													<!--更改 </span>-->
+													<!--<input type="file" name="pic">-->
+													<!--</span>-->
+                                                    <!--<a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">-->
+                                                        <!--移除 </a>-->
+                                                <!--</div>-->
                                             <!--</div>-->
-                                        </div>
-                                    </div>
+                                        <!--</div>-->
+                                    <!--</div>-->
 
                                     <!--<div class="form-group">-->
                                         <!--<label class="control-label col-md-3">列表图 <span class="required">-->
@@ -210,6 +206,18 @@
                                         </label>
                                         <div class="col-md-4">
                                             <textarea rows="5" cols="40" name="notice"></textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">详情图 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div id="my-dropzone" class="dropzone" style="">
+                                                <!--拖拉图片文件到这里或者点击-->
+                                            </div>
                                         </div>
                                     </div>
 

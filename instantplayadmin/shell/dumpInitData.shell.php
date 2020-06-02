@@ -16,7 +16,7 @@ class DumpInitData{
     private $host = "127.0.0.1";
     private $user = "root";
     private $ps = "root";
-    private $targetDir = BASE_DIR.DS."doc/init_data/";
+    private $targetDir = "D:/www/zhongyuhuacai_doc/init_data/";
     public $tbCategoryAttrId = 37;
     public $tbCategoryId = 8;//分类:1688抓取，空属性值ID
 
@@ -29,6 +29,8 @@ class DumpInitData{
 
 
 //        $this->makeBaseTable();
+
+        fopen("{$this->targetDir}init.sql","w+");
         $this->makeDynamicTable();
 
         $endTime = time();

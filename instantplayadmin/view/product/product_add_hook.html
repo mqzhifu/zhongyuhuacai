@@ -225,3 +225,98 @@
 
 
 </script>
+
+
+<script>
+
+    var FormDropzone = function () {
+
+
+        return {
+            //main function to initiate the module
+            init: function () {
+
+                // $("#my-dropzone").dropzone(
+                //     {
+                        // dictCancelUpload: '取消',
+                        // dictRemoveFile: '删除',
+                    // }
+                // )
+
+                Dropzone.options.myDropzone = {
+                    url :"/product/no/product/multipleUploadOneImg/",
+                    dictDefaultMessage: "拖拉图片文件到这里或者点击",
+                    paramName :"pic",
+                    acceptedFiles: ".jpg,.gif,.png",
+                    success:function(file, response){
+                        response = eval( "(" + response +")");
+                        var src = response.msg;
+                        var hiddenHtml = "<input name='pics[]' type='hidden' value='"+src+"' />";
+                        $("#form_sample_3").append(hiddenHtml);
+                        // console.log(file);
+                        // console.log(response);
+                    },
+                    init: function() {
+                        this.on("addedfile", function(file) {
+                            // Create the remove button\aoert
+                            var removeButton = Dropzone.createElement("<button class='btn btn-sm btn-block'>Remove file</button>");
+
+                            // Capture the Dropzone instance as closure.
+                            var _this = this;
+
+                            // Listen to the click event
+                            removeButton.addEventListener("click", function(e) {
+                                // Make sure the button click doesn't submit the form:
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                // Remove the file preview.
+                                _this.removeFile(file);
+                                // If you want to the delete the file on the server as well,
+                                // you can do the AJAX request here.
+                            });
+
+                            // Add the button to the file preview element.
+                            file.previewElement.appendChild(removeButton);
+                        });
+
+                        // var mockFile = {
+                        //     name: "1.png" , //显示的文件名
+                        //     accepted:true,
+                        //     size:0
+                        // };
+                        // let mockFile = { name: "Filename", size: 12345 };
+                        // myDropzone.displayExistingFile(mockFile, 'https://image-url');
+
+                        // var imageUrl = "http://local.z-s.com/upload/instantplayadmin/dev/category/1.png";
+                        // this.emit( 'addedfile',mockFile);
+                        // this.emit("thumbnail", mockFile, imageUrl);
+                        this.on("removedfile",function(file){
+                            response = eval( "(" + file.xhr.response +")");
+                            var src = response.msg;
+                            $("input[name='pics[]']").each(function(){
+                                if($(this).val() == src){
+                                    $(this).remove();
+                                }
+                            });
+                        });
+                    }
+
+                    // this.on("queuecomplete",function(file) {
+                    //     //上传完成后触发的方法
+                    // });
+                }
+
+                // Dropzone.autoDiscover = false;
+
+            }
+        };
+    }();
+
+
+    jQuery(document).ready(function() {
+        FormDropzone.init();
+    });
+
+
+</script>
