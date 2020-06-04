@@ -194,7 +194,8 @@ class inserTBDb{
         $categoryArr = explode(",",$category_attr);
 
         $newProductAttribute = $this->calcSingleProductGoodsPrice($categoryArr,$this->tbCategoryId,'getIds');
-        $newPid = ProductModel::addOne($productData,0,$newProductAttribute);
+        $productService = new ProductService();
+        $newPid = $productService::addOne($productData,0,$newProductAttribute);
         $newProduct = ProductModel::db()->getById($newPid);
 
         out($space."create new product ,id : $newPid ");
