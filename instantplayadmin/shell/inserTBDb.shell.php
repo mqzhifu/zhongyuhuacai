@@ -195,7 +195,7 @@ class inserTBDb{
 
         $newProductAttribute = $this->calcSingleProductGoodsPrice($categoryArr,$this->tbCategoryId,'getIds');
         $productService = new ProductService();
-        $newPid = $productService::addOne($productData,0,$newProductAttribute);
+        $newPid = $productService->addOne($productData,0,$newProductAttribute);
         $newProduct = ProductModel::db()->getById($newPid);
 
         out($space."create new product ,id : $newPid ");
@@ -221,7 +221,8 @@ class inserTBDb{
         $space = "    ";
         out($space ."case 1 , no attr , price : $price");
 
-        $newPid = ProductModel::addOne($productData,$this->tbCategoryAttrId);
+        $productService = new ProductService();
+        $newPid = $productService->addOne($productData,$this->tbCategoryAttrId);
         $newProduct = array('category_attr_null'=>1,'id'=>$newPid);
         out($space."create new product ,id : $newPid ");
 
