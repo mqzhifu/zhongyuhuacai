@@ -255,19 +255,22 @@ class parserTBDetail{
 
     public function run(){
         $fileList = get_dir(STORAGE_DIR .DS ."tb_product");
-        $n = 0;
+
         foreach ($fileList as $k=>$files) {
-            if($n > 10){
-                break;
-            }
+
             out("k:",$k);
+            $n = 0;
             foreach ($files as $k=>$file) {
                 if($file == "demo.txt"){
                     continue;
                 }
+                if($n > 10){
+                    break;
+                }
+                $n++;
                 $this->processOneFile($file);
             }
-            $n++;
+
         }
 
 
