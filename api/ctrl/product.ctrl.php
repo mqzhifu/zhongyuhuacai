@@ -51,7 +51,7 @@ class ProductCtrl extends BaseCtrl  {
         $id = get_request_one( $this->request,'id',0);
         $includeGoods = get_request_one( $this->request,'include_goods',0);
 
-        $data = $this->productService->getOneDetail($id,$includeGoods);
+        $data = $this->productService->getOneDetail($id,$includeGoods,$this->uid);
         out_ajax($data['code'],$data['msg']);
     }
     //搜索

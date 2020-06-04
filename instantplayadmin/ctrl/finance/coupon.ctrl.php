@@ -1,12 +1,12 @@
 <?php
-class OrderCtrl extends BaseCtrl{
+class CouponCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
         }
 
-        $this->assign("statusOptions", OrderModel::getStatusOptions());
-        $this->assign("payTypeOptions", OrderModel::getPayTypeOptions());
+        $this->assign("statusOptions", CouponModel::getStatusOptions());
+        $this->assign("payTypeOptions", CouponModel::getPayTypeOptions());
 
         $this->display("/finance/order_list.html");
     }
@@ -46,26 +46,26 @@ class OrderCtrl extends BaseCtrl{
 
             $agentAddr = AgentModel::getAddrStrById($agent_uid);
             $data = array(
-                'no'=>OrderModel::getNo(),
+                'no'=>CouponModel::getNo(),
                 'uid'=>$uid,
                 'pid'=>$goods['pid'],
                 'gid'=>$goods_id,
                 'agent_uid'=>$agent_uid,
                 'a_time'=> time(),
-                'status'=>OrderModel::STATUS_WAIT_PAY,
+                'status'=>CouponModel::STATUS_WAIT_PAY,
                 'pay_type'=>0,
                 'pay_time'=>time(),
                 'express_no'=>"",
                 'address_agent'=>$agentAddr,
-                'agent_withdraw_money_status'=> OrderModel::WITHDRAW_MONEY_AGENT_WAIT,
-                'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
+                'agent_withdraw_money_status'=> CouponModel::WITHDRAW_MONEY_AGENT_WAIT,
+                'factory_withdraw_money_status'=>CouponModel::WITHDRAW_MONEY_FACTORY_WAIT,
                 'num'=>$num,
             );
             $price = $goods['sale_price'] * $num;
             $data['price'] = $price;
             $data['pid'] = $goods['pid'];
 
-            $newId = OrderModel::db()->add($data);
+            $newId = CouponModel::db()->add($data);
             $this->ok($newId,"",$this->_backListUrl);
         }
 
@@ -106,7 +106,7 @@ class OrderCtrl extends BaseCtrl{
 
         $where = $this->getDataListTableWhere();
 
-        $cnt = OrderModel::db()->getCount($where);
+        $cnt = CouponModel::db()->getCount($where);
 
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
@@ -140,12 +140,12 @@ class OrderCtrl extends BaseCtrl{
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            $data = OrderModel::db()->getAll($where . $order);
+            $data = CouponModel::db()->getAll($where . $order);
 
             foreach($data as $k=>$v){
                 $payType = "--";
                 if($v['pay_type']){
-                    $payType = OrderModel::PAY_TYPE_DESC[$v['pay_type']];
+                    $payType = CouponModel::PAY_TYPE_DESC[$v['pay_type']];
                 }
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
@@ -155,7 +155,7 @@ class OrderCtrl extends BaseCtrl{
                     $v['gid'],
                     $v['total_price'],
                     $payType,
-                    OrderModel::STATUS_DESC[$v['status']],
+                    CouponModel::STATUS_DESC[$v['status']],
                     UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
                     AgentModel::db()->getOneFieldValueById($v['agent_uid'],'real_name','--'),
                     $v['address_agent'],

@@ -12,10 +12,6 @@ class GoodsCtrl extends BaseCtrl{
     }
 
 
-    function getList(){
-        $this->getData();
-    }
-
     function makeQrcode(){
 //        var_dump(1);
         include PLUGIN .DS."phpqrcode".DS."qrlib.php";
@@ -44,7 +40,6 @@ class GoodsCtrl extends BaseCtrl{
                 'pid'=>$pid,
                 'stock'=>_g('stock'),
                 'status'=>_g('status'),
-                'sort'=>_g('sort'),
                 'sale_price'=>_g('sale_price'),
                 'original_price'=>_g('original_price'),
                 'pay_type'=>implode(",",_g('payType')),
@@ -53,16 +48,33 @@ class GoodsCtrl extends BaseCtrl{
                 'a_time'=>time(),
             );
 
-            $attrParaGroup = ProductLinkCategoryAttrModel::getAttrParaGroup($product['id']);
             $attrPara = [];
-            foreach ($attrParaGroup as $k=>$v) {
-                $attrPara[$k] = _g("categoryAttrPara_".$k);
+            if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
+                $attrParaGroup = ProductLinkCategoryAttrModel::getAttrParaGroup($product['id']);
+                $attrParaStr = "";
+                foreach ($attrParaGroup as $k=>$v) {
+                    $attrPara[$k] = _g("categoryAttrPara_".$k);
+                    $attrParaStr .= $k ."-". $attrPara[$k] . ",";
+                }
+                $attrParaStr = substr($attrParaStr,0,strlen($attrParaStr)-1);
+            }else{
+                $attrParaGroup = ProductLinkCategoryAttrModel::getAttrParaGroup($product['id']);
+                $attrParaStr = "";
+                foreach ($attrParaGroup as $k=>$v){
+                    $attrPara[$k] = $v;
+                    $attrParaStr = $k . "-" . $v;
+                }
+
+                var_dump("测试无商品属性情况 ",$attrParaStr);exit;
             }
 
+            $exist = GoodsModel::db()->getRow(" product_attr_ids = '$attrParaStr'");
+            if($exist){
+                $this->notice("该商品已存在 ，请不要重复添加:".$attrParaStr);
+            }
 
             $newId = GoodsModel::addOne($data,$product,$attrPara);
-            var_dump($newId);exit;
-
+            $this->ok($newId,$this->_backListUrl);
         }
 
         $this->assign("product",$product);
@@ -74,6 +86,18 @@ class GoodsCtrl extends BaseCtrl{
 //        }
         $this->assign("productLinkCategoryAttr",json_encode($productLinkCategoryAttr));
 
+
+
+        $paraMax = 0;
+        foreach ($productLinkCategoryAttr as $k=>$v) {
+            if(arrKeyIssetAndExist($v,'para')){
+                if(count($v['para']) > $paraMax){
+                    $paraMax = count($v['para']);
+                }
+            }
+        }
+
+        $this->assign("paraMax",$paraMax);
 
 
         $category = ProductCategoryModel::db()->getById($product['category_id']);
@@ -113,7 +137,7 @@ class GoodsCtrl extends BaseCtrl{
     }
 
 
-    function getData(){
+    function getList(){
         $records = array();
         $records["data"] = array();
         $sEcho = intval($_REQUEST['draw']);
@@ -185,7 +209,6 @@ class GoodsCtrl extends BaseCtrl{
                     json_encode($payTypeArr,JSON_UNESCAPED_UNICODE),
                     AdminUserModel::db()->getOneFieldValueById($v['admin_id'],'uname'),
                     $v['is_search'],
-                    $v['sort'],
                     $v['haulage'],
                     $v['order_total'],
                     get_default_date($v['a_time']),

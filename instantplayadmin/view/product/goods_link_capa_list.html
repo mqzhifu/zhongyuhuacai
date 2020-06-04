@@ -14,11 +14,29 @@
                     <div class="portlet light">
                         <div class="portlet-title">
                             <div class="actions">
-                                <a href="{$this->_addUrl}">
-                                    <button class="btn green">
-                                        添加 <i class="fa fa-plus"></i>
-                                    </button>
-                                </a>
+                                <div class="btn-group">
+                                    <!--<a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">-->
+                                        <!--<i class="fa fa-share"></i> 导出 <i class="fa fa-angle-down"></i>-->
+                                    <!--</a>-->
+
+                                    <!--<ul class="dropdown-menu pull-right">-->
+                                        <!--<li>-->
+                                            <!--<a href="javascript:void(0);" onclick="export_data();">-->
+                                                <!--Excel </a>-->
+                                        <!--</li>-->
+                                        <!--<li class="divider">-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="javascript:;">-->
+                                                <!--PDF </a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="javascript:;">-->
+                                                <!--WORD </a>-->
+                                        <!--</li>-->
+
+                                    <!--</ul>-->
+                                </div>
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -43,57 +61,26 @@
                                             ID
                                         </th>
                                         <th width="5%">
-                                            编号
+                                            gid
                                         </th>
-                                        <th width="5%">
-                                            产品ID
-                                        </th>
-                                        <th width="5%">
-                                            商品ID
-                                        </th>
+                                        <!--<th width="10%">-->
+                                            <!--type-->
+                                        <!--</th>-->
 
                                         <th width="5%">
-                                            价格
+                                            pc_id
                                         </th>
 
+
                                         <th width="5%">
-                                            支付类型
+                                            pca_id
                                         </th>
 
                                         <th width="5%">
-                                            状态
+                                            pcap_id
                                         </th>
 
-                                        <th width="5%">
-                                            用户ID
-                                        </th>
-
-                                        <th width="5%">
-                                            代理ID
-                                        </th>
-
-                                        <th width="5%">
-                                            代理地址
-                                        </th>
-
-                                        <th width="5%">
-                                            添加时间
-                                        </th>
-
-                                        <th width="5%">
-                                            支付时间
-                                        </th>
-
-                                        <th>
-                                            数量
-                                        </th>
-
-                                        <th>
-                                            运费
-
-                                        </th>
-
-                                        <th width="5%">
+                                        <th width="8%">
                                             操作
                                         </th>
                                     </tr>
@@ -101,84 +88,24 @@
                                         <td>
                                         </td>
                                         <td>
-
-                                        </td>
-                                        <td>
                                             <input type="text" class="form-control form-filter input-sm" name="uid" >
                                         </td>
                                         <td>
-
-                                            <input type="text" class="form-control form-filter input-sm" name="ctrlName" >
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="acName" >
-                                        </td>
-
-                                        <td>
-                                        </td>
-
-
-                                        <td>
-                                            <select name="payType">
-                                                {$payTypeOptions}
-                                            </select>
-                                        </td>
-
-                                        <td>
-
-                                            <select name="payType">
-                                                {$statusOptions}
-                                            </select>
-
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
-
-
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="to">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
-
-
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="to">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
                                         </td>
 
                                         <td></td>
+                                        <td></td>
+
+                                        <td>
+
+                                        </td>
+
                                         <td>
                                             <div class="margin-bottom-5">
                                                 <button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> 搜索</button>
                                             </div>
                                             <button class="btn btn-sm green filter-cancel"><i class="fa fa-times"></i> 重置</button>
                                         </td>
-                                        <td></td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -238,7 +165,7 @@
                     ],
                     "pageLength": 10, // default record count per page
                     "ajax": {
-                        "url": "/finance/no/order/getlist/" // ajax sourcedelBat
+                        "url": "/product/no/goodsLinkCategoryAttr/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
@@ -338,6 +265,11 @@
 
 
 
+    });
+
+    $("#datatable_products").on("click",".qrcode",function(){
+        var id = $(this).attr("data-id");
+        location.href="/product/no/goods/makeQrcode/";
     });
 
     if (!jQuery().datetimepicker) {

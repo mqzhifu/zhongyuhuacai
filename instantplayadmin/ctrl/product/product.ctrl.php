@@ -35,6 +35,9 @@ class ProductCtrl extends BaseCtrl{
             $product['desc_attr_arr'] = json_decode($product['desc_attr'],true);
         }
 
+        $factory = FactoryModel::db()->getById($product['factory_uid']);
+
+        $product['factory'] = $factory['title'];
         if(arrKeyIssetAndExist($product,'pic')){
             $pics = explode(",",$product['pic']);
             foreach ($pics as $k=>$v) {
@@ -61,9 +64,9 @@ class ProductCtrl extends BaseCtrl{
     function add(){
         if(_g('opt')){
 
-            if(ProductModel::db()->getOneByOneField("title",_g('title'))){
-                $this->notice("标题重复:"._g('title'));
-            }
+//            if(ProductModel::db()->getOneByOneField("title",_g('title'))){
+//                $this->notice("标题重复:"._g('title'));
+//            }
 
             $data['sort'] = _g('sort');
             $data['title']= _g("title");
@@ -116,7 +119,8 @@ class ProductCtrl extends BaseCtrl{
 
 //            $data['pic'] = $uploadRs['msg'];
 
-            ProductModel::addOne($data,$categoryAttrNull,$categoryAttrPara);
+            $productService = new ProductService();
+            $productService->addOne($data,$categoryAttrNull,$categoryAttrPara);
 
             $this->ok("成功",$this->_backListUrl);
         }
@@ -246,10 +250,10 @@ class ProductCtrl extends BaseCtrl{
 //                    $v['lables'],
 //                    $v['is_search'],
                     $v['admin_id'],
-                    $v['factory_uid'],
+                    FactoryModel::db()->getOneFieldValueById($v['factory_uid'],'title','--'),
                     $v['pv'],
                     $v['uv'],
-                   "<input data-id='{$v['id']}'  value='{$v['sort']}' type='input' onblur='upSort(this)' />",
+                   "<input class='form-control form-filter input-sm' data-id='{$v['id']}'  value='{$v['sort']}' type='input' onblur='upSort(this)' />",
                     ProductModel::RECOMMEND[$v['recommend']],
                     get_default_date($v['a_time']),
                     '<a href="/product/no/product/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.

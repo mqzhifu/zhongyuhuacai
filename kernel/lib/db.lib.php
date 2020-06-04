@@ -522,6 +522,25 @@ class DbLib{
         $rs = $this->getRowBySQL( $sql );
         return $rs;
     }
+
+//    function getOneFieldById($id,$fieldName,$default = ""){
+//        $row = $this->getById($id,null,null," $fieldName as rs ");
+//        if(!$row){
+//            return $default;
+//        }
+//
+//        return $row['rs'];
+//    }
+
+    function getOneFieldValueById($id,$fieldName,$defaultValue = '---'){
+        $row = $this->getById($id,null,$this->_table,$fieldName);
+        if(!$row){
+            return $defaultValue;
+        }
+
+        return $row[$fieldName];
+    }
+
     function getById($id = '',$pk = '',$table = '' ,$filed = '*'){
         $table = $this->getTable($table);
         $pk_filed = $this->getPrimary($pk);
@@ -547,15 +566,6 @@ class DbLib{
         $sql = "select $filed  from `$table` where $id_filed in ( $ids )";
         $rs = $this->getAllBySQL( $sql );
         return $rs;
-    }
-
-    function getOneFieldValueById($id,$fieldName,$defaultValue = '---'){
-        $row = $this->getById($id,null,$this->_table,$fieldName);
-        if(!$row){
-            return $defaultValue;
-        }
-
-        return $row[$fieldName];
     }
 
     //根据主键ID(字段名必须 为:id)，获得一条记录

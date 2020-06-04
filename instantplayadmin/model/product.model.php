@@ -129,41 +129,42 @@ class ProductModel {
 	    return $rs;
     }
 
-    static function addOne($data,$categoryAttrNull = 0,$categoryAttrPara = []){
-        $attribute = [];
-        if($categoryAttrNull){
-            $attribute[$categoryAttrNull] = [];
-            $data['category_attr_null'] = 1;
-        }else{
-            foreach ($categoryAttrPara as $k=>$v) {
-                $tmp = explode("_",$v );
-                $attribute[$tmp[0]][] = $tmp[1];
-            }
-            $data['category_attr_null'] = 2;
-        }
-
-        $data['attribute'] = json_encode($attribute);
-
-        $addId = ProductModel::db()->add($data);
-
-        if($categoryAttrPara){
-            foreach ( $categoryAttrPara as $k=>$v) {
-                $exp = explode("_",$v);
-                $categoryAttr = $exp[0];
-                $categoryAttrPara = $exp[1];
-                $addData = array(
-                    'pid'=>$addId,
-                    'pc_id'=>$data['category_id'],
-                    'pca_id'=>$categoryAttr,
-                    'pcap_id'=>$categoryAttrPara,
-                );
-
-                ProductLinkCategoryAttrModel::db()->add($addData);
-            }
-        }
-
-        return $addId;
-    }
+    //已转移至 service
+//    static function addOne($data,$categoryAttrNull = 0,$categoryAttrPara = []){
+//        $attribute = [];
+//        if($categoryAttrNull){
+//            $attribute[$categoryAttrNull] = [];
+//            $data['category_attr_null'] = 1;
+//        }else{
+//            foreach ($categoryAttrPara as $k=>$v) {
+//                $tmp = explode("_",$v );
+//                $attribute[$tmp[0]][] = $tmp[1];
+//            }
+//            $data['category_attr_null'] = 2;
+//        }
+//
+//        $data['attribute'] = json_encode($attribute);
+//
+//        $addId = ProductModel::db()->add($data);
+//
+//        if($categoryAttrPara){
+//            foreach ( $categoryAttrPara as $k=>$v) {
+//                $exp = explode("_",$v);
+//                $categoryAttr = $exp[0];
+//                $categoryAttrPara = $exp[1];
+//                $addData = array(
+//                    'pid'=>$addId,
+//                    'pc_id'=>$data['category_id'],
+//                    'pca_id'=>$categoryAttr,
+//                    'pcap_id'=>$categoryAttrPara,
+//                );
+//
+//                ProductLinkCategoryAttrModel::db()->add($addData);
+//            }
+//        }
+//
+//        return $addId;
+//    }
 
     function getRecommend(){
 	    return self::db()->getAll(" recommend = ".self::RECOMMEND_TRUE . " order by sort desc");

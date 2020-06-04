@@ -24,28 +24,19 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    stock: {
+                    goods_id: {
                         required: true
                     },
-                    status: {
+                    uid: {
                         required: true
                     },
-                    sort: {
+                    agent_uid: {
                         required: true,
                     },
-                    sale_price: {
-                        required: true
-                    },
-                    original_price: {
-                        required: true
-                    },
-                    payType: {
-                        required: true
-                    },
-                    haulage: {
+                    num: {
                         required: true
                     }
-                    ,
+                    // ,
                     // sort: {
                     //     integer:true,
                     //     maxlength: 4,
@@ -148,45 +139,4 @@
     });
 
 
-</script>
-
-
-<script>
-
-    {if ($product['category_attr_null'] == 2)}
-    var productLinkCategoryAttr = eval ({$productLinkCategoryAttr});
-    var paraMax = {$paraMax};
-    function initCategoryAttrPara(obj){
-        // var radioBoxHtml = "";
-        var radioBoxHtml = '<table class="table table-hover table-bordered table-striped">';
-        for(var i= 0 ;i <obj.length;i++){
-            var paraMaxTdNum = 1;
-
-            radioBoxHtml += "<tr  ><td>" + obj[i]['name'] +"</td>" ;
-            // radioBoxHtml += "<div  >" + obj[i]['name'] ;
-
-            if(obj[i]['para']){
-                for(var j= 0 ;j <obj[i]['para'].length;j++){
-                    radioBoxHtml += "<td><input type='radio' class='md-radiobtn' name='categoryAttrPara_"+obj[i]['id']+"' value=" + obj[i]['para'][j]['id'] + " />&nbsp;"+obj[i]['para'][j]['name'] + "</td>";
-                    paraMaxTdNum++;
-                }
-            }
-
-            for(var x=paraMaxTdNum;x<=paraMax;x++){
-                radioBoxHtml += "<td></td>";
-            }
-
-
-            radioBoxHtml += "</tr>";
-            // radioBoxHtml += "</div>";
-        }
-        radioBoxHtml += "</table>";
-        // var replaceHtml = $("#categoryAttrPara").html();
-        // alert(replaceHtml);
-        // replaceHtml = replaceHtml.replace("|checkbox|",checkBoxHtml);
-
-        $("#categoryAttrPara").html(radioBoxHtml);
-    }
-    initCategoryAttrPara(productLinkCategoryAttr);
-    {/if}
 </script>

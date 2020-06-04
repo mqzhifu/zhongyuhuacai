@@ -48,14 +48,15 @@ class GoodsModel {
     }
 
     static function addOne($data,$product,$attrPara,$upTotal = 1){
-        //这是特殊情况，产品无参数
         $product_attr_ids = "";
-        if($product['category_attr_null'] == 2){
+        if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
             $product_attr_ids = "";
             foreach ($attrPara as $k=>$v) {
                 $product_attr_ids .= $k . "-" .$v . ",";
             }
             $product_attr_ids = substr($product_attr_ids,0,strlen($product_attr_ids)-1);
+        }else{
+            //这是特殊情况，产品无参数
         }
 
         $data['pid'] = $product['id'];
@@ -65,6 +66,18 @@ class GoodsModel {
             ProductModel::upTotal($product['id']);
 //            ProductModel::upLowestPriceByGoods($product['id']);
         }
+        $productService = new ProductService();
+        if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_TRUE){
+            foreach ($attrPara as $k=>$v){
+                $key = $k;
+            }
+            $productService->goodsLinkProductPCAP($newId,$product['id'],$product['category_id'],$key);
+        }else{
+            foreach ($attrPara as $k=>$v) {
+                $productService->goodsLinkProductPCAP($newId,$product['id'],$product['category_id'],$k,$v);
+            }
+        }
+
 
         return $newId;
 

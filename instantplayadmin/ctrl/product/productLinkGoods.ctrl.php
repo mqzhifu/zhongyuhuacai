@@ -1,80 +1,13 @@
 <?php
-class OrderCtrl extends BaseCtrl{
+class ProductLinkGoodsCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
         }
 
-        $this->assign("statusOptions", OrderModel::getStatusOptions());
-        $this->assign("payTypeOptions", OrderModel::getPayTypeOptions());
-
-        $this->display("/finance/order_list.html");
+        $this->display("/product/product_link_goods_list.html");
     }
 
-
-    function add(){
-        if(_g("opt")){
-            $goods_id =_g("goods_id");
-            $agent_uid = _g("agent_uid");
-            $num = _g("num");
-            $uid = _g("uid");
-
-            if(!$goods_id)
-                $this->notice("goods_id null");
-
-            if(!$agent_uid)
-                $this->notice("agent_uid null");
-
-            if(!$num)
-                $this->notice("num null");
-
-            if(!$uid)
-                $this->notice("uid null");
-
-            $goods = GoodsModel::db()->getById($goods_id);
-            $agent = AgentModel::db()->getById($agent_uid);
-            $user = UserModel::db()->getById($uid);
-
-            if(!$goods)
-                $this->notice("goods_id not in db");
-
-            if(!$agent)
-                $this->notice("agent_uid not in db");
-
-            if(!$user)
-                $this->notice("uid not in db");
-
-            $agentAddr = AgentModel::getAddrStrById($agent_uid);
-            $data = array(
-                'no'=>OrderModel::getNo(),
-                'uid'=>$uid,
-                'pid'=>$goods['pid'],
-                'gid'=>$goods_id,
-                'agent_uid'=>$agent_uid,
-                'a_time'=> time(),
-                'status'=>OrderModel::STATUS_WAIT_PAY,
-                'pay_type'=>0,
-                'pay_time'=>time(),
-                'express_no'=>"",
-                'address_agent'=>$agentAddr,
-                'agent_withdraw_money_status'=> OrderModel::WITHDRAW_MONEY_AGENT_WAIT,
-                'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
-                'num'=>$num,
-            );
-            $price = $goods['sale_price'] * $num;
-            $data['price'] = $price;
-            $data['pid'] = $goods['pid'];
-
-            $newId = OrderModel::db()->add($data);
-            $this->ok($newId,"",$this->_backListUrl);
-        }
-
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
-
-        $this->addHookJS("/finance/order_add_hook.html");
-        $this->display("/finance/order_add.html");
-    }
 
     function getWhere(){
         $where = " 1 ";
@@ -106,7 +39,7 @@ class OrderCtrl extends BaseCtrl{
 
         $where = $this->getDataListTableWhere();
 
-        $cnt = OrderModel::db()->getCount($where);
+        $cnt = ProductLinkCategoryAttrModel::db()->getCount($where);
 
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
@@ -140,32 +73,40 @@ class OrderCtrl extends BaseCtrl{
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            $data = OrderModel::db()->getAll($where . $order);
+            $limit = " limit $iDisplayStart,$end";
+            $data = ProductLinkCategoryAttrModel::db()->getAll($where . $order .$limit);
+
 
             foreach($data as $k=>$v){
-                $payType = "--";
-                if($v['pay_type']){
-                    $payType = OrderModel::PAY_TYPE_DESC[$v['pay_type']];
-                }
+//                $paraStr = "";
+//                if(arrKeyIssetAndExist($v,'product_attr_ids')){
+//                    $paraIds = explode(",",$v['product_attr_ids']);
+//                    foreach ($paraIds as $k2=>$v2) {
+//                        $tmp = explode("-",$v2);
+//                        $attrName = ProductCategoryAttrModel::db()->getOneFieldValueById($tmp[0],'name');
+//                        $paraName = ProductCategoryAttrParaModel::db()->getOneFieldValueById($tmp[1],'name');
+//                        $paraStr .= $attrName . " : ". $paraName . "<br/>";
+//                    }
+//                }
+
+//                $payTypeArr = OrderModel::getSomePayTypeDesc($v['pay_type']);
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['no'],
-                    ProductModel::db()->getOneFieldValueById($v['pid'],'title'),
-                    $v['gid'],
-                    $v['total_price'],
-                    $payType,
-                    OrderModel::STATUS_DESC[$v['status']],
-                    UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
-                    AgentModel::db()->getOneFieldValueById($v['agent_uid'],'real_name','--'),
-                    $v['address_agent'],
-                    get_default_date($v['a_time']),
-                    get_default_date($v['pay_time']),
-                    $v['num'],
-                    $v['haulage'],
-                    '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
-                    '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_TWO.'&oids='.$v['id'].'&uid=2" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二级代理提现 </a>'.
-                    '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_FACTORY.'&oids='.$v['id'].'&fid=3" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 工厂提现 </a>',
+//                    ProductLinkCategoryAttrModel::db()->getOneFieldValueById($v['pid'],'title'),
+//                    $v['type'],
+//                    ProductLinkCategoryAttrModel::STATUS[$v['status']],
+//                    $paraStr,
+                    $v['pid']."-(".ProductModel::db()->getOneFieldValueById($v['pid'],'title') .")",
+                    $v['pc_id']."-(".ProductCategoryModel::db()->getOneFieldValueById($v['pc_id'],'name') .")",
+//                    json_encode($payTypeArr,JSON_UNESCAPED_UNICODE),
+//                    AdminUserModel::db()->getOneFieldValueById($v['admin_id'],'uname'),
+                    $v['pca_id']."-(".ProductCategoryAttrModel::db()->getOneFieldValueById($v['pca_id'],'name') .")",
+                    $v['pcap_id']."-(".ProductCategoryAttrParaModel::db()->getOneFieldValueById($v['pcap_id'],'name') .")",
+//                    $v['order_total'],
+//                    get_default_date($v['a_time']),
+                    '<a target="_blank" href="/product/no/goods/makeQrcode/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二维码 </a>',
                 );
 
                 $records["data"][] = $row;

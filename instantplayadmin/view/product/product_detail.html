@@ -54,7 +54,7 @@
                                             <!--<span class="hidden-480">| Dec 27, 2013 7:16:25 </span>-->
                                         </div>
                                         <div class="actions">
-                                            <a href="javascript:;" class="btn default yellow-stripe">
+                                            <a href="{$this->_backListUrl}" class="btn default yellow-stripe">
                                                 <i class="fa fa-angle-left"></i>
                                                 <span class="hidden-480">
 								Back </span>
@@ -172,7 +172,7 @@
                                                                             工厂:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$product['factory_uid']}
+                                                                            {$product['factory']}
                                                                         </div>
                                                                     </div>
 
@@ -249,21 +249,41 @@
                                                                         </div>
                                                                     </div>
 
+
+
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            售出总数:
+                                                                            购买总用户数(售出总数):
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            0
+                                                                            {$product['user_buy_total']}
                                                                         </div>
                                                                     </div>
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            购买总用户数:
+                                                                            总点赞数:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            0
+                                                                            {$product['user_up_total']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            总收藏数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['user_collect_total']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            总评论数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['user_comment_total']}
                                                                         </div>
                                                                     </div>
 

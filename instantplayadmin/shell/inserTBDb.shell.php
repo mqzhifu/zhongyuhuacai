@@ -161,8 +161,9 @@ class inserTBDb{
 
             $newGoodsDataInsertBat[] = $newGoodsDataInsert;
         }
+        $productService = new ProductService();
 
-        $newPid = ProductModel::addOne($productData,0,$productCategoryAttrParaIds);
+        $newPid =$productService->addOne($productData,0,$productCategoryAttrParaIds);
         $newProduct = ProductModel::db()->getById($newPid);
 
         out($space."create new product ,id : $newPid ");
