@@ -10,6 +10,12 @@ class UpService{
             return out_pc(8072);
         }
 
+        $exist = UserLikedModel::db()->getById(" pid = $pid and uid = $uid");
+        if($exist){
+            return out_pc(8338);
+        }
+
+
         $data = array(
             'a_time'=>time(),
             'pid'=>$pid,
