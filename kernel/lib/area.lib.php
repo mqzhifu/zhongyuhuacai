@@ -94,6 +94,8 @@ class AreaLib  {
         $res = @file_get_contents($url);
         //解析json
         $arr = json_decode($res,true);
+        LogLib::inc()->debug("in getByIp curl baidu!");
+        LogLib::inc()->debug($arr);
         if (!empty($arr['status'])) {
             return "百度解析IP失败-$ip";
         }
