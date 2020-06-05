@@ -15,7 +15,6 @@ class UpService{
             return out_pc(8338);
         }
 
-
         $data = array(
             'a_time'=>time(),
             'pid'=>$pid,
@@ -26,7 +25,6 @@ class UpService{
         $data = array("user_up_total"=>array(1));
         $rs = ProductModel::db()->upById($pid,$data);
 
-        var_dump($rs);
         return out_pc(200,$newId);
     }
 //    function getListByPid($pid,$page = 0,$limit = 0){

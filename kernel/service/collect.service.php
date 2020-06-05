@@ -10,7 +10,7 @@ class CollectService{
             return out_pc(8072);
         }
 
-        $exist = UserCommentModel::db()->getById(" pid = $pid and uid = $uid");
+        $exist = UserCollectionModel::db()->getById(" pid = $pid and uid = $uid");
         if($exist){
             return out_pc(8338);
         }
