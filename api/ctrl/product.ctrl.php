@@ -105,7 +105,7 @@ class ProductCtrl extends BaseCtrl  {
     }
 
     function getSearchAttr(){
-        $category = ProductModel::db()->getAll(" is_show_search = 1 ");
+        $category = ProductCategoryModel::db()->getAll(" is_show_search = 1 ");
         $orderType =ProductService::ORDER_TYPE;
 
         $rs = array('category'=>$category,'order_type'=>$orderType);
