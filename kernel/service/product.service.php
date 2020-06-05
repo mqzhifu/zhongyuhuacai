@@ -128,6 +128,9 @@ class ProductService{
 
 
     function getUserHistoryPVList($pid){
+        if(!$pid){
+            exit("pid is null");
+        }
         $list = UserProductLogModel::db()->getAll(" pid = $pid group by uid order by a_time desc");
         if(!$list){
             return $list;
@@ -135,9 +138,13 @@ class ProductService{
         $service =  new UserService();
 
         foreach ($list as $k=>$v){
+            $list['nickname'] = '游客1';
+            $list['avatar'] = get_avatar_url();
             $user =  $service->getUinfoById($v['uid']);
-            $list['nickname'] = $user['nickname'];
-            $list['avatar'] = $user['avatar'];
+            if($user){
+                $list['nickname'] = $user['nickname'];
+                $list['avatar'] = $user['avatar'];
+            }
         }
         return out_pc(200,$list);
     }
