@@ -522,8 +522,9 @@ class UserService{
         if(!$user){
             return out_pc(1000);
         }
-        if(arrKeyIssetAndExist($user,'avatar'))
-            $user['avatar'] = get_avatar_url($user['avatar']);
+
+//        if(arrKeyIssetAndExist($user,'avatar'))
+        $user['avatar'] = get_avatar_url($user['avatar']);
 
         return out_pc(200,$user);
 //        if(!arrKeyIssetAndExist($user,'avatar')){
