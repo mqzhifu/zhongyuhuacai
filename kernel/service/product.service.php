@@ -102,10 +102,10 @@ class ProductService{
         if(arrKeyIssetAndExist($product,'desc_attr')){
            $tmp = json_decode($product['desc_attr'],true);
            $str = "";
-           foreach ($tmp as $k=>$v){
-               $str .= "<text>{$k}:{$v}</text>";
-           }
-            $product['desc_attr_format'] = $str;
+//           foreach ($tmp as $k=>$v){
+//               $str .= "<text>{$k}:{$v}</text>";
+//           }
+            $product['desc_attr_format'] = $tmp;
         }else{
             $product['desc_attr_format'] = "";
         }
