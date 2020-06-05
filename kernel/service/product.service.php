@@ -126,6 +126,22 @@ class ProductService{
         return out_pc(200,$product);
     }
 
+
+    function getUserHistoryPVList($pid){
+        $list = UserProductLogModel::db()->getAll(" pid = $pid group by uid order by a_time desc");
+        if(!$list){
+            return $list;
+        }
+        $service =  new UserService();
+
+        foreach ($list as $k=>$v){
+            $user =  $service->getUinfoById($v['uid']);
+            $list['nickname'] = $user['nickname'];
+            $list['avatar'] = $user['avatar'];
+        }
+        return out_pc(200,$list);
+    }
+
     function upPvUv($pid,$uid){
         $data = array("pv"=>array(1));
         $info = UserProductLogModel::db()->getRow("uid = {$uid} and pid = $pid");

@@ -35,6 +35,12 @@ class ProductCtrl extends BaseCtrl  {
         out_ajax(200,$this->productService->formatShow($rs['msg']));
     }
 
+    function getUserHistoryPVList(){
+        $id = get_request_one( $this->request,'id',0);
+        $rs = $this->productService->getUserHistoryPVList($id);
+        out_ajax(200,($rs['msg']));
+    }
+
     //获取一个分类下的所有商品列表
     function getListByCategory(){
         $categoryId =get_request_one( $this->request,'category_id',0);
