@@ -54,6 +54,7 @@ class ProductService{
             return out_pc(8072);
         }
 
+        $stock = 0;
         $product = ProductModel::db()->getById($id);
         if(!$product){
             return out_pc(1026);
@@ -80,7 +81,9 @@ class ProductService{
                 $productCategoryAttrParaData[] = $row;
             }
 
+
             foreach ($goodsDb as $k=>$v){
+                $stock += $v['stock'];
                 $row = $v;
                 $row['category_attr_para'] = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}");
                 $goodsList[]= $row;
@@ -89,7 +92,7 @@ class ProductService{
 
         $product['pcap'] = $productCategoryAttrParaData;
         $product['goods_list'] = $goodsList;
-
+        $product['stock'] = $stock;
 
         //处理 产品 属性-参数
 //        $attribute = $product['attribute'];
@@ -204,7 +207,9 @@ class ProductService{
         }
 
         $data['attribute'] = json_encode($attribute);
-
+        if(!arrKeyIssetAndExist($data,'recommend')){
+            $data['recommend'] = 2;
+        }
         $addId = ProductModel::db()->add($data);
 
         if($categoryAttrPara){
@@ -217,7 +222,6 @@ class ProductService{
                     'pc_id'=>$data['category_id'],
                     'pca_id'=>$categoryAttr,
                     'pcap_id'=>$categoryAttrPara,
-                    'gid'=>0,
                 );
 
                 ProductLinkCategoryAttrModel::db()->add($addData);
@@ -226,7 +230,6 @@ class ProductService{
             $noParaAttr = ProductCategoryAttrModel::db()->getRow(" pc_id = {$data['category_id']} and is_no = ".ProductCategoryAttrModel::NO_ATTR_TRUE);
             $data = array(
                 'pid'=>$addId,
-                'gid'=>0,
                 'pc_id'=>$data['category_id'],
                 'pca_id'=>$noParaAttr['id'],
                 'pcap_id'=>0,

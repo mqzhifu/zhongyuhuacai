@@ -250,12 +250,12 @@ class parserTBDetail{
         $mysqlData['desc'] =str_replace("阿里巴巴","", $match[2]['0']);
         $mysqlData['desc'] = substr($mysqlData['desc'],1);
 
-        ProductTbModel::db()->add($mysqlData);
+        $newId = ProductTbModel::db()->add($mysqlData);
+        out("insert productTB ok , id:$newId");
     }
 
     public function run(){
         $fileList = get_dir(STORAGE_DIR .DS ."tb_product");
-
         foreach ($fileList as $k=>$files) {
 
             out("k:",$k);

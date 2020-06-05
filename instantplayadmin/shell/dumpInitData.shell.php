@@ -33,6 +33,8 @@ class DumpInitData{
         fopen("{$this->targetDir}init.sql","w+");
         $this->makeDynamicTable();
 
+        $this->getMysqlDumpAppend("banner", " id = 1 ");
+
         $endTime = time();
 
         $total = $endTime - $startTime;
@@ -61,8 +63,12 @@ class DumpInitData{
         return $baseSql;
     }
 
-    function getMysqlDumpAppend($table){
-        $baseSql = "mysqldump  --default-character-set=utf8 -t -h{$this->host} -u{$this->user} -p{$this->ps} {$this->database} $table >> {$this->targetDir}{$table}.sql";
+    function getMysqlDumpAppend($table,$where = ""){
+        $commend = "mysqldump  --default-character-set=utf8 -t -h{$this->host} -u{$this->user} -p{$this->ps} {$this->database} $table";
+        if($where){
+            $commend .= " --where $where";
+        }
+        $baseSql = " $commend  >> {$this->targetDir}{$table}.sql";
         return $baseSql;
     }
 

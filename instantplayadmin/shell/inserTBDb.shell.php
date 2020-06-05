@@ -223,13 +223,17 @@ class inserTBDb{
 
         $productService = new ProductService();
         $newPid = $productService->addOne($productData,$this->tbCategoryAttrId);
-        $newProduct = array('category_attr_null'=>1,'id'=>$newPid);
+
+
+        $newProduct = ProductModel::db()->getById($newPid);
+        $newProduct['category_attr_null'] = 1;
+//        array('category_attr_null'=>1,'id'=>$newPid);
         out($space."create new product ,id : $newPid ");
 
         $goods = $newGoodsData;
         $goods['sale_price'] = $price;
         $goods['original_price'] = $price;
-        $GoodsNewId = GoodsModel::addOne($goods,$newProduct,null);
+        $GoodsNewId = GoodsModel::addOne($goods,$newProduct,array(37=>""));
         out(" create goods, id:$GoodsNewId");
     }
 
