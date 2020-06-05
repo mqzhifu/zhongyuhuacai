@@ -3,7 +3,7 @@
 class CommentService{
     function getListByPid($pid,$page = 0,$limit = 0){
         if(!$pid){
-            return out_pc(8002);
+            return out_pc(8072);
         }
 
         $list = UserCommentModel::getListByPid($pid);

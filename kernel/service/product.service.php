@@ -10,8 +10,13 @@ class ProductService{
         return ProductModel::db()->getCount($where );
     }
 
-    function getRecommendList($page,$limit){
-        $where = " recommend = ".ProductModel::RECOMMEND_TRUE;
+    function getRecommendList($page,$limit,$type){
+        if($type == 1){
+            $where = " recommend_detail = ".ProductModel::RECOMMEND_TRUE;
+        }else{
+            $where = " recommend = ".ProductModel::RECOMMEND_TRUE;
+        }
+
         $cnt = $this->getListCntByDb($where);
         if(!$cnt){
             return  out_pc(200,null);
@@ -131,7 +136,7 @@ class ProductService{
         if(!$pid){
             exit("pid is null");
         }
-        $list = UserProductLogModel::db()->getAll(" pid = $pid group by uid order by a_time desc");
+        $list = UserProductLogModel::db()->getAll(" pid = $pid group by uid order by a_time desc limit 20");
         if(!$list){
             return out_pc(200,$list);
         }

@@ -26,9 +26,10 @@ class ProductCtrl extends BaseCtrl  {
     }
     //获取 后台 推荐的商品的列表
     function getRecommendList(){
+        $type = get_request_one( $this->request,'type',0);
         $page = get_request_one( $this->request,'page',0);
         $limit = get_request_one( $this->request,'limit',0);
-        $rs = $this->productService->getRecommendList($page,$limit);
+        $rs = $this->productService->getRecommendList($page,$limit,$type);
         if(!$rs['msg']){
             out_ajax($rs['code'],$rs['msg']);
         }
@@ -94,6 +95,12 @@ class ProductCtrl extends BaseCtrl  {
         $limit = get_request_one( $this->request,'limit',0);
 
         $rs = $this->commentService->getListByPid($pid,$page,$limit);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
+    function getDetailRecommend(){
+        $pid = get_request_one( $this->request,'pid',0);
+        $rs = $this->productService->getDetailRecommend($pid);
         out_ajax($rs['code'],$rs['msg']);
     }
 }

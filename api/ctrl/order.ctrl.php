@@ -18,6 +18,22 @@ class OrderCtrl extends BaseCtrl  {
         return out_pc(200,$oid);
     }
 
+    function getNearUserBuyHistory(){
+        $pid = $agentUid =get_request_one( $this->request,'pid',0);
+        $list = OrderModel::db()->getAll("pid = $pid group by uid order by a_time desc limit 20 ");
+        foreach ($list as $k=>$v){
+            $list[$k]['nickname'] = '游客'.$k;
+            $list[$k]['avatar'] = get_avatar_url("");
+            $user = UserModel::db()->getById($v['uid']);
+            if($user){
+                $list[$k]['nickname'] = $user['nickname'];
+                $list[$k]['avatar'] = $user['avatar'];
+            }
+        }
+
+        return out_pc(200,$list);
+    }
+
     function getOneDetail(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
         $order = $this->orderService->getOneDetail($id);
