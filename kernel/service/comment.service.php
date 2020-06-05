@@ -7,6 +7,12 @@ class CommentService{
         }
 
         $list = UserCommentModel::getListByPid($pid);
+        if(!$list){
+            return out_pc(200,null);
+        }
+
+        $list = $this->format($list);
+
         return out_pc(200,$this->format($list));
     }
 
@@ -25,6 +31,10 @@ class CommentService{
             if(arrKeyIssetAndExist($v,'uid')){
                 $userRs =$userService->getUinfoById($v['uid']);
                 $row['nickname'] = $userRs['msg']['nickname'];
+                $row['avatar'] = $userRs['msg']['avatar'];
+            }else{
+                $row['nickname']  ="";
+                $row['avatar'] = get_avatar_url("");
             }
 
             $data[] = $row;
