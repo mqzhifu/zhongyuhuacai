@@ -57,7 +57,7 @@ function get_category_attr_para_url( $tmpPath , $protocol =HTTP_PROTOCOL){
 
 function get_avatar_url($tmpPath,$protocol = 'http'){
     if(!$tmpPath){
-        return get_default_user_url();
+        return get_default_user_url(HTTP_PROTOCOL);
     }
 
     if(substr($tmpPath,0,4) == "http"){
@@ -88,8 +88,8 @@ function get_comment_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     return get_admin_upload_url($tmpPath,"comment",$protocol);
 }
 
-function get_default_user_url(){
-    $staticUrl = get_static_url("http");
+function get_default_user_url($protocol = "http"){
+    $staticUrl = get_static_url($protocol);
     return $staticUrl . "/nouser.png";
 }
 
