@@ -138,9 +138,9 @@ class ProductService{
         $service =  new UserService();
 
         foreach ($list as $k=>$v){
-            $list['nickname'] = '游客1';
+            $list['nickname'] = '游客'.$k;
             $list['avatar'] = get_avatar_url();
-            $user =  $service->getUinfoById($v['uid']);
+            $user = UserModel::db()->getById($v['uid']);
             if($user){
                 $list['nickname'] = $user['nickname'];
                 $list['avatar'] = $user['avatar'];
