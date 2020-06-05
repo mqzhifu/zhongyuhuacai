@@ -3,6 +3,15 @@
 class ProductService{
     public $limit = 10;
 
+    const ORDER_TYPE =array(
+        1=> array('id'=>1,"name"=>'默认',"id"),
+        2=> array('id'=>2,"name"=>'新品',"id"),
+        3=> array('id'=>3,"name"=>'销量',"user_buy_total"),
+        4=> array('id'=>4,"name"=>'价格','lowest_price'),
+    );
+
+
+
     function getListByDb($where,$start,$limit){
         return ProductModel::db()->getAll($where  . ProductModel::getDefaultOrder() . " limit $start,$limit"   );
     }

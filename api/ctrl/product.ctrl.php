@@ -103,4 +103,12 @@ class ProductCtrl extends BaseCtrl  {
         $rs = $this->productService->getDetailRecommend($pid);
         out_ajax($rs['code'],$rs['msg']);
     }
+
+    function getSearchAttr(){
+        $category = ProductModel::db()->getAll(" is_show_search = 1 ");
+        $orderType =ProductService::ORDER_TYPE;
+
+        $rs = array('category'=>$category,'order_type'=>$orderType);
+        out_ajax(200,$rs);
+    }
 }
