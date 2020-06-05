@@ -138,12 +138,12 @@ class ProductService{
         $service =  new UserService();
 
         foreach ($list as $k=>$v){
-            $list['nickname'] = '游客'.$k;
-            $list['avatar'] = get_avatar_url("");
+            $list[$k]['nickname'] = '游客'.$k;
+            $list[$k]['avatar'] = get_avatar_url("");
             $user = UserModel::db()->getById($v['uid']);
             if($user){
-                $list['nickname'] = $user['nickname'];
-                $list['avatar'] = $user['avatar'];
+                $list[$k]['nickname'] = $user['nickname'];
+                $list[$k]['avatar'] = $user['avatar'];
             }
         }
         return out_pc(200,$list);
