@@ -70,6 +70,8 @@ class BaseCtrl {
         $ipBaiduParserAddress = RedisOptLib::getBaiduIpParser($ip);
         if(!$ipBaiduParserAddress){
             $ipBaiduParserAddress = AreaLib::getByIp($ip);
+            LogLib::inc()->debug($ip);
+            LogLib::inc()->debug($ipBaiduParserAddress);
             RedisOptLib::setBaiduIpParser($ip,$ipBaiduParserAddress);
         }
 
