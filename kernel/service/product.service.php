@@ -133,13 +133,13 @@ class ProductService{
         }
         $list = UserProductLogModel::db()->getAll(" pid = $pid group by uid order by a_time desc");
         if(!$list){
-            return $list;
+            return out_pc(200,$list);
         }
         $service =  new UserService();
 
         foreach ($list as $k=>$v){
             $list['nickname'] = '游客'.$k;
-            $list['avatar'] = get_avatar_url();
+            $list['avatar'] = get_avatar_url("");
             $user = UserModel::db()->getById($v['uid']);
             if($user){
                 $list['nickname'] = $user['nickname'];
@@ -153,10 +153,11 @@ class ProductService{
         $data = array("pv"=>array(1));
         $info = UserProductLogModel::db()->getRow("uid = {$uid} and pid = $pid");
         if(!$info){
-            $d = array('pid'=>$pid,'uid'=>$uid,'a_time'=>time());
-            UserProductLogModel::db()->add($d);
             $data['uv'] =  array(1);
         }
+
+        $d = array('pid'=>$pid,'uid'=>$uid,'a_time'=>time());
+        UserProductLogModel::db()->add($d);
 
         $rs = ProductModel::db()->upById($pid,$data);
         return $rs;
