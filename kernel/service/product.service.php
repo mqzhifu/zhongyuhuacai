@@ -99,6 +99,16 @@ class ProductService{
         $product['goods_list'] = $goodsList;
         $product['stock'] = $stock;
 
+        if(arrKeyIssetAndExist($product,'desc_attr')){
+           $tmp = json_decode($product['desc_attr'],true);
+           $str = "";
+           foreach ($tmp as $k=>$v){
+               $str .= "<text>{$k}:{$v}</text>";
+           }
+            $product['desc_attr_format'] = $str;
+        }else{
+            $product['desc_attr_format'] = "";
+        }
         //处理 产品 属性-参数
 //        $attribute = $product['attribute'];
 //        //该产品所有包含的属性参数，但是不一定每种属性组合都有商品(库存)
