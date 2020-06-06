@@ -4,10 +4,10 @@ class ProductService{
     public $limit = 10;
 
     const ORDER_TYPE =array(
-        1=> array('id'=>1,"name"=>'默认1','field'=>"id"),
-        2=> array('id'=>2,"name"=>'新品2','field'=>"id"),
-        3=> array('id'=>3,"name"=>'销量3','field'=>"user_buy_total"),
-        4=> array('id'=>4,"name"=>'价格4','field'=>'lowest_price'),
+         array('id'=>1,"name"=>'默认1','field'=>"id"),
+         array('id'=>2,"name"=>'新品2','field'=>"id"),
+          array('id'=>3,"name"=>'销量3','field'=>"user_buy_total"),
+         array('id'=>4,"name"=>'价格4','field'=>'lowest_price'),
     );
 
 
