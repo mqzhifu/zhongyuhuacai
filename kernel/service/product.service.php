@@ -188,6 +188,9 @@ class ProductService{
     }
 
     function formatShow($list){
+        if(!$list){
+            return $list;
+        }
         $data = null;
         foreach ( $list as $k=>$v){
             $pic = "";
