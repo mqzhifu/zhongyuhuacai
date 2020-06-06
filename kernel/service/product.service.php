@@ -226,6 +226,8 @@ class ProductService{
             return  out_pc(200,null);
         }
 
+        LogLib::inc()->debug($where);
+
         $order = "";
         if(arrKeyIssetAndExist($condition,'orderType')){
             $order .= " order by ".self::ORDER_TYPE[$condition['orderType']]['field'];
