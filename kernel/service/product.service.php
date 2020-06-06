@@ -4,10 +4,10 @@ class ProductService{
     public $limit = 10;
 
     const ORDER_TYPE =array(
-         array('id'=>1,"name"=>'默认1','field'=>"id"),
-         array('id'=>2,"name"=>'新品2','field'=>"id"),
-          array('id'=>3,"name"=>'销量3','field'=>"user_buy_total"),
-         array('id'=>4,"name"=>'价格4','field'=>'lowest_price'),
+        1=> array('id'=>1,"name"=>'默认1','field'=>"id"),
+        2=> array('id'=>2,"name"=>'新品2','field'=>"id"),
+        3=> array('id'=>3,"name"=>'销量3','field'=>"user_buy_total"),
+        4=> array('id'=>4,"name"=>'价格4','field'=>'lowest_price'),
     );
 
 
@@ -218,7 +218,7 @@ class ProductService{
 
         }
 
-        $cnt = $this->getListCntByDb($where);
+        $cnt = ProductModel::db()->getAll($where);
         if(!$cnt){
             return  out_pc(200,null);
         }
@@ -234,7 +234,8 @@ class ProductService{
         }
 
         $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
-        $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end'],$order);
+        $where .= $where " limit $order {$pageInfo['start']} , {$pageInfo['end']}}";
+        $list = ProductModel::db()->getAll($where);
         $list = $this->format($list);
 
         return out_pc(200,$list);
