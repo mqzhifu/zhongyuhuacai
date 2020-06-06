@@ -218,7 +218,7 @@ class ProductService{
 
         }
 
-        $cnt = ProductModel::db()->getAll($where);
+        $cnt = self::getListCntByDb($where);
         if(!$cnt){
             return  out_pc(200,null);
         }
