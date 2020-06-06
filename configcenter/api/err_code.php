@@ -181,6 +181,7 @@ return array(
     8975=>"title is null",
     8976=>"keyword is null",
     8977=>'categoryAttrPara is null',
+    8978=>"condition is null",
 ////    5003=>'token验证错误',
 ////    5004=>'key验证错误',
 //    8101=>'邮箱格式错误',

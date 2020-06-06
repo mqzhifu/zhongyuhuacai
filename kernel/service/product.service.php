@@ -12,8 +12,8 @@ class ProductService{
 
 
 
-    function getListByDb($where,$start,$limit){
-        return ProductModel::db()->getAll($where  . ProductModel::getDefaultOrder() . " limit $start,$limit"   );
+    function getListByDb($where,$start,$limit ,$order = ""){
+        return ProductModel::db()->getAll($where  . ProductModel::getDefaultOrder() . $order . " limit $start,$limit"   );
     }
     function getListCntByDb($where){
         return ProductModel::db()->getCount($where );
@@ -204,12 +204,39 @@ class ProductService{
         return GoodsModel::db()->getAll(" pid = $pid ");
     }
 
-    function search($keyword){
-        if(!$keyword){
-            return out_pc(8976);
+    function search($condition,$page = 1,$limit = 10){
+        $where = " 1 = 1 ";
+        if($condition){
+//            return out_pc(8978);
+            if(arrKeyIssetAndExist($condition,'keyword')){
+                $where .=" and ( title like '%{$condition['keyword']}%' or `desc`  like '%{$condition['keyword']}%')";
+            }
+
+            if(arrKeyIssetAndExist($condition,'category')){
+                $where .= " and category_id = {$condition['category']}";
+            }
+
         }
-        $list = ProductModel::search($keyword);
+
+        $cnt = $this->getListCntByDb($where);
+        if(!$cnt){
+            return  out_pc(200,null);
+        }
+
+        $order = "";
+        if(arrKeyIssetAndExist($condition,'orderType')){
+            $order .= " order by ".self::ORDER_TYPE[$condition['orderType']]['field'];
+            if(arrKeyIssetAndExist($condition ,'orderUpDown')){
+                $order .=  " {$condition['orderUpDown']}";
+            }else{
+                $order .=  " asc ";
+            }
+        }
+
+        $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
+        $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end'],$order);
         $list = $this->format($list);
+
         return out_pc(200,$list);
     }
 

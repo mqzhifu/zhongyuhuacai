@@ -63,9 +63,23 @@ class ProductCtrl extends BaseCtrl  {
     }
     //搜索
     function search(){
-        $keyword = $this->request['keyword'];
-        $data = $this->productService->search($keyword);
-        out_ajax($data['code'],$data['msg']);
+        $page = get_request_one( $this->request,'page',0);
+        $limit = get_request_one( $this->request,'limit',0);
+
+        $condition = array(
+            'keyword'=>get_request_one( $this->request,'keyword',0),
+            'category'=>get_request_one( $this->request,'category',0),
+            'orderType'=> get_request_one( $this->request,'order_type',0),
+            'orderUpDown'=> get_request_one( $this->request,'orderUpDown',0),
+        );
+        $rs = $this->productService->search($condition);
+        if($rs != 200){
+            return out_ajax($rs['code'],$rs['msg']);
+        }
+
+        $list = $this->formatShow($rs['msg']);
+        out_ajax($rs['code'],$list);
+
     }
     //点赞
     function up(){
