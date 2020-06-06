@@ -234,7 +234,7 @@ class ProductService{
         }
 
         $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
-        $where .= " limit {$pageInfo['start']} , {$pageInfo['end']}} $order ";
+        $where .= " limit {$pageInfo['start']} , {$pageInfo['end']} $order ";
         $list = ProductModel::db()->getAll($where);
         $list = $this->format($list);
 
