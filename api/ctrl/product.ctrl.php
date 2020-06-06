@@ -77,7 +77,7 @@ class ProductCtrl extends BaseCtrl  {
             return out_ajax($rs['code'],$rs['msg']);
         }
 
-        $list = $this->formatShow($rs['msg']);
+        $list = $this->productService->formatShow($rs['msg']);
         out_ajax($rs['code'],$list);
 
     }
