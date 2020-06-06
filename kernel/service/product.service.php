@@ -220,13 +220,11 @@ class ProductService{
             }
 
         }
-
+        LogLib::inc()->debug($where);
         $cnt = self::getListCntByDb($where);
         if(!$cnt){
             return  out_pc(200,null);
         }
-
-        LogLib::inc()->debug($where);
 
         $order = "";
         if(arrKeyIssetAndExist($condition,'orderType')){
