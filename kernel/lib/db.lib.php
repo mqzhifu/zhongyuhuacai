@@ -33,25 +33,43 @@ class DbLib{
             $this->_pk = $pk;
     }
     //初始化数据库连接,这里是一个小优化，只有真正执行SQL语句时，才去连接数据库
-    protected function checkConnect() {
+    function checkConnect() {
         $dbFD = ContainerLib::get($this->_configMapKey);
         if(!$dbFD){
             $this->conn();
         }else{
-            var_dump($dbFD);exit;
+//            var_dump( mysqli_get_client_info(),"<br/>", mysqli_get_client_stats());
+//            var_dump($dbFD);exit;
             //缓存连接一个小时
-            if(time()  - $dbFD['connTime'] >=  60 * 60 ){
-                LogLib::inc()->debug(" mysql conn sock fd timeout. reconnect!!!");
-                $this->conn();
-            }else{
-                if(!$this->_masterFD){
-                    $this->_masterFD = $dbFD['masterFD'];
-                }
+//            if(time()  - $dbFD['connTime'] >=  60 * 60 ){
+//                LogLib::inc()->debug(" mysql conn sock fd timeout. reconnect!!!");
+//                $this->conn();
+//            }else{
+                    if(!$this->_masterFD){
+                        if(mysqli_ping( $dbFD['masterFD'])){
+                            $this->_masterFD = $dbFD['masterFD'];
+                        }else {
+                            LogLib::inc()->debug(" mysql ping err,will reconnect!!!");
+                            $this->conn();
+                            $dbFD = ContainerLib::get($this->_configMapKey);
+                            $this->_masterFD =  $dbFD['masterFD'];
+                        }
+                    }
 
-                if(!$this->_slaveFD){
-                    $this->_slaveFD = $dbFD['slaveFD'];
-                }
-            }
+                    if(!$this->_slaveFD){
+                        if(mysqli_ping( $dbFD['slaveFD'])){
+                            $this->_slaveFD = $dbFD['slaveFD'];
+                        }else {
+                            LogLib::inc()->debug(" mysql ping err,will reconnect!!!");
+                            $this->conn();
+                            $dbFD = ContainerLib::get($this->_configMapKey);
+                            $this->_slaveFD =  $dbFD['slaveFD'];
+                        }
+
+                    }
+//                }
+
+//            }
 
 //            if(time()  - $dbFD['connTime'] >=  $this->_config['timeout']){
 //                self::$_poll[$this->configKey] = null;
@@ -65,7 +83,7 @@ class DbLib{
         }
     }
 
-    function conn(){
+    public function conn(){
         $masterFD = $this->setOneMysqliConnect($this->_config['master']);
         $slaveFD = null;
         if( arrKeyIssetAndExist($this->_config,'masterSlave') ){//是否开启主从模式
