@@ -182,6 +182,8 @@ return array(
     8976=>"keyword is null",
     8977=>'categoryAttrPara is null',
     8978=>"condition is null",
+    8979=>"product not include goods",
+    8980=>"product not ProductLinkCategoryAttr",
 ////    5003=>'token验证错误',
 ////    5004=>'key验证错误',
 //    8101=>'邮箱格式错误',

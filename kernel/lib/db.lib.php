@@ -38,6 +38,7 @@ class DbLib{
         if(!$dbFD){
             $this->conn();
         }else{
+            var_dump($dbFD);exit;
             //缓存连接一个小时
             if(time()  - $dbFD['connTime'] >=  60 * 60 ){
                 LogLib::inc()->debug(" mysql conn sock fd timeout. reconnect!!!");

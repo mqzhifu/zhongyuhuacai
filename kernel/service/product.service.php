@@ -77,8 +77,15 @@ class ProductService{
         $goodsList = null;//商品及属性列表
         $productCategoryAttrParaData = null;//产品属性列表
         $goodsDb = GoodsModel::db()->getAll(" pid = $id");
+        if(!$goodsDb){
+            return out_pc(8979);
+        }
         if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
             $ProductLinkCategoryAttrDb = ProductLinkCategoryAttrModel::db()->getAll(" pid = $id");
+            if(!$ProductLinkCategoryAttrDb){
+                return out_pc(8980);
+            }
+
             $categoryAttrParaIds = null;
             foreach ($ProductLinkCategoryAttrDb as $k=>$v){
                 $categoryAttrParaIds[ $v['pca_id']][] = $v['pcap_id'];
