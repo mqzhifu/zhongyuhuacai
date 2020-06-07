@@ -51,22 +51,20 @@ class DbLib{
                         }else {
                             LogLib::inc()->debug(" mysql ping err,will reconnect!!!");
                             $this->conn();
-                            $dbFD = ContainerLib::get($this->_configMapKey);
-                            $this->_masterFD =  $dbFD['masterFD'];
+//                            $dbFD = ContainerLib::get($this->_configMapKey);
+//                            $this->_masterFD =  $dbFD['masterFD'];
                         }
                     }
 
-                    if(!$this->_slaveFD){
-                        if(mysqli_ping( $dbFD['slaveFD'])){
-                            $this->_slaveFD = $dbFD['slaveFD'];
-                        }else {
-                            LogLib::inc()->debug(" mysql ping err,will reconnect!!!");
-                            $this->conn();
-                            $dbFD = ContainerLib::get($this->_configMapKey);
-                            $this->_slaveFD =  $dbFD['slaveFD'];
-                        }
-
-                    }
+//                    if(!$this->_slaveFD){
+//                        if(mysqli_ping( $dbFD['slaveFD'])){
+//                            $this->_slaveFD = $dbFD['slaveFD'];
+//                        }else {
+//                            LogLib::inc()->debug(" mysql ping err,will reconnect!!!");
+//                            $this->conn();
+//                        }
+//
+//                    }
 //                }
 
 //            }
