@@ -15,6 +15,13 @@ class UserCtrl extends BaseCtrl  {
 
     function getOneDetail(){
         $rs  = $this->userService->getUinfoById($this->uid);
+        if($rs){
+            $uid = $this->uid;
+            $historyCnt =  UserProductLogModel::db()->getCount(" uid = $uid");
+            $rs['view_product_history_cnt'] = $historyCnt;
+
+            $rs['collect_cnt'] = UserCollectionModel::db()->getCount(" uid = $uid");
+        }
         out_ajax($rs['code'],$rs['msg']);
 
     }
@@ -82,5 +89,11 @@ class UserCtrl extends BaseCtrl  {
             $rs[] = $row;
         }
         out_ajax(200,$rs);
+    }
+    //浏览产品 - 历史 记录
+    function viewProductHistory(){
+        $uid = $this->uid;
+        $list = UserProductLogModel::db()->getAll(" uid = $uid");
+        out_ajax(200,$list);
     }
 }

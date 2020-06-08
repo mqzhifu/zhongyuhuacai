@@ -4,7 +4,6 @@ class IndexCtrl extends BaseCtrl  {
     function index(){
         //调取支付
 
-
         //代理
         //密码登陆
         //商品，获取二维码
@@ -13,9 +12,6 @@ class IndexCtrl extends BaseCtrl  {
         //发送短信
         //退出
 
-
-        //订单列表
-        //编辑个人信息
         //提现列表
         //发起提现
     }
@@ -24,6 +20,8 @@ class IndexCtrl extends BaseCtrl  {
     function wxPushLocation($request){
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
+
+
         $addr = AreaLib::getByGPS($latitude,$longitude);
 
         $data = array(

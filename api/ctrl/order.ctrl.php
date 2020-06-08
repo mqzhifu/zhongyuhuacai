@@ -17,7 +17,7 @@ class OrderCtrl extends BaseCtrl  {
         $oid = $this->orderService->doing($this->uid,$pid,$categoryAttrPara,$num,$agentUid);
         return out_pc(200,$oid);
     }
-
+    //某一个产品，近期购买记录
     function getNearUserBuyHistory(){
         $pid = $agentUid =get_request_one( $this->request,'pid',0);
         $list = OrderModel::db()->getAll("pid = $pid group by uid order by a_time desc limit 20 ");
@@ -33,6 +33,13 @@ class OrderCtrl extends BaseCtrl  {
         }
 
         return out_pc(200,$list);
+    }
+
+    function cntUserOrderByType(){
+        $list = OrderModel::db()->getAll("uid = {$this->uid} ");
+        if(!$list){
+
+        }
     }
 
     function getOneDetail(){
@@ -51,6 +58,21 @@ class OrderCtrl extends BaseCtrl  {
         $uid = $this->uid;
         $type = $agentUid =get_request_one( $this->request,'type',0);
 
+    }
+
+    function delUserCart(){
+        $id = $agentUid =get_request_one( $this->request,'id',0);
+        $this->orderService->delUserCart($id,$this->uid);
+    }
+
+    function getUserCart(){
+//        $oid = $agentUid =get_request_one( $this->request,'oid',0);
+        $this->orderService->getUserCart($this->uid);
+    }
+
+    function addUserCart(){
+        $pid = $agentUid =get_request_one( $this->request,'pid',0);
+        $this->orderService->addUserCart($this->uid,$pid);
     }
 
 

@@ -100,4 +100,36 @@ class OrderService{
     function getOneDetail($id){
         return OrderModel::db()->getById($id);
     }
+
+    function addUserCart($uid,$pid){
+        $data = array(
+            'uid'=>$uid,
+            'pid'=>$pid,
+            'a_time'=>time(),
+            'gid'=>0,
+        );
+        $newId = CartModel::db()->add($data);
+        return out_pc(200,$newId);
+    }
+
+    function delUserCart($id,$uid){
+        $newId = CartModel::db()->delById($id);
+        return out_pc(200,$newId);
+    }
+
+    function getUserCart($uid){
+        $service  =  new ProductService();
+        $list = CartModel::db()->getAll(" uid = $uid");
+        if(!$list){
+            return out_pc(200);
+        }
+        $rs = null;
+        foreach ($list as $k=>$v){
+            $product = ProductModel::db()->getById($v['pid']);
+            $rs[] = $service->formatRow($product);
+        }
+        $rs = $service->formatShow($list);
+        return out_pc(200,$rs);
+
+    }
 }

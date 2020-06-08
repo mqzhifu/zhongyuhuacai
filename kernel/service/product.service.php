@@ -20,6 +20,15 @@ class ProductService{
     }
 
     function getRecommendList($page,$limit,$type){
+        $returnPageInfo = array(
+            'page'=>$page,
+            'limit'=>$limit,
+            'record_cnt'=>0,
+            'page_cnt'=>0,
+            'list'=>null,
+        );
+
+
         if($type == 1){
             $where = " recommend_detail = ".ProductModel::RECOMMEND_TRUE;
         }else{
@@ -38,7 +47,16 @@ class ProductService{
         $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
         $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end']);
         $list = $this->format($list);
-        return out_pc(200,$list);
+        $list = $this->formatShow($list);
+
+        $returnPageInfo['page'] = $page;
+        $returnPageInfo['limit'] = $limit;
+        $returnPageInfo['page_cnt'] = $pageInfo['totalPage'];
+        $returnPageInfo['record_cnt'] = $cnt;
+        $returnPageInfo['list'] = $list;
+
+
+        return out_pc(200,$returnPageInfo);
     }
 
     function getListByCategory($categoryId,$page,$limit){

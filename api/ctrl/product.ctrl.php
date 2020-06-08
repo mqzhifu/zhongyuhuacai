@@ -26,14 +26,16 @@ class ProductCtrl extends BaseCtrl  {
     }
     //获取 后台 推荐的商品的列表
     function getRecommendList(){
+        //type=1,推荐到详情页,type=2，首页
         $type = get_request_one( $this->request,'type',0);
         $page = get_request_one( $this->request,'page',0);
-        $limit = get_request_one( $this->request,'limit',0);
+        $limit = get_request_one( $this->request,'limit',4);
         $rs = $this->productService->getRecommendList($page,$limit,$type);
-        if(!$rs['msg']){
+
+//        if(!$rs['msg']){
             out_ajax($rs['code'],$rs['msg']);
-        }
-        out_ajax(200,$this->productService->formatShow($rs['msg']));
+//        }
+//        out_ajax(200,$this->productService->formatShow($rs['msg']));
     }
 
     function getUserHistoryPVList(){
