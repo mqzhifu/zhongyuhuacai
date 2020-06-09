@@ -256,6 +256,7 @@ class ProductService{
             $order .= " order by ".self::ORDER_TYPE[$condition['orderType']]['field'];
             if(arrKeyIssetAndExist($condition ,'orderUpDown')){
                 $order .=  " desc ";
+
             }else{
                 $order .=  " asc ";
             }

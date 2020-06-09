@@ -15,7 +15,7 @@ class OrderCtrl extends BaseCtrl  {
         $pid = get_request_one( $this->request,'pid',0);
 
         $oid = $this->orderService->doing($this->uid,$pid,$categoryAttrPara,$num,$agentUid);
-        return out_pc(200,$oid);
+        return out_ajax(200,$oid);
     }
     //某一个产品，近期购买记录
     function getNearUserBuyHistory(){
@@ -32,7 +32,7 @@ class OrderCtrl extends BaseCtrl  {
             }
         }
 
-        return out_pc(200,$list);
+        return out_ajax(200,$list);
     }
 
     function cntUserOrderByType(){
@@ -72,7 +72,8 @@ class OrderCtrl extends BaseCtrl  {
 
     function addUserCart(){
         $pid = $agentUid =get_request_one( $this->request,'pid',0);
-        $this->orderService->addUserCart($this->uid,$pid);
+        $rs = $this->orderService->addUserCart($this->uid,$pid);
+        out_ajax($rs['code'],$rs['msg']);
     }
 
 

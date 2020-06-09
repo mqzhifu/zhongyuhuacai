@@ -102,6 +102,10 @@ class OrderService{
     }
 
     function addUserCart($uid,$pid){
+        $exist = CartModel::db()->getRow(" uid = $uid and pid = $pid");
+        if($exist){
+            return out_pc(8339);
+        }
         $data = array(
             'uid'=>$uid,
             'pid'=>$pid,
