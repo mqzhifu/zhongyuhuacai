@@ -121,6 +121,11 @@ class OrderService{
         return out_pc(200,$newId);
     }
 
+    function getUserCartNum($uid){
+        $list = CartModel::db()->getCount(" uid = $uid");
+        return out_pc(200,$list);
+    }
+
     function getUserCart($uid){
         $service  =  new ProductService();
         $list = CartModel::db()->getAll(" uid = $uid");

@@ -143,6 +143,10 @@ class ProductService{
         }else{
             $product['desc_attr_format'] = "";
         }
+
+        $orderService = new OrderService();
+        $product['cart_num'] = $orderService->getUserCartNum($uid);
+
         //处理 产品 属性-参数
 //        $attribute = $product['attribute'];
 //        //该产品所有包含的属性参数，但是不一定每种属性组合都有商品(库存)
