@@ -145,7 +145,7 @@ class ProductService{
         }
 
         $orderService = new OrderService();
-        $product['cart_num'] = $orderService->getUserCartNum($uid);
+        $product['cart_num'] = $orderService->getUserCartNum($uid)['msg'];
 
         //处理 产品 属性-参数
 //        $attribute = $product['attribute'];
