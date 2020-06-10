@@ -95,11 +95,12 @@ class WxPayConfig extends WxPayConfigInterface
 	 */
 	public function GetKey()
 	{
-        if(APP_NAME == 'instantplay'){
-            return 'f313c94d34cae6632d37b2d2eb617fe5';
-        }else{
-            return 'd576d689e6f47d153c3e26d65ce1bf20';
-        }
+//        if(APP_NAME == 'instantplay'){
+//            return 'f313c94d34cae6632d37b2d2eb617fe5';
+//        }else{
+//            return 'd576d689e6f47d153c3e26d65ce1bf20';
+//        }
+        return 'ccaab4e10f59bb6eb95e197c98bb0be1';
 	}
 	public function GetAppSecret()
 	{
