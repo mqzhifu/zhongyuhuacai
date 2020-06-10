@@ -121,6 +121,144 @@ class OrderService{
         return out_pc(200,$newId);
     }
 
+    function confirmOrder($pid,$num,$pcap){
+        if(!$pid){
+            return out_pc(8072);
+
+        }
+        $product = ProductModel::db()->getById($pid);
+        if(!$product){
+            return out_pc(1026);
+
+        }
+
+        if(!$num){
+            return out_pc(8021);
+
+        }
+        //获取该产品下的所有商品
+        $goodsDb = GoodsModel::db()->getAll(" pid = $pid");
+        if(!$goodsDb){
+            return out_pc(8979);
+        }
+
+        $goods = null;
+        $goodsAttrParaDesc = "";
+        if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
+            $category_attr_para = null;
+            foreach ($goodsDb as $k=>$v){
+                $row = $v;
+                //获取每个商品对应的  分类属性参数
+                $row = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}");
+                if($row){
+                    $category_attr_para[] = $row;
+                }
+
+            }
+
+            if(!$category_attr_para){
+                return out_pc(8341);
+            }
+
+            if(!$pcap){
+                return out_pc(8342);
+            }
+
+            $userPcap = explode(",",$pcap);
+            foreach ($userPcap as $k=>$v){
+                if(!$v){
+                    return out_pc(8345);
+                }
+
+                if(strpos($v,'-') === false){
+                    return out_pc(8343);
+
+                }
+
+                $tmp = explode("-",$v);
+                if(count($tmp) != 2){
+                    return out_pc(8344);
+                }
+
+                $pca_id = (int)$tmp[0];
+                $pcap_id = (int)$tmp[1];
+                if(!$pca_id || !$pcap_id){
+                    return out_pc(8346);
+                }
+            }
+
+
+
+
+
+
+            $goodsAttrPara = null;
+            //商品
+            foreach ($category_attr_para as $k=>$goodsPCAP){
+                $cntGoodsPCAP = 0;
+                //商品下的所有参数
+                foreach ($goodsPCAP as $k2=>$onePcap){
+                    $f = 0;
+                    //用户提交的 商品 属性参数
+                    foreach ($userPcap as $k=>$userOnePcap){
+                        $tmp = explode("-",$userOnePcap);
+                        $pca_id = $tmp[0];
+                        $pcap_id = $tmp[1];
+                        if($onePcap['pca_id'] == $pca_id && $onePcap['pcap_id'] == $pcap_id){
+                            $f = 1;
+                            break;
+                        }
+                    }
+                    if(!$f){
+                        //只要有一个 参数 找不见，就证明，此条商品，不满足，直接停止该层循环
+                        break;
+                    }
+                    $cntGoodsPCAP++;
+                }
+                //证明上面的循环都走完了，没有提前结束
+                if($cntGoodsPCAP == count($goodsPCAP)){
+                    $goodsAttrPara = $goodsPCAP;
+                    break;
+                }
+
+            }
+
+            if(!$goodsAttrPara){
+                return out_pc(8340);
+            }
+
+            foreach ($goodsDb as $k=>$v){
+                if($v['id'] == $goodsAttrPara[0]['gid']){
+                    $goods = $v;
+                    break;
+                }
+            }
+
+            foreach ($goodsAttrPara as $k=>$v){
+                $attr = ProductCategoryAttrModel::db()->getById($v['pca_id'])['name'];
+                $para = ProductCategoryAttrParaModel::db()->getById($v['pcap_id'])['name'];
+                $goodsAttrParaDesc = array('attr'=>$attr,"part"=>$para);
+            }
+        }else{
+            $goods = $goodsDb[0];
+        }
+
+        if(!$goods['stock'] || $goods['stock'] < 0){
+            return out_pc(8336);
+        }
+
+
+        $productService = new ProductService();
+        $data = array(
+            'product'=>$productService->formatShow(array($product))[0],
+            'goods'=>$goods,
+            'goodsAttrParaDesc'=>$goodsAttrParaDesc,
+        );
+
+        return out_pc(200,$data);
+
+    }
+
     function getUserCartNum($uid){
         $list = CartModel::db()->getCount(" uid = $uid");
         return out_pc(200,$list);

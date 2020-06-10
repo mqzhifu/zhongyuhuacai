@@ -98,18 +98,19 @@ class ProductService{
         if(!$goodsDb){
             return out_pc(8979);
         }
+        //产品 属性参数  是否为空
         if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
+            //获取一个产品的，所有类型 属性 参数
             $ProductLinkCategoryAttrDb = ProductLinkCategoryAttrModel::db()->getAll(" pid = $id");
             if(!$ProductLinkCategoryAttrDb){
                 return out_pc(8980);
             }
-
+            //格式化 属性参数   以ID 形式
             $categoryAttrParaIds = null;
             foreach ($ProductLinkCategoryAttrDb as $k=>$v){
                 $categoryAttrParaIds[ $v['pca_id']][] = $v['pcap_id'];
             }
-
-
+            //将ID形式 转换成 多维数组，主要是为了获取汉字描述
             foreach ($categoryAttrParaIds as $k=>$v){
                 $row = ProductCategoryAttrModel::db()->getById($k);
                 $para = null;
@@ -119,11 +120,11 @@ class ProductService{
                 $row['category_attr_para'] = $para;
                 $productCategoryAttrParaData[] = $row;
             }
-
-
+            //遍历该产品下的所有商品列表
             foreach ($goodsDb as $k=>$v){
                 $stock += $v['stock'];
                 $row = $v;
+                //获取每个商品对应的  分类属性参数
                 $row['category_attr_para'] = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}");
                 $goodsList[]= $row;
             }

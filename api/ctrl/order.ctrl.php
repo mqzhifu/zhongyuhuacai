@@ -61,7 +61,7 @@ class OrderCtrl extends BaseCtrl  {
     }
 
     function delUserCart(){
-        $id = $agentUid =get_request_one( $this->request,'id',0);
+        $id = get_request_one( $this->request,'id',0);
         $this->orderService->delUserCart($id,$this->uid);
     }
 
@@ -69,6 +69,15 @@ class OrderCtrl extends BaseCtrl  {
 //        $oid = $agentUid =get_request_one( $this->request,'oid',0);
         $list = $this->orderService->getUserCart($this->uid);
         out_ajax(200,$list);
+    }
+
+    function confirmOrder(){
+        $pid =get_request_one( $this->request,'pid',0);
+        $pcap = get_request_one( $this->request,'pcap',"");
+        $num =get_request_one( $this->request,'num',0);
+
+        $rs = $this->orderService->confirmOrder($pid,$num,$pcap);
+        out_ajax($rs['code'],$rs['msg']);
     }
 
     function addUserCart(){
