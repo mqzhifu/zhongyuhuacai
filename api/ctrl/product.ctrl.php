@@ -64,12 +64,6 @@ class ProductCtrl extends BaseCtrl  {
         out_ajax($data['code'],$data['msg']);
     }
 
-    function confirmOrder(){
-        $pid = get_request_one( $this->request,'pid',0);
-        $pcap =  get_request_one( $this->request,'pcap',"");
-        $this->orderService->confirmOrder();
-    }
-
     //搜索
     function search(){
         $page = get_request_one( $this->request,'page',0);

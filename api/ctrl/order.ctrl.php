@@ -4,17 +4,69 @@ class OrderCtrl extends BaseCtrl  {
         $list = $this->orderService->getUserList($this->uid);
         return out_pc(200,$list);
     }
+
+    function testPay(){
+        include PLUGIN ."wxpay/WxPay.Config.php";
+        include PLUGIN ."wxpay/WxPay.JsApiPay.php";
+        include PLUGIN ."wxpay/WxPay.Api.php";
+
+
+
+        $tools = new JsApiPay();
+        $openId = $this->userService->getUinfoById($this->uid);
+        var_dump($openId);exit;
+
+        //②、统一下单
+        $input = new WxPayUnifiedOrder();
+        $input->SetBody("test");
+        $input->SetAttach("test");
+        $input->SetOut_trade_no("sdkphp".date("YmdHis"));
+        $input->SetTotal_fee("1");
+        $input->SetTime_start(date("YmdHis"));
+        $input->SetTime_expire(date("YmdHis", time() + 600));
+        $input->SetGoods_tag("test");
+        $input->SetNotify_url("http://paysdk.weixin.qq.com/notify.php");
+        $input->SetTrade_type("JSAPI");
+        $input->SetOpenid($openId);
+        $config = new WxPayConfig();
+        $order = WxPayApi::unifiedOrder($config, $input);
+        echo '<font color="#f00"><b>统一下单支付单信息</b></font><br/>';
+        printf_info($order);
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+
+        //获取共享收货地址js函数参数
+        $editAddress = $tools->GetEditAddressParameters();
+    }
+
+
     function doing(){
+
+
+
+        $this->testPay();
+        exit;
+
+
+
+
+
+
+
+
+
+
 //        $num = get_request_one($request['num'],0);
 //        $gid = get_request_one($request['gid'],0);
 
         $agentUid =get_request_one( $this->request,'agent_uid',0);
-//        $gid = get_request_one( $this->request,'gid',0);
+        $couponId = get_request_one( $this->request,'coupon_id',0);
         $num = get_request_one( $this->request,'num',0);
-        $categoryAttrPara = get_request_one( $this->request,'categoryAttrPara',0);
+        $gid = get_request_one( $this->request,'gid',0);
         $pid = get_request_one( $this->request,'pid',0);
+        $memo = get_request_one( $this->request,'memo','');
 
-        $oid = $this->orderService->doing($this->uid,$pid,$categoryAttrPara,$num,$agentUid);
+
+        $oid = $this->orderService->doing($this->uid,$pid,$gid,$num,$agentUid,$couponId,$memo);
         return out_ajax(200,$oid);
     }
     //某一个产品，近期购买记录

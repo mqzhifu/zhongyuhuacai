@@ -29,15 +29,16 @@ class WxPayConfig extends WxPayConfigInterface
 	 */
 	public function GetAppId()
 	{
-        if(APP_NAME == 'instantplay') {
-            return 'wx406c54b223a06df0';
-        }else{
-            return 'wx66a442fbdb47a4fe';
-        }
+//        if(APP_NAME == 'instantplay') {
+//            return 'wx406c54b223a06df0';
+//        }else{
+//            return 'wx66a442fbdb47a4fe';
+//        }
+        return "wx9f0bcf9eed8f9bf2";
 	}
 	public function GetMerchantId()
 	{
-		return '1358633902';
+		return '1599865331';
 	}
 	
 	//=======【支付相关配置：支付成功回调地址/签名方式】===================================

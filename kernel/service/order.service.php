@@ -2,19 +2,19 @@
 
 class OrderService{
     //下单入口
-    function doing($uid,$pid,$categoryAttrPara,$num,$agentUid = 0){
+    function doing($uid,$pid,$gid,$num,$agentUid = 0,$couponId = 0,$memo = ''){
         if(!$uid){
             return out_pc(8002);
         }
 
-//        if(!$gid){
-//            return out_pc(8073);
-//        }
-//
-//        $goods = GoodsModel::db()->getById($gid);
-//        if(!$goods){
-//            return out_pc(1027);
-//        }
+        if(!$gid){
+            return out_pc(8073);
+        }
+
+        $goods = GoodsModel::db()->getById($gid);
+        if(!$goods){
+            return out_pc(1027);
+        }
 
         $product = ProductModel::db()->getById($pid);
         if(!$product){
@@ -22,14 +22,16 @@ class OrderService{
         }
 
 
-        if(!$categoryAttrPara){
-            return out_pc(8977);
-        }
+//        if(!$categoryAttrPara){
+//            return out_pc(8977);
+//        }
 
 
         if($goods['stock'] - $num <= 0 ){
             return out_pc(8336);
         }
+
+        LogLib::inc()->debug([$uid,$pid,$gid,$num,$agentUid ,$couponId ,$memo ]);
 
 
         $agentAddress = "";
@@ -43,12 +45,15 @@ class OrderService{
 
         $totalPrice = $goods['sale_price'] + $goods['haulage'];
 
-        $couponId = _g("coupon_id");
-        $couponInfo = CouponModel::db()->getById($couponId);
+
         $couponPrice = 0;
-        if($couponInfo){
-            $couponPrice = $couponInfo['price'];
+        if($couponId){
+            $couponInfo = CouponModel::db()->getById($couponId);
+            if($couponInfo){
+                $couponPrice = $couponInfo['price'];
+            }
         }
+
         $totalPrice = $totalPrice  -  $couponPrice;
 
         $order = array(
@@ -70,6 +75,7 @@ class OrderService{
             'address_agent'=>$agentAddress,
             'agent_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_STATUS_WAIT,
             'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
+            'memo'=>$memo,
         );
 
         $newId = OrderModel::db()->add($order);
@@ -144,6 +150,7 @@ class OrderService{
 
         $goods = null;
         $goodsAttrParaDesc = "";
+        $pcap_desc_str = "";
         if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
             $category_attr_para = null;
             foreach ($goodsDb as $k=>$v){
@@ -237,6 +244,7 @@ class OrderService{
             foreach ($goodsAttrPara as $k=>$v){
                 $attr = ProductCategoryAttrModel::db()->getById($v['pca_id'])['name'];
                 $para = ProductCategoryAttrParaModel::db()->getById($v['pcap_id'])['name'];
+                $pcap_desc_str .= $attr . ":".$para . " ";
                 $goodsAttrParaDesc = array('attr'=>$attr,"part"=>$para);
             }
         }else{
@@ -253,6 +261,7 @@ class OrderService{
             'product'=>$productService->formatShow(array($product))[0],
             'goods'=>$goods,
             'goodsAttrParaDesc'=>$goodsAttrParaDesc,
+            'pcap_desc_str'=>$pcap_desc_str,
         );
 
         return out_pc(200,$data);
