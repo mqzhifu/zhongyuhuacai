@@ -148,6 +148,25 @@ class ProductService{
         $orderService = new OrderService();
         $product['cart_num'] = $orderService->getUserCartNum($uid)['msg'];
 
+
+        $upService = new UpService();
+        $collectService = new CollectService();
+
+        $hasLiked = 0;
+        if($upService->exist($id,$uid)){
+            $hasLiked = 1;
+        }
+
+        $hasCollect = 0;
+        if($collectService->exist($id,$uid)){
+            $hasCollect = 1;
+        }
+
+        $product['has_collect'] = $hasCollect;
+        $product['has_up'] = $hasLiked;
+
+
+
         //处理 产品 属性-参数
 //        $attribute = $product['attribute'];
 //        //该产品所有包含的属性参数，但是不一定每种属性组合都有商品(库存)

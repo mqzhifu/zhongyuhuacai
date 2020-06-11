@@ -10,8 +10,7 @@ class CollectService{
             return out_pc(8072);
         }
 
-        $exist = UserCollectionModel::db()->getById(" pid = $pid and uid = $uid");
-        if($exist){
+        if($this->exist($pid,$uid)){
             return out_pc(8338);
         }
 
@@ -25,6 +24,11 @@ class CollectService{
         ProductModel::db()->upById($pid,$data);
 
         return out_pc(200,$newId);
+    }
+
+    function exist($pid,$uid){
+        $exist = UserCollectionModel::db()->getRow(" pid = $pid and uid = $uid");
+        return $exist;
     }
 //    function getListByPid($pid,$page = 0,$limit = 0){
 //        if(!$pid){

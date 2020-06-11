@@ -10,8 +10,8 @@ class UpService{
             return out_pc(8072);
         }
 
-        $exist = UserLikedModel::db()->getById(" pid = $pid and uid = $uid");
-        if($exist){
+
+        if($this->exist($pid,$uid)){
             return out_pc(8338);
         }
 
@@ -26,6 +26,11 @@ class UpService{
         $rs = ProductModel::db()->upById($pid,$data);
 
         return out_pc(200,$newId);
+    }
+
+    function exist($pid,$uid){
+        $exist = UserLikedModel::db()->getRow(" pid = $pid and uid = $uid");
+        return $exist;
     }
 //    function getListByPid($pid,$page = 0,$limit = 0){
 //        if(!$pid){
