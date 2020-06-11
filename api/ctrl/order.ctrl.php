@@ -58,44 +58,28 @@ class OrderCtrl extends BaseCtrl  {
         $uid = $this->uid;
         $type = $agentUid =get_request_one( $this->request,'type',0);
 
+        if(!$type){
+            out_ajax(8004);
+        }
+
+
+        if(!$oid){
+            out_ajax(8981);
+        }
+
+        $order = OrderModel::db()->getById($oid);
+        if($order){
+            out_ajax(1029);
+        }
+
+        $payService = new PayService();
+        if($type == OrderModel::PAY_WX_H5_NATIVE){
+
+            $payService->wxJsApi($order,$uid);
+        }
 
 
 
-        include PLUGIN ."wxpay/WxPay.Config.php";
-        include PLUGIN ."wxpay/WxPay.JsApiPay.php";
-        include PLUGIN ."wxpay/WxPay.Api.php";
-
-
-
-        $tools = new JsApiPay();
-        $openId = $this->userService->getUinfoById($this->uid)['msg']['wx_open_id'];
-//        var_dump($openId);
-
-        //②、统一下单
-        $input = new WxPayUnifiedOrder();
-        $input->SetBody("test");
-        $input->SetAttach("test");
-        $input->SetOut_trade_no("sdkphp".date("YmdHis"));
-        $input->SetTotal_fee("1");
-        $input->SetTime_start(date("YmdHis"));
-        $input->SetTime_expire(date("YmdHis", time() + 600));
-        $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://paysdk.weixin.qq.com/notify.php");
-        $input->SetTrade_type("JSAPI");
-        $input->SetOpenid($openId);
-        $config = new WxPayConfig();
-        $order = WxPayApi::unifiedOrder($config, $input);
-
-        LogLib::inc()->debug($order);
-//        var_dump($order);
-//        echo "<br/><br/>";
-        $jsApiParameters = $tools->GetJsApiParameters($order);
-        out_ajax(200,$jsApiParameters);
-//        var_dump($jsApiParameters);
-//        //获取共享收货地址js函数参数
-//        $editAddress = $tools->GetEditAddressParameters();
-//        echo "<br/><br/>";
-//        var_dump($editAddress);
     }
 
     function delUserCart(){

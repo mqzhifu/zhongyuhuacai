@@ -1,6 +1,7 @@
 <?php
 
 class OrderService{
+    public $timeout = 30 * 60;//订单超时时间
     //下单入口
     function doing($uid,$pid,$gid,$num,$agentUid = 0,$couponId = 0,$memo = ''){
         if(!$uid){
@@ -76,6 +77,8 @@ class OrderService{
             'agent_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_STATUS_WAIT,
             'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
             'memo'=>$memo,
+            'title'=>$product['title'],
+            'expire_time'=>time() + $this->timeout,
         );
 
         $newId = OrderModel::db()->add($order);

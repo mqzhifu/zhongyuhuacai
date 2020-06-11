@@ -38,6 +38,7 @@ return array(
     1026=>'pid ，不在DB中',
     1027=>"gid,不在DB中",
     1028=>"agent_uid 不在DB中",
+    1029=>"oid not in db",
 
 
 
@@ -184,6 +185,7 @@ return array(
     8978=>"condition is null",
     8979=>"product not include goods",
     8980=>"product not ProductLinkCategoryAttr",
+    8981=>"oid is null",
 ////    5003=>'token验证错误',
 ////    5004=>'key验证错误',
 //    8101=>'邮箱格式错误',
@@ -191,6 +193,7 @@ return array(
     8105=>'token解出的UID，但不是整型',
 //    //各种-数据格式-验证-错误
     8109=>'token解析失败',//
+
 //    8110=>'code验证失败',//
 //    8112=>'路径错误',
 //    8113=>'目录不是777',

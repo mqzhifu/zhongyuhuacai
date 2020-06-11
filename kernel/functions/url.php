@@ -190,7 +190,7 @@ function get_tmp_status_dir(){
     return  "xyxnew/".get_upload_cdn_evn()."/static/";
 }
 
-function get_domain_url($protocol = 'http'){
+function get_domain_url($protocol = HTTP_PROTOCOL){
     return $protocol."://".DOMAIN_URL."/";
 }
 
