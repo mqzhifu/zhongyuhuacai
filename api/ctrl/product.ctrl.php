@@ -100,13 +100,13 @@ class ProductCtrl extends BaseCtrl  {
     //点赞
     function cancelUp(){
         $id = get_request_one( $this->request,'id',0);
-        $rs = $this->upService->add($this->uid,$id);
+        $rs = $this->upService->cancel($this->uid,$id);
         out_ajax($rs['code'],$rs['msg']);
     }
     //收藏
     function cancelCollect(){
         $id = get_request_one( $this->request,'id',0);
-        $rs = $this->collectService->add($this->uid,$id);
+        $rs = $this->collectService->cancel($this->uid,$id);
         out_ajax(200,$rs['msg']);
     }
 
