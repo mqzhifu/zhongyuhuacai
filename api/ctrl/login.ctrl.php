@@ -33,7 +33,7 @@ class LoginCtrl extends BaseCtrl {
     function wxLittleLoginByCode($request){
         $code = get_request_one( $this->request,'code',0);
         if(!$code){
-
+            out_ajax(8074);
         }
         $WxLittleLib = new WxLittleLib();
         $wxCallbackData = $WxLittleLib->getSessionOpenIdByCode($code);
@@ -42,26 +42,33 @@ class LoginCtrl extends BaseCtrl {
 //        var_dump($wxData);
 //        var_dump($request);
 
-        $sessionKey = "aaa";
-//        $sessionKey = $wxCallbackData['session_key'];
+        $return = array("token"=>"","session_key");
+
+        $sessionKey = $wxCallbackData['session_key'];
         $openId = $wxCallbackData['openid'];
 
         $loginData = array('thirdId'=>$openId,'type'=>UserModel::$_type_wechat);
         $loginRs = $this->third($loginData);
+
+        $return['session_key'] = $sessionKey;
+
         LogLib::inc()->debug(["end back:",$loginRs]);
         if($loginRs['code'] == 200){
-            out_ajax(200,$loginRs['msg']);
+            $return['token'] = $loginRs['msg'];
+            out_ajax(200,$return);
         }
 
         if($loginRs['code'] == 1006){//DB中找不到此用户
+            //注册一个新的用户，使用微信的用户基础信息
             $rawData = json_decode($request['rawData'],true);
             //language city  province country
             $userInfo = array('nickanme'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
             $newUserInfo = $this->userService->register($openId,"",UserModel::$_type_wechat,$userInfo);
 //            var_dump("new uid :",$newUserInfo['id']);
             $token = $this->createToken($newUserInfo['id']);
+            $return['token'] = $token;
             LogLib::inc()->debug("create token:$token");
-            out_ajax(200,$token);
+            out_ajax(200,$return);
         }else{
             exit("未知错误");
         }
@@ -82,6 +89,18 @@ class LoginCtrl extends BaseCtrl {
 //        var_dump($data);
 //        return json_encode($data);
 
+    }
+
+    function decodeWxEncryptedData($request,$sessionKey){
+//        $rawData = $request['rawData'];
+//        $signature = $request['signature'];
+
+        $iv = $request['iv'];
+        $encryptedData = $request['encryptedData'];
+
+        $WxLittleLib = new WxLittleLib();
+        $data = $WxLittleLib->decryptData($encryptedData,$iv,$sessionKey);
+        var_dump($data);exit;
     }
 
     function third($request){
