@@ -25,7 +25,8 @@ class PayService{
 
 
         $tools = new JsApiPay();
-        $openId = $this->userService->getUinfoById($uid)['msg']['wx_open_id'];
+        $userService = new UserService();
+        $openId = $userService->getUinfoById($uid)['msg']['wx_open_id'];
 
 
         $config = ConfigCenter::get(APP_NAME,"wx")['pay'];
