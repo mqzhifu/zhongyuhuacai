@@ -72,11 +72,14 @@ class OrderCtrl extends BaseCtrl  {
             out_ajax(1029);
         }
 
+        $rs = null;
         $payService = new PayService();
         if($type == OrderModel::PAY_WX_H5_NATIVE){
 
-            $payService->wxJsApi($order,$uid);
+            $rs = $payService->wxJsApi($order,$uid);
         }
+
+        out_ajax($rs['code'],$rs['msg']);
 
 
 

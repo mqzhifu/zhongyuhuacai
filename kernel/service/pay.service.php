@@ -65,7 +65,7 @@ class PayService{
         $jsApiParameters = $tools->GetJsApiParameters($order);
         LogLib::inc()->debug(["GetJsApiParameters",$jsApiParameters]);
 
-        return out_pc(200,$jsApiParameters);
+        return out_pc(200,json_decode($jsApiParameters,true));
 //        //获取共享收货地址js函数参数
 //        $editAddress = $tools->GetEditAddressParameters();
     }
