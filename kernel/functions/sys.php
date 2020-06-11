@@ -273,6 +273,7 @@ function out_ajax($code = 500,$msg = "",$appKey = APP_NAME){
         $errCode = ConfigCenter::get(APP_NAME,"err_code");
         $msg = $errCode[$code];
     }
+    LogLib::inc()->debug(json_encode($msg));
     echo json_encode(array('code'=>$code,'msg'=>$msg));
     exit;
 }
