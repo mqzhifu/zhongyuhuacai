@@ -14,8 +14,8 @@ class OrderCtrl extends BaseCtrl  {
         $memo = get_request_one( $this->request,'memo','');
 
 
-        $oid = $this->orderService->doing($this->uid,$pid,$gid,$num,$agentUid,$couponId,$memo);
-        return out_ajax(200,$oid);
+        $rs = $this->orderService->doing($this->uid,$pid,$gid,$num,$agentUid,$couponId,$memo);
+        return out_ajax($rs['code'],$rs['msg']);
     }
     //某一个产品，近期购买记录
     function getNearUserBuyHistory(){
