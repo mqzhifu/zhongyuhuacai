@@ -40,7 +40,6 @@ class WxLittleLib{
 
     function decryptData($encryptedData,$iv,$sessionKey){
         $pc = new \WXBizDataCrypt($this->_appId, $sessionKey);
-        var_dump($pc);exit;
         $data = null;
         $errCode = $pc->decryptData($encryptedData, $iv, $data );
 
