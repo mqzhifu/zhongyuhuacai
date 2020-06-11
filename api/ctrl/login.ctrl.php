@@ -42,7 +42,7 @@ class LoginCtrl extends BaseCtrl {
 //        var_dump($wxData);
 //        var_dump($request);
 
-        $return = array("token"=>"","session_key");
+        $return = array("token"=>"","session_key"=>"");
 
         $sessionKey = $wxCallbackData['session_key'];
         $openId = $wxCallbackData['openid'];
