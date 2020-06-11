@@ -101,7 +101,12 @@ class LoginCtrl extends BaseCtrl {
 
         $WxLittleLib = new WxLittleLib();
         $data = $WxLittleLib->decryptData($encryptedData,$iv,$sessionKey);
-        var_dump($data);exit;
+        $data = json_decode($data,true);
+
+        $userService = new UserService();
+        $rs = $userService->upUserInfo($this->uid,array('mobile'=>$data['phoneNumber']));
+        //string(146) "{"phoneNumber":"13522536459","purePhoneNumber":"13522536459","countryCode":"86","watermark":{"timestamp":1591855857,"appid":"wx9f0bcf9eed8f9bf2"}}"
+        out_ajax($rs['code'],array("upinfoRs"=>$rs['msg'],'mobile'=>$data['phoneNumber']));
     }
 
     function third($request){

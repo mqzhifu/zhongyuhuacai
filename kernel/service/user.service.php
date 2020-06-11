@@ -655,8 +655,8 @@ class UserService{
             $data['hidden_gps'] = $info['hidden_gps'];
         }
 
-        if(arrKeyIssetAndExist($info,'cellphone')){
-            $data['cellphone'] = $info['cellphone'];
+        if(arrKeyIssetAndExist($info,'mobile')){
+            $data['mobile'] = $info['mobile'];
         }
 
         if(arrKeyIssetAndExist($info,'wechat_uid')){
