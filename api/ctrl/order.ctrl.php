@@ -68,7 +68,7 @@ class OrderCtrl extends BaseCtrl  {
         }
 
         $order = OrderModel::db()->getById($oid);
-        if($order){
+        if(!$order){
             out_ajax(1029);
         }
 
