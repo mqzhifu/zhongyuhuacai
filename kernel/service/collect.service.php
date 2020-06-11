@@ -26,6 +26,28 @@ class CollectService{
         return out_pc(200,$newId);
     }
 
+    function cancel($uid,$pid){
+        if(!$uid){
+            return out_pc(8002);
+        }
+
+        if(!$pid){
+            return out_pc(8072);
+        }
+
+
+        if(!$this->exist($pid,$uid)){
+            return out_pc(8347);
+        }
+
+        $delRs = UserCollectionModel::db()->delete(" pid = $pid and uid = $uid limit 100" );
+
+        $data = array("user_up_total"=>array(-1));
+        $rs = ProductModel::db()->upById($pid,$data);
+
+        return out_pc(200,$delRs);
+    }
+
     function exist($pid,$uid){
         $exist = UserCollectionModel::db()->getRow(" pid = $pid and uid = $uid");
         return $exist;
