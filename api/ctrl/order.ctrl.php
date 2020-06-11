@@ -13,8 +13,8 @@ class OrderCtrl extends BaseCtrl  {
 
 
         $tools = new JsApiPay();
-        $openId = $this->userService->getUinfoById($this->uid);
-        var_dump($openId);exit;
+        $openId = $this->userService->getUinfoById($this->uid)['msg']['wx_open_id'];
+//        var_dump($openId);
 
         //②、统一下单
         $input = new WxPayUnifiedOrder();
@@ -30,12 +30,17 @@ class OrderCtrl extends BaseCtrl  {
         $input->SetOpenid($openId);
         $config = new WxPayConfig();
         $order = WxPayApi::unifiedOrder($config, $input);
-        echo '<font color="#f00"><b>统一下单支付单信息</b></font><br/>';
-        printf_info($order);
-        $jsApiParameters = $tools->GetJsApiParameters($order);
 
-        //获取共享收货地址js函数参数
-        $editAddress = $tools->GetEditAddressParameters();
+        LogLib::inc()->debug($order);
+//        var_dump($order);
+//        echo "<br/><br/>";
+        $jsApiParameters = $tools->GetJsApiParameters($order);
+        out_ajax(200,$jsApiParameters);
+//        var_dump($jsApiParameters);
+//        //获取共享收货地址js函数参数
+//        $editAddress = $tools->GetEditAddressParameters();
+//        echo "<br/><br/>";
+//        var_dump($editAddress);
     }
 
 

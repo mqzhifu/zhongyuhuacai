@@ -17,6 +17,10 @@ class IndexCtrl extends BaseCtrl  {
     }
 
 
+    function checkToken(){
+        out_ajax(200);
+    }
+
     function wxPushLocation($request){
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
