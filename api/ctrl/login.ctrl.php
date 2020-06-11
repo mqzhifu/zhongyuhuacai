@@ -91,12 +91,13 @@ class LoginCtrl extends BaseCtrl {
 
     }
 
-    function decodeWxEncryptedData($request,$sessionKey){
+    function decodeWxEncryptedData($request){
 //        $rawData = $request['rawData'];
 //        $signature = $request['signature'];
 
         $iv = $request['iv'];
         $encryptedData = $request['encryptedData'];
+        $sessionKey = $request['sessionKey'];
 
         $WxLittleLib = new WxLittleLib();
         $data = $WxLittleLib->decryptData($encryptedData,$iv,$sessionKey);
