@@ -111,6 +111,25 @@ class ProductService{
             foreach ($ProductLinkCategoryAttrDb as $k=>$v){
                 $categoryAttrParaIds[ $v['pca_id']][] = $v['pcap_id'];
             }
+
+            foreach ($categoryAttrParaIds as $k=>$v){
+
+                //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
+                if(count($v ) >5){
+                    $tmp = null;
+                    foreach ($v as $k2=>$v2){
+                        if($k2 >5 ){
+                            break;
+                        }
+                        $tmp[] = $v2;
+                    }
+                    $categoryAttrParaIds[$k] = $tmp;
+                }
+            }
+
+
+
+
             //将ID形式 转换成 多维数组，主要是为了获取汉字描述
             foreach ($categoryAttrParaIds as $k=>$v){
                 //先获取分类属性的  一条记录值
@@ -344,14 +363,14 @@ class ProductService{
         }
         $addId = ProductModel::db()->add($data);
 
+        out(" productService addOne,so add product is ok ~id:$addId , next add ProductLinkCategoryAttrModel");
         if($categoryAttrPara){
             foreach ( $categoryAttrPara as $k=>$v) {
                 $exp = explode("_",$v);
                 $categoryAttr = $exp[0];
                 $categoryAttrPara = $exp[1];
 
-                $exist = ProductLinkCategoryAttrModel::db()->getRow(" pca_id = $categoryAttr and pcap_id = $categoryAttrPara");
-                var_dump($exist);exit;
+                $exist = ProductLinkCategoryAttrModel::db()->getRow(" pid = $addId and pca_id = $categoryAttr and pcap_id = $categoryAttrPara");
                 if($exist){
                     continue;
                 }

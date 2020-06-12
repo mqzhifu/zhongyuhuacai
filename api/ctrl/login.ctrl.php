@@ -62,10 +62,10 @@ class LoginCtrl extends BaseCtrl {
             //注册一个新的用户，使用微信的用户基础信息
             $rawData = json_decode($request['rawData'],true);
             //language city  province country
-            $userInfo = array('nickanme'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
+            $userInfo = array('nickname'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
             $newUserInfo = $this->userService->register($openId,"",UserModel::$_type_wechat,$userInfo);
 //            var_dump("new uid :",$newUserInfo['id']);
-            $token = $this->createToken($newUserInfo['id']);
+            $token =  $this->userService->createToken($newUserInfo['id']);
             $return['token'] = $token;
             LogLib::inc()->debug("create token:$token");
             out_ajax(200,$return);

@@ -18,7 +18,7 @@ class inserTBDb{
 
 
         //共3步:
-        //1：先把产品的分类属性，都定位到，并入库
+        //1：先把产品的分类属性，都定位到，并入库，保证创建产品的时候，能读到所有分类属性参数
         //2：生成产品信息
         //3：生成商品信息
 
@@ -35,7 +35,8 @@ class inserTBDb{
     function insertProduct($products){
         ProductModel::db()->delete(" id > 0 limit 1000 ");
         GoodsModel::db()->delete(" id > 0 limit 4000 ");
-//        ProductLinkCategoryAttrModel::db()->delete(" pid > 1 limit 1000 ");
+        ProductLinkCategoryAttrModel::db()->delete(" pid > 0 limit 1000 ");
+        GoodsLinkCategoryAttrModel::db()->delete(" gid > 0 limit 1000 ");
 
 
         //初始化，要插入product DB的每一个记录的field
@@ -55,6 +56,9 @@ class inserTBDb{
 
         out("start insert Product Goods");
         foreach ($products as $k=>$v) {
+//            if($k != 7){
+//                continue;
+//            }
             out(" productTb num: $k ");
             $data = $newProductData;
             $data['title'] = $v['title'];
@@ -192,6 +196,7 @@ class inserTBDb{
         $finalPrice = $price;//最第一个，也就是，最高的价格
         //取出<分类为：1688抓取>的所有产品的分类
         $categoryArr = explode(",",$category_attr);
+//        var_dump($categoryArr);
 
         $newProductAttribute = $this->calcSingleProductGoodsPrice($categoryArr,$this->tbCategoryId,'getIds');
         $productService = new ProductService();
@@ -239,11 +244,15 @@ class inserTBDb{
 
     function calcSingleProductGoodsPrice($categoryArr,$tbCategoryId){
         $categoryArrParaIds = [];
+//        var_dump($categoryArr);
         foreach ($categoryArr as $k2=>$v2) {
+//            var_dump($v2);
             $attr = trim($v2);
+//            var_dump($attr);
             if(!$attr){
                 //待处理
-                exit("calcSingleProductGoodsPrice is null");
+                out("calcSingleProductGoodsPrice is null");
+                continue;
             }
             $categoryAttrDb = ProductCategoryAttrModel::getRowByNameByCategoryId($attr,$this->tbCategoryId);
 //            $categoryAttrDb = ProductCategoryAttrModel::db()->getRow(" name = '$attr' and pc_id = $tbCategoryId");
@@ -259,7 +268,7 @@ class inserTBDb{
             foreach ($categoryAttrPara as $k=>$v) {
                 $categoryArrParaIds[] = $categoryAttrDb['id'] ."_" .$v['id'];
             }
-            return $categoryArrParaIds;
+//            return $categoryArrParaIds;
         }
         return $categoryArrParaIds;
     }
@@ -273,30 +282,33 @@ class inserTBDb{
         out("start process categoryAttrCategory");
         foreach ($products as $k=>$v) {
             out("offerId:".$v['offerid']);
+            //该产品 没有任何属性参数，单纯的只卖个数
             if(!arrKeyIssetAndExist($v,'category_attr')){
                 out("this product no have category_attr");
                 continue;
             }
-
+            //该产品的所有属性-值
             $categoryArr = explode(",",$v['category_attr']);
             foreach ($categoryArr as $k2=>$v2) {
+                //这里做个过滤，可能抓取分析的时候，有些空格没处理干净
                 $attr = trim($v2);
                 if(!$attr){
                     continue;
                 }
                 out("new attr name: $attr");
+                //判断该1688分类下的，属性值，是否已经存在
+                //如果存在就不用插入了
                 $categoryAttrDb = ProductCategoryAttrModel::getRowByNameByCategoryId($attr,$this->tbCategoryId);
-//                $categoryAttrDb = ProductCategoryAttrModel::db()->getRow(" name = '$attr' and pc_id = {$this->tbCategoryId}");
                 if($categoryAttrDb){
                     out(" db has this attr");
                     continue;
                 }
-
+                //插入新的属性到DB中
                 $data = array("name"=>$attr,'is_no'=>ProductCategoryAttrModel::NO_ATTR_FALSE,'pc_id'=>$this->tbCategoryId);
                 $newCategoryAttrId = ProductCategoryAttrModel::db()->add($data);
                 out(" insert db id : $newCategoryAttrId");
             }
-
+            //该产品的所有属性+参数-值
             if(!arrKeyIssetAndExist($v,'category_attr_para')){
                 out(" no have category_attr_para ");
                 continue;
@@ -304,12 +316,11 @@ class inserTBDb{
 
             $categoryAttrPara = json_decode($v['category_attr_para'],true);
             out("start process category_attr_para");
-            foreach ($categoryAttrPara as $k3=>$v3) {
-                $attrName = trim($k3);
+            foreach ($categoryAttrPara as $attrName=>$attrDataList) {
+                $attrName = trim($attrName);
                 $categoryAttrDb = ProductCategoryAttrModel::getRowByNameByCategoryId($attrName,$this->tbCategoryId);
-//                $attrDb = ProductCategoryAttrModel::db()->getRow(" name = '$attrName' and pc_id = {$this->tbCategoryId}");
                 out(" attr:".$attrName . " pca_id:".$categoryAttrDb['id']);
-                foreach ($v3 as $k4=>$v4) {
+                foreach ($attrDataList as $k4=>$v4) {
                     $data = array('name'=>$v4['name'],'pca_id'=>$categoryAttrDb['id']);
                     if(arrKeyIssetAndExist($v4,'img_url')){
                         $data['img'] = $v4['img_url'];

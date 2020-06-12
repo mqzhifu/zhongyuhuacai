@@ -105,7 +105,7 @@ class UserService{
                 $data['avatar'] = $userInfo['avatar'];
             }
 
-            if(arrKeyIssetAndExist($userInfo,'nickname')){
+            if(arrKeyIssetAndExist($userInfo,'nickname') || arrKeyIssetAndExist($userInfo,'nickName')){
                 $data['nickname'] = $userInfo['nickname'];
             }
 
