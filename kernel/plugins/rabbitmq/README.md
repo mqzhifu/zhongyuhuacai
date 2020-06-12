@@ -1,9 +1,9 @@
-#准备工作  
-#php 依赖库  
+准备工作=  
+php 依赖库- 
 1.composer 模式，"php-amqplib/php-amqplib"  
 2.扩展模式，rabbitmq-c、amqp  
 
-#服务器需要安装erlang、rabbitmq-server   
+服务器需要安装erlang、rabbitmq-server-
 rabbitmq-server 依赖插件：rabbitmq_management、rabbitmq_delayed_message_exchange  
 
 端口号：  
