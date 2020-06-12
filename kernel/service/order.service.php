@@ -288,7 +288,7 @@ class OrderService{
             $product = ProductModel::db()->getById($v['pid']);
             $rs[] = $service->formatRow($product);
         }
-        $rs = $service->formatShow($list);
+        $rs = $service->formatShow($rs);
         return out_pc(200,$rs);
 
     }
