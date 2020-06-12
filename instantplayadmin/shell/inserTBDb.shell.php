@@ -33,10 +33,12 @@ class inserTBDb{
     }
 
     function insertProduct($products){
-        ProductModel::db()->delete(" id > 1 limit 1000 ");
-        GoodsModel::db()->delete(" id > 1 limit 4000 ");
-        ProductLinkCategoryAttrModel::db()->delete(" pid > 1 limit 1000 ");
+        ProductModel::db()->delete(" id > 0 limit 1000 ");
+        GoodsModel::db()->delete(" id > 0 limit 4000 ");
+//        ProductLinkCategoryAttrModel::db()->delete(" pid > 1 limit 1000 ");
 
+
+        //初始化，要插入product DB的每一个记录的field
         $newProductData = ProductModel::getField();
         $newProductData['category_id'] = $this->tbCategoryId;
         $newProductData['a_time'] = time();
@@ -44,9 +46,7 @@ class inserTBDb{
         $newProductData['spider_source_type'] = ProductModel::SPIDER_TYPE_1688;//获取 来源
         $newProductData['status'] = ProductModel::STATUS_OFF;
         $newProductData['category_attr_null'] = ProductModel::CATE_ATTR_NULL_FALSE;
-
-
-
+        //初始化，要插入goods DB的每一个记录的field
         $newGoodsData = GoodsModel::getField();
         $newGoodsData['a_time'] = time();
         $newGoodsData['u_time'] = time();
@@ -267,6 +267,9 @@ class inserTBDb{
     function insertProductCategoryAttrPara($products){
         ProductCategoryAttrModel::db()->delete(" id > 37 limit 1000 ");
         ProductCategoryAttrParaModel::db()->delete(" id > 100 limit 4000 ");
+        ProductLinkCategoryAttrModel::db()->delete(" id > 0 limit 4000 ");
+        GoodsLinkCategoryAttrModel::db()->delete(" id > 0 limit 4000 ");
+
         out("start process categoryAttrCategory");
         foreach ($products as $k=>$v) {
             out("offerId:".$v['offerid']);

@@ -7,39 +7,26 @@ class parserTBDetail{
         $this->commands = $c;
     }
 
-//<script src="/jquery.js"></script>
-//<script>
-//
-//$("document").ready(function(){
-//    setTimeout("init()", 5000 )
-//    });
-//
-//    function init(){
-//        var h = $(document).height()-$(window).height();
-//        $(document).scrollTop(h);
-//
-//        setTimeout("getImg()", 5000 );
-//
-//    }
-//
-//    function getImg(){
-//        var img=$("body img");
-//        for(var i=0;i<img.length;i++){
-//            var n=img.get(i).src;
-//            console.log(n);
-//        }
-//    }
-//</script>
+    public function run(){
+        $s_time = time();
+        //读取文件夹下的，所有文件
+        $fileList = get_dir(STORAGE_DIR .DS ."tb_product");
+        foreach ($fileList as $k=>$files) {
+            out("k:",$k);
+            $n = 0;//计数，先处理，一个文件夹下的10个文件用于测试
+            foreach ($files as $k=>$file) {
+                if($file == "demo.txt"){//忽略特殊文件
+                    continue;
+                }
+                if($n > 10){
+                    break;
+                }
+                $n++;
+                $this->processOneFile($file);
+            }
+        }
 
-
-    function test(){
-        //        echo iconv("UTF-8",'GBK',"王");exit;
-        //        $encode = mb_detect_encoding($productTxt, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
-//        var_dump($encode);
-
-        //        $imgs  = preg_match_all('/<img src="(.*)"/U',$productTxt,$match);
-//        $url  = preg_match_all('/<link rel="canonical" href="(.*)"(.*)>/U',$productTxt,$match);
-//        var_dump($match);
+        out("finale process time:".time() - $s_time);
     }
 
     function getUrl($offerId){
@@ -50,16 +37,18 @@ class parserTBDetail{
         $mysqlData = array('a_time'=>time());
 
         out("file_name:$fileName");
+        //读取文件内容
         $productTxt = file_get_contents(STORAGE_DIR."/tb_product/$fileName");
 //        $encode = mb_detect_encoding($productTxt, array("ASCII",'UTF-8',"GB2312","GBK",'BIG5'));
-//        var_dump($encode);exit;
 //        $productTxt = mb_convert_encoding($productTxt,"CP936","UTF-8");
+
+        //匹配 - 标题
         preg_match_all('/<title>(.*)<\/title>/s',$productTxt,$match);
         $title = str_replace("阿里巴巴","", $match[1]['0']);
         out("title:$title");
         $mysqlData['title'] = $title;
 
-
+        //匹配 - 图片
         $ge = '/http(.*?)60x60\.jpg/U';
         preg_match_all( $ge,$productTxt,$match);
         $boxImgArr = $match[0];
@@ -245,6 +234,7 @@ class parserTBDetail{
 
 //        <meta name="description" content="阿里巴巴1号猫果蔬清洗剂1.08KG 家用果蔬清洗剂清洁液一件代发oem贴牌，洗洁精，这里云集了众多的供应商，采购商，制造商。这是1号猫果蔬清洗剂1.08KG 家用果蔬清洗剂清洁液一件代发oem贴牌的详细页面。品牌:1号猫，是否进口:否，品牌类型:国货品牌，产地:河南郑州，适用范围:果蔬专用，净含量:1080ml，货号:05，是否促销装:否，是否跨境货源:否，货源类别:现货，商品条形码:6970477648866。我们还为您精选了洗洁精公司黄页、行业资讯、价格行情、展会信息等，欲了解更多详细信息,请点击访问!"/>
 
+        //匹配 - 产品描述信息
         $ge = '/description(.*?)content\=(.*?)>/';
         preg_match_all( $ge,$productTxt,$match);
         $mysqlData['desc'] =str_replace("阿里巴巴","", $match[2]['0']);
@@ -252,30 +242,6 @@ class parserTBDetail{
 
         $newId = ProductTbModel::db()->add($mysqlData);
         out("insert productTB ok , id:$newId");
-    }
-
-    public function run(){
-        $fileList = get_dir(STORAGE_DIR .DS ."tb_product");
-        foreach ($fileList as $k=>$files) {
-
-            out("k:",$k);
-            $n = 0;
-            foreach ($files as $k=>$file) {
-                if($file == "demo.txt"){
-                    continue;
-                }
-                if($n > 10){
-                    break;
-                }
-                $n++;
-                $this->processOneFile($file);
-            }
-
-        }
-
-
-        exit;
-
     }
 
     function getJsonObjBlock($pre,$str){

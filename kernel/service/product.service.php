@@ -106,32 +106,35 @@ class ProductService{
                 return out_pc(8980);
             }
             //格式化 属性参数   以ID 形式
+            //属性1 =》  N个参数  ,属性2 =》  N个参数
             $categoryAttrParaIds = null;
             foreach ($ProductLinkCategoryAttrDb as $k=>$v){
                 $categoryAttrParaIds[ $v['pca_id']][] = $v['pcap_id'];
             }
             //将ID形式 转换成 多维数组，主要是为了获取汉字描述
             foreach ($categoryAttrParaIds as $k=>$v){
+                //先获取分类属性的  一条记录值
                 $row = ProductCategoryAttrModel::db()->getById($k);
                 $para = null;
+                //再获取该属性下的所有参数的值
                 foreach ($v as $k2=>$v2){
                     $para[] = ProductCategoryAttrParaModel::db()->getById($v2);
                 }
                 $row['category_attr_para'] = $para;
                 $productCategoryAttrParaData[] = $row;
             }
-            //遍历该产品下的所有商品列表
+//            //遍历该产品下的所有商品列表
             foreach ($goodsDb as $k=>$v){
                 $stock += $v['stock'];
-                $row = $v;
-                //获取每个商品对应的  分类属性参数
-                $row['category_attr_para'] = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}");
-                $goodsList[]= $row;
+//                $row = $v;
+//                //获取每个商品对应的  分类属性参数
+//                $row['category_attr_para'] = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}");
+//                $goodsList[]= $row;
             }
         }
 
         $product['pcap'] = $productCategoryAttrParaData;
-        $product['goods_list'] = $goodsList;
+//        $product['goods_list'] = $goodsList;
         $product['stock'] = $stock;
 
         if(arrKeyIssetAndExist($product,'desc_attr')){
@@ -346,6 +349,12 @@ class ProductService{
                 $exp = explode("_",$v);
                 $categoryAttr = $exp[0];
                 $categoryAttrPara = $exp[1];
+
+                $exist = ProductLinkCategoryAttrModel::db()->getRow(" pca_id = $categoryAttr and pcap_id = $categoryAttrPara");
+                if($exist){
+                    continue;
+                }
+                
                 $addData = array(
                     'pid'=>$addId,
                     'pc_id'=>$data['category_id'],
