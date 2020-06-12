@@ -93,7 +93,7 @@ class OrderCtrl extends BaseCtrl  {
     function getUserCart(){
 //        $oid = $agentUid =get_request_one( $this->request,'oid',0);
         $list = $this->orderService->getUserCart($this->uid);
-        out_ajax(200,$list);
+        out_ajax($list['code'],$list['msg']);
     }
 
     function confirmOrder(){
