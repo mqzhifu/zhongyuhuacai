@@ -141,11 +141,12 @@ reply_to | 消息被发送者处理完后,返回回复时执行的回调(在rpc�
 正常发送一条消息，类库会加上：
 
 参数名  | 说明  |
-content_type|1application/serialize 2application/json
-type|1confirm 2tx 3normal
-message_id|uniqid(time());
-timestamp|time()
-delivery_mode|2
+ ---- | ----- |
+content_type|1application/serialize 2application/json|
+type|1confirm 2tx 3normal|
+message_id|uniqid(time())|
+timestamp|time()|
+delivery_mode|2|
 
 
 #消费者<br/>
