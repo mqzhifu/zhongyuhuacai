@@ -5,22 +5,27 @@ php 依赖库
 1.composer 模式，"php-amqplib/php-amqplib"  
 2.扩展模式，rabbitmq-c、amqp  
 
-服务器需要安装erlang、rabbitmq-server-
-rabbitmq-server 依赖插件：rabbitmq_management、rabbitmq_delayed_message_exchange  
+服务器 依赖
+-
+1.需要安装erlang  
+2.rabbitmq-server  
+ rabbitmq-server 依赖插件：rabbitmq_management、rabbitmq_delayed_message_exchange  
 
 端口号：  
+-
 15672:rabbitmq web 可视化管理工具  
 5672:PHP连接rabbitmq server  
 
-#名词说明  
+名词说明  
+=
 生产者：生产消息，并发送给server  
 消费者：接收<生产者>发送的消息，消费掉该消息  
 
 
-#DEMO  
+DEMO
+==
 
-
-#先定义ProductSms一个生产类，只需要继承一个基类(MessageQueue)即可
+先定义ProductSms一个生产类，只需要继承一个基类(MessageQueue)即可
 （ProductSms 类名就是 最后在rabbitmq创建的队列名。
 ```java
 <?php
@@ -73,12 +78,14 @@ $ProductSmsBean->send($ProductSmsBean);
     $msgId = $SmsBean->send();
 ```
 
-#异常机制  
+异常机制
+=
 因为，rabbitmq 是纯异步网络模式，同步是捕捉不到异步的。  
 比如：发送一条消息，同步状态下，返回的永久是真。所以，异常的触发机制，依然是异步的。  
 那就，需要类库来做 异常回调函数注册。一但有异常，类库会抛出。  
 
-#特殊异常情况  
+特殊异常情况  
+-
 当用户发送一条消息到server，rabbitmq 路由不到队列中（实际就是该队列不存在），类库给直接捕捉了，不报异常  
 如果想报出来，需要 设置标识  
 
@@ -86,7 +93,8 @@ $ProductSmsBean->send($ProductSmsBean);
 $SmsBean->setIgnoreSendNoQueueReceive(false);
 ```
 
-#延迟消息  
+延迟消息
+-
 是用的rabbitmq 官方的插件  
 机制是，当一条延迟消息过来后，插件会捕捉，并存于插件DB(mnesia)中  
 然后由定时器维护一但到了时间，再把访消息发送到rabbitmq
@@ -96,15 +104,17 @@ $SmsBean->setIgnoreSendNoQueueReceive(false);
 >因为是插件先捕获消息，并不做校验（该消息是否有队列接收），一但，队列不存在，该消息会丢失。  
 >基于上面，每发一条延迟消息，插件会报出一个错误，类库会帮助忽略掉。  
 
-#消息体说明
+消息体说明
+==
 正常发送一条消息到rabbitmq ，包括3个部分
-body:消息正文
-attr:描述消息的属性值
-header:包含在attr的header-Key中， 是对attr的进一步描述。
+>body:消息正文
+>attr:描述消息的属性值
+>header:包含在attr的header-Key中， 是对attr的进一步描述。
 
 
 
-#消息参数
+消息参数
+-
 
 参数名  | 说明  |
  ---- | ----- |
