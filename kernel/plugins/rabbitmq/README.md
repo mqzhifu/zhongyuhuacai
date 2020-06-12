@@ -1,12 +1,12 @@
-#准备工作
-#php 依赖库
-1.composer 模式，"php-amqplib/php-amqplib"
-2.扩展模式，rabbitmq-c amqp
+#准备工作  
+#php 依赖库  
+1.composer 模式，"php-amqplib/php-amqplib"  
+2.扩展模式，rabbitmq-c amqp  
 
-#服务器需要安装erlang rabbitmq-server 
+#服务器需要安装erlang rabbitmq-server   
 rabbitmq-server 依赖插件：rabbitmq_management rabbitmq_delayed_message_exchange  
 
-server端口：
+端口号：  
 15672:rabbitmq web 可视化管理工具  
 5672:PHP连接rabbitmq server  
 
@@ -15,27 +15,72 @@ server端口：
 消费者：接收<生产者>发送的消息，消费掉该消息
 
 
+#DEMO
 
-#先定义ProductSms一个生产类，只需要继承一个基类即可。ProductSms 该类名即是 绑定队列的名，也就是接收消息的队列名
+
+#先定义ProductSms一个生产类，只需要继承一个基类(MessageQueue)即可
+（ProductSms 类名就是 最后在rabbitmq创建的队列名。
 ```java
-$productSms = new ProductSms();
+<?php
+namespace php_base\MsgQueue\Test\Product;
+use php_base\MsgQueue\MsgQueue\MessageQueue;
+
+class SmsBean extends MessageQueue{
+    public $_id = 1;
+    public $_type = "";
+    public $_msg = "";
+
+    function __construct($conf = null,$provinder = 'rabbitmq',$debug = 0){
+        parent::__construct($provinder,$conf,$debug);
+    }
+
+}
+
 ```
-##再定义一个通信协议类
+类中的成员变量，就是消息体中的键值   
+接着，实例化类，定义消息体内，每个键对应的值
+
 ```java
 $ProductSmsBean = new ProductSmsBean();
-```
-
-#初始化要发送的数据
-```javascript
 $ProductSmsBean->_id = 1;
 $ProductSmsBean->_msg = "is finish.";
 $ProductSmsBean->_type = "order";
 ```
 
+这样一条消息，即初始化完成，接着，准备发送
+
 #发送一条普通的消息
 ```javascript
-$productSms->send($ProductSmsBean);
+$ProductSmsBean->send($ProductSmsBean);
 ```
+
+#发送一条延迟的消息,3秒后发送
+ $msgId = $user->sendDelay(3000);
+ ```javascript
+ $ProductSmsBean->sendDelay(3000);
+```
+
+消息发送之后，想要知道，该消息是否被rabbitmq-server成功接受，是需要定义callback函数的
+（注：因为rabbitmq-server 是全异步网络模式，同步是无法获取发送结果的，只能注册callback）
+
+```java
+
+    $callback = function($msg){
+        out ("im simple ack callback");
+    };
+    $SmsBean->regUserCallbackAck($callback);
+    $msgId = $SmsBean->send();
+```
+
+#异常机制
+因为，rabbitmq 是纯异步网络模式，比如：发送一条消息，同步状态下，返回的永久是真。所以，异常的触发机制，依然是异步的。
+那就，需要类库来做 异常回调函数注册。一但有异常，类库会抛出。
+
+#特殊异常情况
+当用户发送一条消息到server，rabbitmq 路由不到队列中（实际就是该队列不存在），类库给直接捕捉了，不报异常
+如果想报出来，
+
+
 
 #消息参数
 
