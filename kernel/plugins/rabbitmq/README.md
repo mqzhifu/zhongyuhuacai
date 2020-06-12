@@ -1,5 +1,7 @@
-准备工作=  
-php 依赖库- 
+准备工作
+=  
+php 依赖库
+- 
 1.composer 模式，"php-amqplib/php-amqplib"  
 2.扩展模式，rabbitmq-c、amqp  
 
