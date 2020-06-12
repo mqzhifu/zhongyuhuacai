@@ -58,6 +58,7 @@ class LoginCtrl extends BaseCtrl {
             out_ajax(200,$return);
         }
 
+
         if($loginRs['code'] == 1006){//DB中找不到此用户
             //注册一个新的用户，使用微信的用户基础信息
             $rawData = json_decode($request['rawData'],true);
@@ -65,7 +66,7 @@ class LoginCtrl extends BaseCtrl {
             $userInfo = array('nickname'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
             $newUserInfo = $this->userService->register($openId,"",UserModel::$_type_wechat,$userInfo);
 //            var_dump("new uid :",$newUserInfo['id']);
-            $token =  $this->userService->createToken($newUserInfo['id']);
+            $token =  $this->userService->createToken($newUserInfo['msg']);
             $return['token'] = $token;
             LogLib::inc()->debug("create token:$token");
             out_ajax(200,$return);
