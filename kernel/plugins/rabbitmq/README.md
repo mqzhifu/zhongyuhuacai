@@ -1,6 +1,20 @@
-#rabbitMq 队列<br/>
-#注意：依赖 "php-amqplib/php-amqplib":<br/>
-#具体可参考TEST目录下的client.php server.php
+#准备工作
+#php 依赖库
+1.composer 模式，"php-amqplib/php-amqplib"
+2.扩展模式，rabbitmq-c amqp
+
+#服务器需要安装erlang rabbitmq-server 
+rabbitmq-server 依赖插件：rabbitmq_management rabbitmq_delayed_message_exchange  
+
+server端口：
+15672:rabbitmq web 可视化管理工具  
+5672:PHP连接rabbitmq server  
+
+#名词说明
+生产者：生产消息，并发送给server
+消费者：接收<生产者>发送的消息，消费掉该消息
+
+
 
 #先定义ProductSms一个生产类，只需要继承一个基类即可。ProductSms 该类名即是 绑定队列的名，也就是接收消息的队列名
 ```java
