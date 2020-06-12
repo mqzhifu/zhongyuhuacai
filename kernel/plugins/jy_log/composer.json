@@ -1,0 +1,15 @@
+{
+  "name": "rouchi/jy_log",
+  "description": "jy_log file",
+  "authors": [
+    {
+      "name": "xiaoz",
+      "email": "wangdongyan@rouchi.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4":{"Jy\\Log\\" : "src/" },
+    "files": []
+  }
+}

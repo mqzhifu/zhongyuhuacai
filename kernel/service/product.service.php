@@ -351,6 +351,7 @@ class ProductService{
                 $categoryAttrPara = $exp[1];
 
                 $exist = ProductLinkCategoryAttrModel::db()->getRow(" pca_id = $categoryAttr and pcap_id = $categoryAttrPara");
+                var_dump($exist);exit;
                 if($exist){
                     continue;
                 }

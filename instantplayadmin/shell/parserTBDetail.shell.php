@@ -26,8 +26,10 @@ class parserTBDetail{
             }
         }
 
-        out("finale process time:".time() - $s_time);
+        $eTime = time() - $s_time;
+        out("finale process time:".$eTime);
     }
+
 
     function getUrl($offerId){
         return $this->host . "offer/$offerId.html";

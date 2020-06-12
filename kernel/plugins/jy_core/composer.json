@@ -1,0 +1,22 @@
+{
+    "name": "rouchi/jy_core",
+    "type": "component",
+    "description": "rouchi templete core componet",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "rouchi-service-templete-core-component",
+            "email": "rouchi-service-team@rouchi.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "rouchi/jy_common": "*"
+    },
+    "autoload": {
+        "psr-4" : {
+            "Jy\\" : "src/"
+        }
+    }
+}
+
