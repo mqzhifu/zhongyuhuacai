@@ -151,6 +151,7 @@ class DbLib{
 
         $this->_mysqlMemPoint = mysqli_query($this->_masterFD,$sql);
 
+        var_dump($this->_mysqlMemPoint);exit;
         $this->debug($sql);//SQL日志
         if ( false === $this->_mysqlMemPoint ) {
             $err  = $this->error($this->_masterFD);
