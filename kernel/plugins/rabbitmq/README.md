@@ -55,12 +55,11 @@ $ProductSmsBean->send($ProductSmsBean);
 ```
 
 #发送一条延迟的消息,3秒后发送
- $msgId = $user->sendDelay(3000);
- ```javascript
+  ```javascript
  $ProductSmsBean->sendDelay(3000);
 ```
 
-消息发送之后，想要知道，该消息是否被rabbitmq-server成功接受，是需要定义callback函数的
+消息发送之后，想要知道，该消息是否被rabbitmq-server成功接受，是需要定义callback函数的  
 （注：因为rabbitmq-server 是全异步网络模式，同步是无法获取发送结果的，只能注册callback）
 
 ```java
