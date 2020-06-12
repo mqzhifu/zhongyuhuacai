@@ -11,7 +11,7 @@ class UserService{
     // $ps:有些注册类型，可能需要填写密码
     function register($name,$ps = '',$type ,$userInfo = null){
         LogLib::inc()->debug("start reg : $name $ps $type  " );
-        LogLib::inc()->debug($userInfo );
+        LogLib::inc()->debug(['userInfo',$userInfo] );
         if(!$name){
             return out_pc(8009);
         }
@@ -114,6 +114,7 @@ class UserService{
             }
         }
 
+        LogLib::inc()->debug(['final add db new user data',$data]);
         $id = UserModel::db()->add($data);
         $data['uid'] = $id;
 
