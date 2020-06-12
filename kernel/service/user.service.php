@@ -79,16 +79,12 @@ class UserService{
                 $data['name'] = $name;
             }
         }elseif($this->getTypeMethod($type) == UserModel::$_type_cate_guest){
-            $data = array(
-                "type"=>$type,
-                "name"=>$name,
-                'nickname'=>$name,
-            );
+            $data['type'] = $type;
+            $data['name'] = $name;
+            $data['nickname'] = nickname;
         }else{
             //3方注册的过来的
-            $data = array(
-                "type"=>$type,
-            );
+            $data['type'] = $type;
 
             if($type == UserModel::$_type_wechat){
                 $data['wx_open_id'] = $name;
