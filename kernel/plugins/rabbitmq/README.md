@@ -149,58 +149,103 @@ timestamp|time()|
 delivery_mode|2|
 
 
-#消费者<br/>
-#快速开启consumer 监听某一个事件队列
+消费者
+=
+
+快速开启consumer 监听某一个事件队列  
 ```java
 
-$productSms = new ProductSms();
-$userCallback = function ($recall){
-    echo "im in user callback func \n";
+$SmsBean = new SmsBean();
+$callback = function($msg){
+    echo "im cousmer callback :processing...";
 };
-$productSms->groupSubscribe($userCallback,"dept_A");
+
+$SmsBean->groupSubscribe($callback,'consumer1');
 
 ```
->上面的关键点：dept_A ，这是个标识，如果以该标识为队列名，且存在~OK。如不存在 就会新建一个队列，接收product消息<br/>
->也就是说：创建队列/选择队列 ，绑定队列 这些基操作 已由基类帮你完成。<br/>
->业务人员可随意使用，随意创建<br/>
+非常简单，只要找到生产者定义的bean类，拿过来，直接实例化  
+定义一个callback处理消息的回调函数  
+最后groupSubscribe 开启守护模式监听  
 
-#消费者-确认模式-多个consumer 监听
+上面的关键点：consumer1 ，这是个标识。该标识作用：以该标识名为队列名，如果不存在 就会新建一个队列，接收product消息  
+
+
+队列的维护
+-
+比如：创建、删除、绑定路由等，这些基操作 已由基类帮你完成  
+业务人员其实不用关心 exchange 名，队列名，类库都已经帮你完成了  
+只需要关注   tag值  
+
+
+队列名的组成
+-
+bean类别名+tag名
+比如：ProductSmsBean 类，最后生成的队列中即是：ProductSmsBean+tag  
+tag:是由 消费者，启动守护进程时，赋值的  
+
+特殊情况
+-
+如果两个进程，使用同一个bean类，使用相同的tagName，会怎样？  
+就是两个守护进程，同时消费一个队列而以。  
+
+
+以上是最简单最简单的一个DEMO，开启一个消费者守护进程，消费一个队列中的消息  
+下面讲一些复杂的  
+
+消费者-确认模式-多个consumer 监听
+-
+
 ```javascript
-class ConsumerSms extends MessageQueue{
-    function __construct()
+class ConsumerManyBean extends  MessageQueue{
+    function __construct($conf = "")
     {
-        parent::__construct();
+        parent::__construct("rabbitmq", $conf, 3);
+
+        $PaymentBean = new PaymentBean(null,null,3);
+        $OrderBean = new OrderBean(null,null,3);
+        $UserBean = new UserBean(null,null,3);
+        $SmsBean = new SmsBean(null,null,3);
+
+        $this->regListenerBean(array($OrderBean,$PaymentBean,$UserBean,$SmsBean));
+
     }
-
-    function init(){
-        $queueName = "test.header.delay.sms";
-
-        $this->setBasicQos(1);
-//        $durable = true;$autoDel = false;
-//        $this->createQueue();
-
-        $ProductSmsBean = new ProductSmsBean();
-        $handleSmsBean = array($this,'handleSmsBean');
-        $this->setListenerBean($ProductSmsBean->getBeanName(),$handleSmsBean);
-
-        $ProductUserBean = new ProductUserBean();
-        $handleUserBean = array($this,'handleUserBean');
-        $this->setListenerBean($ProductUserBean->getBeanName(),$handleUserBean);
-
-        $this->subscribe($queueName,null);
+    //拒绝一条消息
+    function handlePaymentBean($msg){
+        echo "im handlePaymentBean , ConsumerManyBean\n";
+        throw new RejectMsgException();
     }
-
-    function handleSmsBean($data){
-        echo "im sms bean handle \n ";
-        return array("return"=>"ack");
+    //回滚，重试
+    function handleOrderBean($msg){
+        echo "im handleOrderBean , ConsumerManyBean \n";
+        throw new RetryException();
     }
-
-    function handleUserBean($data){
-        echo "im user bean handle \n ";
-        return array("return"=>"reject",'requeue'=>false);
+    //运行时异常
+    function handleUserBean($msg){
+        echo "im handleUserBean\n , ConsumerManyBean";
+        throw new \Exception();
+    }
+    //
+    function handleSmsBean($msg){
+        echo "im handleSmsBean , ConsumerManyBean \n";
+        $RetryException=new RetryException();
+        $retry = array(2,6);
+        $RetryException->setRetry($retry);
+        throw $RetryException;
     }
 }
 ```
+
+上面就是定义了4种类型的消息bean:PaymentBean OrderBean UserBean SmsBean  
+然后，把4种消息类型添加 到监听中：regListenerBean  
+最后，定义4个handle函数，处理callback  
+这种模式，其实也只是开一个队列，但监听了4种类型的消息，如果有人发消息是这4种之一  
+该队列，就会收到一条消息，然后，根据消息类型，最后分发到相应的handle中  
+
+
+消息retry机制
+-
+
+
 
 #编程模式
 >rabbitmq 是基于erlang模式，全并发模式(channel)。也就是全异步模式(基类里我规避了这种方式，但牺牲部分性能)<br/>
