@@ -97,11 +97,13 @@ class OrderCtrl extends BaseCtrl  {
     }
 
     function confirmOrder(){
-        $pid =get_request_one( $this->request,'pid',0);
-        $pcap = get_request_one( $this->request,'pcap',"");
-        $num =get_request_one( $this->request,'num',0);
+//        $pid =get_request_one( $this->request,'pid',0);
+//        $pcap = get_request_one( $this->request,'pcap',"");
+//        $num =get_request_one( $this->request,'num',0);
 
-        $rs = $this->orderService->confirmOrder($pid,$num,$pcap);
+        $gidsNums = get_request_one( $this->request,'gidsNums',"");
+
+        $rs = $this->orderService->confirmOrder($gidsNums);
         out_ajax($rs['code'],$rs['msg']);
     }
 

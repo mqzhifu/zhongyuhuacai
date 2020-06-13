@@ -141,40 +141,62 @@ class OrderService{
         }
 
 
-
-
-        $product = ProductModel::db()->getById($pid);
-        if(!$product){
-            return out_pc(1026);
-        }
-
-        if(!$num){
-            return out_pc(8021);
-
-        }
-        //获取该产品下的所有商品
-        $goodsDb = GoodsModel::db()->getAll(" pid = $pid");
-        if(!$goodsDb){
-            return out_pc(8979);
-        }
-
-
-//        $goods = $this->getGoodsIdByPcap($pid,$pcap)['msg'];
-
-        if(!$goods['stock'] || $goods['stock'] < 0){
-            return out_pc(8336);
-        }
-
-
         $productService = new ProductService();
-        $data = array(
-            'product'=>$productService->formatShow(array($product))[0],
-            'goods'=>$goods,
-            'goodsAttrParaDesc'=>$goods['goodsAttrParaDesc'] ,
-            'pcap_desc_str'=>$goods['pcap_desc_str'] ,
-        );
 
-        return out_pc(200,$data);
+        $gidsNums =explode(",",$gidsNums);
+        $productGoods = null;
+        foreach ($gidsNums as $k=>$v){
+            $arr = explode("-",$v);
+            $gid = $arr[0];
+            $num = $arr[1];
+
+            if(!$num){
+                return out_pc(8021);
+            }
+
+            $goods = GoodsModel::db()->getById($gid);
+            if(!$goods){
+                return out_pc(8979);
+            }
+
+            if(!$goods['stock'] || $goods['stock'] < 0){
+                return out_pc(8336);
+            }
+
+            $product = ProductModel::db()->getById($goods['pid']);
+            if(!$product){
+                return out_pc(1026);
+            }
+
+            $product = $productService->formatShow(array($product))[0];
+            $product['price'] = $goods['sale_price'];
+            $product['num'] = $num;
+
+            $goodsLinkPcap = GoodsLinkCategoryAttrModel::db()->getAll(" gid = $gid ");
+            if(!$goodsLinkPcap){
+                exit("goodsLinkPcap is null");
+            }
+
+            $pcap_desc_str = "";
+            foreach ($goodsLinkPcap as $k=>$v){
+                $attr = ProductCategoryAttrModel::db()->getById($v['pca_id'])['name'];
+                $para = ProductCategoryAttrParaModel::db()->getById($v['pcap_id'])['name'];
+                $pcap_desc_str .= $attr . ":".$para . " ";
+                $goodsAttrParaDesc = array('attr'=>$attr,"part"=>$para);
+            }
+            $product['pcap_desc_str'] = $pcap_desc_str;
+            $product['goodsAttrParaDesc'] = $goodsAttrParaDesc;
+            $productGoods[] = $product;
+        }
+
+//        $data = array(
+//            'product'=>$productService->formatShow(array($product))[0],
+//            'goods'=>$goods,
+//            'goodsAttrParaDesc'=>$goods['goodsAttrParaDesc'] ,
+//            'pcap_desc_str'=>$goods['pcap_desc_str'] ,
+//        );
+
+        return out_pc(200,$productGoods);
 
     }
 
