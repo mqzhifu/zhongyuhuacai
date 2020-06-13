@@ -159,9 +159,9 @@ class OrderService{
                 return out_pc(8979);
             }
 
-            if(!$goods['stock'] || $goods['stock'] < 0){
-                return out_pc(8336);
-            }
+//            if(!$goods['stock'] || $goods['stock'] < 0){
+//                return out_pc(8336);
+//            }
 
             $product = ProductModel::db()->getById($goods['pid']);
             if(!$product){
@@ -338,7 +338,9 @@ class OrderService{
         $rs = null;
         foreach ($list as $k=>$v){
             $product = ProductModel::db()->getById($v['pid']);
-            $rs[] = $service->formatRow($product);
+            $row = $service->formatRow($product);
+            $row['gid'] = $v['gid'];
+            $rs[] = $row;
         }
         $rs = $service->formatShow($rs);
         return out_pc(200,$rs);
