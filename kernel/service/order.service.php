@@ -135,15 +135,17 @@ class OrderService{
         return out_pc(200,$newId);
     }
 
-    function confirmOrder($pid,$num,$pcap){
-        if(!$pid){
-            return out_pc(8072);
-
+    function confirmOrder($gidsNums = ""){
+        if(!$gidsNums){
+            return out_pc(8982);
         }
+
+
+
+
         $product = ProductModel::db()->getById($pid);
         if(!$product){
             return out_pc(1026);
-
         }
 
         if(!$num){
@@ -156,10 +158,49 @@ class OrderService{
             return out_pc(8979);
         }
 
+
+//        $goods = $this->getGoodsIdByPcap($pid,$pcap)['msg'];
+
+        if(!$goods['stock'] || $goods['stock'] < 0){
+            return out_pc(8336);
+        }
+
+
+        $productService = new ProductService();
+        $data = array(
+            'product'=>$productService->formatShow(array($product))[0],
+            'goods'=>$goods,
+            'goodsAttrParaDesc'=>$goods['goodsAttrParaDesc'] ,
+            'pcap_desc_str'=>$goods['pcap_desc_str'] ,
+        );
+
+        return out_pc(200,$data);
+
+    }
+
+    function getGoodsIdByPcap($pid,$pcap,$num = 0){
+        if(!$pid){
+            return out_pc(8072);
+
+        }
+        $product = ProductModel::db()->getById($pid);
+        if(!$product){
+            return out_pc(1026);
+        }
+
+        //获取该产品下的所有商品
+        $goodsDb = GoodsModel::db()->getAll(" pid = $pid");
+        if(!$goodsDb){
+            return out_pc(8979);
+        }
+
+
         $goods = null;
         $goodsAttrParaDesc = "";
         $pcap_desc_str = "";
+        //产品是否有属性参数
         if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
+            //每个商品下的，属性参数pcap
             $category_attr_para = null;
             foreach ($goodsDb as $k=>$v){
                 $row = $v;
@@ -168,7 +209,6 @@ class OrderService{
                 if($row){
                     $category_attr_para[] = $row;
                 }
-
             }
 
             if(!$category_attr_para){
@@ -178,7 +218,7 @@ class OrderService{
             if(!$pcap){
                 return out_pc(8342);
             }
-
+            //检查C端传过来的商品PCAP参数是否正确
             $userPcap = explode(",",$pcap);
             foreach ($userPcap as $k=>$v){
                 if(!$v){
@@ -201,11 +241,6 @@ class OrderService{
                     return out_pc(8346);
                 }
             }
-
-
-
-
-
 
             $goodsAttrPara = null;
             //商品
@@ -259,22 +294,12 @@ class OrderService{
             $goods = $goodsDb[0];
         }
 
-        if(!$goods['stock'] || $goods['stock'] < 0){
-            return out_pc(8336);
-        }
+        $goods['pcap_desc_str'] = $pcap_desc_str;
+        $goods['goodsAttrParaDesc'] = $goodsAttrParaDesc;
 
-
-        $productService = new ProductService();
-        $data = array(
-            'product'=>$productService->formatShow(array($product))[0],
-            'goods'=>$goods,
-            'goodsAttrParaDesc'=>$goodsAttrParaDesc,
-            'pcap_desc_str'=>$pcap_desc_str,
-        );
-
-        return out_pc(200,$data);
-
+        return out_pc(200,$goods);
     }
+
 
     function getUserCartNum($uid){
         $list = CartModel::db()->getCount(" uid = $uid");

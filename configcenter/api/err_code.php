@@ -186,6 +186,7 @@ return array(
     8979=>"product not include goods",
     8980=>"product not ProductLinkCategoryAttr",
     8981=>"oid is null",
+    8982=>"gidsNums is null",
 ////    5003=>'token验证错误',
 ////    5004=>'key验证错误',
 //    8101=>'邮箱格式错误',

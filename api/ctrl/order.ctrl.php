@@ -112,4 +112,16 @@ class OrderCtrl extends BaseCtrl  {
     }
 
 
+    function getGoodsIdByPcap(){
+        $pid =get_request_one( $this->request,'pid',0);
+        $pcap = get_request_one( $this->request,'pcap',"");
+        $num =get_request_one( $this->request,'num',0);
+
+        $rs = $this->orderService->getGoodsIdByPcap($pid,$pcap,$num);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
+
+
+
 }
