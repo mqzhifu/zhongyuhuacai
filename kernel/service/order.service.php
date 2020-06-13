@@ -3,38 +3,93 @@
 class OrderService{
     public $timeout = 30 * 60;//订单超时时间
     //下单入口
-    function doing($uid,$pid,$gid,$num,$agentUid = 0,$couponId = 0,$memo = ''){
+    function doing($uid,$gidsNums,$agentUid = 0,$couponId = 0,$memo = ''){
+        LogLib::inc()->debug([$uid,$gidsNums,$agentUid ,$couponId ,$memo ]);
+
         if(!$uid){
             return out_pc(8002);
         }
 
-        if(!$gid){
-            return out_pc(8073);
+        if(!$gidsNums){
+            return out_pc(8982);
         }
 
-        $goods = GoodsModel::db()->getById($gid);
-        if(!$goods){
-            return out_pc(1027);
+        $pidsArr = null;
+        $goodsTotalPrice = 0;
+        $haulage = 0;
+        $gidsArr = null;
+        $numsArr = null;
+
+        $gidsNumsArr = explode(",",$gidsNums);
+        foreach ($gidsNumsArr as $k=>$v){
+            $arr = explode("-",$v);
+            $gid = $arr[0];
+            $num = $arr[1];
+
+            if(!$num){
+                return out_pc(8021);
+            }
+
+            $goods = GoodsModel::db()->getById($gid);
+            if(!$goods){
+                return out_pc(1027);
+            }
+
+//            if(!$goods['stock'] || $goods['stock'] < 0){
+//                return out_pc(8336);
+//            }
+
+            $product = ProductModel::db()->getById($goods['pid']);
+            if(!$product){
+                return out_pc(1026);
+            }
+
+            $gidsArr[] = $gid;
+            $numsArr = $num;
+            $pidsArr[] = $goods['pid'];
+
+            $goodsTotalPrice += $goods['sale_price'];
+            $haulage += $goods['$haulage'];
+
+//            $goodsLinkPcap = GoodsLinkCategoryAttrModel::db()->getAll(" gid = $gid ");
+//            if(!$goodsLinkPcap){
+//                exit("goodsLinkPcap is null");
+//            }
+//
+//            $pcap_desc_str = "";
+//            foreach ($goodsLinkPcap as $k=>$v){
+//                $attr = ProductCategoryAttrModel::db()->getById($v['pca_id'])['name'];
+//                $para = ProductCategoryAttrParaModel::db()->getById($v['pcap_id'])['name'];
+//                $pcap_desc_str .= $attr . ":".$para . " ";
+//                $goodsAttrParaDesc = array('attr'=>$attr,"part"=>$para);
+//            }
+//            $product['pcap_desc_str'] = $pcap_desc_str;
+//            $product['goodsAttrParaDesc'] = $goodsAttrParaDesc;
+//            $product['haulage'] = $goods['haulage'];
+//            $productGoods[] = $product;
         }
 
-        $product = ProductModel::db()->getById($pid);
-        if(!$product){
-            return out_pc(1026);
-        }
+
+//        $goods = GoodsModel::db()->getById($gid);
+//        if(!$goods){
+//            return out_pc(1027);
+//        }
+
+//        $product = ProductModel::db()->getById($pid);
+//        if(!$product){
+//            return out_pc(1026);
+//        }
 
 
 //        if(!$categoryAttrPara){
 //            return out_pc(8977);
 //        }
 
+//        if($goods['stock'] - $num <= 0 ){
+//            return out_pc(8336);
+//        }
 
-        if($goods['stock'] - $num <= 0 ){
-            return out_pc(8336);
-        }
-
-        LogLib::inc()->debug([$uid,$pid,$gid,$num,$agentUid ,$couponId ,$memo ]);
-
-
+        //收货地址
         $agentAddress = "";
         if($agentUid){
             $agent = AgentModel::db()->getById($agentUid);
@@ -43,10 +98,7 @@ class OrderService{
             }
             $agentAddress = AgentModel::getAddrStrById($agentUid);
         }
-
-        $totalPrice = $goods['sale_price'] + $goods['haulage'];
-
-
+        //优惠卷
         $couponPrice = 0;
         if($couponId){
             $couponInfo = CouponModel::db()->getById($couponId);
@@ -54,13 +106,14 @@ class OrderService{
                 $couponPrice = $couponInfo['price'];
             }
         }
-
-        $totalPrice = $totalPrice  -  $couponPrice;
+        //最终价格 = 商品总价 + 运费总价 - 优惠卷价格
+        $totalPrice = $goodsTotalPrice + $haulage  -  $couponPrice;
 
         $order = array(
             'no'=>get_order_rand_no(),
-            'pid'=>$goods['pid'],
-            'gid'=>$gid,
+            'pids'=>implode(",",$pidsArr),
+            'gids'=>implode(",",$gidsArr),
+            'nums'=>implode(",",$numsArr),
             'uid'=>$uid,
             'total_price'=>$totalPrice,
             'goods_price'=> $goods['sale_price'] ,
@@ -79,15 +132,36 @@ class OrderService{
             'memo'=>$memo,
             'title'=>$product['title'],
             'expire_time'=>time() + $this->timeout,
+            'gids_nums'=>$gidsNums,
         );
 
         $newId = OrderModel::db()->add($order);
 
-        $data = array("order_num"=>array(1),'consume_total'=>array($goods['sale_price']));
-        UserModel::db()->upById($uid,$data);
 
-        $data = array("user_buy_total"=>array(1));
-        ProductModel::db()->upById($goods['pid'],$data);
+        foreach ($gidsNumsArr as $k=>$v){
+            $arr = explode("-",$v);
+            $gid = $arr[0];
+            $num = $arr[1];
+
+            $goods = GoodsModel::db()->getById($gid);
+            $data = array(
+                'pid'=>$goods['pid'],
+                'gid'=>$gid,
+                'num'=>$num,
+                'sale_price'=>$goods['sale_price'],
+                'haulage'=>$goods['haulage'],
+                'oid'=>$newId,
+            );
+            OrderGoodsModel::db()->add($data);
+        }
+
+        foreach ($pidsArr as $k=>$v){
+            $data = array("user_buy_total"=>array(1));
+            ProductModel::db()->upById($v,$data);
+        }
+
+        $data = array("order_num"=>array(1),'consume_total'=>array($totalPrice));
+        UserModel::db()->upById($uid,$data);
 
         return out_pc(200,$newId);
 

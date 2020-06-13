@@ -8,13 +8,14 @@ class OrderCtrl extends BaseCtrl  {
     function doing(){
         $agentUid =get_request_one( $this->request,'agent_uid',0);
         $couponId = get_request_one( $this->request,'coupon_id',0);
-        $num = get_request_one( $this->request,'num',0);
-        $gid = get_request_one( $this->request,'gid',0);
-        $pid = get_request_one( $this->request,'pid',0);
+//        $num = get_request_one( $this->request,'num',0);
+//        $gid = get_request_one( $this->request,'gid',0);
+        $gidsNum = get_request_one( $this->request,'gidsNum',0);
+//        $pid = get_request_one( $this->request,'pid',0);
         $memo = get_request_one( $this->request,'memo','');
 
 
-        $rs = $this->orderService->doing($this->uid,$pid,$gid,$num,$agentUid,$couponId,$memo);
+        $rs = $this->orderService->doing($this->uid,$gidsNum,$agentUid,$couponId,$memo);
         return out_ajax($rs['code'],$rs['msg']);
     }
     //某一个产品，近期购买记录
