@@ -339,10 +339,11 @@ class OrderService{
         foreach ($list as $k=>$v){
             $product = ProductModel::db()->getById($v['pid']);
             $row = $service->formatRow($product);
+            $row = $service->formatShow(array($row))[0];
             $row['gid'] = $v['gid'];
             $rs[] = $row;
         }
-        $rs = $service->formatShow($rs);
+
         return out_pc(200,$rs);
 
     }
