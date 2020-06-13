@@ -10,7 +10,7 @@ class OrderCtrl extends BaseCtrl  {
         $couponId = get_request_one( $this->request,'coupon_id',0);
 //        $num = get_request_one( $this->request,'num',0);
 //        $gid = get_request_one( $this->request,'gid',0);
-        $gidsNum = get_request_one( $this->request,'gidsNum',0);
+        $gidsNum = get_request_one( $this->request,'gidsNums',0);
 //        $pid = get_request_one( $this->request,'pid',0);
         $memo = get_request_one( $this->request,'memo','');
 
