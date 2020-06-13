@@ -341,6 +341,8 @@ class OrderService{
             $row = $service->formatRow($product);
             $row = $service->formatShow(array($row))[0];
             $row['gid'] = $v['gid'];
+            $goods = GoodsModel::db()->getById($row['gid']);
+            $row['goods_price'] = $goods['sale_price'];
             $rs[] = $row;
         }
 
