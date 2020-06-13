@@ -311,6 +311,9 @@ class ProductService{
         $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
         $where .= " $order limit {$pageInfo['start']} , {$pageInfo['end']}  ";
         $list = ProductModel::db()->getAll($where);
+
+
+
         $list = $this->format($list);
 
         return out_pc(200,$list);
@@ -339,6 +342,7 @@ class ProductService{
             }
             $realUrl = substr($realUrl,0,strlen($realUrl)-1);
             $row['pic'] = $realUrl;
+
         }
 
         return $row;

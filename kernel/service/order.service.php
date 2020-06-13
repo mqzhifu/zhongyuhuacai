@@ -115,11 +115,16 @@ class OrderService{
         if($exist){
             return out_pc(8339);
         }
+
+        $goods = GoodsModel::db()->getRow(" pid = $pid order by sale_price asc ");
+        if(!$goods){
+            return out_pc(8979);
+        }
         $data = array(
             'uid'=>$uid,
             'pid'=>$pid,
             'a_time'=>time(),
-            'gid'=>0,
+            'gid'=>$goods['id'],
         );
         $newId = CartModel::db()->add($data);
         return out_pc(200,$newId);
