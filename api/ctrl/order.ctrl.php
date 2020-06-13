@@ -86,11 +86,6 @@ class OrderCtrl extends BaseCtrl  {
 
     }
 
-    function delUserCart(){
-        $id = get_request_one( $this->request,'id',0);
-        $this->orderService->delUserCart($id,$this->uid);
-    }
-
     function getUserCart(){
 //        $oid = $agentUid =get_request_one( $this->request,'oid',0);
         $list = $this->orderService->getUserCart($this->uid);
@@ -105,6 +100,12 @@ class OrderCtrl extends BaseCtrl  {
         $gidsNums = get_request_one( $this->request,'gidsNums',"");
 
         $rs = $this->orderService->confirmOrder($gidsNums);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
+    function delUserCart(){
+        $ids = get_request_one( $this->request,'ids',"");
+        $rs = $this->orderService->delUserCart($ids);
         out_ajax($rs['code'],$rs['msg']);
     }
 

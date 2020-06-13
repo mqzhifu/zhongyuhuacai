@@ -153,6 +153,9 @@ class OrderService{
                 'oid'=>$newId,
             );
             OrderGoodsModel::db()->add($data);
+
+//            $data = array("stock"=>array(-1));
+//            GoodsModel::db()->upById($gid,$data);
         }
 
         foreach ($pidsArr as $k=>$v){
@@ -204,8 +207,8 @@ class OrderService{
         return out_pc(200,$newId);
     }
 
-    function delUserCart($id,$uid){
-        $newId = CartModel::db()->delById($id);
+    function delUserCart($ids,$uid){
+        $newId = CartModel::db()->del(" id in ($ids) and uid = $uid");
         return out_pc(200,$newId);
     }
 
