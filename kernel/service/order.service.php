@@ -45,11 +45,11 @@ class OrderService{
             }
 
             $gidsArr[] = $gid;
-            $numsArr = $num;
+            $numsArr[] = $num;
             $pidsArr[] = $goods['pid'];
 
             $goodsTotalPrice += $goods['sale_price'];
-            $haulage += $goods['$haulage'];
+            $haulage += $goods['haulage'];
 
 //            $goodsLinkPcap = GoodsLinkCategoryAttrModel::db()->getAll(" gid = $gid ");
 //            if(!$goodsLinkPcap){
@@ -130,7 +130,7 @@ class OrderService{
             'agent_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_STATUS_WAIT,
             'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
             'memo'=>$memo,
-            'title'=>$product['title'],
+            'title'=>"好商品的购买~",
             'expire_time'=>time() + $this->timeout,
             'gids_nums'=>$gidsNums,
         );
