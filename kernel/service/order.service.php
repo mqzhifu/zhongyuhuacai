@@ -186,6 +186,7 @@ class OrderService{
             }
             $product['pcap_desc_str'] = $pcap_desc_str;
             $product['goodsAttrParaDesc'] = $goodsAttrParaDesc;
+            $productService['haulage'] = $goods['haulage'];
             $productGoods[] = $product;
         }
 

@@ -269,7 +269,10 @@ class ProductService{
                 $pic = explode(",",$v['pic']);
                 $pic = get_product_url($pic[0]);
             }
-            $data[] = array( 'id'=>$v['id'],'goods_total'=>$v['goods_total'],'pic'=>$pic,'lowest_price'=>$v['lowest_price'],'title'=>$v['title'],'user_buy_total'=>$v['user_buy_total']);
+            $data[] = array(
+                'id'=>$v['id'],'goods_total'=>$v['goods_total'],'pic'=>$pic,
+                'lowest_price'=>$v['lowest_price'],'title'=>$v['title'],'user_buy_total'=>$v['user_buy_total'],
+            );
         }
         return $data;
     }
