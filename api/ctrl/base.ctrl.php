@@ -15,6 +15,7 @@ class BaseCtrl {
     public $upService = null;
     public $collectService = null;
     public $payService = null;
+    public $userAddressService = null;
 
     function __construct($request){
         $this->request = $request;
@@ -36,6 +37,7 @@ class BaseCtrl {
         $this->upService = new UpService();
         $this->collectService =  new CollectService();
         $this->payService = new PayService();
+        $this->userAddressService = new UserAddressService();
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){

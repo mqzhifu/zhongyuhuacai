@@ -96,4 +96,10 @@ class UserCtrl extends BaseCtrl  {
         $list = UserProductLogModel::db()->getAll(" uid = $uid");
         out_ajax(200,$list);
     }
+
+    function getAddress(){
+        $list = $this->userAddressService->getList($this->uid);
+        out_ajax(200,$list['msg']);
+
+    }
 }
