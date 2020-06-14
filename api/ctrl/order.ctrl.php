@@ -21,7 +21,7 @@ class OrderCtrl extends BaseCtrl  {
     //某一个产品，近期购买记录
     function getNearUserBuyHistory(){
         $pid = $agentUid =get_request_one( $this->request,'pid',0);
-        $list = OrderModel::db()->getAll("pid = $pid group by uid order by a_time desc limit 20 ");
+        $list = OrderGoodsModel::db()->getAll("pid = $pid group by uid order by a_time desc limit 20 ");
         foreach ($list as $k=>$v){
             $list[$k]['nickname'] = '游客'.$k;
             $list[$k]['avatar'] = get_avatar_url("");
