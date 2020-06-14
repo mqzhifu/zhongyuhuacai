@@ -523,6 +523,8 @@ class UserService{
 //        if(arrKeyIssetAndExist($user,'avatar'))
         $user['avatar'] = get_avatar_url($user['avatar']);
 
+        $user['reg_dt'] = get_default_date($user['a_time']);
+
         return out_pc(200,$user);
 //        if(!arrKeyIssetAndExist($user,'avatar')){
 //            $user['avatar'] = "默认图占位符";

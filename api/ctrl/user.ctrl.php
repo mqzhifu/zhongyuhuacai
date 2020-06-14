@@ -14,15 +14,16 @@ class UserCtrl extends BaseCtrl  {
     }
 
     function getOneDetail(){
-        $rs  = $this->userService->getUinfoById($this->uid);
-        if($rs){
-            $uid = $this->uid;
-            $historyCnt =  UserProductLogModel::db()->getCount(" uid = $uid");
-            $rs['view_product_history_cnt'] = $historyCnt;
-
-            $rs['collect_cnt'] = UserCollectionModel::db()->getCount(" uid = $uid");
+        $userRs  = $this->userService->getUinfoById($this->uid);
+        if($userRs['code'] != 200){
+            return out_ajax($userRs['code'],$userRs['msg']);
         }
-        out_ajax($rs['code'],$rs['msg']);
+
+        $user = $userRs['msg'];
+        $user['view_product_history_cnt'] = UserProductLogModel::db()->getCount(" uid = {$this->uid}");
+        $user['collect_cnt'] = UserCollectionModel::db()->getCount(" uid =  {$this->uid}");
+        
+        out_ajax(200,$user);
 
     }
     //用户反馈
