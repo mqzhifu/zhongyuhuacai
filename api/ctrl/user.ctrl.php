@@ -61,19 +61,23 @@ class UserCtrl extends BaseCtrl  {
     function upAvatar(){
         LogLib::inc()->debug(['up avatar',$_REQUEST]);
 
-        $userInfo = $this->userService->getUinfoById($this->uid);
+        LogLib::inc()->debug(["php fifle",$_FILES]);
 
-        $uploadRs = $this->uploadService->avatar('avatar');
-        if($uploadRs['code'] != 200){
-            exit(" uploadService->product error ".json_encode($uploadRs));
-        }
 
-        $data['avatar'] = $uploadRs['msg'];
-        $this->userService->upUserInfo($this->uid,$data);
+        var_dump($_FILES);
+//        $userInfo = $this->userService->getUinfoById($this->uid);
 
-        if(arrKeyIssetAndExist($userInfo,'avatar')){
-            $this->uploadService->delAvatar($userInfo['avatar']);
-        }
+//        $uploadRs = $this->uploadService->avatar('avatar');
+//        if($uploadRs['code'] != 200){
+//            exit(" uploadService->product error ".json_encode($uploadRs));
+//        }
+//
+//        $data['avatar'] = $uploadRs['msg'];
+//        $this->userService->upUserInfo($this->uid,$data);
+//
+//        if(arrKeyIssetAndExist($userInfo,'avatar')){
+//            $this->uploadService->delAvatar($userInfo['avatar']);
+//        }
 
     }
     //已收藏的产品列表
