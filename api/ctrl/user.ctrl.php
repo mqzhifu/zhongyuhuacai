@@ -59,8 +59,8 @@ class UserCtrl extends BaseCtrl  {
     }
 
     function upAvatar(){
-        LogLib::inc()->debug($_REQUEST);
-        
+        LogLib::inc()->debug(['up avatar',$_REQUEST]);
+
         $userInfo = $this->userService->getUinfoById($this->uid);
 
         $uploadRs = $this->uploadService->avatar('avatar');
