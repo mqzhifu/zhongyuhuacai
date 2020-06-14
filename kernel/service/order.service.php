@@ -176,6 +176,15 @@ class OrderService{
     //用户订单列表
     function getUserList($uid){
         $list =  OrderModel::getListByUid($uid);
+        if(!$list){
+            return out_pc(200,$list);
+        }
+
+        $orderList = null;
+        foreach ($list as $k=>$v){
+            $orderList[] = $this->getOneDetail($v['id']);
+        }
+
         return out_pc(200,$list);
     }
     //支付完成 - 通知订单变更状态
