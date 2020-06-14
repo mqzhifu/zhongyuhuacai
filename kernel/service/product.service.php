@@ -341,7 +341,12 @@ class ProductService{
             $picsTmpUrl = explode(",",$row['pic']);
             $realUrl = "";
             foreach ($picsTmpUrl as $k=>$v){
-                $realUrl .=get_product_url($v) . ",";
+                //data-lazy-src=\"https:\/\/cbu01.alicdn.com\/img\/ibank\/2019\/972\/967\/10464769279_1593857209.jpg,https:\/\/cbu01.alicdn.com\/cms\/upload\/other\/lazyload.png\"
+                //这里有个BUG,应该是正则匹配的时候，出的问题，先不处理
+                if(strpos($v,'src') === false){
+                    $realUrl .=get_product_url($v) . ",";
+                }
+//                $realUrl .=get_product_url($v) . ",";
             }
             $realUrl = substr($realUrl,0,strlen($realUrl)-1);
             $row['pic'] = $realUrl;
