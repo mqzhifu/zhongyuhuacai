@@ -151,9 +151,13 @@ class OrderService{
                 'sale_price'=>$goods['sale_price'],
                 'haulage'=>$goods['haulage'],
                 'oid'=>$newId,
+                'a_time'=>time(),
+                'uid'=>$uid,
             );
             OrderGoodsModel::db()->add($data);
 
+
+            CartModel::db()->delete(" pid = {$goods['pid']} and gid = $gid and uid = $uid limit 10");
 //            $data = array("stock"=>array(-1));
 //            GoodsModel::db()->upById($gid,$data);
         }
