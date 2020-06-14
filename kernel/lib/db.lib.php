@@ -98,9 +98,9 @@ class DbLib{
 
     function setOneMysqliConnect($config){
         $host = $config['host'];
-        if($config['conn_persistence']){
-            $host = "p:".$host;
-        }
+//        if($config['conn_persistence']){
+//            $host = "p:".$host;
+//        }
         $connFD = mysqli_connect(
             $host,
             $config['user'],
