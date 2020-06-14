@@ -425,6 +425,7 @@ class OrderService{
             $row['gid'] = $v['gid'];
             $goods = GoodsModel::db()->getById($row['gid']);
             $row['goods_price'] = $goods['sale_price'];
+            $row['cart_id'] = $v['id'];
             $rs[] = $row;
         }
 
