@@ -188,7 +188,46 @@ class OrderService{
     }
 
     function getOneDetail($id){
-        return OrderModel::db()->getById($id);
+        if(!$id){
+            return out_pc(8981);
+        }
+        $orders = OrderModel::db()->getById($id);
+        if(!$orders){
+            return out_pc(1029);
+        }
+        $gidsNums = explode(",",$orders['gids_nums']);
+        $productService = new ProductService();
+        foreach ($gidsNums as $k=>$v){
+            $arr = explode("-",$v);
+            $gid = $arr[0];
+            $num = $arr[1];
+
+            $goods = GoodsModel::db()->getById($gid);
+            $product = ProductModel::db()->getById($goods['pid']);
+
+            $product = $productService->formatShow(array($product))[0];
+            $product['price'] = $goods['sale_price'];
+            $product['num'] = $num;
+
+            $goodsLinkPcap = GoodsLinkCategoryAttrModel::db()->getAll(" gid = $gid ");
+            if(!$goodsLinkPcap){
+                exit("goodsLinkPcap is null");
+            }
+
+            $pcap_desc_str = "";
+            foreach ($goodsLinkPcap as $k2=>$v2){
+                $attr = ProductCategoryAttrModel::db()->getById($v2['pca_id'])['name'];
+                $para = ProductCategoryAttrParaModel::db()->getById($v2['pcap_id'])['name'];
+                $pcap_desc_str .= $attr . ":".$para . " ";
+                $goodsAttrParaDesc = array('attr'=>$attr,"part"=>$para);
+            }
+            $product['pcap_desc_str'] = $pcap_desc_str;
+            $product['goodsAttrParaDesc'] = $goodsAttrParaDesc;
+            $product['haulage'] = $goods['haulage'];
+            $productGoods[] = $product;
+        }
+
+        var_dump($productService);exit;
     }
 
     function addUserCart($uid,$pid){
@@ -259,9 +298,9 @@ class OrderService{
             }
 
             $pcap_desc_str = "";
-            foreach ($goodsLinkPcap as $k=>$v){
-                $attr = ProductCategoryAttrModel::db()->getById($v['pca_id'])['name'];
-                $para = ProductCategoryAttrParaModel::db()->getById($v['pcap_id'])['name'];
+            foreach ($goodsLinkPcap as $k2=>$v2){
+                $attr = ProductCategoryAttrModel::db()->getById($v2['pca_id'])['name'];
+                $para = ProductCategoryAttrParaModel::db()->getById($v2['pcap_id'])['name'];
                 $pcap_desc_str .= $attr . ":".$para . " ";
                 $goodsAttrParaDesc = array('attr'=>$attr,"part"=>$para);
             }
