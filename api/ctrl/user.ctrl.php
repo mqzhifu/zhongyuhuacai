@@ -64,17 +64,22 @@ class UserCtrl extends BaseCtrl  {
         LogLib::inc()->debug(["php fifle",$_FILES]);
 
 
-        var_dump($_FILES);
-//        $userInfo = $this->userService->getUinfoById($this->uid);
+        $userInfo = $this->userService->getUinfoById($this->uid);
 
-//        $uploadRs = $this->uploadService->avatar('avatar');
-//        if($uploadRs['code'] != 200){
-//            exit(" uploadService->product error ".json_encode($uploadRs));
-//        }
-//
-//        $data['avatar'] = $uploadRs['msg'];
-//        $this->userService->upUserInfo($this->uid,$data);
-//
+        $uploadRs = $this->uploadService->avatar('avatar');
+        if($uploadRs['code'] != 200){
+            exit(" uploadService->product error ".json_encode($uploadRs));
+        }
+
+        $data['avatar'] = $uploadRs['msg'];
+        $this->userService->upUserInfo($this->uid,$data);
+
+
+        $avatarUrl = get_avatar_url( $data['avatar']);
+
+        out_ajax(200,$avatarUrl);
+
+
 //        if(arrKeyIssetAndExist($userInfo,'avatar')){
 //            $this->uploadService->delAvatar($userInfo['avatar']);
 //        }
