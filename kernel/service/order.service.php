@@ -212,7 +212,7 @@ class OrderService{
     }
 
     function delUserCart($ids,$uid){
-        $newId = CartModel::db()->del(" id in ($ids) and uid = $uid");
+        $newId = CartModel::db()->delete(" id in ($ids) and uid = $uid and limit 100");
         return out_pc(200,$newId);
     }
 
