@@ -18,6 +18,12 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->doing($this->uid,$gidsNum,$agentUid,$couponId,$memo);
         return out_ajax($rs['code'],$rs['msg']);
     }
+
+    function getUserList(){
+        $rs = $this->orderService->getUserList($this->uid);
+        return out_ajax($rs['code'],$rs['msg']);
+    }
+
     //某一个产品，近期购买记录
     function getNearUserBuyHistory(){
         $pid = $agentUid =get_request_one( $this->request,'pid',0);
