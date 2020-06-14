@@ -111,7 +111,7 @@ class OrderCtrl extends BaseCtrl  {
 
     function delUserCart(){
         $ids = get_request_one( $this->request,'ids',"");
-        $rs = $this->orderService->delUserCart($ids);
+        $rs = $this->orderService->delUserCart($ids,$this->uid);
         out_ajax($rs['code'],$rs['msg']);
     }
 
