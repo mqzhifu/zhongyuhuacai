@@ -197,6 +197,7 @@ class OrderService{
         }
         $gidsNums = explode(",",$orders['gids_nums']);
         $productService = new ProductService();
+        $productGoods = null;
         foreach ($gidsNums as $k=>$v){
             $arr = explode("-",$v);
             $gid = $arr[0];
@@ -227,7 +228,7 @@ class OrderService{
             $productGoods[] = $product;
         }
 
-        var_dump($productService);exit;
+        return out_pc(200,$productGoods);
     }
 
     function addUserCart($uid,$pid){
