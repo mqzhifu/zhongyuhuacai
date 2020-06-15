@@ -1,2 +1,4 @@
 <?php
-return [];
+return [
+    '1000'=>"uid不在DB中",
+];
