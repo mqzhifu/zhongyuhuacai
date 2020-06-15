@@ -67,7 +67,7 @@ class ProductCtrl extends BaseCtrl  {
     //搜索
     function search(){
         $page = get_request_one( $this->request,'page',0);
-        $limit = get_request_one( $this->request,'limit',0);
+        $limit = get_request_one( $this->request,'limit',10);
 
         $condition = array(
             'keyword'=>get_request_one( $this->request,'keyword',0),
