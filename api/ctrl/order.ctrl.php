@@ -92,6 +92,11 @@ class OrderCtrl extends BaseCtrl  {
 
     }
 
+    function getUserCartCnt(){
+        $cnt = $list = CartModel::db()->getCount(" uid = {$this->uid}");
+        out_ajax(200,$cnt);
+    }
+
     function getUserCart(){
 //        $oid = $agentUid =get_request_one( $this->request,'oid',0);
         $list = $this->orderService->getUserCart($this->uid);

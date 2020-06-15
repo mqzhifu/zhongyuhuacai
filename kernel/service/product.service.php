@@ -281,7 +281,7 @@ class ProductService{
         return GoodsModel::db()->getAll(" pid = $pid ");
     }
 
-    function search($condition,$page = 1,$limit = 10){
+    function search($condition,$page = 1,$limit = 10 ,$uid = 0){
         $where = " 1 = 1 ";
         if($condition){
 //            return out_pc(8978);
@@ -318,6 +318,18 @@ class ProductService{
 
 
         $list = $this->format($list);
+
+        if($uid){
+            foreach ($list as $k=>$v){
+                $userHasCart = 0;
+                $dbRs = CartModel::db()->getRow(" pid = {$v['id']} and uid = $uid");
+                if($dbRs){
+                    $userHasCart = 1;
+                }
+                $list[$k]['has_cart'] = $userHasCart;
+            }
+        }
+
 
         return out_pc(200,$list);
     }

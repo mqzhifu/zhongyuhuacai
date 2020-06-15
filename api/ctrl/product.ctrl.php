@@ -75,7 +75,7 @@ class ProductCtrl extends BaseCtrl  {
             'orderType'=> get_request_one( $this->request,'order_type',0),
             'orderUpDown'=> get_request_one( $this->request,'orderUpDown',0),
         );
-        $rs = $this->productService->search($condition);
+        $rs = $this->productService->search($condition,$page,$limit,$this->uid);
         if($rs['code'] != 200){
             return out_ajax($rs['code'],$rs['msg']);
         }
