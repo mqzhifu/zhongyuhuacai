@@ -182,7 +182,7 @@ class OrderService{
 
         $orderList = null;
         foreach ($list as $k=>$v){
-            $orderList[] = $this->getOneDetail($v['id']);
+            $orderList[] = $this->getOneDetail($v['id'])['msg'];
         }
 
         return out_pc(200,$orderList);
