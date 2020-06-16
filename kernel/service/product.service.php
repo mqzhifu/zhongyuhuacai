@@ -238,7 +238,7 @@ class ProductService{
             $user = UserModel::db()->getById($v['uid']);
             if($user){
                 $list[$k]['nickname'] = $user['nickname'];
-                $list[$k]['avatar'] = $user['avatar'];
+                $list[$k]['avatar'] = get_avatar_url($user['avatar']);
             }
         }
         return out_pc(200,$list);

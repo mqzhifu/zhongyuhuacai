@@ -79,6 +79,7 @@ class insertRobot{
         }else{
             exit(" EVN ERR");
         }
+        o(" addAdminUser ,env = ".ENV ." uid :$adminUid , nickname: $adminUserNickname");
 
 //        $adminUser = $userService->getUinfoById($adminUid);
         $adminUser = UserModel::db()->getById($adminUid);
@@ -116,7 +117,7 @@ class insertRobot{
         $newId = UserModel::db()->add($data);
 //        $data = array('uid'=>$adminUid);
 //        UserDetailModel::db()->add($data);
-        out("add system adminuser ok  $newId");
+        out("add system admin user ok ,new uid :  $newId");
     }
 
     public function insert($module,$sexName){
@@ -139,10 +140,13 @@ class insertRobot{
             exit(" EVN ERR");
         }
 
+        o("insert start, first uid :$inc_uid");
 //        $firstUser = $userService->getUinfoById($inc_uid);
         $firstUser = UserModel::db()->getById($inc_uid);
         if($firstUser){
-            $inc_uid = 'null' ;
+//            var_dump($firstUser);
+//            var_dump("first uid exist.");exit;
+            $inc_uid = null ;
         }
 
 
@@ -165,7 +169,7 @@ class insertRobot{
 //            }
 
             if($k > 0 ){
-                $inc_uid = 'null';
+                $inc_uid = null;
             }
 
             if($sexName == 'boy'){

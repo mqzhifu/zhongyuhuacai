@@ -268,7 +268,7 @@ class OrderService{
     function confirmOrder($gidsNums = ""){
         if(!$gidsNums){
             return out_pc(8982);
-        }
+        }d
 
 
         $productService = new ProductService();
