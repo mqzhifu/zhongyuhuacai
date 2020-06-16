@@ -31,11 +31,11 @@ class OrderCtrl extends BaseCtrl  {
         foreach ($list as $k=>$v){
             $list[$k]['nickname'] = '游客'.$k;
             $list[$k]['avatar'] = get_avatar_url("");
+            $list[$k]['dt'] = get_default_date($v['a_time']);
             $user = UserModel::db()->getById($v['uid']);
             if($user){
                 $list[$k]['nickname'] = $user['nickname'];
                 $list[$k]['avatar'] = get_avatar_url( $user['avatar']);
-                $list[$k]['dt'] = get_default_date($user['a_time']);
             }
         }
 
