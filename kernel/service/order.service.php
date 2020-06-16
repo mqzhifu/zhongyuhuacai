@@ -183,6 +183,7 @@ class OrderService{
         $orderList = null;
         foreach ($list as $k=>$v){
             $orderInfo = OrderModel::db()->getById( $v['id']);
+            $orderInfo['goods_total_num'] = count(explode(",",$orderInfo['gids']));
 
             $orderInfo['goods_list'] = $this->getOneDetail($v['id'])['msg'];
 
