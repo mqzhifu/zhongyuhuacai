@@ -185,6 +185,8 @@ class OrderService{
             $orderInfo = OrderModel::db()->getById( $v['id']);
 
             $orderInfo['goods_info'] = $this->getOneDetail($v['id'])['msg'];
+
+            $orderList[] = $orderInfo;
         }
 
         return out_pc(200,$orderList);
