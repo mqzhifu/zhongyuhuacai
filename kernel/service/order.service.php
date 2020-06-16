@@ -185,7 +185,7 @@ class OrderService{
             $orderList[] = $this->getOneDetail($v['id']);
         }
 
-        return out_pc(200,$list);
+        return out_pc(200,$orderList);
     }
     //支付完成 - 通知订单变更状态
     function finish($id){
