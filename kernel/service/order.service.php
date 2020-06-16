@@ -182,7 +182,9 @@ class OrderService{
 
         $orderList = null;
         foreach ($list as $k=>$v){
-            $orderList[] = $this->getOneDetail($v['id'])['msg'];
+            $orderInfo = OrderModel::db()->getById( $v['id']);
+
+            $orderInfo['goods_info'] = $this->getOneDetail($v['id'])['msg'];
         }
 
         return out_pc(200,$orderList);
