@@ -272,7 +272,7 @@ class ProductService{
 
             $row = array(
                 'id'=>$v['id'],'goods_total'=>$v['goods_total'],'pic'=>$pic,
-                'lowest_price'=>$v['lowest_price'],'title'=>$v['title'],'user_buy_total'=>$v['user_buy_total'],
+                'lowest_price'=>fenToYuan($v['lowest_price']),'title'=>$v['title'],'user_buy_total'=>$v['user_buy_total'],
             );
 
             if(isset($v['has_cart'])){

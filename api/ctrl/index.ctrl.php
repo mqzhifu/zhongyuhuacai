@@ -20,7 +20,7 @@ class IndexCtrl extends BaseCtrl  {
     function checkToken(){
         out_ajax(200);
     }
-
+    //微信获取用户GPS推给小程序，再推到后端
     function wxPushLocation($request){
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
@@ -34,7 +34,7 @@ class IndexCtrl extends BaseCtrl  {
         $newId = wxLocationModel::db()->add($data);
         out_ajax(200,[$newId,$addr]);
     }
-
+    //首页轮播图
     function getBannerList(){
         $data = BannerModel::getIndexList();
         out_ajax(200,$data);
