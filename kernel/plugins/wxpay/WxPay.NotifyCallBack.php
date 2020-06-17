@@ -52,10 +52,12 @@ class NotifyCallBack extends WxPayNotify
         if(!array_key_exists("return_code", $data) || (array_key_exists("return_code", $data) && $data['return_code'] != "SUCCESS")) {
             //TODO失败,不是支付成功的通知
             //如果有需要可以做失败时候的一些清理处理，并且做一些监控
+            $msg = "NotifyProcess return_code err";
             LogLib::inc()->debug(["NotifyProcess return_code err",$data]);
             return false;
         }
         if(!array_key_exists("transaction_id", $data)){
+            $msg = "NotifyProcess transaction_id err";
             LogLib::inc()->debug([" NotifyProcess transaction_id err",$data]);
             return false;
         }
@@ -64,6 +66,7 @@ class NotifyCallBack extends WxPayNotify
         try {
             $checkResult = $objData->CheckSign($config);
             if($checkResult == false){
+                $msg = "NotifyProcess 签名错误 err";
                 //签名错误
                 LogLib::inc()->debug(" NotifyProcess 签名错误...");
                 return false;
@@ -79,6 +82,7 @@ class NotifyCallBack extends WxPayNotify
 
         //查询订单，判断订单真实性
         if(!$this->Queryorder($data["transaction_id"])){
+            $msg = "NotifyProcess Queryorder err";
 //            $msg = "订单查询失败";
             LogLib::inc()->debug(['NotifyProcess Queryorder err']);
 

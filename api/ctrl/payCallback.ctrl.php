@@ -26,10 +26,8 @@ class PayCallbackCtrl{
 
 
         if($returnCode &&  $returnCode == 'SUCCESS') {//证明验证都没有问题了
-            echo "ok";
-            LogLib::inc()->debug("wx back data auth ok.");
             $wx_callback_data = $notify->wx_callback_data;
-//            $order = GamesGoodsOrderModel::db()->getRow(" in_trade_no = '{$wx_callback_data['out_trade_no']}' ");
+            LogLib::inc()->debug(["wx back data auth ok.",$wx_callback_data]);
         }else{
             var_dump($returnMsg);exit;
             LogLib::inc()->debug(["wx back data auth err.",$returnMsg]);
