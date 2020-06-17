@@ -13,6 +13,6 @@ return [
         'SignType'=>"MD5",
         'key'=>'ccaab4e10f59bb6eb95e197c98bb0be1',
         'SSLCertPath'=>"",
-        "notify_url"=>"/payCallback/wxJsapi/little/",
+        "notify_url"=>"/payCallback/wxJsapi/",
     ]
 ];
