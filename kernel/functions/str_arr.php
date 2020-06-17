@@ -59,6 +59,20 @@ function uidToOpenId(){
 
 }
 
+function fenToYuan($price){
+    return $price * 100;
+}
+
+function yuanToFen($price,$isRound = 1){
+    $price = $price / 100 ;
+    if(is_int($price)){
+        return $price;
+    }
+
+    $price = round($price,2);
+    return $price;
+}
+
 function get_order_rand_no(){
     return rand(100000,999999).date("YmdHis").rand(100000,999999);
 }

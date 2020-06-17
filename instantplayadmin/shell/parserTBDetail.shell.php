@@ -51,7 +51,7 @@ class parserTBDetail{
         $mysqlData['title'] = $title;
 
         //匹配 - 图片
-        $ge = '/http(.*?)60x60\.jpg/U';
+        $ge = '/src="http(.*?)60x60\.jpg/U';
         preg_match_all( $ge,$productTxt,$match);
         $boxImgArr = $match[0];
         $boxImg = "";
