@@ -219,8 +219,6 @@ class ProductService{
         $product['original_price'] = ProductService::formatDataPrice(2,$product,'original_price');
         $product['lowest_price'] = ProductService::formatDataPrice(2,$product,'lowest_price');
 
-        ProductModel::db()
-
         return out_pc(200,$product);
     }
 
