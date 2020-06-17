@@ -43,7 +43,7 @@ class PayCallbackCtrl{
             $upData = array(
                 'status'=>OrderModel::STATUS_PAYED,
                 'pay_time'=>time(),
-                'out_trade_no'=> $wx_callback_data['"transaction_id'],
+                'out_trade_no'=> $wx_callback_data['transaction_id'],
             );
 
             OrderModel::db()->upById($order['id'], $upData );
