@@ -215,7 +215,7 @@ class ProductService{
         $this->upPvUv($id,$uid);
         $product = $this->formatRow($product);
 
-        $product['original_price'] = $product['lowest_price'] * $this->originalPricePercent;
+        $product['original_price'] =$product['lowest_price'] + ( $product['lowest_price'] * $this->originalPricePercent);
 
         return out_pc(200,$product);
     }
