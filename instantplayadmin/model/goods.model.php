@@ -59,19 +59,8 @@ class GoodsModel {
             //这是特殊情况，产品无参数
         }
 
-        if(arrKeyIssetAndExist($data,'sale_price')){
-            $salePrice = $data['sale_price'];
-            if($salePrice > 0 && (int)($salePrice) > 0){
-                $data['sale_price'] = yuanToFen($salePrice);
-            }
-        }
-
-        if(arrKeyIssetAndExist($data,'original_price')){
-            $price = $data['original_price'];
-            if($price > 0 &&  (int)$price > 0){
-                $data['original_price'] = yuanToFen($price);
-            }
-        }
+        $data['sale_price'] = ProductService::formatDataPrice(1,$data,'sale_price');
+        $data['original_price'] = ProductService::formatDataPrice(1,$data,'original_price');
 
         $data['pid'] = $product['id'];
         $data['product_attr_ids'] = $product_attr_ids;

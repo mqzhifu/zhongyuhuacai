@@ -216,8 +216,29 @@ class ProductService{
         $product = $this->formatRow($product);
 
         $product['original_price'] =$product['lowest_price'] + ( $product['lowest_price'] * $this->originalPricePercent);
+        $product['original_price'] = ProductService::formatDataPrice(2,$product,'original_price');
+        $product['lowest_price'] = ProductService::formatDataPrice(2,$product,'lowest_price');
+
+        ProductModel::db()
 
         return out_pc(200,$product);
+    }
+
+    static function formatDataPrice($type,$data,$key){
+        if(!arrKeyIssetAndExist($data,$key)){
+            return 0;
+        }
+
+        $salePrice = $data[$key];
+        if($salePrice > 0 && (int)($salePrice) > 0){
+            if($type == 1){//元 转换 分
+                return yuanToFen($salePrice);
+            }else{//分 转换 元
+                return fenToYuan($salePrice);
+            }
+        }
+
+        return 0;
     }
 
 
