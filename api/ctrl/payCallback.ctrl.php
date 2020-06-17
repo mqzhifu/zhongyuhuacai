@@ -1,7 +1,6 @@
 <?php
 class PayCallbackCtrl{
     function wxJsapi(){
-        $a = new NotifyCallBack();
         LogLib::inc()->debug("im wxJsapi");
         LogLib::inc()->debug($_REQUEST);
 
