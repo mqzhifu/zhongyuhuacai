@@ -12,7 +12,7 @@ class NotifyCallBack extends WxPayNotify
 
         $config = new WxPayConfig();
         $result = WxPayApi::orderQuery($config, $input);
-        LogLib::appWriteFileHash("query:" . json_encode($result));
+        LogLib::inc()->debug("Queryorder:" . json_encode($result));
         if(array_key_exists("return_code", $result)
             && array_key_exists("result_code", $result)
             && $result["return_code"] == "SUCCESS"
@@ -32,8 +32,7 @@ class NotifyCallBack extends WxPayNotify
      **/
     public function LogAfterProcess($xmlData)
     {
-        LogLib::appWriteFileHash(["+++++++++++++++++++++++++++",$xmlData]);
-//        Loglib("call back， return xml:" . $xmlData);
+        LogLib::inc()->debug(["LogAfterProcess",$xmlData]);
         return;
     }
 
@@ -48,17 +47,16 @@ class NotifyCallBack extends WxPayNotify
     {
         $data = $objData->GetValues();
         $this->wx_callback_data = $data;
-        LogLib::appWriteFileHash(["----------------------",$data]);
+        LogLib::inc()->debug(["NotifyProcess objData->GetValues()",$data]);
         //TODO 1、进行参数校验
-        if(!array_key_exists("return_code", $data)
-            ||(array_key_exists("return_code", $data) && $data['return_code'] != "SUCCESS")) {
+        if(!array_key_exists("return_code", $data) || (array_key_exists("return_code", $data) && $data['return_code'] != "SUCCESS")) {
             //TODO失败,不是支付成功的通知
             //如果有需要可以做失败时候的一些清理处理，并且做一些监控
-            $msg = "异常异常";
+            LogLib::inc()->debug(["NotifyProcess return_code err",$data]);
             return false;
         }
         if(!array_key_exists("transaction_id", $data)){
-            $msg = "输入参数不正确";
+            LogLib::inc()->debug([" NotifyProcess transaction_id err",$data]);
             return false;
         }
 
@@ -67,21 +65,23 @@ class NotifyCallBack extends WxPayNotify
             $checkResult = $objData->CheckSign($config);
             if($checkResult == false){
                 //签名错误
-                LogLib::appWriteFileHash("签名错误...");
+                LogLib::inc()->debug(" NotifyProcess 签名错误...");
                 return false;
             }
         } catch(Exception $e) {
-            LogLib::appWriteFileHash(json_encode($e));
+            LogLib::inc()->debug(['NotifyProcess exception',json_encode($e)]);
+            return false;
         }
 
         //TODO 3、处理业务逻辑
-        LogLib::appWriteFileHash("call back:" . json_encode($data));
         $notfiyOutput = array();
 
 
         //查询订单，判断订单真实性
         if(!$this->Queryorder($data["transaction_id"])){
-            $msg = "订单查询失败";
+//            $msg = "订单查询失败";
+            LogLib::inc()->debug(['NotifyProcess Queryorder err']);
+
             return false;
         }
         return true;
