@@ -1,5 +1,5 @@
 <?php
-class PayCallback{
+class PayCallbackCtrl{
     function wxJsapi(){
         $a = new NotifyCallBack();
         LogLib::inc()->debug("im wxJsapi");
@@ -23,8 +23,11 @@ class PayCallback{
 
 
         if($returnData && $returnData == 'OK') {//证明验证都没有问题了
+            LogLib::inc()->debug("wx back data auth ok.");
             $wx_callback_data = $notify->wx_callback_data;
             $order = GamesGoodsOrderModel::db()->getRow(" in_trade_no = '{$wx_callback_data['out_trade_no']}' ");
+        }else{
+            LogLib::inc()->debug("wx back data auth err.");
         }
     }
 
