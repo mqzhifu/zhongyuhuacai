@@ -2,7 +2,7 @@
 
 class ProductService{
     public $limit = 10;
-
+    private $originalPricePercent = 10;
     const ORDER_TYPE =array(
         1=> array('id'=>1,"name"=>'默认1','field'=>"id"),
         2=> array('id'=>2,"name"=>'新品2','field'=>"id"),
@@ -127,9 +127,6 @@ class ProductService{
                 }
             }
 
-
-
-
             //将ID形式 转换成 多维数组，主要是为了获取汉字描述
             foreach ($categoryAttrParaIds as $k=>$v){
                 //先获取分类属性的  一条记录值
@@ -217,6 +214,8 @@ class ProductService{
 //        $product['goods_list'] = $goods;
         $this->upPvUv($id,$uid);
         $product = $this->formatRow($product);
+
+        $product['original_price'] = $product['lowest_price'] * $this->originalPricePercent;
 
         return out_pc(200,$product);
     }
