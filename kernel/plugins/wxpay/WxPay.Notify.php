@@ -16,7 +16,12 @@ class WxPayNotify extends WxPayNotifyReply
 	final public function Handle($config, $needSign = true)
 	{
 		$this->config = $config;
-		$msg = "OK";
+		//这里有小坑，按说：最好是一个执行流，好查错，好处理。但被拆分成2个执行流了，且第2步可能完全不执行
+        //第1步：数据为空 或者 签名 检查失败，就直接 返回假了，后面的回调函数不执行了
+        //第2步，基于上面一步如果是成功的，会调用 callback  NotifyProcess 函数。这一步依然还是验证返回数据的安全性
+
+        $msg = "wait";
+
 		//当返回false的时候，表示notify中调用NotifyCallBack回调失败获取签名校验失败，此时直接回复失败
 		$result = WxpayApi::notify($config, array($this, 'NotifyCallBack'), $msg);
 		if($result == false){

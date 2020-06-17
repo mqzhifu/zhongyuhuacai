@@ -421,6 +421,7 @@ class WxPayApi
 	public static function notify($config, $callback, &$msg)
 	{
 		if (!file_get_contents("php://input")) {
+            $msg = "file_get_contents php://input is null";
 //            if (!isset($GLOBALS['HTTP_RAW_POST_DATA'])) {
 			# 如果没有数据，直接返回失败
 			return false;
@@ -431,12 +432,13 @@ class WxPayApi
 			//获取通知的数据
 //			$xml = $GLOBALS['HTTP_RAW_POST_DATA'];
 			$xml = file_get_contents("php://input");
+			//处理XML 转 arr ，再检测签名
 			$result = WxPayNotifyResults::Init($config, $xml);
 		} catch (WxPayException $e){
 			$msg = $e->errorMessage();
 			return false;
 		}
-		
+		//签名和XML 没问题，做下一步检测
 		return call_user_func($callback, $result);
 	}
 	

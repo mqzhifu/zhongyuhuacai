@@ -11,24 +11,28 @@ class PayCallbackCtrl{
         include_once PLUGIN ."/wxpay/WxPay.Data.php";
         include_once PLUGIN ."/wxpay/WxPay.NotifyCallBack.php";
 
-
-        $config = new WxPayConfig();
-        $notify = new NotifyCallBack();
+        //流程有点绕，既然有现成的SDK，懒得改了
+        $config = new WxPayConfig();//初始化配置信息
+        $notify = new NotifyCallBack();//获取 处理类
+        //执行验证
         $notify->Handle($config, true);
-        $returnData = $notify->GetReturn_msg();
+        //验证执行完毕，获取结果
+        $returnMsg = $notify->GetReturn_msg();
+        $returnCode = $notify->GetReturn_code();
 
-        LogLib::inc()->debug(["============notify->GetReturn_msg========",$returnData]);
+        LogLib::inc()->debug(["============notify->GetReturn_msg========",$returnMsg]);
+        LogLib::inc()->debug(["============notify->GetReturn_code========",$returnCode]);
         LogLib::inc()->debug(["============wx_callback_data data========",$notify->wx_callback_data]);
 
 
-        if($returnData && $returnData == 'OK') {//证明验证都没有问题了
+        if($returnCode &&  $returnCode == 'SUCCESS') {//证明验证都没有问题了
             echo "ok";
             LogLib::inc()->debug("wx back data auth ok.");
             $wx_callback_data = $notify->wx_callback_data;
 //            $order = GamesGoodsOrderModel::db()->getRow(" in_trade_no = '{$wx_callback_data['out_trade_no']}' ");
         }else{
-            echo "err";
-            LogLib::inc()->debug("wx back data auth err.");
+            var_dump($returnMsg);exit;
+            LogLib::inc()->debug(["wx back data auth err.",$returnMsg]);
         }
     }
 
