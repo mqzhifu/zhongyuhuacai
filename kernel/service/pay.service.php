@@ -29,6 +29,10 @@ class PayService{
         $openId = $userService->getUinfoById($uid)['msg']['wx_open_id'];
 
 
+        $totalPrice = $order['total_price'];
+        //测试使用的金额
+        $totalPrice = 1;
+
         $config = ConfigCenter::get(APP_NAME,"wx")['pay'];
         $notifyUrl  = get_domain_url() . $config['notify_url'];
 
@@ -38,7 +42,7 @@ class PayService{
         //自己生成的数字订单号，发给3方，最后对账的时候使用
         $input->SetOut_trade_no($order['no']);
         //总价
-        $input->SetTotal_fee($order['total_price']);
+        $input->SetTotal_fee($totalPrice);
         //订单创建时间
         $s_time = date("YmdHis",$order['a_time']);
         $input->SetTime_start($s_time);

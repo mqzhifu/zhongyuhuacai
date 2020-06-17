@@ -35,9 +35,9 @@ class OrderService{
                 return out_pc(1027);
             }
 
-//            if(!$goods['stock'] || $goods['stock'] < 0){
-//                return out_pc(8336);
-//            }
+            if(!$goods['stock'] || $goods['stock'] < 0){
+                return out_pc(8336);
+            }
 
             $product = ProductModel::db()->getById($goods['pid']);
             if(!$product){
@@ -162,10 +162,21 @@ class OrderService{
 //            GoodsModel::db()->upById($gid,$data);
         }
 
+
+        foreach ($gidsNumsArr as $k=>$v){
+            $arr = explode("-",$v);
+            $gid = $arr[0];
+            $num = $arr[1];
+
+            $data = array("stock"=>array(-1));
+            $upGoodsStock = GoodsModel::db()->upById($gid,$data);
+        }
+
         foreach ($pidsArr as $k=>$v){
             $data = array("user_buy_total"=>array(1));
             ProductModel::db()->upById($v,$data);
         }
+
 
         $data = array("order_num"=>array(1),'consume_total'=>array($totalPrice));
         UserModel::db()->upById($uid,$data);
