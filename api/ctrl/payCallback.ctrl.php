@@ -28,9 +28,32 @@ class PayCallbackCtrl{
         if($returnCode &&  $returnCode == 'SUCCESS') {//证明验证都没有问题了
             $wx_callback_data = $notify->wx_callback_data;
             LogLib::inc()->debug(["wx back data auth ok.",$wx_callback_data]);
+            $orderNo = $wx_callback_data['out_trade_no'];
+            $order = OrderModel::db()->getRow(" no = '$orderNo'");
+            if(!$order){
+                LogLib::inc()->debug("out_trade_no :not in db :".$orderNo);
+                out_ajax(8349);
+            }
+
+            if($order['status'] != OrderModel::STATUS_WAIT_PAY){
+                LogLib::inc()->debug("order status err( status = {$order['status']}) , status must be = ".OrderModel::STATUS_WAIT_PAY);
+                out_ajax(6350);
+            }
+
+            $upData = array(
+                'status'=>OrderModel::STATUS_PAYED,
+                'pay_time'=>time(),
+                'out_trade_no'=> $wx_callback_data['"transaction_id'],
+            );
+
+            OrderModel::db()->upById($order['id'], $upData );
+
+            LogLib::inc()->debug(" pay callback ,process (up order info0 ok");
+
+            out_ajax(200);
         }else{
-            var_dump($returnMsg);exit;
             LogLib::inc()->debug(["wx back data auth err.",$returnMsg]);
+            out_ajax(8348,$returnMsg);
         }
     }
 
