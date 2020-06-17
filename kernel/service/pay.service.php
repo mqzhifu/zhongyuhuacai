@@ -19,6 +19,7 @@ class PayService{
     }
     //在微信内，用微信浏览器打开的网页，也可以是公众号进入的
     function wxJsApi($order,$uid){
+        LogLib::inc()->debug(["wxJsApi",$order,$uid]);
         include PLUGIN ."wxpay/WxPay.Config.php";
         include PLUGIN ."wxpay/WxPay.JsApiPay.php";
         include PLUGIN ."wxpay/WxPay.Api.php";
@@ -35,6 +36,9 @@ class PayService{
 
         $config = ConfigCenter::get(APP_NAME,"wx")['pay'];
         $notifyUrl  = get_domain_url() . $config['notify_url'];
+
+
+        LogLib::inc()->debug(["openid"=>$openId,'notifyUrl'=>$notifyUrl]);
 
         //②、统一下单
         $input = new WxPayUnifiedOrder();
@@ -58,16 +62,16 @@ class PayService{
 //        $input->SetAttach($Attach);
 
 
-        LogLib::inc()->debug(["pay service wxJsApi para",$openId,$uid,$order['id'],$notifyUrl,$order['title'],$order['no'],$order['total_price'],$s_time,$expire_time]);
+//        LogLib::inc()->debug(["pay service wxJsApi para",$openId,$uid,$order['id'],$notifyUrl,$order['title'],$order['no'],$order['total_price'],$s_time,$expire_time]);
 
         $config = new WxPayConfig();
         //先创建预订单
         $order = WxPayApi::unifiedOrder($config, $input);
 
-        LogLib::inc()->debug([' WxPayApi::unifiedOrder',$order]);
+        LogLib::inc()->debug([' unifiedOrder back::unifiedOrder',$order]);
         //再获取前端需要唤起微信支付的参数
         $jsApiParameters = $tools->GetJsApiParameters($order);
-        LogLib::inc()->debug(["GetJsApiParameters",$jsApiParameters]);
+        LogLib::inc()->debug(["GetJsApiParameters back",$jsApiParameters]);
 
         return out_pc(200,json_decode($jsApiParameters,true));
 //        //获取共享收货地址js函数参数
