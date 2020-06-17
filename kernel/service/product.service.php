@@ -2,7 +2,7 @@
 
 class ProductService{
     public $limit = 10;
-    private $originalPricePercent = 10;
+    private $originalPricePercent = 0.1;
     const ORDER_TYPE =array(
         1=> array('id'=>1,"name"=>'默认1','field'=>"id"),
         2=> array('id'=>2,"name"=>'新品2','field'=>"id"),
