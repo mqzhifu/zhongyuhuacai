@@ -68,14 +68,14 @@ class GoodsModel {
 
         if(arrKeyIssetAndExist($data,'original_price')){
             $price = $data['original_price'];
-            if($price > 0 && int($price) > 0){
+            if($price > 0 &&  (int)$price > 0){
                 $data['original_price'] = yuanToFen($price);
             }
         }
 
         if(arrKeyIssetAndExist($data,'sale_price')){
             $salePrice = $data['sale_price'];
-            if($salePrice > 0 && int($salePrice) > 0){
+            if($salePrice > 0 && (int)$salePrice > 0){
                 $data['sale_price'] = yuanToFen($salePrice);
             }
         }
