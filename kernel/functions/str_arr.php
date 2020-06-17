@@ -59,17 +59,18 @@ function uidToOpenId(){
 
 }
 
-function fenToYuan($price){
-    return $price * 100;
+function yuanToFen($price,$isRound = 1){
+    if($isRound){
+        $price = round($price,2);
+    }
+    return (int)$price * 100;
 }
 
-function yuanToFen($price,$isRound = 1){
+function fenToYuan($price,$isRound = 1){
     $price = $price / 100 ;
-    if(is_int($price)){
-        return $price;
+    if($isRound){
+        $price = round($price,2);
     }
-
-    $price = round($price,2);
     return $price;
 }
 

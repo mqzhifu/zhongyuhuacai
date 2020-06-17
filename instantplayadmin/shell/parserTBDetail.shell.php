@@ -51,12 +51,14 @@ class parserTBDetail{
         $mysqlData['title'] = $title;
 
         //匹配 - 图片
-        $ge = '/src="http(.*?)60x60\.jpg/U';
+        $ge = '/http(.*?)60x60\.jpg/U';
         preg_match_all( $ge,$productTxt,$match);
         $boxImgArr = $match[0];
         $boxImg = "";
         foreach ($boxImgArr as $k=>$v) {
-            $boxImg .= $v . ",";
+            $img = str_replace('https://cbu01.alicdn.com/cms/upload/other/lazyload.png" data-lazy-src="',"",$v);
+            $img = trim($img);
+            $boxImg .= $img . ",";
         }
         $boxImg = substr($boxImg,0,strlen($boxImg)-1);
         $boxImg = str_replace(".60x60","",$boxImg);
