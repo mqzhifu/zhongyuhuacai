@@ -323,7 +323,7 @@
     $("#datatable_products").on("click",".refund",function(){
         var id = $(this).attr("data-id");
         alert(id);
-        // bootbox.confirm("Are you sure?", function(result) {
+        bootbox.confirm("Are you sure?", function(result) {
         //     if(result == true){
         //         $.ajax({
         //             type: 'GET',
@@ -335,7 +335,7 @@
         //
         //         });
         //     }
-        // });
+        });
     });
 
     if (!jQuery().datetimepicker) {
