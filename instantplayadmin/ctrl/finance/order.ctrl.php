@@ -33,6 +33,8 @@ class OrderCtrl extends BaseCtrl{
 
             $service = new OrderService();
             $payService = new PayService();
+            var_dump($status);
+            var_dump($memo);
             if($status == 1){
                 $wxPayRefundBack = $payService->wxPayRefund($id);
 
