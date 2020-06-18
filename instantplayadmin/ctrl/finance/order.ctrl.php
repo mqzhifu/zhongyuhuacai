@@ -21,9 +21,10 @@ class OrderCtrl extends BaseCtrl{
             $this->notice("id not in db");
         }
 
-        if($order['status'] != OrderModel::STATUS_REFUND){
-            $this->notice("只有 用户 申请退款 ，才能进此页面");
-        }
+//        if($order['status'] != OrderModel::STATUS_REFUND){
+//            $this->notice("只有 用户 申请退款 ，才能进此页面");
+//        }
+
         if(_g("opt")) {
             $status = _g("status");
             $memo = _g("memo");

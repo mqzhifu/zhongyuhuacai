@@ -286,7 +286,7 @@ class OrderService{
         $data = array('status'=>$status,'u_time'=>time());
         if($status == OrderModel::STATUS_SIGN_IN){
             $data['sign_time'] = time();
-        }elseif($status == OrderModel::STATUS_REFUND_FINISH){
+        }elseif($status == OrderModel::STATUS_REFUND_FINISH   || $status == OrderModel::STATUS_REFUND_REJECT){
             $data['refund_memo'] = $upData['refund_memo'];
         }
         return OrderModel::db()->upById($oid,$data);
