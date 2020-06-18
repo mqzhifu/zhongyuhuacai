@@ -1,8 +1,7 @@
 <?php
-include PLUGIN ."wxpay/WxPay.Config.php";
-include PLUGIN ."wxpay/WxPay.JsApiPay.php";
-include PLUGIN ."wxpay/WxPay.Api.php";
-include PLUGIN ."wxpay/WxPay.Api.php";
+include_once PLUGIN ."wxpay/WxPay.Config.php";
+include_once PLUGIN ."wxpay/WxPay.JsApiPay.php";
+include_once PLUGIN ."wxpay/WxPay.Api.php";
 
 class PayService{
 
