@@ -147,6 +147,12 @@ class OrderCtrl extends BaseCtrl{
                 if($v['pay_type']){
                     $payType = OrderModel::PAY_TYPE_DESC[$v['pay_type']];
                 }
+
+                $refundBnt = "";
+                if($v['status'] == OrderModel::STATUS_REFUND){
+                    $refundBnt =  '<a href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue refund btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -164,6 +170,7 @@ class OrderCtrl extends BaseCtrl{
                     get_default_date($v['pay_time']),
                     $v['nums'],
                     $v['haulage'],
+                    $refundBnt.
                     '<a href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
                     '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
                     '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_TWO.'&oids='.$v['id'].'&uid=2" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二级代理提现 </a>'.

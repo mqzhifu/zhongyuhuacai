@@ -243,10 +243,10 @@
                                                                 <thead>
                                                                 <tr role="row" class="heading">
                                                                     <th width="5%">
-                                                                        pid
+                                                                        产品标题
                                                                     </th>
                                                                     <th width="15%">
-                                                                        gid
+                                                                        pid/gid
                                                                     </th>
                                                                     <th width="15%">
                                                                         价格
@@ -258,9 +258,9 @@
                                                                         商品属性参数
                                                                     </th>
 
-                                                                    <td>
+                                                                    <th>
                                                                         运费
-                                                                    </td>
+                                                                    </th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -268,8 +268,8 @@
                                                                 {foreach ($orderDetail['goods_list'] as $k=>$v) }
                                                                 <tr>
 
-                                                                    <td>{$v['id']}</td>
-                                                                    <td>{$v['gid']}</td>
+                                                                    <td>{$v['title']}</td>
+                                                                    <td>{$v['id']}/{$v['gid']}</td>
                                                                     <td>{$v['price']}</td>
                                                                     <td>{$v['num']}</td>
                                                                     <td>{$v['pcap_desc_str']}</td>
