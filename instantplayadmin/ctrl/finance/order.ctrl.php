@@ -13,7 +13,8 @@ class OrderCtrl extends BaseCtrl{
     //退款
     function refund(){
         $id = _g("id");
-        $this->notice("id null");
+        if(!$id)
+            $this->notice("id null");
 
         $order = OrderModel::db()->getById($id);
         if(!$order){
