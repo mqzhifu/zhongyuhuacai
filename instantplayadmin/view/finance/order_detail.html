@@ -212,7 +212,6 @@
                                                                             代理地址:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$orderDetail}
                                                                         </div>
                                                                     </div>
 
@@ -231,14 +230,14 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="portlet-body">
-                                                                    {foreach ($orderDetail as $k=>$v) }
+                                                                    {foreach ($orderDetail['goods_list'] as $k=>$v) }
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
                                                                             {$k}:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$v}
+                                                                            {$v['price'}
                                                                         </div>
                                                                     </div>
 
