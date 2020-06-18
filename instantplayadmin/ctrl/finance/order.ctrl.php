@@ -199,10 +199,12 @@ class OrderCtrl extends BaseCtrl{
         }
 
         $orderInfo['status_desc'] = OrderModel::STATUS_DESC[$orderInfo['status']];
-        $orderInfo['goods_list'] = $this->getOneDetail($id)['msg'];
+
+        $orderService =  new OrderService();
+        $orderInfo['goods_list'] = $orderService->getOneDetail($id)['msg'];
 
         $orderDetail = $orderInfo;//这里是个坑
-//        $orderService =  new OrderService();
+
 //        $orderDetail = $orderService->getOneDetail($id);
 //        $product = ProductModel::db()->getById($id);
         $orderDetail['dt'] = get_default_date($orderDetail['a_time']);
