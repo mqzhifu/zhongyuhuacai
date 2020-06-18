@@ -190,8 +190,20 @@ class OrderCtrl extends BaseCtrl{
         }
 
 
-        $orderService =  new OrderService();
-        $orderDetail = $orderService->getOneDetail($id);
+        $orderInfo = OrderModel::db()->getById($id);
+        $orderInfo['goods_total_num'] = count(explode(",",$orderInfo['gids']));
+
+        $orderInfo['sigin_time_dt'] = 0;
+        if(arrKeyIssetAndExist($orderInfo,'sigin_time')){
+            $orderInfo['sigin_time_dt'] = get_default_date($orderInfo['sigin_time']);
+        }
+
+        $orderInfo['status_desc'] = OrderModel::STATUS_DESC[$orderInfo['status']];
+        $orderInfo['goods_list'] = $this->getOneDetail($id)['msg'];
+
+        $orderDetail = $orderInfo;//这里是个坑
+//        $orderService =  new OrderService();
+//        $orderDetail = $orderService->getOneDetail($id);
 //        $product = ProductModel::db()->getById($id);
         $orderDetail['dt'] = get_default_date($orderDetail['a_time']);
         $orderDetail['pay_time_dt'] = get_default_date($orderDetail['pay_time']);
