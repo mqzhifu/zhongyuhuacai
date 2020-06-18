@@ -92,6 +92,7 @@ class PayService{
             return out_pc(8354);
         }
 
+        var_dump(3333);exit;
         try{
             $input = new WxPayRefund();
             $input->SetTransaction_id($order["transaction_id"]);
