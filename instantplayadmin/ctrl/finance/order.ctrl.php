@@ -150,7 +150,7 @@ class OrderCtrl extends BaseCtrl{
 
                 $refundBnt = "";
                 if($v['status'] == OrderModel::STATUS_REFUND){
-                    $refundBnt = '<button class="btn btn-xs default green refund btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-link"></i>退款审批</button>'.
+                    $refundBnt = '<button class="btn btn-xs default green refund btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-link"></i>退款审批</button>';
 //                    $refundBnt =  '<a href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue refund btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
                 }
 
