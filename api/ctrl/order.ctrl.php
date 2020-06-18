@@ -67,7 +67,7 @@ class OrderCtrl extends BaseCtrl  {
         out_ajax($rs['code'],$rs['msg']);
     }
 
-    function refund(){
+    function applyRefund(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
         $rs = $this->orderService->applyRefund($id);
         out_ajax($rs['code'],$rs['msg']);
