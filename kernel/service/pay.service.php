@@ -1,18 +1,11 @@
 <?php
+include PLUGIN ."wxpay/WxPay.Config.php";
+include PLUGIN ."wxpay/WxPay.JsApiPay.php";
+include PLUGIN ."wxpay/WxPay.Api.php";
+include PLUGIN ."wxpay/WxPay.Api.php";
 
 class PayService{
 
-    //下单入口
-    function doing($uid,$oid,$type){
-        $order = OrderModel::db()->getById($oid);
-        if(!$order){
-
-        }
-
-        if(!$type){
-
-        }
-    }
     //在微信外的 手机端 浏览器 ，以浏览器唤醒微信APP的方式，支付
     function wxH5(){
 
@@ -20,10 +13,6 @@ class PayService{
     //在微信内，用微信浏览器打开的网页，也可以是公众号进入的
     function wxJsApi($order,$uid){
         LogLib::inc()->debug(["wxJsApi",$order,$uid]);
-        include PLUGIN ."wxpay/WxPay.Config.php";
-        include PLUGIN ."wxpay/WxPay.JsApiPay.php";
-        include PLUGIN ."wxpay/WxPay.Api.php";
-
 
         $tools = new JsApiPay();
         $userService = new UserService();
@@ -66,11 +55,14 @@ class PayService{
 
         $config = new WxPayConfig();
         //先创建预订单
-        $order = WxPayApi::unifiedOrder($config, $input);
+        $unifiedOrderBack = WxPayApi::unifiedOrder($config, $input);
+        LogLib::inc()->debug([' unifiedOrder back::unifiedOrder',$unifiedOrderBack]);
+        if($unifiedOrderBack['return_code'] == 'FAIL'){
+            return out_pc(8357,"生成预订单失败,".$unifiedOrderBack['return_msg']);
+        }
 
-        LogLib::inc()->debug([' unifiedOrder back::unifiedOrder',$order]);
         //再获取前端需要唤起微信支付的参数
-        $jsApiParameters = $tools->GetJsApiParameters($order);
+        $jsApiParameters = $tools->GetJsApiParameters($unifiedOrderBack);
         LogLib::inc()->debug(["GetJsApiParameters back",$jsApiParameters]);
 
         return out_pc(200,json_decode($jsApiParameters,true));
@@ -88,5 +80,35 @@ class PayService{
 
     function aliH5(){
 
+    }
+
+    function wxPayRefund($oid,$fee = 0){
+        $order = OrderModel::db()->getById($oid);
+        //默认是全部退款
+        if(!$fee){
+            $fee = $order['total_price'];
+        }
+
+        if(!arrKeyIssetAndExist($order,'transaction_id')){
+            return out_pc(8354);
+        }
+
+        try{
+            $input = new WxPayRefund();
+            $input->SetTransaction_id($order["transaction_id"]);
+            $input->SetTotal_fee( $order["total_price"]);
+            $input->SetRefund_fee($fee);
+
+            $config = new WxPayConfig();
+            $input->SetOut_refund_no("sdkphp".date("YmdHis"));
+            $input->SetOp_user_id($config->GetMerchantId());
+
+            $backInfo = WxPayApi::refund($config, $input);
+            LogLib::inc()->debug([" WxPayApi::refund back:",$backInfo,]);
+            return out_pc(200);
+        } catch(Exception $e) {
+            LogLib::inc()->debug(["rerund err:".json_encode($e)]);
+            return out_pc(8355,$e->getMessage());
+        }
     }
 }
