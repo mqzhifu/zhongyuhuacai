@@ -205,12 +205,116 @@ class OrderService{
         return out_pc(200,$orderList);
     }
     //支付完成 - 通知订单变更状态
-    function finish($id){
+    function finish($wx_callback_data){
+        $orderNo = $wx_callback_data['out_trade_no'];
+        $order = OrderModel::db()->getRow(" no = '$orderNo'");
+        if(!$order){
+            LogLib::inc()->debug("out_trade_no :not in db :".$orderNo);
+            return out_pc(8349);
+        }
+
+        if($order['status'] != OrderModel::STATUS_WAIT_PAY){
+            LogLib::inc()->debug("order status err( status = {$order['status']}) , status must be = ".OrderModel::STATUS_WAIT_PAY);
+            return out_pc(6350);
+        }
+
+        $upData = array(
+            'status'=>OrderModel::STATUS_PAYED,
+            'pay_time'=>time(),
+            'out_trade_no'=> $wx_callback_data['transaction_id'],
+        );
+
+        OrderModel::db()->upById($order['id'], $upData );
+
+
+        LogLib::inc()->debug(" pay callback ,process (up order info0 ok");
+        return out_pc(200);
+    }
+
+    function applyRefund($id){
+        if(!$id){
+            return out_pc(8981);
+        }
+        $orders = OrderModel::db()->getById($id);
+        if(!$orders){
+            return out_pc(1029);
+        }
+
+        $allowStatus = array(
+            OrderModel::STATUS_WAIT_PAY,OrderModel::STATUS_SIGN_IN,OrderModel::STATUS_TRANSPORT
+        );
+        if(!in_array($orders['status'],$allowStatus)){
+            return out_pc(8353);
+        }
+
+        $rs = $this->upStatus($id,OrderModel::STATUS_REFUND);
+        return out_pc(200,$rs);
+
 
     }
 
     function refund($id){
+        if(!$id){
+            return out_pc(8981);
+        }
+        $orders = OrderModel::db()->getById($id);
+        if(!$orders){
+            return out_pc(1029);
+        }
 
+        if($orders['status'] != OrderModel::STATUS_REFUND){
+            return out_pc(8356);
+        }
+
+        $payService = new PayService();
+        $rs = $payService->wxPayRefund($id);
+        if($rs['code'] != 200){
+            return out_pc($rs['code'],$rs['msg']);
+        }
+
+        $rs = $this->upStatus($id,OrderModel::STATUS_REFUND_FINISH);
+        return out_pc(200,$rs);
+    }
+
+    function upStatus($oid,$status){
+        LogLib::inc()->debug(['up order status:',$oid,$status]);
+        $data = array('status'=>$status,'u_time'=>time());
+        return OrderModel::db()->upById($oid,$data);
+    }
+
+    function cancel($id){
+        if(!$id){
+            return out_pc(8981);
+        }
+        $orders = OrderModel::db()->getById($id);
+        if(!$orders){
+            return out_pc(1029);
+        }
+
+        if($orders['status'] != OrderModel::STATUS_WAIT_PAY){
+            return out_pc(8351);
+        }
+
+        $rs = $this->upStatus($id,OrderModel::STATUS_CANCEL);
+        return out_pc(200,$rs);
+
+    }
+
+    function confirmReceive($id){
+        if(!$id){
+            return out_pc(8981);
+        }
+        $orders = OrderModel::db()->getById($id);
+        if(!$orders){
+            return out_pc(1029);
+        }
+
+        if($orders['status'] != OrderModel::STATUS_PAYED){
+            return out_pc(8352);
+        }
+
+        $rs = $this->upStatus($id,OrderModel::STATUS_SIGN_IN);
+        return out_pc(200,$rs);
     }
 
     function getOneDetail($id){

@@ -36,6 +36,8 @@ class OrderModel {
     const STATUS_SIGN_IN = 6;
     const STATUS_REFUND= 7;
     const STATUS_FINISH= 8;
+    const STATUS_REFUND_FINISH = 9;
+    const STATUS_REFUND_REJECT = 10;
 
     const STATUS_DESC = [
         self::STATUS_WAIT_PAY=>"未支付",
@@ -45,7 +47,9 @@ class OrderModel {
         self::STATUS_TRANSPORT=>"已发货",
         self::STATUS_SIGN_IN=>'已签收',
         self::STATUS_REFUND=>"退款中",
+        self::STATUS_REFUND_FINISH=>"退款完成",
         self::STATUS_FINISH=>"已结束",
+        self::STATUS_REFUND_REJECT=>"退款驳回",
     ];
 
     const WITHDRAW_MONEY_STATUS_WAIT = 1;

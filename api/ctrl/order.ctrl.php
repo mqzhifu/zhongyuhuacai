@@ -55,9 +55,22 @@ class OrderCtrl extends BaseCtrl  {
         return out_pc(200,$order);
     }
 
+    function cancel(){
+        $id = $agentUid =get_request_one( $this->request,'id',0);
+        $rs = $this->orderService->cancel($id);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
+    function confirmReceive(){
+        $id = $agentUid =get_request_one( $this->request,'id',0);
+        $rs = $this->orderService->confirmReceive($id);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
     function refund(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
-        $this->orderService->refund($id);
+        $rs = $this->orderService->applyRefund($id);
+        out_ajax($rs['code'],$rs['msg']);
     }
 
     function pay(){
@@ -135,8 +148,5 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->getGoodsIdByPcap($pid,$pcap,$num);
         out_ajax($rs['code'],$rs['msg']);
     }
-
-
-
 
 }
