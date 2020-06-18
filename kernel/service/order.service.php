@@ -347,6 +347,7 @@ class OrderService{
             $product = $productService->formatShow(array($product))[0];
             $product['price'] = ProductService::formatDataPrice(2,$goods,'sale_price');
             $product['num'] = $num;
+            $product['gid'] = $gid;
 
             $goodsLinkPcap = GoodsLinkCategoryAttrModel::db()->getAll(" gid = $gid ");
             if(!$goodsLinkPcap){
