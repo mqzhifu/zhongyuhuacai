@@ -88,7 +88,7 @@ class PayService{
             $fee = $order['total_price'];
         }
 
-        if(!arrKeyIssetAndExist($order,'transaction_id')){
+        if(!arrKeyIssetAndExist($order,'out_trade_no')){
             return out_pc(8354);
         }
 

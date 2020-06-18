@@ -37,7 +37,9 @@ class OrderCtrl extends BaseCtrl{
             var_dump($memo);
             if($status == 1){
                 $wxPayRefundBack = $payService->wxPayRefund($id);
-
+                if($wxPayRefundBack['code'] != 200){
+                    $this->notice("微信接口请求退款异常,".$wxPayRefundBack['msg']);
+                }
                 $service->upStatus($id,OrderModel::STATUS_REFUND_FINISH,array('refund_memo'=>$memo));
             }else{
                 $service->upStatus($id,OrderModel::STATUS_REFUND_REJECT,array('refund_memo'=>$memo));
