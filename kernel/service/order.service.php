@@ -196,6 +196,11 @@ class OrderService{
             $orderInfo = OrderModel::db()->getById( $v['id']);
             $orderInfo['goods_total_num'] = count(explode(",",$orderInfo['gids']));
 
+            $orderInfo['sign_time_dt'] = 0;
+            if(arrKeyIssetAndExist($orderInfo,'sign_time')){
+                $orderInfo['sign_time_dt'] = get_default_date($orderInfo['sign_time']);
+            }
+
             $orderInfo['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
             $orderInfo['goods_list'] = $this->getOneDetail($v['id'])['msg'];
 
@@ -279,6 +284,9 @@ class OrderService{
     function upStatus($oid,$status){
         LogLib::inc()->debug(['up order status:',$oid,$status]);
         $data = array('status'=>$status,'u_time'=>time());
+        if($status == OrderModel::STATUS_SIGN_IN){
+            $data['sign_time'] = time();
+        }
         return OrderModel::db()->upById($oid,$data);
     }
 
