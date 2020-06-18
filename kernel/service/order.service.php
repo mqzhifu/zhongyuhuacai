@@ -196,9 +196,9 @@ class OrderService{
             $orderInfo = OrderModel::db()->getById( $v['id']);
             $orderInfo['goods_total_num'] = count(explode(",",$orderInfo['gids']));
 
-            $orderInfo['sign_time_dt'] = 0;
-            if(arrKeyIssetAndExist($orderInfo,'sign_time')){
-                $orderInfo['sign_time_dt'] = get_default_date($orderInfo['sign_time']);
+            $orderInfo['sigin_time_dt'] = 0;
+            if(arrKeyIssetAndExist($orderInfo,'sigin_time')){
+                $orderInfo['sigin_time_dt'] = get_default_date($orderInfo['sigin_time']);
             }
 
             $orderInfo['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
