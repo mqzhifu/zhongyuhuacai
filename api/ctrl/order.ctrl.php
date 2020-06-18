@@ -92,6 +92,10 @@ class OrderCtrl extends BaseCtrl  {
             out_ajax(1029);
         }
 
+        if(time() > $order['expire_time']){
+            out_ajax(8358);
+        }
+
         $rs = null;
         $payService = new PayService();
         if($type == OrderModel::PAY_WX_H5_NATIVE){
