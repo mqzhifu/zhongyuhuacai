@@ -151,8 +151,9 @@ class OrderCtrl extends BaseCtrl{
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['no'],
-                    ProductModel::db()->getOneFieldValueById($v['pid'],'title'),
-                    $v['gid'],
+                    $v['pids'],
+//                    ProductModel::db()->getOneFieldValueById($v['pid'],'title'),
+                    $v['gids'],
                     $v['total_price'],
                     $payType,
                     OrderModel::STATUS_DESC[$v['status']],
@@ -161,8 +162,9 @@ class OrderCtrl extends BaseCtrl{
                     $v['address_agent'],
                     get_default_date($v['a_time']),
                     get_default_date($v['pay_time']),
-                    $v['num'],
+                    $v['nums'],
                     $v['haulage'],
+                    '<a href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
                     '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
                     '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_TWO.'&oids='.$v['id'].'&uid=2" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二级代理提现 </a>'.
                     '<a href="/finance/no/withdraw/add/role='.AgentModel::ROLE_FACTORY.'&oids='.$v['id'].'&fid=3" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 工厂提现 </a>',
@@ -179,6 +181,67 @@ class OrderCtrl extends BaseCtrl{
         echo json_encode($records);
         exit;
     }
+
+
+    function detail(){
+        $id = _g("id");
+        if(!$id){
+            $this->notice("id is null");
+        }
+
+
+        $orderService =  new OrderService();
+        $orderDetail = $orderService->getOneDetail($id);
+//        $product = ProductModel::db()->getById($id);
+        $orderDetail['dt'] = get_default_date($orderDetail['a_time']);
+        $orderDetail['pay_time_dt'] = get_default_date($orderDetail['pay_time']);
+        $orderDetail['u_time_dt'] = get_default_date($orderDetail['u_time']);
+        $orderDetail['sigin_time_dt'] = get_default_date($orderDetail['sigin_time']);
+        $orderDetail['expire_time_dt'] = get_default_date($orderDetail['expire_time']);
+
+
+        $orderDetail['status_desc'] = OrderModel::STATUS_DESC[$orderDetail['status']];
+
+//
+//        $category = ProductCategoryModel::db()->getById($product['category_id']);
+//        $product['category_name'] = $category['name'];
+//
+//        $admin = AdminUserModel::db()->getById($product['admin_id']);
+//        $product['admin_name'] = $admin['uname'];
+//
+//        $product['status_desc'] = ProductModel::STATUS[$product['status']];
+//
+//        $product['desc_attr_arr'] = "";
+//        if(arrKeyIssetAndExist($product,'desc_attr')){
+//            $product['desc_attr_arr'] = json_decode($product['desc_attr'],true);
+//        }
+//
+//        $factory = FactoryModel::db()->getById($product['factory_uid']);
+//
+//        $product['factory'] = $factory['title'];
+//        if(arrKeyIssetAndExist($product,'pic')){
+//            $pics = explode(",",$product['pic']);
+//            foreach ($pics as $k=>$v) {
+//                $product['pics'][] = get_product_url($v);
+//            }
+//        }
+//
+//        $goodsList = GoodsModel::getListByPid($id);
+//        $product['goods_num'] = 0;
+//        if($goodsList){
+//            $product['goods_num'] = count($goodsList);
+//        }
+//
+//        $attributeArr = ProductModel::attrParaParserToName($product['attribute']);
+
+
+        $this->assign("orderDetail",$orderDetail);
+//        $this->assign("goodsList",$goodsList);
+//        $this->assign("product",$product);
+
+        $this->display("/finance/order_detail.html");
+    }
+
 
     function getDataListTableWhere(){
         $where = 1;

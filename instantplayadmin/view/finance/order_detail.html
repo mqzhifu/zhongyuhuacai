@@ -1,0 +1,371 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+
+
+
+
+
+                        <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+                        <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                        <h4 class="modal-title">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Widget settings form goes here
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn blue">Save changes</button>
+                                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
+                        <!-- /.modal -->
+                        <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+                        <!-- BEGIN STYLE CUSTOMIZER -->
+                        <!-- END STYLE CUSTOMIZER -->
+                        <!-- BEGIN PAGE HEADER-->
+                        <!-- END PAGE HEADER-->
+                        <!-- BEGIN PAGE CONTENT-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- Begin: life time stats -->
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-shopping-cart"></i>订单详情 #{$orderDetail['id']}
+                                            <!--<span class="hidden-480">| Dec 27, 2013 7:16:25 </span>-->
+                                        </div>
+                                        <div class="actions">
+                                            <a href="{$this->_backListUrl}" class="btn default yellow-stripe">
+                                                <i class="fa fa-angle-left"></i>
+                                                <span class="hidden-480">
+								Back </span>
+                                            </a>
+                                            <!--<div class="btn-group">-->
+                                                <!--<a href="/product/no/goods/add/pid={$product['id']}" class="btn default yellow-stripe">-->
+                                                    <!--添加商品-->
+                                                <!--</a>-->
+                                            <!--</div>-->
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-lg">
+                                                <li class="active">
+                                                    <a href="#tab_1" data-toggle="tab">
+                                                        详情 </a>
+                                                </li>
+                                                <li>
+                                                    <a href="#tab_3" data-toggle="tab">
+                                                        商品列表 </a>
+                                                </li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="tab_1">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet yellow-crusta box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>属性
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            id #:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$orderDetail['id']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            创建 日期 & 时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$orderDetail['dt']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            状态:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+																<span class="label label-success">
+																{$orderDetail['status_desc']} </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            支付时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                           {$orderDetail['pay_time_dt']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            最后更新时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$orderDetail['u_time_dt']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            签收时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$orderDetail['sigin_time_dt']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            总价:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['total_price']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            商品总价:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['category_name']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            运费总价:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['admin_name']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            超时时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['factory']}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            标签:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['lables']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            爬虫-3方ID:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            <a target="_blank" href="https://detail.1688.com/offer/{$product['spider_source_pid']}.html">{$product['spider_source_pid']}</a>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            是否空属性:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['category_attr_null']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet blue-hoki box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>统计
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            快递号:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['pv']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            代理ID:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['uv']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            收货地址:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['goods_num']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            代理地址:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$product['lowest_price']}
+                                                                        </div>
+                                                                    </div>
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet red-sunglo box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>商品信息
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    {foreach ($attributeArr as $k=>$v) }
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            {$k}:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$v}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/foreach}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet green-meadow box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>图片信息
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-12 value">
+
+
+                                                                            {foreach ($product['pics'] as $k=>$v) }
+                                                                            <img src="{$v}" width="200" height="200" /><br>
+                                                                            {/foreach}
+
+                                                                            <!--#24 Park Avenue Str<br>-->
+                                                                            <!--T: 123123232<br>-->
+                                                                            <!--F: 231231232<br>-->
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet red-sunglo box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>描述参数
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+
+
+                                                                    {if ( $product['desc_attr_arr'] )}
+                                                                    {foreach ( $product['desc_attr_arr'] as $k=>$v) }
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            {$k}:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$v}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {/foreach}
+                                                                    {/if}
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End: life time stats -->
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
