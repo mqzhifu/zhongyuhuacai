@@ -121,7 +121,7 @@ class WxPayConfig extends WxPayConfigInterface
 	 */
 	public function GetSSLCertPath(&$sslCertPath, &$sslKeyPath)
 	{
-		$sslCertPath = APP_CONFIG.'/wechat_pay/apiclient_cert.pem';
-		$sslKeyPath = APP_CONFIG.'/wechat_pay/apiclient_key.pem';
+		$sslCertPath = ConfigCenter::$_dir.DS .KERNEL_NAME.'/apiclient_cert.pem';
+		$sslKeyPath =  ConfigCenter::$_dir.DS .KERNEL_NAME.'/apiclient_key.pem';
 	}
 }
