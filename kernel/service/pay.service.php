@@ -92,10 +92,9 @@ class PayService{
             return out_pc(8354);
         }
 
-        var_dump(3333);exit;
         try{
             $input = new WxPayRefund();
-            $input->SetTransaction_id($order["transaction_id"]);
+            $input->SetTransaction_id($order["out_trade_no"]);
             $input->SetTotal_fee( $order["total_price"]);
             $input->SetRefund_fee($fee);
 
