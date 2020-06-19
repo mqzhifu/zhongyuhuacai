@@ -88,8 +88,10 @@ class PayService{
             $fee = $order['total_price'];
         }
 
-        $fee = 1;
 
+        $totalPrice = $order["total_price"];
+        $fee = 1;
+        $totalPrice = 1;
 
         if(!arrKeyIssetAndExist($order,'out_trade_no')){
             return out_pc(8354);
@@ -98,7 +100,7 @@ class PayService{
         try{
             $input = new WxPayRefund();
             $input->SetTransaction_id($order["out_trade_no"]);
-            $input->SetTotal_fee( $order["total_price"]);
+            $input->SetTotal_fee( );
             $input->SetRefund_fee($fee);
 
             $config = new WxPayConfig();
