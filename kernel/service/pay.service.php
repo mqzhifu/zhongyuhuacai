@@ -88,6 +88,7 @@ class PayService{
             $fee = $order['total_price'];
         }
 
+
         if(!arrKeyIssetAndExist($order,'out_trade_no')){
             return out_pc(8354);
         }
@@ -104,6 +105,7 @@ class PayService{
 
             $backInfo = WxPayApi::refund($config, $input);
             LogLib::inc()->debug([" WxPayApi::refund back:",$backInfo,]);
+            var_dump($backInfo);exit;
             return out_pc(200);
         } catch(Exception $e) {
             LogLib::inc()->debug(["rerund err:".json_encode($e)]);
