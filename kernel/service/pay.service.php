@@ -100,7 +100,7 @@ class PayService{
         try{
             $input = new WxPayRefund();
             $input->SetTransaction_id($order["out_trade_no"]);
-            $input->SetTotal_fee( );
+            $input->SetTotal_fee( $totalPrice);
             $input->SetRefund_fee($fee);
 
             $config = new WxPayConfig();
@@ -109,7 +109,8 @@ class PayService{
 
             $backInfo = WxPayApi::refund($config, $input);
             LogLib::inc()->debug([" WxPayApi::refund back:",$backInfo,]);
-            $backInfo = json_decode($backInfo,true);
+//            $backInfo = json_decode($backInfo,true);
+            var_dump($backInfo);
             if($backInfo['err_code']){
                 return out_pc(8355,json_encode($backInfo));
             }
