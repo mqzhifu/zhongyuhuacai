@@ -336,7 +336,7 @@ class ProductService{
                     $order .=  " asc ";
                 }
             }else{
-                $order = "desc";
+                $order .= "desc";
             }
 
         }
