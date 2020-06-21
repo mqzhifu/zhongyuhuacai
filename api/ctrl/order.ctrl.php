@@ -1,12 +1,13 @@
 <?php
 class OrderCtrl extends BaseCtrl  {
-    function getListByUser(){
-        $list = $this->orderService->getUserList($this->uid);
-        return out_pc(200,$list);
-    }
+//    function getListByUser(){
+//        $status = get_request_one( $this->request,'status',0);
+//        $list = $this->orderService->getUserList($this->uid,$status);
+//        return out_pc(200,$list);
+//    }
 
     function doing(){
-        $agentUid =get_request_one( $this->request,'agent_uid',0);
+        $agentUid = get_request_one( $this->request,'agent_uid',0);
         $couponId = get_request_one( $this->request,'coupon_id',0);
 //        $num = get_request_one( $this->request,'num',0);
 //        $gid = get_request_one( $this->request,'gid',0);
@@ -20,7 +21,8 @@ class OrderCtrl extends BaseCtrl  {
     }
 
     function getUserList(){
-        $rs = $this->orderService->getUserList($this->uid);
+        $status = get_request_one( $this->request,'status',0);
+        $rs = $this->orderService->getUserList($this->uid,$status);
         return out_ajax($rs['code'],$rs['msg']);
     }
 

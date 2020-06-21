@@ -329,12 +329,16 @@ class ProductService{
         $order = "";
         if(arrKeyIssetAndExist($condition,'orderType')){
             $order .= " order by ".self::ORDER_TYPE[$condition['orderType']]['field'];
-            if(arrKeyIssetAndExist($condition ,'orderUpDown')){
-                $order .=  " desc ";
-
+            if($order == 'lowest_price'){
+                if(arrKeyIssetAndExist($condition ,'orderUpDown')){
+                    $order .=  " desc ";
+                }else{
+                    $order .=  " asc ";
+                }
             }else{
-                $order .=  " asc ";
+                $order = "desc";
             }
+
         }
 
         $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);

@@ -185,8 +185,13 @@ class OrderService{
 
     }
     //用户订单列表
-    function getUserList($uid){
-        $list =  OrderModel::getListByUid($uid);
+    function getUserList($uid,$status){
+        $where = " uid = $uid ";
+        $order = " order by id desc";
+        if($status){
+            $where .= " and status = $status";
+        }
+        $list =  OrderModel::db()->getALL($where . $order);
         if(!$list){
             return out_pc(200,$list);
         }
