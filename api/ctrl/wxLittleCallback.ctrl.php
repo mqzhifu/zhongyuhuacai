@@ -41,8 +41,10 @@ class WxLittleCallbackCtrl{
         LogLib::inc()->debug($request);
     }
 
-    function sharetest($request){
-        LogLib::inc()->debug("share test callback ");
-        LogLib::inc()->debug($request);
+    function shareTest($request){
+//        LogLib::inc()->debug("share test callback ");
+//        LogLib::inc()->debug($request);
+        $lib = new WxLittleLib();
+        $rs = $lib->getQrCode();
     }
 }
