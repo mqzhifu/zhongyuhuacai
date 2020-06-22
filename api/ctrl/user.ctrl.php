@@ -26,6 +26,18 @@ class UserCtrl extends BaseCtrl  {
         out_ajax(200,$user);
 
     }
+
+    function delAddress($request){
+        $id = get_request_one($request,'id',0);
+        $rs =  $this->userAddressService->addOne($this->uid,$id);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
+    function addAddress($request){
+        $rs =  $this->userAddressService->addOne($this->uid,$request);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
     //用户反馈
     function feedback(){
         $title = get_request_one($this->request,'title',0);
@@ -45,7 +57,7 @@ class UserCtrl extends BaseCtrl  {
         $newId = UserFeedbackModel::db()->add($data);
         out_ajax(200,$newId);
     }
-
+    //更新资料
     function upInfo(){
         $sex = get_request_one($this->request,'sex',0);
         $nickname = get_request_one($this->request,'nickname',0);
@@ -57,7 +69,7 @@ class UserCtrl extends BaseCtrl  {
 
         $this->userService->upUserInfo($this->uid,$data);
     }
-
+    //更新头像
     function upAvatar(){
         LogLib::inc()->debug(['up avatar',$_REQUEST]);
 

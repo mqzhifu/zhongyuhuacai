@@ -35,4 +35,14 @@ class WxLittleCallbackCtrl{
     function pay(){
 
     }
+
+    function share($request){
+        LogLib::inc()->debug("share callback ");
+        LogLib::inc()->debug($request);
+    }
+
+    function sharetest($request){
+        LogLib::inc()->debug("share test callback ");
+        LogLib::inc()->debug($request);
+    }
 }
