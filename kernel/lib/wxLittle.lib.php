@@ -27,37 +27,40 @@ class WxLittleLib{
     //发送获取token请求,获取token(2小时)
     function getToken() {
         $url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential"; //获取token的url
-        echo $url;
+//        echo $url;
         $res = $this->curl($url);
-        var_dump($res);
+//        var_dump($res);
         $data = json_decode($res,true);
-        var_dump($data);
+//        var_dump($data);
         $token = $data['access_token'];
         return $token;
     }
 
-    //获取token的url参数拼接
-//    function getTokenUrlStr()
-//    {
-//        $getTokenUrl =
-//        $WXappid     =  "wx0399845015067c51"; //APPID
-//        $WXsecret    = "7d7205f85b79805006ecfa2121ef4272"; //secret
-//        $str  = $getTokenUrl;
-//        $str .= "grant_type=client_credential&";
-//        $str .= "appid=" . $WXappid . "&";
-//        $str .= "secret=" . $WXsecret;
-//
-//        return $str;
-//    }
-
     function getQrCode(){
-        $token = $this->getToken();
-        var_dump($token);exit;
-        $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=$token";
-        $res = $this->curl($url,false);
+        $access_token = $this->getToken();
+//        var_dump($token);exit;
+        $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=$access_token";
+//        var_dump($url);
+        $data = array(
+//            'access_token'=>$access_token,
+            'scene'=>"id=1",
+            'page'=>"pages/goodsDetail/goodsDetail",
+            'width'=>400,
+            "auto_color"=>"",
+            'line_color'=>"",
+            "is_hyaline"=>"",
+        );
+//        var_dump($data);
+        $res = $this->curl($url,false,$data);
+//        var_dump($res);exit;
+
+        header('Content-type: image/jpg');
+        echo $res;
+        exit;
+
     }
 
-    function curl($url,$autoIncludeApp = true)
+    function curl($url,$autoIncludeApp = true,$postData = null)
     {
         if($autoIncludeApp){
             $url .= "&appid={$this->_appId}&secret={$this->_appSecret}";
@@ -69,6 +72,12 @@ class WxLittleLib{
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_URL, $url);
+
+        if($postData){
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $postData);
+        }
+
         $res = curl_exec($curl);
         curl_close($curl);
         return $res;
