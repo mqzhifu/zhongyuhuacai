@@ -3,8 +3,8 @@
 class OrderService{
     public $timeout = 30 * 60;//订单超时时间
     //下单入口
-    function doing($uid,$gidsNums,$agentUid = 0,$couponId = 0,$memo = ''){
-        LogLib::inc()->debug([$uid,$gidsNums,$agentUid ,$couponId ,$memo ]);
+    function doing($uid,$gidsNums,$couponId = 0,$memo = '',$share_uid = 0,$userSelAddressId = 0){
+        LogLib::inc()->debug([$uid,$gidsNums,$couponId ,$memo ,$share_uid ]);
 
         if(!$uid){
             return out_pc(8002);
@@ -89,15 +89,39 @@ class OrderService{
 //            return out_pc(8336);
 //        }
 
+        $userService = new UserService();
+        $agentService = new AgentService();
+        $addressService = new UserAddressService();
+
+        $userSelAddress = "";//用户收货地址详细信息
+        $shareUser = null;//分享者的用户信息
+        $agentShare = null;//分享者为代理，代理的信息
+        if($share_uid && $share_uid != $uid ){
+            $shareUserRs = $userService->getUinfoById($share_uid);
+            if($shareUserRs['code'] != 200){
+                return out_pc($shareUserRs['code'] ,$shareUserRs['msg']);
+            }
+            $shareUser = $shareUserRs['msg'];
+
+            $agentShareRs = $agentService->getOneByUid($share_uid);
+            if($agentShareRs['code'] == 200){
+                $agentShare = $agentShareRs['msg'];
+            }
+
+        }
+
+        if($userSelAddressId){
+            $userSelAddress = $addressService->getById($userSelAddressId)['msg'];
+            if(!$userSelAddress){
+                return out_pc(1035);
+            }
+        }
         //收货地址
         $agentAddress = "";
-        if($agentUid){
-            $agent = AgentModel::db()->getById($agentUid);
-            if(!$agent){
-                return out_pc(1028);
-            }
-            $agentAddress = AgentModel::getAddrStrById($agentUid);
+        if($agentShare){
+            $agentAddress = AgentModel::getAddrStrById($agentShare['id']);
         }
+
         //优惠卷
         $couponPrice = 0;
         if($couponId){
@@ -124,7 +148,8 @@ class OrderService{
             'pay_time'=>0,
             'express_no'=>"",
             'haulage'=>$goods['haulage'],
-            'agent_uid'=>$agentUid,
+            'share_uid'=>$share_uid,
+            'agent_uid'=>$agentShare['id'],
             'coupon_id'=>$couponId,
             'address_agent'=>$agentAddress,
             'agent_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_STATUS_WAIT,
@@ -133,6 +158,7 @@ class OrderService{
             'title'=>"好商品的购买~",
             'expire_time'=>time() + $this->timeout,
             'gids_nums'=>$gidsNums,
+            'address_id'=>$userSelAddressId,
         );
 
         $newId = OrderModel::db()->add($order);
@@ -155,7 +181,6 @@ class OrderService{
                 'uid'=>$uid,
             );
             OrderGoodsModel::db()->add($data);
-
 
             CartModel::db()->delete(" pid = {$goods['pid']} and gid = $gid and uid = $uid limit 10");
 //            $data = array("stock"=>array(-1));

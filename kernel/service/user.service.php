@@ -481,7 +481,7 @@ class UserService{
         return "";
     }
 
-    function getUinfoById($uid,$appName = ""){
+    function getUinfoById($uid){
         if(!$uid){
             return out_pc(8002);
         }
@@ -522,7 +522,7 @@ class UserService{
 
 //        if(arrKeyIssetAndExist($user,'avatar'))
         $user['avatar'] = get_avatar_url($user['avatar']);
-
+        //注册时间
         $user['reg_dt'] = get_default_date($user['a_time']);
 
         return out_pc(200,$user);

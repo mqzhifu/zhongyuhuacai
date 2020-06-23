@@ -5,6 +5,8 @@ class BaseCtrl {
 
     public $request = null;
 
+
+    //微服务 类
     public $userService = null;
     public $productService =null;
     public $systemService =null;
@@ -21,6 +23,7 @@ class BaseCtrl {
         $this->request = $request;
 //        $this->checkSign();
 
+        //加载 配置文件 信息
         ConfigCenter::get(APP_NAME,"api");
         ConfigCenter::get(APP_NAME,"err_code");
         ConfigCenter::get(APP_NAME,"main");
@@ -61,6 +64,8 @@ class BaseCtrl {
 //            $this->userService->setDayActiveUser($this->uid);
 //        }
 
+
+//        var_dump($this->uinfo);exit;
         //有些接口必须，得登陆后，才能访问
         $isLogin = $this->loginAPIExcept($request['ctrl'],$request['ac']);
         if($isLogin){
@@ -171,7 +176,9 @@ class BaseCtrl {
             if($rs['code'] != 200){
                 return $rs;
             }
-            $this->uid = $rs['msg'];
+
+            $this->uinfo = $rs['msg'];
+            $this->uid =  $rs['msg']['id'];
 //        }
 //        elseif(RUN_ENV == "WEBSOCKET"){
 //            if($GLOBALS['uid_fd_table']->exist($this->clientFrame->fd)){
@@ -197,7 +204,7 @@ class BaseCtrl {
         if(!$decodeData['uid']){
             return out_pc(8109);
         }
-        $uid = $decodeData['uid'];
+        $uid = (int) $decodeData['uid'];
         //防止黑客伪造非整形UID,这样后面所有程度在读取的时候，都会错
         if(!$uid || $uid < 0 ){
             return out_pc(8105);
@@ -210,12 +217,12 @@ class BaseCtrl {
 //        if($redisToken != $token){
 //            return out_pc(8232);
 //        }
-        $this->uinfo = $this->userService->getUinfoById($uid);
-        if(!$this->uinfo){//TOKEN解出的UID 不在DB中
-            return out_pc(1002);
+        $uinfoRs = $this->userService->getUinfoById($uid);
+        if($uinfoRs['code'] != 200){
+            return out_pc($uinfoRs['code'],$uinfoRs['msg']);
         }
 
-        return out_pc(200,$uid);
+        return out_pc(200,$uinfoRs['msg']);
     }
 
 }

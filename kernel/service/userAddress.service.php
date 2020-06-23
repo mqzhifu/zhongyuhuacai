@@ -103,6 +103,11 @@ class UserAddressService{
 
     }
 
+    function getById($id){
+        $row = UserAddressModel::db()->getRow($id);
+        return out_pc(200,$row);
+    }
+
     function getProvinceByCode($code){
         return AreaProvinceModel::db()->getRow(" code = '$code'");
     }

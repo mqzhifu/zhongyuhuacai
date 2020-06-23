@@ -44,7 +44,8 @@ return array(
     1031=>"city code not in db",
     1032=>"county code not in db",
     1033=>"town code not in db",
-
+    1034=>"share_uid not in db",
+    1035=>"user sel address id not in db",
 
     5001=>'此接口必须为登陆状态',
 //

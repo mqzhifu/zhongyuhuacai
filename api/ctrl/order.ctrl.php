@@ -9,14 +9,17 @@ class OrderCtrl extends BaseCtrl  {
     function doing(){
         $agentUid = get_request_one( $this->request,'agent_uid',0);
         $couponId = get_request_one( $this->request,'coupon_id',0);
-//        $num = get_request_one( $this->request,'num',0);
+
+        $share_uid = get_request_one( $this->request,'share_uid',0);
+
+        $userSelAddressId = get_request_one( $this->request,'userSelAddressId',0);
 //        $gid = get_request_one( $this->request,'gid',0);
         $gidsNum = get_request_one( $this->request,'gidsNums',0);
 //        $pid = get_request_one( $this->request,'pid',0);
         $memo = get_request_one( $this->request,'memo','');
 
 
-        $rs = $this->orderService->doing($this->uid,$gidsNum,$agentUid,$couponId,$memo);
+        $rs = $this->orderService->doing($this->uid,$gidsNum,$couponId,$memo,$share_uid,$userSelAddressId);
         return out_ajax($rs['code'],$rs['msg']);
     }
 
@@ -126,7 +129,7 @@ class OrderCtrl extends BaseCtrl  {
 //        $pid =get_request_one( $this->request,'pid',0);
 //        $pcap = get_request_one( $this->request,'pcap',"");
 //        $num =get_request_one( $this->request,'num',0);
-
+//
         $gidsNums = get_request_one( $this->request,'gidsNums',"");
 
         $rs = $this->orderService->confirmOrder($gidsNums);

@@ -51,7 +51,7 @@ class WxLittleLib{
             "is_hyaline"=>"",
         );
 //        var_dump($data);
-        $res = $this->curl($url,false,$data);
+        $res = $this->curl($url,false,json_encode($data));
 //        var_dump($res);exit;
 
         header('Content-type: image/jpg');

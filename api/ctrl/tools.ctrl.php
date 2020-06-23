@@ -135,9 +135,10 @@ class ToolsCtrl {
         $this->userService = new UserService();
         $token = _g('token');
         if(!$token){
-            $token = 'sre6Zn-uppGH34bbfcupng';
+            $token = 'sre6ZoCIspaIqaCUfbWp2bN2vWp_2XRx';
         }
         $tokenInfo = TokenLib::getDecode($token);
+//        var_dump($tokenInfo);exit;
         $info = $this->userService->getUinfoById($tokenInfo['uid']);
         $info = $info['msg'];
         $api = $this->_api;

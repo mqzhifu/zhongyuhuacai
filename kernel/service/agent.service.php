@@ -57,6 +57,11 @@ class AgentService{
         $newId = AgentModel::db()->add($addData);
         return out_pc(200,$newId);
     }
+    //代理有一个ID,同时代理还可以是普通用户，还有一个UID
+    function getOneByUid($uid){
+        $agent = AgentModel::db()->getRow(" uid = $uid");
+        return out_pc(200,$agent);
+    }
 
 
 }
