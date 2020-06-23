@@ -36,19 +36,20 @@ class WxLittleLib{
         return $token;
     }
 
-    function getQrCode(){
+    function getQrCode($pid,$shareUid){
         $access_token = $this->getToken();
 //        var_dump($token);exit;
         $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=$access_token";
 //        var_dump($url);
+        $scene = "id=$pid&share_uid=$shareUid";
         $data = array(
 //            'access_token'=>$access_token,
-            'scene'=>"id=1",
+            'scene'=>$scene,
             'page'=>"pages/goodsDetail/goodsDetail",
-            'width'=>400,
-            "auto_color"=>"",
-            'line_color'=>"",
-            "is_hyaline"=>"",
+//            'width'=>400,
+//            "auto_color"=>"",
+//            'line_color'=>"",
+//            "is_hyaline"=>"",
         );
 //        var_dump($data);
         $res = $this->curl($url,false,json_encode($data));

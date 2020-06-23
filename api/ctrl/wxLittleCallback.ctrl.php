@@ -31,11 +31,24 @@ class WxLittleCallbackCtrl{
             return false;
         }
     }
-    //支付回调
-    function pay(){
 
+
+    function getShareQrCode(){
+        $pid = _g('pid');
+        if(!$pid){
+            out_ajax(8366);
+
+        }
+
+        $share_uid = _g('share_uid');
+        if(!$share_uid){
+            out_ajax(8366);
+
+        }
+
+        $lib = new WxLittleLib();
+        $lib->getQrCode($pid,$share_uid);
     }
-
     function share($request){
         LogLib::inc()->debug("share callback ");
         LogLib::inc()->debug($request);
