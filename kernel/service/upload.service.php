@@ -89,6 +89,12 @@ class UploadService
     function saveAgentShareQrCode($binaryImg,$pid,$shareUid){
         $tmp = "/$pid/$shareUid.jpg";
         $path = get_share_qr_code_path($tmp);
+
+        $checkDir = get_share_qr_code_path($pid);
+        if(!is_dir($checkDir)){
+            mkdir( $checkDir );
+        }
+
         file_put_contents($path,$binaryImg);
     }
 
