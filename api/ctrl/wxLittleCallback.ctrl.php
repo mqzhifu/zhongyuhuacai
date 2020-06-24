@@ -31,7 +31,10 @@ class WxLittleCallbackCtrl{
             return false;
         }
     }
-
+    //接收小程序推送的日志
+    function log($request){
+        LogLib::inc()->debug(["WxLittleCallback ,receive log:",$request]);
+    }
 
     function getShareQrCode(){
         $pid = _g('pid');
