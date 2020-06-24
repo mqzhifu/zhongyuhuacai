@@ -55,7 +55,8 @@ class WxLittleCallbackCtrl{
             out_ajax(1036);
         }
 
-        $agent = AgentModel::db()->getById($share_uid);
+        $agentService = new AgentService();
+        $agent = $agentService->getOneByUid($share_uid)['msg'];
         if(!$agent){
             out_ajax(1037);
         }
