@@ -43,7 +43,6 @@ class WxLittleLib{
 //        var_dump($url);
         $scene = "id=$pid&share_uid=$shareUid";
         $scene = "$pid&$shareUid";
-        var_dump($scene);exit;
         $data = array(
 //            'access_token'=>$access_token,
             'scene'=>$scene,

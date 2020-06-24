@@ -73,9 +73,15 @@ class WxLittleCallbackCtrl{
 
         $lib = new WxLittleLib();
         $binaryImg = $lib->getQrCode($pid,$share_uid);
+        if(!$binaryImg){
+            out_ajax(8367);
+        }
 
         $imService = new UploadService();
         $imService->saveAgentShareQrCode($binaryImg,$pid,$share_uid);
+
+        $url = get_share_qr_code_path($tmpPath);
+        out_ajax(200,$url);
 
     }
     function share($request){

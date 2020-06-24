@@ -386,6 +386,7 @@ return array(
     8364=>"收货人手机号为空",
     8365=>"详细地址为空",
     8366=>"scene is null",
+    8367=>"getwxacodeunlimit is false",
 
 
 
