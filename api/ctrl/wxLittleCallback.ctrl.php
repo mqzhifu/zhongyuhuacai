@@ -34,6 +34,7 @@ class WxLittleCallbackCtrl{
     //接收小程序推送的日志
     function log($request){
         LogLib::inc()->debug(["WxLittleCallback ,receive log:",$request]);
+        out_ajax(200,"ok");
     }
 
     function getShareQrCode(){
