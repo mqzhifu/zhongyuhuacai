@@ -68,7 +68,8 @@ class WxLittleCallbackCtrl{
         $tmpPath = "/$pid/$share_uid.jpg";
         $path = get_share_qr_code_path($tmpPath);
         if(file_exists($path)){
-            return $path;
+            $url = get_share_qr_code_url($tmpPath);
+            out_ajax(200,$url);
         }
 
         $lib = new WxLittleLib();
@@ -80,7 +81,7 @@ class WxLittleCallbackCtrl{
         $imService = new UploadService();
         $imService->saveAgentShareQrCode($binaryImg,$pid,$share_uid);
 
-        $url = get_share_qr_code_path($tmpPath);
+        $url = get_share_qr_code_url($tmpPath);
         out_ajax(200,$url);
 
     }
