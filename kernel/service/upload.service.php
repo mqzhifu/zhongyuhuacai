@@ -85,6 +85,14 @@ class UploadService
         $rs = $lib->upLoadOneFile($postInputName,'factory',array('png','jpg','bmp'),0);
         return $rs;
     }
+
+    function saveAgentShareQrCode($binaryImg,$pid,$shareUid){
+        $tmp = "/$pid/$shareUid.jpg";
+        $path = get_share_qr_code_path($tmp);
+        file_put_contents($path,$binaryImg);
+    }
+
+
     //循环遍历，整个 图片上传目录，所有的已上传的图片
     function getAllUploadImage(){
         $dir = $this->getFileUploadDir();

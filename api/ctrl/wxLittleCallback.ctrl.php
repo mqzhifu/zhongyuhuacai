@@ -36,18 +36,42 @@ class WxLittleCallbackCtrl{
     function getShareQrCode(){
         $pid = _g('pid');
         if(!$pid){
-            out_ajax(8366);
+            out_ajax(8072);
 
         }
 
         $share_uid = _g('share_uid');
         if(!$share_uid){
-            out_ajax(8366);
+            out_ajax(8110);
+        }
 
+        $product = ProductModel::db()->getById($pid);
+        if(!$product){
+            out_ajax(1026);
+        }
+
+        $user = UserModel::db()->getById($share_uid);
+        if(!$user){
+            out_ajax(1036);
+        }
+
+        $agent = AgentModel::db()->getById($share_uid);
+        if(!$agent){
+            out_ajax(1037);
+        }
+
+        $tmpPath = "/$pid/$share_uid.jpg";
+        $path = get_share_qr_code_path($tmpPath);
+        if(file_exists($path)){
+            return $path;
         }
 
         $lib = new WxLittleLib();
-        $lib->getQrCode($pid,$share_uid);
+        $binaryImg = $lib->getQrCode($pid,$share_uid);
+
+        $imService = new UploadService();
+        $imService->saveAgentShareQrCode($binaryImg,$pid,$share_uid);
+
     }
     function share($request){
         LogLib::inc()->debug("share callback ");

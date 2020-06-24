@@ -54,11 +54,10 @@ class WxLittleLib{
 //        var_dump($data);
         $res = $this->curl($url,false,json_encode($data));
 //        var_dump($res);exit;
-
-        header('Content-type: image/jpg');
-        echo $res;
-        exit;
-
+//        header('Content-type: image/jpg');
+//        echo $res;
+//        exit;
+        return $res;
     }
 
     function curl($url,$autoIncludeApp = true,$postData = null)

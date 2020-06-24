@@ -46,6 +46,8 @@ return array(
     1033=>"town code not in db",
     1034=>"share_uid not in db",
     1035=>"user sel address id not in db",
+    1036=>"share_uid not in db ",
+    1037=>"share_uid is not agent",
 
     5001=>'此接口必须为登陆状态',
 //
@@ -198,6 +200,8 @@ return array(
     8105=>'token解出的UID，但不是整型',
 //    //各种-数据格式-验证-错误
     8109=>'token解析失败',//
+    8110=>"share_uid is null",
+
 
 //    8110=>'code验证失败',//
 //    8112=>'路径错误',

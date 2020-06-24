@@ -4,6 +4,15 @@ function get_admin_project_name(){
     return "instantplayadmin";
 }
 
+function get_api_project_name(){
+    return "api";
+}
+
+function get_base_upload_path( ){
+    $staticUrl = STATIC_DIR;
+    return $staticUrl . DS . "upload" . DS;
+}
+
 function get_base_upload_url( $protocol = HTTP_PROTOCOL){
     $staticUrl = get_static_url($protocol);
     return $staticUrl . DS . "upload" . DS;
@@ -11,6 +20,16 @@ function get_base_upload_url( $protocol = HTTP_PROTOCOL){
 
 function get_admin_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
     $base =  get_base_upload_url($protocol).get_admin_project_name() . DS . get_upload_cdn_evn() .  DS;
+    return $base.$module.DS . $tmpPath;
+}
+
+function get_api_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
+    $base =  get_base_upload_url($protocol).get_api_project_name() . DS . get_upload_cdn_evn() .  DS;
+    return $base.$module.DS . $tmpPath;
+}
+
+function get_api_upload_path($tmpPath,$module ){
+    $base =  get_base_upload_path().get_api_project_name() . DS . get_upload_cdn_evn() .  DS;
     return $base.$module.DS . $tmpPath;
 }
 
@@ -91,6 +110,22 @@ function get_comment_url( $tmpPath , $protocol =HTTP_PROTOCOL){
 function get_default_user_url($protocol = "http"){
     $staticUrl = get_static_url($protocol);
     return $staticUrl . "/nouser.png";
+}
+
+function get_share_qr_code_url($tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return "";
+    }
+
+    return get_api_upload_url($tmpPath,"wx_little_share_qrcode",$protocol);
+}
+
+function get_share_qr_code_path($tmpPath){
+    if(!$tmpPath){
+        return "";
+    }
+
+    return get_api_upload_path($tmpPath,"wx_little_share_qrcode");
 }
 
 
