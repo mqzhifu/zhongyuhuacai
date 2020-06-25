@@ -197,6 +197,12 @@ class OrderCtrl extends BaseCtrl{
                     $refundBnt =  '<a href="/finance/no/order/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
                 }
 
+
+                $shareUserName = "";
+                if(arrKeyIssetAndExist($v,'share_uid')){
+                    $shareUserName = UserModel::db()->getOneFieldValueById($v['share_uid'],'nickname',"--");
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -208,8 +214,8 @@ class OrderCtrl extends BaseCtrl{
                     $payType,
                     OrderModel::STATUS_DESC[$v['status']],
                     UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
-                    AgentModel::db()->getOneFieldValueById($v['agent_uid'],'real_name','--'),
-                    $v['address_agent'],
+                    $shareUserName,
+                    $v['agent_uid']."-".$v['address_agent'],
                     get_default_date($v['a_time']),
                     get_default_date($v['pay_time']),
                     $v['nums'],
