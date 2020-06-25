@@ -257,16 +257,19 @@
                                                                     id
                                                                 </th>
                                                                 <th width="15%">
-                                                                    pid
+                                                                    pids
                                                                 </th>
                                                                 <th width="15%">
-                                                                    goods_id
+                                                                    gids
                                                                 </th>
                                                                 <th width="10%">
-                                                                    价格
+                                                                    总价
                                                                 </th>
                                                                 <th width="10%">
                                                                     状态
+                                                                </th>
+                                                                <th width="10%">
+                                                                    a_time
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -282,6 +285,7 @@
                                                                     <td>{$v['gids']}</td>
                                                                     <td>{$v['total_price']}</td>
                                                                     <td>{$v['status']}</td>
+                                                                    <td>{$v['dt']}</td>
 
                                                                 </tr>
                                                                 {/foreach}

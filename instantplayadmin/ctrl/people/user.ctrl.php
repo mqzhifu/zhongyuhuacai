@@ -196,6 +196,12 @@ class UserCtrl extends BaseCtrl{
             }
         }
 
+        if($orders){
+            foreach ($orders as $k=>$v){
+                $orders[$k]['dt'] = get_default_date($v['a_time']);
+            }
+        }
+
         $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
         $user['last_active_record_dt'] = $lastActiveRecord;
         $user['active_day_cnt'] = $this->userService->getActiveDayCnt($user['id']);
