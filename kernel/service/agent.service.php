@@ -63,5 +63,25 @@ class AgentService{
         return out_pc(200,$agent);
     }
 
+    function getSubAgentList($aid){
+        $list = AgentModel::db()->getAll(" invite_agent_uid = $aid");
+        return $list;
+    }
+
+    function getFee($uids){
+        $orderService = new OrderService();
+        $orderList = $orderService->getListByAgentId($uids,OrderModel::STATUS_FINISH);
+        if(!$orderList){
+            return 0;
+        }
+
+        $fee = 0;
+        foreach ($orderList as $k=>$v){
+            $fee += $v['total_price'];
+        }
+
+        return $fee;
+    }
+
 
 }

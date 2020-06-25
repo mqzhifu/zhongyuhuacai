@@ -11,6 +11,21 @@ class UserAddressService{
         return out_pc(200,$list);
     }
 
+    function getRowById($id){
+        $info = UserAddressService::getById($id);
+        if(!$info){
+            return out_pc(1000);
+        }
+
+        $info['province_cn'] =  $this->getProvinceByCode($info['province']) ;
+        $info['city_cn'] =  $this->getProvinceByCode($info['city']) ;
+        $info['county_cn'] =  $this->getProvinceByCode($info['county']) ;
+        $info['town_cn'] =   $this->getProvinceByCode($info['town']);
+
+        return $info;
+    }
+
+
     function addOne($uid,$data){
 
         $this->checkArea($data);

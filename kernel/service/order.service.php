@@ -2,6 +2,14 @@
 
 class OrderService{
     public $timeout = 30 * 60;//订单超时时间
+    function getListByAgentId($agentIds , $status = 0 ){
+        $where = " agent_uid in ( $agentIds ) ";
+        if($status){
+            $where .= " and status in ($status)";
+        }
+        $list = OrderModel::db()->getAll($where);
+        return $list;
+    }
     //下单入口
     function doing($uid,$gidsNums,$couponId = 0,$memo = '',$share_uid = 0,$userSelAddressId = 0){
         LogLib::inc()->debug([$uid,$gidsNums,$couponId ,$memo ,$share_uid ]);
@@ -365,6 +373,11 @@ class OrderService{
         if(!$orders){
             return out_pc(1029);
         }
+
+        if(!arrKeyIssetAndExist($orders,'gids_nums')){
+            exit("$id : gids_nums is null");
+        }
+
         $gidsNums = explode(",",$orders['gids_nums']);
         $productService = new ProductService();
         $productGoods = null;

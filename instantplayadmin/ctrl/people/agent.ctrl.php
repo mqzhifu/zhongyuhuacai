@@ -48,6 +48,51 @@ class AgentCtrl extends BaseCtrl{
 
         }
 
+        $agentService = new AgentService();
+
+        $share = ShareProductModel::db()->getAll(" agent_uid = $uid");
+        $shareCnt = 0;
+        if($share){
+            $shareCnt = count($share);
+        }
+        $this->assign("shareCnt",$shareCnt);
+
+        $shareOrder = OrderModel::db()->getAll(" agent_uid = $uid");
+        $shareOrderCnt = 0;
+        $shareOrderFinishCnt = 0;
+        if($shareOrder){
+            $shareOrderCnt = count($shareOrder);
+            foreach ($shareOrder as $k=>$v){
+                if($v['status'] == OrderModel::STATUS_FINISH){
+                    $shareOrderFinishCnt++;
+                }
+            }
+        }
+        $this->assign("shareOrderCnt",$shareOrderCnt);
+        $this->assign("shareOrderFinishCnt",$shareOrderFinishCnt);
+
+        $fee = $agentService->getFee($uid);
+
+        $subAgentCnt = 0;
+        $SubAgentList = $agentService->getSubAgentList($uid);
+        if($SubAgentList){
+            $subAgentCnt = count($SubAgentList);
+
+            $subAgentUids = "";
+            foreach ($SubAgentList as $k=>$v){
+                $subAgentUids .= $v['id'] . ",";
+            }
+            $subAgentUids = substr($subAgentUids,0,strlen($subAgentUids)-1);
+            $subAgentFee = $agentService->getFee($subAgentUids);
+            $fee += $subAgentFee;
+        }
+        $this->assign("subAgentCnt",$subAgentCnt);
+
+
+
+        $this->assign("fee",$fee);
+
+
         $userLivePlaceDesc = UserModel::getAgentLivePlaceDesc($uid);
         $this->assign("userLivePlaceDesc",$userLivePlaceDesc);
 
@@ -195,7 +240,7 @@ class AgentCtrl extends BaseCtrl{
                 'county_code'=> _g('county'),
                 'towns_code'=> _g('town'),
                 'villages'=> _g('villages'),
-
+                'sub_fee_percent'=>_g("sub_fee_percent"),
                 'a_time'=>time(),
             );
 
@@ -208,6 +253,12 @@ class AgentCtrl extends BaseCtrl{
             $data['pic'] = $uploadRs['msg'];
 
             $newId = AgentModel::add($data);
+
+
+            $invite_code =intToStr($newId);
+            AgentModel::db()->upById($newId,array("invite_code"=>$invite_code));
+
+
 
             $this->ok($newId,$this->_backListUrl);
 

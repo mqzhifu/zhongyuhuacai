@@ -18,7 +18,7 @@ class BaseCtrl {
     public $collectService = null;
     public $payService = null;
     public $userAddressService = null;
-
+    public $agentService = null;
     function __construct($request){
         $this->request = $request;
 //        $this->checkSign();
@@ -41,6 +41,7 @@ class BaseCtrl {
         $this->collectService =  new CollectService();
         $this->payService = new PayService();
         $this->userAddressService = new UserAddressService();
+        $this->agentService = new AgentService();
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){

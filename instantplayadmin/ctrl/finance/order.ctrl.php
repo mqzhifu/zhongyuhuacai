@@ -222,6 +222,7 @@ class OrderCtrl extends BaseCtrl{
                     $v['haulage'],
                     $refundBnt.
                     '<a target="_blank"  href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
+                    '<a target="_blank"  href="/finance/no/order/edit/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 编辑 </a>'.
                     '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
                     '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_TWO.'&oids='.$v['id'].'&uid=2" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二级代理提现 </a>'.
                     '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_FACTORY.'&oids='.$v['id'].'&fid=3" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 工厂提现 </a>',
@@ -240,40 +241,88 @@ class OrderCtrl extends BaseCtrl{
     }
 
 
+    function edit(){
+        $id = _g("id");
+        if(!$id){
+            $this->notice("id is null");
+        }
+
+        $order = OrderModel::db()->getById($id);
+
+
+        if(_g("opt")){
+            $data = array(
+                'express_no'=>_g("express_no"),
+            );
+
+            OrderModel::db()->upById($id,$data);
+            $this->ok("成功");
+        }
+
+
+        $this->assign("order",$order);
+
+        $this->addHookJS("/finance/order_edit_hook.html");
+        $this->display("/finance/order_edit.html");
+
+
+    }
+
     function detail(){
         $id = _g("id");
         if(!$id){
             $this->notice("id is null");
         }
 
-        $orderInfo = OrderModel::db()->getById($id);
-        $orderInfo['goods_total_num'] = count(explode(",",$orderInfo['gids']));
-
-        $orderInfo['sigin_time_dt'] = 0;
-        if(arrKeyIssetAndExist($orderInfo,'sigin_time')){
-            $orderInfo['sigin_time_dt'] = get_default_date($orderInfo['sigin_time']);
-        }
-
-        $orderInfo['status_desc'] = OrderModel::STATUS_DESC[$orderInfo['status']];
+        $order = OrderModel::db()->getById($id);
 
         $orderService =  new OrderService();
+        $order['goods_list'] = $orderService->getOneDetail($id)['msg'];
 
-        $orderInfo['goods_list'] = $orderService->getOneDetail($id)['msg'];
-
-        $orderDetail = $orderInfo;//这里是个坑
-
-//        $orderDetail = $orderService->getOneDetail($id);
-//        $product = ProductModel::db()->getById($id);
-        $orderDetail['dt'] = get_default_date($orderDetail['a_time']);
-        $orderDetail['pay_time_dt'] = get_default_date($orderDetail['pay_time']);
-        $orderDetail['u_time_dt'] = get_default_date($orderDetail['u_time']);
-        $orderDetail['sigin_time_dt'] = get_default_date($orderDetail['sigin_time']);
-        $orderDetail['expire_time_dt'] = get_default_date($orderDetail['expire_time']);
+        $order['dt'] = get_default_date($order['a_time']);
+        $order['pay_time_dt'] = get_default_date($order['pay_time']);
+        $order['u_time_dt'] = get_default_date($order['u_time']);
+        $order['signin_time_dt'] = get_default_date($order['signin_time']);
+        $order['expire_time_dt'] = get_default_date($order['expire_time']);
+        $order['status_desc'] = OrderModel::STATUS_DESC[$order['status']];
+        $order['status_desc'] = OrderModel::STATUS_DESC[$order['status']];
+        $order['goods_total_num'] = count(explode(",",$order['gids']));
 
 
-        $orderDetail['status_desc'] = OrderModel::STATUS_DESC[$orderDetail['status']];
+        $address = array("area"=>"","detail"=>"");
+        if(arrKeyIssetAndExist($order,'address_id')){
+            $addressService =  new UserAddressService();
+            $addressRow = $addressService->getRowById($order['address_id']);
+            $address['area'] = $addressRow['province_cn'] . "-" .   $addressRow['city_cn'] . "-" .  $addressRow['county_cn']  . "-" .  $addressRow['town_cn'];
+            $address['detail'] = $addressRow['address'];
+        }
 
-//
+
+        $agent = null;
+        $agentFather = null;
+        $shareUser = null;
+
+        if(arrKeyIssetAndExist($order,'share_uid')){
+            $shareUser = UserModel::db()->getById($order['share_uid']);
+        }
+
+        if(arrKeyIssetAndExist($order,'agent_uid')){
+            $agent = AgentModel::db()->getById($order['agent_uid']);
+            if($agent['type'] == AgentModel::ROLE_LEVEL_TWO){
+                $agentFather = AgentModel::db()->getById($agent['invite_agent_uid']);
+            }
+        }
+
+        $this->assign("address",$address);
+
+        $this->assign("shareUser",$shareUser);
+        $this->assign("agentFather",$agentFather);
+        $this->assign("agent",$agent);
+        $this->assign("orderDetail",$order);
+
+        $this->display("/finance/order_detail.html");
+
+
 //        $category = ProductCategoryModel::db()->getById($product['category_id']);
 //        $product['category_name'] = $category['name'];
 //
@@ -305,12 +354,9 @@ class OrderCtrl extends BaseCtrl{
 //
 //        $attributeArr = ProductModel::attrParaParserToName($product['attribute']);
 
-
-        $this->assign("orderDetail",$orderDetail);
 //        $this->assign("goodsList",$goodsList);
 //        $this->assign("product",$product);
 
-        $this->display("/finance/order_detail.html");
     }
 
 

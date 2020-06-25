@@ -17,6 +17,27 @@ class IndexCtrl extends BaseCtrl  {
     }
 
 
+    function shareProduct($request){
+        $pid = $request['pid'];
+        $source = $request['source'];//微信 - 用户直接分享
+
+        $data = array(
+            'uid'=>$this->uid,
+            'pid'=>$pid,
+            'a_time'=>time(),
+            'source'=>$source,
+            'agent_uid'=>0,
+        );
+
+        $agent = $this->agentService->getOneByUid($this->uid);
+        if($agent){
+            $data['agent_uid'] = $agent['id'];
+        }
+
+        $newId = ShareProductModel::db()->add($data);
+        out_ajax(200,$newId);
+    }
+
     function checkToken(){
         out_ajax(200);
     }

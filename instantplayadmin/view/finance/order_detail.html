@@ -131,7 +131,7 @@
                                                                             签收时间:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$orderDetail['sigin_time_dt']}
+                                                                            {$orderDetail['signin_time_dt']}
                                                                         </div>
                                                                     </div>
 
@@ -193,18 +193,11 @@
                                                                     </div>
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            代理ID:
-                                                                        </div>
-                                                                        <div class="col-md-7 value">
-                                                                            {$orderDetail['agent_uid']}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row static-info">
-                                                                        <div class="col-md-5 name">
                                                                             收货地址:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$orderDetail['address_id']}
+                                                                            {$address['area']}<br/>
+                                                                            {$address['detail']}
                                                                         </div>
                                                                     </div>
                                                                     <div class="row static-info">
@@ -226,10 +219,65 @@
                                                             <div class="portlet red-sunglo box">
                                                                 <div class="portlet-title">
                                                                     <div class="caption">
-                                                                        <i class="fa fa-cogs"></i>商品信息
+                                                                        <i class="fa fa-cogs"></i>分享&佣金
                                                                     </div>
                                                                 </div>
                                                                 <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            分享者:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {if $shareUser}
+                                                                                {$shareUser['nickname']}
+                                                                            {/if}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            代理者:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {if $agent}
+                                                                                {$agent['real_name']}
+                                                                            {/if}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            代理者级别:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {if $agent}
+                                                                                {$agent['type']}
+                                                                            {/if}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            代理获得佣金:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {if $agent}
+                                                                                {$agent['fee_percent']}
+                                                                            {/if}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {if $agentFather}
+                                                                        <div class="row static-info">
+                                                                            <div class="col-md-5 name">
+                                                                                代理者上级可获取佣金:
+                                                                            </div>
+                                                                            <div class="col-md-7 value">
+                                                                                {$agentFather['sub_fee_percent']}
+                                                                            </div>
+                                                                        </div>
+                                                                    {/if}
+
                                                                 </div>
                                                             </div>
                                                         </div>

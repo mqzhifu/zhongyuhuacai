@@ -159,6 +159,16 @@
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
+                                                                            二级代理出单,可分佣金:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['sub_fee_percent']}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
                                                                             店面图片:
                                                                         </div>
                                                                         <div class="col-md-7 value">
@@ -222,6 +232,17 @@
                                                                     </div>
 
 
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            邀请码:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$agent['invite_code']}
+                                                                        </div>
+                                                                    </div>
+
+
+
 
                                                                 </div>
                                                             </div>
@@ -239,17 +260,67 @@
                                                                             分享产品次数:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$agent['id']}
+                                                                            {$shareCnt}
                                                                         </div>
                                                                     </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            分享成功下单数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$shareOrderCnt}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            分享完成订单数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$shareOrderFinishCnt}
+                                                                        </div>
+                                                                    </div>
+
+
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
                                                                             总获取佣金金额:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$agent['id']}
+                                                                            {$fee}
                                                                         </div>
                                                                     </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            下属-二级代理数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$subAgentCnt}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            已提现金额:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                           0
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            可提现金额:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                           0
+                                                                        </div>
+                                                                    </div>
+
+
+
                                                                 </div>
                                                             </div>
                                                         </div>
