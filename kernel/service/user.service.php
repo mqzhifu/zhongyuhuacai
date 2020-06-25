@@ -1169,7 +1169,8 @@ class UserService{
         $data['inner_type']= UserModel::INNER_TYPE_HUMAN;
         $data['nickname'] = "";
         $data['sex'] = 0;
-        $data['avatar'] = UserModel::STATUS_NORMAL;
+        $data['status'] = UserModel::STATUS_NORMAL;
+        $data['avatar'] = "";
 
         $data['mobile'] = "";
         $data['ps'] = "";
