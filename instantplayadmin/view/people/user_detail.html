@@ -150,7 +150,7 @@
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            分类:
+                                                                            邮箱:
                                                                         </div>
                                                                         <div class="col-md-7 value">
                                                                             {$user['email']}
@@ -181,7 +181,16 @@
                                                                             三方UID:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$user['third_uid']}
+                                                                            {$user['wx_open_id']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            内部类型:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$user['inner_type_desc']}
                                                                         </div>
                                                                     </div>
 
@@ -202,7 +211,7 @@
                                                                             总消费金额:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$user['id']}
+                                                                            {$user['consume_total']}
                                                                         </div>
                                                                     </div>
                                                                     <div class="row static-info">
@@ -210,7 +219,7 @@
                                                                             总订单数:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$user['id']}
+                                                                            {$user['order_num']}
                                                                         </div>
                                                                     </div>
                                                                     <div class="row static-info">
@@ -218,7 +227,7 @@
                                                                             总活跃天数:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$user['id']}
+                                                                            {$user['active_day_cnt']}
                                                                         </div>
                                                                     </div>
                                                                     <div class="row static-info">
@@ -226,7 +235,7 @@
                                                                             最后活跃时间:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$user['id']}
+                                                                            {$user['last_active_record_dt']}
                                                                         </div>
                                                                     </div>
 

@@ -7,6 +7,7 @@ class UserCtrl extends BaseCtrl{
 
         $this->assign("typeOptions",UserModel::getTypeOptions());
         $this->assign("sexOptions", UserModel::getSexOptions());
+        $this->assign("innerTypeOptions", UserModel::getInnerTypeOptions());
 
         $this->display("/people/user_list.html");
     }
@@ -87,15 +88,15 @@ class UserCtrl extends BaseCtrl{
                     UserModel::getSexDescByKey($v['sex']),
                     $v['order_num'],
                     $v['mobile'],
-                    $v['email'],
+                    UserModel::INNER_TYPE_DESC[ $v['inner_type']],
                     get_default_date($v['birthday']),
                     get_default_date($v['a_time']),
                     '<img height="30" width="30" src="'.$avatar.'" />',
                     UserModel::getTypeDescByKey($v['type']),
                     $v['wx_open_id'],
                     $v['consume_total'],
-                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
-                    '<a href="" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
+                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
+                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );
 
@@ -113,7 +114,9 @@ class UserCtrl extends BaseCtrl{
 
 
     function add(){
+
         if(_g('opt')){
+            $this->ok("成功");
             $data =array(
                 'uname'=> _g('uname'),
                 'realname'=> _g('realname'),
@@ -121,16 +124,21 @@ class UserCtrl extends BaseCtrl{
                 'mobile'=> _g('mobile'),
                 'sex'=> _g('sex'),
                 'email'=> _g('email'),
-//                'birthday'=> _g('birthday'),
-//                'status'=>_g('status'),
+                'birthday'=> strtotime( _g('birthday')),
+                'status'=>UserModel::STATUS_NORMAL,
+                'inner_type'=>UserModel::INNER_TYPE_HUMAN,
                 'type'=>_g('type'),
-//                'third_uid'=>_g('third_uid'),
-                'a_time'=>time(),
+                'wx_open_id'=>_g('third_uid'),
                 'city_code'=> _g('city'),
                 'county_code'=> _g('county'),
                 'town_code'=> _g('town'),
                 'province_code'=> _g('province'),
+                'id_card_num'=> _g('id_card_num'),
+                'a_time'=>time(),
             );
+            if(_g("a_time")){
+                $data['a_time'] = strtotime( _g("a_time"));
+            }
 
             $uploadService = new UploadService();
             $uploadRs = $uploadService->avatar('pic');
@@ -140,9 +148,10 @@ class UserCtrl extends BaseCtrl{
 
             $data['avatar'] = $uploadRs['msg'];
 
+
             $newId = UserModel::db()->add($data);
 
-            $this->ok("成功",$this->_backListUrl);
+            $this->ok("成功");
 
         }
 
@@ -178,8 +187,13 @@ class UserCtrl extends BaseCtrl{
         $user['avatar_url'] = get_avatar_url($user['avatar']);
         $user['birthday_dt'] =  get_default_date($user['birthday']);
         $user['type_desc'] = UserModel::getTypeDescByKey($user['type']);
+        $user['inner_type_desc'] = UserModel::INNER_TYPE_DESC[$user['inner_type']];
         $orders = OrderModel::getListByUid($uid);
         $userLog = UserLogModel::getListByUid($uid);
+
+        $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
+        $user['last_active_record_dt'] = $lastActiveRecord;
+        $user['active_day_cnt'] = $this->userService->getActiveDayCnt($user['id']);
 
         $this->assign("user",$user);
         $this->assign("orders",$orders);

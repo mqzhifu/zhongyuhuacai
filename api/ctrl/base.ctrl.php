@@ -209,14 +209,14 @@ class BaseCtrl {
         if(!$uid || $uid < 0 ){
             return out_pc(8105);
         }
-//        $redisToken = RedisOptLib::getToken($uid);
-//        if(!$redisToken){
-//            return out_pc(8231);
-//        }
-//
-//        if($redisToken != $token){
-//            return out_pc(8232);
-//        }
+        $redisToken = RedisOptLib::getToken($uid);
+        if(!$redisToken){
+            return out_pc(8231);
+        }
+
+        if($redisToken != $token){
+            return out_pc(8232);
+        }
         $uinfoRs = $this->userService->getUinfoById($uid);
         if($uinfoRs['code'] != 200){
             return out_pc($uinfoRs['code'],$uinfoRs['msg']);

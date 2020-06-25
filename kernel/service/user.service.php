@@ -1,7 +1,7 @@
 <?php
-//用户基类~ 注册   等
+//用户相关
 class UserService{
-    //是否开启用户个人信息缓存
+    //是否开启用户个人信息缓存到redis中
     public $redisCacheUser = 0;
 
     //注册
@@ -10,7 +10,7 @@ class UserService{
     // $data:用户信息,目前注册基本都是最简，详细信息后续面再补
     // $ps:有些注册类型，可能需要填写密码
     function register($name,$ps = '',$type ,$userInfo = null){
-        LogLib::inc()->debug("start reg : $name $ps $type  " );
+        LogLib::inc()->debug("UserService register start : $name $ps $type  " );
         LogLib::inc()->debug(['userInfo',$userInfo] );
         if(!$name){
             return out_pc(8009);
@@ -32,6 +32,7 @@ class UserService{
 //        }
 
         $data = $this->getUserDataInit();
+        //用户名 手机 邮箱 注册类型
         if($this->getTypeMethod($type) == UserModel::$_type_cate_self){
 //            if($type == UserModel::$_type_cellphone){
 //                //手机注册不需要密码，验证码已经验证过了
@@ -78,6 +79,8 @@ class UserService{
             }else{
                 $data['name'] = $name;
             }
+
+        //游客
         }elseif($this->getTypeMethod($type) == UserModel::$_type_cate_guest){
             $data['type'] = $type;
             $data['name'] = $name;
@@ -151,9 +154,8 @@ class UserService{
     }
      //3方登陆
     function thirdLogin($thirdUid,$thirdType){
-        LogLib::inc()->debug("start thirdLogin $thirdUid $thirdType");
+        LogLib::inc()->debug("userService thirdLogin $thirdUid $thirdType");
         $user = $this->getThirdUser($thirdUid,$thirdType);
-        LogLib::inc()->debug($user);
         if($user){
 //            $this->loginRecord($user,$clientInfo,$type);
             $token = $this->createToken($user['id']);
@@ -217,37 +219,10 @@ class UserService{
             LogLib::appWriteFileHash($clientInfo);
             $reg = 1;
 //            if(!arrKeyIssetAndExist( $clientInfo,'app_version' ) || $clientInfo['app_version'] <= '1.0.6'){
-//                $rs = $this->register($name,$ps,$type,$clientInfo);
-//                if($rs['code'] == 200){
-//                    $user = $rs['msg'];
-//                    //3方登陆，可能会拿到用户一些基础信息，需要再更新一下
-//                    if($this->getTypeMethod($type) == "third"){
-//                        $thirdInfo['type'] = $type;
-//
-//
-//                        if($type == UserModel::$_type_wechat){
-//                            $thirdInfo['wechat_uid'] = $name;
-//                        }elseif($type == UserModel::$_type_qq){
-//                            $thirdInfo['qq_uid'] = $name;
-//                        }elseif($type == UserModel::$_type_facebook){
-//                            $thirdInfo['facebook_uid'] = $name;
-//                        }elseif($type == UserModel::$_type_google){
-//                            $thirdInfo['google_uid'] = $name;
-//                        }
-//                        $this->upUserInfo($user['id'],$thirdInfo);
-////                        LogLib::appWriteFileHash($rs);
-//                    }elseif($type == UserModel::$_type_cellphone){
-//                        $data = array('nickname'=>"玩家".substr($name,-4),'type'=>$type,'cellphone'=>$name);
-//                        $this->upUserInfo($user['id'],$data);
-//                    }
-//                    $task->addUserGrowUpTask($user['id']);
-//                }
-//            }else{
 //                $user = $this->getUinfoById($loginUid);
 //                //3方登陆，可能会拿到用户一些基础信息，需要再更新一下
 //                if($this->getTypeMethod($type) == "third"){
 //                    $thirdInfo['type'] = $type;
-//
 //
 //                    if($type == UserModel::$_type_wechat){
 //                        $thirdInfo['wechat_uid'] = $name;
@@ -283,12 +258,10 @@ class UserService{
     }
 
     function createToken($uid){
-        LogLib::inc()->debug("start create token");
         $token = TokenLib::create($uid);
-        LogLib::inc()->debug("create token:".$token);
+        $rs = RedisOptLib::setToken($uid,$token);
 
-        RedisOptLib::setToken($uid,$token);
-
+        LogLib::inc()->debug("create token:".$token ."  and set redis rs:$rs");
         return $token;
     }
 
@@ -454,7 +427,6 @@ class UserService{
     }
     //根据TYPE，获取3方来源的类型，再根据字段值匹配
     function getThirdUser($thirdUid,$type){
-        LogLib::inc()->debug("start getThirdUser:$thirdUid $type " );
         if($type == UserModel::$_type_qq){
             $where = " qq_uid = '$thirdUid'";
         }elseif($type == UserModel::$_type_wechat){
@@ -466,9 +438,9 @@ class UserService{
         }else{
             return false;
         }
-        LogLib::inc()->debug($where);
-//        return UserModel::db()->getRow("type = $type and third_uid = '$thirdUid'");
-        return UserModel::db()->getRow($where);
+        $user = UserModel::db()->getRow($where);
+        LogLib::inc()->debug(["getThirdUser By DB :$where",$user] );
+        return $user;
     }
 
     function getFieldById($uid,$field){
@@ -618,6 +590,57 @@ class UserService{
         }
         return $type;
     }
+    //最后活跃日志
+    function lastActiveRecord($uid){
+        $row = UserLogModel::db()->getRow(" uid = $uid order by id desc ");
+        return $row;
+    }
+    //统计一个用户的活跃天数
+    function activeByDay($uid){
+        $list = UserLogModel::db()->getAll(" uid = $uid group by  a_day  order by a_day desc",null," FROM_UNIXTIME(a_time, '%Y-%m-%d') AS a_day ");
+        return $list;
+    }
+    //统计一个用户的总活跃天数
+    function getActiveDayCnt($uid,$default = '--'){
+        $list = $this->activeByDay($uid);
+        if(!$list){
+            return $default;
+        }
+
+        return count($list);
+    }
+
+    function getLastActiveRecordTime($uid,$default = '--'){
+        $row = $this->lastActiveRecord($uid);
+        if(!$row){
+            return $default;
+        }
+
+        return get_default_date($row['a_time']) ;
+    }
+
+    //    function maxContinueDay($uid,$default = '--'){
+//        $list = $this->activeByDay($uid);
+//        if(!$list){
+//            return $default;
+//        }
+//
+//        $last = 0;
+//        foreach ($list as $k=>$v){
+//           if(strtotime($v['a_day']) - $last =>){
+//
+//           }
+//        }
+//
+//        $max = 0;
+//        foreach ($days as $k=>$v){
+//            if($v > $max){
+//                $max = $v;
+//            }
+//        }
+//
+//        return $max;
+//    }
 
     //目前只允许修改：
     function upUserInfo($uid,$info){

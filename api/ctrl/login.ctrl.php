@@ -48,19 +48,19 @@ class LoginCtrl extends BaseCtrl {
         $openId = $wxCallbackData['openid'];
 
         $loginData = array('thirdId'=>$openId,'type'=>UserModel::$_type_wechat);
+        //正常，登陆
         $loginRs = $this->third($loginData);
 
         $return['session_key'] = $sessionKey;
 
         LogLib::inc()->debug(["end back:",$loginRs]);
-        if($loginRs['code'] == 200){
+        if($loginRs['code'] == 200){//登陆成功
+            //返回token
             $return['token'] = $loginRs['msg'];
             out_ajax(200,$return);
         }
-
-
-
-        if($loginRs['code'] == 1006){//DB中找不到此用户
+        //正常登陆没问题，但，DB中找不到此用户，默认就要走注册流程了
+        if($loginRs['code'] == 1006){
             //注册一个新的用户，使用微信的用户基础信息
             $rawData = json_decode($request['rawData'],true);
             //language city  province country
@@ -72,7 +72,7 @@ class LoginCtrl extends BaseCtrl {
             LogLib::inc()->debug("create token:$token");
             out_ajax(200,$return);
         }else{
-            exit("未知错误");
+            out_ajax($loginRs['code'],$loginRs['msg']);
         }
 
 //        $rawData = $request['rawData'];
@@ -110,11 +110,11 @@ class LoginCtrl extends BaseCtrl {
         //string(146) "{"phoneNumber":"13522536459","purePhoneNumber":"13522536459","countryCode":"86","watermark":{"timestamp":1591855857,"appid":"wx9f0bcf9eed8f9bf2"}}"
         out_ajax($rs['code'],array("upinfoRs"=>$rs['msg'],'mobile'=>$data['phoneNumber']));
     }
-
+    //3方登陆,如果登陆成功后，每次都会重新建立一次token
     function third($request){
-        LogLib::inc()->debug("start login third");
         $thirdId = $request['thirdId'];
         $type = $request['type'];
+        LogLib::inc()->debug(["ctrl third start ~",'thirdId:',$thirdId,"type:",$type]);
         if(!$thirdId){
             return out_pc(8030);
         }
@@ -126,21 +126,10 @@ class LoginCtrl extends BaseCtrl {
         if(!UserModel::keyInRegType($type)){
             return out_pc(8210);
         }
-
+        //判断 type 值是否正常
         if($this->userService->getTypeMethod($type) != UserModel::$_type_cate_third){
             return out_pc(8242);
         }
-
-//        $thirdInfo = array(
-//            'nickname'=>$nickname,'avatar'=>$avatar,'sex'=>$sex,'unionId'=>$unionId,
-//        );
-//
-//        $clienInfo = get_client_info();
-//
-//        $rs = $this->userService->loginRegister($uniqueId ,null,$type,$clienInfo,$thirdInfo,null,$this->uid);
-//        if($rs['code'] == 200){
-//            $this->gamesService->loginHook($rs['msg']['uid'],$this->uid);
-//        }
 
         $rs = $this->userService->thirdLogin($thirdId,$type);
         return out_pc($rs['code'],$rs['msg']);

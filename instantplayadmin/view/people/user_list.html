@@ -68,7 +68,7 @@
                                         </th>
 
                                         <th width="5%">
-                                            邮箱
+                                            类型
                                         </th>
 
                                         <th width="10%">
@@ -133,7 +133,12 @@
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="email" >
+                                            <select name="inner_type" class="form-control form-filter input-sm">
+
+                                                <option value="">选择</option>
+                                                {$innerTypeOptions}
+
+                                            </select>
                                         </td>
                                         <td>
 
@@ -176,7 +181,7 @@
                                         <td></td>
                                         <td>
 
-                                            <select name="type">
+                                            <select name="type" class="form-control form-filter input-sm" >
 
                                                 {$typeOptions}
 

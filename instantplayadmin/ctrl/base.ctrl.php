@@ -10,6 +10,8 @@ class BaseCtrl{
     public $_request = null;
 
 
+    public $userService = null;
+
     public $_backListUrl = null;
     public $_addPostUrl = null;
     public $_addUrl = null;
@@ -50,6 +52,7 @@ class BaseCtrl{
         $id = AdminLogModel::addReq($this->_adminid,$this->cate,$this->sub,$this->ctrl,$this->ac);
         define("ACCESS_ID",$id);
 
+        $this->userService = new UserService();
 
         ConfigCenter::get(APP_NAME,"err_code");
         ConfigCenter::get(APP_NAME,"rediskey");
@@ -264,6 +267,10 @@ class BaseCtrl{
 
 
         $hook_js = $this->_hook_js;
+
+
+
+        $backListUrl = $this->_backListUrl;
 
         include $header_html;
         include $index_html;

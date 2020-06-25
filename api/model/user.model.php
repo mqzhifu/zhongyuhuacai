@@ -112,7 +112,7 @@ class UserModel {
     const INNER_TYPE_HUMAN = 1;
     const INNER_TYPE_ROBOT = 2;
     const INNER_TYPE_DESC = [
-        self::INNER_TYPE_HUMAN =>'正常用户',
+        self::INNER_TYPE_HUMAN =>'正常',
         self::INNER_TYPE_ROBOT =>'机器人',
     ];
 

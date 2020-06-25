@@ -250,5 +250,32 @@
     jQuery(document).ready(function() {
         FormValidation.init();
 
+
+        $(".form_date").datetimepicker({
+            isRTL: Metronic.isRTL(),
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            todayBtn: true,
+            startDate: "2013-02-14 10:00",
+            // pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            // minuteStep: 10
+        });
+
     });
+
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14 10:00",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+
+
+
+
+
 </script>

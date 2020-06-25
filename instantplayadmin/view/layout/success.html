@@ -19,13 +19,12 @@
                     <!--</div>-->
 
                     <div class="note note-success">
-                        <strong>成功!</strong>{$msg} ,<a href="{$backUrl}">后退</a>
-                    </div>
+                        <strong>成功!</strong>{$msg} ,
 
-                    <div class="note note-success">
-                        <a href="{$backListUrl}">返回列表</a>
-                    </div>
+                        <button type="button" class="btn blue" onclick="window.history.go(-1)">后退</button>
+                        <a href="{$backListUrl}"    class="btn green">返回列表</a>
 
+                    </div>
                 </div>
             </div>
             <!-- END PAGE CONTENT-->
