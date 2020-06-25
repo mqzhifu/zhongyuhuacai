@@ -17,8 +17,8 @@ class UserLogModel {
         return call_user_func_array(array(self::db(),$func), $arguments);
     }
 
-    static function getListByUid($uid){
-        $list = self::db()->getAll(" uid = $uid");
+    static function getListByUid($uid,$limit = 100){
+        $list = self::db()->getAll(" uid = $uid order by id desc limit $limit");
         return $list;
     }
 

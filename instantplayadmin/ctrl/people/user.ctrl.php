@@ -190,6 +190,11 @@ class UserCtrl extends BaseCtrl{
         $user['inner_type_desc'] = UserModel::INNER_TYPE_DESC[$user['inner_type']];
         $orders = OrderModel::getListByUid($uid);
         $userLog = UserLogModel::getListByUid($uid);
+        if($userLog){
+            foreach ($userLog as $k=>$v){
+                $userLog[$k]['dt'] = get_default_date($v['a_time']);
+            }
+        }
 
         $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
         $user['last_active_record_dt'] = $lastActiveRecord;
