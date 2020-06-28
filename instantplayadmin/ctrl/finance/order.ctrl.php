@@ -44,7 +44,6 @@ class OrderCtrl extends BaseCtrl{
             $payService = new PayService();
             if($status == 1){
                 $wxPayRefundBack = $payService->wxPayRefund($id);
-                var_dump($wxPayRefundBack);exit;
                 if($wxPayRefundBack['code'] != 200){
                     $this->notice("微信接口请求退款异常,".$wxPayRefundBack['msg']);
                 }

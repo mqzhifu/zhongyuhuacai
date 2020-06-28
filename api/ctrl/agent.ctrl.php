@@ -24,6 +24,12 @@ class AgentCtrl extends BaseCtrl  {
         out_ajax(200,$list['msg']);
     }
 
+    function withDraw(){
+        $num =  get_request_one( $this->request,'num',0);
+        $oids =  get_request_one( $this->request,'oids',"");
+        $this->agentService->withdrawMoney($this->agent['id'],$num,$oids,$this->uid);
+    }
+
     function apply($request){
         $type =  get_request_one( $this->request,'type',0);
         $invite_agent_code = get_request_one( $this->request,'invite_agent_code','');

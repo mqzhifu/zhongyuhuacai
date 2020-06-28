@@ -25,16 +25,16 @@ class WithdrawCtrl extends BaseCtrl{
         $agent = null;
         foreach ($oids as $k=>$v) {
             $order = OrderModel::db()->getById($v);
-            if($order != OrderModel::STATUS_FINISH){
+            if($order['status'] != OrderModel::STATUS_FINISH){
                 $this->notice($v. " 订单非完成状态，不允许 提现");
             }
 
             if($role == AgentModel::ROLE_FACTORY){
-                if($order['factory_withdraw_money_status'] ==OrderModel::WITHDRAW_MONEY_STATUS_OK){
+                if($order['factory_withdraw'] ==WithdrawMoneyService::WITHDRAW_ORDER_STATUS_OK){
                     $this->notice($v." 订单 已提取过了");
                 }
             }else{
-                if($order['agent_withdraw_money_status'] ==OrderModel::WITHDRAW_MONEY_STATUS_OK){
+                if($order['agent_one_withdraw'] ==WithdrawMoneyService::WITHDRAW_ORDER_STATUS_OK){
                     $this->notice($v." 订单 已提取过了");
                 }
             }
