@@ -338,7 +338,7 @@ class OrderService{
         LogLib::inc()->debug(['up order status:',$oid,$status]);
         $data = array('status'=>$status,'u_time'=>time());
         if($status == OrderModel::STATUS_SIGN_IN){
-            $data['sign_time'] = time();
+            $data['signin_time'] = time();
         }elseif($status == OrderModel::STATUS_REFUND_FINISH   || $status == OrderModel::STATUS_REFUND_REJECT){
             $data['refund_memo'] = $upData['refund_memo'];
         }
