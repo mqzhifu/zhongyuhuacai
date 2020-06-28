@@ -244,6 +244,11 @@ class OrderService{
             $orderInfo = OrderModel::db()->getById( $v['id']);
             $orderInfo['goods_total_num'] = count(explode(",",$orderInfo['gids']));
 
+
+            $orderInfo['total_price'] = ProductService::formatDataPrice(2,$orderInfo,'total_price');
+            $orderInfo['goods_price'] = ProductService::formatDataPrice(2,$orderInfo,'goods_price');
+            $orderInfo['haulage'] = ProductService::formatDataPrice(2,$orderInfo,'haulage');
+
             $orderInfo['sigin_time_dt'] = 0;
             if(arrKeyIssetAndExist($orderInfo,'sigin_time')){
                 $orderInfo['sigin_time_dt'] = get_default_date($orderInfo['sigin_time']);
