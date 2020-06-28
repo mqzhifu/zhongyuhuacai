@@ -110,8 +110,8 @@ class PayService{
             $backInfo = WxPayApi::refund($config, $input);
             LogLib::inc()->debug([" WxPayApi::refund back:",$backInfo,]);
 //            $backInfo = json_decode($backInfo,true);
-            var_dump($backInfo);
-            if($backInfo['err_code']){
+//            var_dump($backInfo);
+            if(array($backInfo,'err_code')){
                 return out_pc(8355,json_encode($backInfo));
             }
             return out_pc(200);
