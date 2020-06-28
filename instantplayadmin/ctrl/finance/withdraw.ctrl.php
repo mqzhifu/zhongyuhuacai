@@ -40,7 +40,7 @@ class WithdrawCtrl extends BaseCtrl{
             }
 
             if($role != AgentModel::ROLE_FACTORY){
-                $agent = AgentModel::db()->getById($order['agent_uid']);
+                $agent = AgentModel::db()->getById($order['agent_id']);
                 $fee_percent = $agent['fee_percent'] / 100;
                 $price = $order['price'] * $fee_percent;
                 $priceTotal += $price;

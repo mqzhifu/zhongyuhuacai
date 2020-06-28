@@ -7,7 +7,7 @@ class OrderCtrl extends BaseCtrl  {
 //    }
 
     function doing(){
-        $agentUid = get_request_one( $this->request,'agent_uid',0);
+//        $agentUid = get_request_one( $this->request,'agent_uid',0);
         $couponId = get_request_one( $this->request,'coupon_id',0);
 
         $share_uid = get_request_one( $this->request,'share_uid',0);

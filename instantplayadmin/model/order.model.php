@@ -52,15 +52,15 @@ class OrderModel {
         self::STATUS_REFUND_REJECT=>"退款驳回",
     ];
 
-    const WITHDRAW_MONEY_STATUS_WAIT = 1;
-    const WITHDRAW_MONEY_STATUS_OK = 2;
-    const WITHDRAW_MONEY_STATUS = [
-        self::WITHDRAW_MONEY_STATUS_WAIT =>"未操作",
-        self::WITHDRAW_MONEY_STATUS_OK =>"已提现",
-    ];
+//    const WITHDRAW_MONEY_STATUS_WAIT = 1;
+//    const WITHDRAW_MONEY_STATUS_OK = 2;
+//    const WITHDRAW_MONEY_STATUS = [
+//        self::WITHDRAW_MONEY_STATUS_WAIT =>"未操作",
+//        self::WITHDRAW_MONEY_STATUS_OK =>"已提现",
+//    ];
 
-    const WITHDRAW_MONEY_AGENT_WAIT = 1;
-    const WITHDRAW_MONEY_FACTORY_WAIT = 1;
+//    const WITHDRAW_MONEY_AGENT_WAIT = 1;
+//    const WITHDRAW_MONEY_FACTORY_WAIT = 1;
 
 	static function db(){
 		if(self::$_db)
@@ -138,7 +138,7 @@ class OrderModel {
     }
 
     static function getListByAgentId($aid){
-        $list = self::db()->getAll(" agent_uid = $aid");
+        $list = self::db()->getAll(" agent_id = $aid");
         return $list;
     }
 

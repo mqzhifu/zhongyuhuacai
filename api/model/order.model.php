@@ -54,13 +54,15 @@ class OrderModel {
 
     const WITHDRAW_MONEY_STATUS_WAIT = 1;
     const WITHDRAW_MONEY_STATUS_OK = 2;
+    const WITHDRAW_MONEY_STATUS_APPLY = 3;
     const WITHDRAW_MONEY_STATUS = [
         self::WITHDRAW_MONEY_STATUS_WAIT =>"未操作",
         self::WITHDRAW_MONEY_STATUS_OK =>"已提现",
+        self::WITHDRAW_MONEY_STATUS_APPLY=>"申请中",
     ];
 
-    const WITHDRAW_MONEY_AGENT_WAIT = 1;
-    const WITHDRAW_MONEY_FACTORY_WAIT = 1;
+//    const WITHDRAW_MONEY_AGENT_WAIT = 1;
+//    const WITHDRAW_MONEY_FACTORY_WAIT = 1;
 
 	static function db(){
 		if(self::$_db)
@@ -107,38 +109,13 @@ class OrderModel {
 
     }
 
-    static function addReq($adminId,$cate,$sub,$ctrl,$ac){
-	    $request = null;
-	    if($_REQUEST){
-	        foreach ($_REQUEST as $k=>$v) {
-                if(strpos($k,'columns') !== false){
-                    continue;
-                }
-                $request[$k] = $v;
-	        }
-        }
-        $data = array(
-        	'cate'=>$cate,
-        	'sub'=>$sub,
-            'ctrl'=>$ctrl,
-            'ac'=>$ac,
-            'a_time'=>time(),
-            'ip'=>get_client_ip(),
-            'request'=>json_encode($request),
-            'admin_uid'=>$adminId
-        );
-
-        $id = self::db()->add($data);
-        return $id;
-    }
-
     static function getListByUid($uid){
 	    $list = self::db()->getAll(" uid = $uid");
 	    return $list;
     }
 
     static function getListByAgentId($aid){
-        $list = self::db()->getAll(" agent_uid = $aid");
+        $list = self::db()->getAll(" agent_id = $aid");
         return $list;
     }
 

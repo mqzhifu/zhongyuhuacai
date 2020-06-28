@@ -226,7 +226,7 @@ $arr = array(
             'request'=>array(
                 'gid'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'商品ID'),
                 'num'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'购买数量'),
-                'agent_uid'=>array('type'=>'int','must'=>0,'default'=>100001,'title'=>'代理ID'),
+                'agent_id'=>array('type'=>'int','must'=>0,'default'=>100001,'title'=>'代理ID'),
             ),
             'return'=>array(
                 'array_key_number_two'=>array("must"=>0,'list'=>array(

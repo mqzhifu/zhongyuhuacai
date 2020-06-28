@@ -13,20 +13,39 @@ class UserAddressService{
 
     function getRowById($id){
         $info = UserAddressService::getById($id);
-        if(!$info){
+        if($info['code'] != 200){
             return out_pc(1000);
         }
 
-        $info['province_cn'] =  $this->getProvinceByCode($info['province']) ;
-        $info['city_cn'] =  $this->getProvinceByCode($info['city']) ;
-        $info['county_cn'] =  $this->getProvinceByCode($info['county']) ;
-        $info['town_cn'] =   $this->getProvinceByCode($info['town']);
+        $info = $info['msg'];
 
-        return $info;
+        $info['province_cn'] =  $this->getProvinceByCode($info['province_code']) ;
+        $info['city_cn'] =  $this->getProvinceByCode($info['city_code']) ;
+        $info['county_cn'] =  $this->getProvinceByCode($info['county_code']) ;
+        $info['town_cn'] =   $this->getProvinceByCode($info['town_code']);
+
+        return out_pc(200,$info);
     }
 
 
-    function addOne($uid,$data){
+    function editOne($uid,$id,$data){
+        if(!$id){
+            return out_pc(8381);
+        }
+
+        $address = $this->getById($id);
+        if(!$address){
+            return out_pc(1038);
+        }
+
+        if($address['uid'] != $uid){
+            return out_pc(8382,array($uid));
+        }
+
+        $this->addOne($uid,$data,$id);
+    }
+
+    function addOne($uid,$data,$editId = 0){
 
         $this->checkArea($data);
 
@@ -47,10 +66,10 @@ class UserAddressService{
         }
 
         $addData = array(
-            'province'=>$data['province'],
-            'city'=>$data['city'],
-            'county'=>$data['county'],
-            'town'=>$data['town'],
+            'province_code'=>$data['province_code'],
+            'city_code'=>$data['city_code'],
+            'county_code'=>$data['county_code'],
+            'town_code'=>$data['town_code'],
             'mobile'=>$data['mobile'],
             'uid'=>$data['uid'],
             'name'=>$data['name'],
@@ -63,24 +82,29 @@ class UserAddressService{
             $addData['is_default'] = self::IS_DEFAULT_TRUE;
         }
 
-        $newId = UserAddressModel::db()->add($data);
+        if($editId){
+            $newId = UserAddressModel::db()->add($data);
+        }else{
+            $newId = UserAddressModel::db()->upById($editId,$data);
+        }
+
         return out_pc(200,$newId);
     }
 
     function checkArea($data){
-        if(!arrKeyIssetAndExist($data,'province')){
+        if(!arrKeyIssetAndExist($data,'province_code')){
             return out_pc(8359);
         }
 
-        if(!arrKeyIssetAndExist($data,'city')){
+        if(!arrKeyIssetAndExist($data,'city_code')){
             return out_pc(8360);
         }
 
-        if(!arrKeyIssetAndExist($data,'county')){
+        if(!arrKeyIssetAndExist($data,'county_code')){
             return out_pc(8361);
         }
 
-        if(!arrKeyIssetAndExist($data,'town')){
+        if(!arrKeyIssetAndExist($data,'town_code')){
             return out_pc(8362);
         }
 
@@ -88,17 +112,19 @@ class UserAddressService{
             return out_pc(1030);
         }
 
-        if(!$this->getProvinceByCode($data['city'])){
+        if(!$this->getCityByCode($data['city'])){
             return out_pc(1031);
         }
 
-        if(!$this->getProvinceByCode($data['county'])){
+        if(!$this->getCountyByCode($data['county'])){
             return out_pc(1032);
         }
 
-        if(!$this->getProvinceByCode($data['town'])){
+        if(!$this->getTownByCode($data['town'])){
             return out_pc(1033);
         }
+
+        return out_pc(200);
     }
 
     function delOne($uid,$id){
@@ -114,9 +140,53 @@ class UserAddressService{
         return out_pc(200,$rs);
     }
 
-    function editOne(){
+    function parserAddressByStr($str){
+        if(!$str){
+            return out_pc(8383);
+        }
+        $delimiter = "";
+        $delimiterArr = array('，',',','\n','<br/>','<br />','<br>');
+        foreach ($delimiterArr as $k=>$v){
+            if (strpos($str,$v) !== false) {
+                $delimiter = $v;
+            }
+        }
 
+        if(!$delimiter){
+            out_ajax(8380);
+        }
+
+        $arr = explode($delimiter,$str);
+        $strArr = [];
+        foreach ($arr as $k=>$v){
+            $x = trim($v);
+            foreach ($delimiterArr as $k2=>$v2){
+                $x = str_replace($v2,"",$x);
+            }
+            $strArr[] = $x;
+        }
+
+        if(count($strArr) == 6){
+            $rs = array(
+                'name'=>$strArr[0],
+                'province'=>$strArr[1],
+                'city'=>$strArr[2],
+                'county'=>$strArr[3],
+                'town'=>$strArr[4],
+                'village'=>$strArr[5],
+                'mobile'=>$strArr[6],
+            );
+        }else{
+            out_ajax();
+        }
+
+//        foreach ($strArr as $k=>$v){
+//            if (strpos($str,"省") !== false) {
+//
+//            }
+//        }
     }
+
 
     function getById($id){
         $row = UserAddressModel::db()->getRow($id);

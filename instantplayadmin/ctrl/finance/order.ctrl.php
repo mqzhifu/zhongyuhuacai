@@ -1,5 +1,14 @@
 <?php
 class OrderCtrl extends BaseCtrl{
+
+    public $orderService = null;
+
+    function __construct($request)
+    {
+        parent::__construct($request);
+        $this->orderService = new OrderService();
+    }
+
     function index(){
         if(_g("getlist")){
             $this->getList();
@@ -57,59 +66,17 @@ class OrderCtrl extends BaseCtrl{
 
     function add(){
         if(_g("opt")){
-            $goods_id =_g("goods_id");
-            $agent_uid = _g("agent_uid");
-            $num = _g("num");
+
+            $gidsNums =_g("gidsNums");
+            $couponId = _g("couponId");
+            $memo = _g("memo");
             $uid = _g("uid");
+            $share_uid = _g("share_uid");
+            $userSelAddressId = _g("userSelAddressId");
 
-            if(!$goods_id)
-                $this->notice("goods_id null");
 
-            if(!$agent_uid)
-                $this->notice("agent_uid null");
-
-            if(!$num)
-                $this->notice("num null");
-
-            if(!$uid)
-                $this->notice("uid null");
-
-            $goods = GoodsModel::db()->getById($goods_id);
-            $agent = AgentModel::db()->getById($agent_uid);
-            $user = UserModel::db()->getById($uid);
-
-            if(!$goods)
-                $this->notice("goods_id not in db");
-
-            if(!$agent)
-                $this->notice("agent_uid not in db");
-
-            if(!$user)
-                $this->notice("uid not in db");
-
-            $agentAddr = AgentModel::getAddrStrById($agent_uid);
-            $data = array(
-                'no'=>OrderModel::getNo(),
-                'uid'=>$uid,
-                'pid'=>$goods['pid'],
-                'gid'=>$goods_id,
-                'agent_uid'=>$agent_uid,
-                'a_time'=> time(),
-                'status'=>OrderModel::STATUS_WAIT_PAY,
-                'pay_type'=>0,
-                'pay_time'=>time(),
-                'express_no'=>"",
-                'address_agent'=>$agentAddr,
-                'agent_withdraw_money_status'=> OrderModel::WITHDRAW_MONEY_AGENT_WAIT,
-                'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
-                'num'=>$num,
-            );
-            $price = $goods['sale_price'] * $num;
-            $data['price'] = $price;
-            $data['pid'] = $goods['pid'];
-
-            $newId = OrderModel::db()->add($data);
-            $this->ok($newId,"",$this->_backListUrl);
+            $order = $this->orderService->doing($uid,$gidsNums,$couponId,$memo,$share_uid,$userSelAddressId);
+            $this->ok("成功");
         }
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
@@ -140,7 +107,6 @@ class OrderCtrl extends BaseCtrl{
 
         return $where;
     }
-
 
     function getList(){
         $records = array();
@@ -215,7 +181,7 @@ class OrderCtrl extends BaseCtrl{
                     OrderModel::STATUS_DESC[$v['status']],
                     UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
                     $shareUserName,
-                    $v['agent_uid']."-".$v['address_agent'],
+                    $v['agent_id']."-".$v['address_agent'],
                     get_default_date($v['a_time']),
                     get_default_date($v['pay_time']),
                     $v['nums'],
@@ -277,26 +243,37 @@ class OrderCtrl extends BaseCtrl{
         $order = OrderModel::db()->getById($id);
 
         $orderService =  new OrderService();
+        //产品/商品列表
         $order['goods_list'] = $orderService->getOneDetail($id)['msg'];
-
+        //添加时间
         $order['dt'] = get_default_date($order['a_time']);
+        //支付时间
         $order['pay_time_dt'] = get_default_date($order['pay_time']);
         $order['u_time_dt'] = get_default_date($order['u_time']);
+        //签收时间
         $order['signin_time_dt'] = get_default_date($order['signin_time']);
+        //发货时间
         $order['expire_time_dt'] = get_default_date($order['expire_time']);
         $order['status_desc'] = OrderModel::STATUS_DESC[$order['status']];
-        $order['status_desc'] = OrderModel::STATUS_DESC[$order['status']];
+        //订单包括总商品数
         $order['goods_total_num'] = count(explode(",",$order['gids']));
 
+
+        $order['agent_one_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['agent_one_withdraw']];
+        $order['agent_two_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['agent_two_withdraw']];
+        $order['factory_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['factory_withdraw']];
 
         $address = array("area"=>"","detail"=>"");
         if(arrKeyIssetAndExist($order,'address_id')){
             $addressService =  new UserAddressService();
             $addressRow = $addressService->getRowById($order['address_id']);
+            if($addressRow['code'] != 200){
+                $this->notice($addressRow['msg']);
+            }
+            $addressRow = $addressRow['msg'];
             $address['area'] = $addressRow['province_cn'] . "-" .   $addressRow['city_cn'] . "-" .  $addressRow['county_cn']  . "-" .  $addressRow['town_cn'];
             $address['detail'] = $addressRow['address'];
         }
-
 
         $agent = null;
         $agentFather = null;
@@ -306,8 +283,8 @@ class OrderCtrl extends BaseCtrl{
             $shareUser = UserModel::db()->getById($order['share_uid']);
         }
 
-        if(arrKeyIssetAndExist($order,'agent_uid')){
-            $agent = AgentModel::db()->getById($order['agent_uid']);
+        if(arrKeyIssetAndExist($order,'agent_id')){
+            $agent = AgentModel::db()->getById($order['agent_id']);
             if($agent['type'] == AgentModel::ROLE_LEVEL_TWO){
                 $agentFather = AgentModel::db()->getById($agent['invite_agent_uid']);
             }

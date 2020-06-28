@@ -15,15 +15,15 @@ class CouponCtrl extends BaseCtrl{
     function add(){
         if(_g("opt")){
             $goods_id =_g("goods_id");
-            $agent_uid = _g("agent_uid");
+            $agent_id = _g("agent_id");
             $num = _g("num");
             $uid = _g("uid");
 
             if(!$goods_id)
                 $this->notice("goods_id null");
 
-            if(!$agent_uid)
-                $this->notice("agent_uid null");
+            if(!$agent_id)
+                $this->notice("agent_id null");
 
             if(!$num)
                 $this->notice("num null");
@@ -32,25 +32,25 @@ class CouponCtrl extends BaseCtrl{
                 $this->notice("uid null");
 
             $goods = GoodsModel::db()->getById($goods_id);
-            $agent = AgentModel::db()->getById($agent_uid);
+            $agent = AgentModel::db()->getById($agent_id);
             $user = UserModel::db()->getById($uid);
 
             if(!$goods)
                 $this->notice("goods_id not in db");
 
             if(!$agent)
-                $this->notice("agent_uid not in db");
+                $this->notice("agent_id not in db");
 
             if(!$user)
                 $this->notice("uid not in db");
 
-            $agentAddr = AgentModel::getAddrStrById($agent_uid);
+            $agentAddr = AgentModel::getAddrStrById($agent_id);
             $data = array(
                 'no'=>CouponModel::getNo(),
                 'uid'=>$uid,
                 'pid'=>$goods['pid'],
                 'gid'=>$goods_id,
-                'agent_uid'=>$agent_uid,
+                'agent_id'=>$agent_id,
                 'a_time'=> time(),
                 'status'=>CouponModel::STATUS_WAIT_PAY,
                 'pay_type'=>0,
@@ -157,7 +157,7 @@ class CouponCtrl extends BaseCtrl{
                     $payType,
                     CouponModel::STATUS_DESC[$v['status']],
                     UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
-                    AgentModel::db()->getOneFieldValueById($v['agent_uid'],'real_name','--'),
+                    AgentModel::db()->getOneFieldValueById($v['agent_id'],'real_name','--'),
                     $v['address_agent'],
                     get_default_date($v['a_time']),
                     get_default_date($v['pay_time']),

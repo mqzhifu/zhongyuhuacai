@@ -2,9 +2,6 @@
 class IndexCtrl extends BaseCtrl  {
 
     function index(){
-        //调取支付
-
-        //代理
         //密码登陆
         //商品，获取二维码
         //短信登陆
@@ -16,7 +13,13 @@ class IndexCtrl extends BaseCtrl  {
         //发起提现
     }
 
-
+    //根据用户输入的一段字符串，转换成相关的地址
+    function parserAddressByStr($request)
+    {
+        $str =  get_request_one( $this->request,'address_str','');
+        $rs = $this->userAddressService->parserAddressByStr($str);
+        return out_ajax($rs['code'],$rs['msg']);
+    }
     function shareProduct($request){
         $pid = $request['pid'];
         $source = $request['source'];//微信 - 用户直接分享
@@ -26,12 +29,12 @@ class IndexCtrl extends BaseCtrl  {
             'pid'=>$pid,
             'a_time'=>time(),
             'source'=>$source,
-            'agent_uid'=>0,
+            'agent_id'=>0,
         );
 
         $agent = $this->agentService->getOneByUid($this->uid);
         if($agent){
-            $data['agent_uid'] = $agent['id'];
+            $data['agent_id'] = $agent['id'];
         }
 
         $newId = ShareProductModel::db()->add($data);

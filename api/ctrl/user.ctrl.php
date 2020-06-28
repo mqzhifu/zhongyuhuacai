@@ -13,6 +13,13 @@ class UserCtrl extends BaseCtrl  {
         out_ajax($rs['code'],$rs['msg']);
     }
 
+    //普通微信注册的用户 绑定  代理账号
+    function bindAgent($request){
+        $mobile = $agentUid =get_request_one( $this->request,'mobile',"");
+        $code = $agentUid =get_request_one( $this->request,'code',0);
+        $this->agentService->userBindAgent($this->uid,$mobile,$code);
+    }
+
     function getOneDetail(){
         $userRs  = $this->userService->getUinfoById($this->uid);
         if($userRs['code'] != 200){

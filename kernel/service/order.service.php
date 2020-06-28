@@ -2,11 +2,20 @@
 
 class OrderService{
     public $timeout = 30 * 60;//订单超时时间
-    function getListByAgentId($agentIds , $status = 0 ){
-        $where = " agent_uid in ( $agentIds ) ";
+    function getListByAgentId($agentIds , $status = 0 ,$agent_one_withdraw = 0 ,$agent_two_withdraw = 0){
+        $where = " agent_id in ( $agentIds ) ";
         if($status){
             $where .= " and status in ($status)";
         }
+
+        if($agent_one_withdraw){
+            $where .= " and agent_one_withdraw in ($agent_one_withdraw)";
+        }
+
+        if($agent_two_withdraw){
+            $where .= " and agent_two_withdraw in ($agent_two_withdraw)";
+        }
+
         $list = OrderModel::db()->getAll($where);
         return $list;
     }
@@ -141,6 +150,7 @@ class OrderService{
         //最终价格 = 商品总价 + 运费总价 - 优惠卷价格
         $totalPrice = $goodsTotalPrice + $haulage  -  $couponPrice;
 
+//        $withDrawService = new WithdrawMoneyService();
         $order = array(
             'no'=>get_order_rand_no(),
             'pids'=>implode(",",$pidsArr),
@@ -157,11 +167,12 @@ class OrderService{
             'express_no'=>"",
             'haulage'=>$goods['haulage'],
             'share_uid'=>$share_uid,
-            'agent_uid'=>$agentShare['id'],
+            'agent_id'=>$agentShare['id'],
             'coupon_id'=>$couponId,
             'address_agent'=>$agentAddress,
-            'agent_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_STATUS_WAIT,
-            'factory_withdraw_money_status'=>OrderModel::WITHDRAW_MONEY_FACTORY_WAIT,
+            'agent_one_withdraw'=>WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT,
+            'agent_two_withdraw'=>WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT,
+            'factory_withdraw'=>WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT,
             'memo'=>$memo,
             'title'=>"好商品的购买~",
             'expire_time'=>time() + $this->timeout,
@@ -194,7 +205,6 @@ class OrderService{
 //            $data = array("stock"=>array(-1));
 //            GoodsModel::db()->upById($gid,$data);
         }
-
 
         foreach ($gidsNumsArr as $k=>$v){
             $arr = explode("-",$v);

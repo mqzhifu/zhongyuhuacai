@@ -1,5 +1,14 @@
 <?php
 class AgentCtrl extends BaseCtrl{
+    public $agentService =  null;
+    public $orderService = null;
+    function __construct($request)
+    {
+        parent::__construct($request);
+        $this->agentService = new AgentService();
+        $this->orderService = new OrderService();
+    }
+
     function index(){
         if(_g("getlist")){
             $this->getList();
@@ -28,41 +37,39 @@ class AgentCtrl extends BaseCtrl{
     }
 
     function detail(){
-        $uid = _g("id");
-        $agent = AgentModel::db()->getById($uid);
+        $aid = _g("id");
+        $agent = AgentModel::db()->getById($aid);
+
+        //添加时间
         $agent['dt'] = get_default_date($agent['a_time']);
+        //状态 描述
         $agent['status_desc'] = AgentModel::STATUS[$agent['status']];
 
         $agent['pic_url'] = get_agent_url($agent['pic']);
-//        $agent['birthday_dt'] =  get_default_date($agent['birthday']);
-//        $agent['type_desc'] = UserModel::getTypeDescByKey($agent['type']);
-        $orders = OrderModel::getListByAgentId($uid);
-//        $userLog = UserLogModel::getListByUid($uid);
-
+        $orders = $this->agentService->getAllOrderList($aid);
         if($orders){
             foreach ($orders as $k=>$v) {
-                $row = $v;
-                $row['fee_percent'] = $v['price'] * $agent['fee_percent'];
-                $orders[$k] = $row;
+//                $row['fee_percent'] = $v['price'] * $agent['fee_percent'];
+                $orders[$k]['dt'] = get_default_date($v['a_time']);
+                $orders[$k]['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
             }
-
         }
 
-        $agentService = new AgentService();
-
-        $share = ShareProductModel::db()->getAll(" agent_uid = $uid");
+        //代理 分享产品 总次数
+        $share = ShareProductModel::db()->getAll(" agent_id = $aid");
         $shareCnt = 0;
         if($share){
             $shareCnt = count($share);
         }
         $this->assign("shareCnt",$shareCnt);
-
-        $shareOrder = OrderModel::db()->getAll(" agent_uid = $uid");
+        //分享的产品连接，有多少个用户下单
         $shareOrderCnt = 0;
+        //分享的产品连接，有多少个用户下单并完成
         $shareOrderFinishCnt = 0;
-        if($shareOrder){
-            $shareOrderCnt = count($shareOrder);
-            foreach ($shareOrder as $k=>$v){
+//        var_dump($orders);exit;
+        if($orders){
+            $shareOrderCnt = count($orders);
+            foreach ($orders as $k=>$v){
                 if($v['status'] == OrderModel::STATUS_FINISH){
                     $shareOrderFinishCnt++;
                 }
@@ -71,29 +78,24 @@ class AgentCtrl extends BaseCtrl{
         $this->assign("shareOrderCnt",$shareOrderCnt);
         $this->assign("shareOrderFinishCnt",$shareOrderFinishCnt);
 
-        $fee = $agentService->getFee($uid);
-
+        //可提现金额信息
+        $allowWithDrawFeeInfo = $this->agentService->getFee($aid);
+        //有几个子代理
         $subAgentCnt = 0;
-        $SubAgentList = $agentService->getSubAgentList($uid);
+        $SubAgentList = $this->agentService->getSubAgentList($aid);
         if($SubAgentList){
             $subAgentCnt = count($SubAgentList);
-
-            $subAgentUids = "";
             foreach ($SubAgentList as $k=>$v){
-                $subAgentUids .= $v['id'] . ",";
+                $SubAgentList[$k]['dt'] = get_default_date($v['a_time']);
             }
-            $subAgentUids = substr($subAgentUids,0,strlen($subAgentUids)-1);
-            $subAgentFee = $agentService->getFee($subAgentUids);
-            $fee += $subAgentFee;
         }
+
+        $this->assign("SubAgentList",$SubAgentList);
         $this->assign("subAgentCnt",$subAgentCnt);
 
+        $this->assign("fee",$allowWithDrawFeeInfo['fee']);
 
-
-        $this->assign("fee",$fee);
-
-
-        $userLivePlaceDesc = UserModel::getAgentLivePlaceDesc($uid);
+        $userLivePlaceDesc = UserModel::getAgentLivePlaceDesc($aid);
         $this->assign("userLivePlaceDesc",$userLivePlaceDesc);
 
         $this->assign("agent",$agent);
@@ -102,9 +104,6 @@ class AgentCtrl extends BaseCtrl{
 
         $this->display("/people/agent_detail.html");
     }
-
-
-
 
     function getList(){
         //初始化返回数据格式

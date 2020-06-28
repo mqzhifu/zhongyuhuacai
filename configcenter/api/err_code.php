@@ -37,8 +37,8 @@ return array(
 //    1025=>'adId，不在DB中',
     1026=>'pid ，不在DB中',
     1027=>"gid,不在DB中",
-    1028=>"agent_uid 不在DB中",
-    1029=>"oid not in db",
+    1028=>"agent_id 不在DB中",
+    1029=>"oid not in db {0}",
 
     1030=>"province code not in db",
     1031=>"city code not in db",
@@ -48,6 +48,7 @@ return array(
     1035=>"user sel address id not in db",
     1036=>"share_uid not in db ",
     1037=>"share_uid is not agent",
+    1038=>"address is is not in db",
 
     5001=>'此接口必须为登陆状态',
 //
@@ -109,7 +110,7 @@ return array(
 //    7059=>'gold coin shortage',// 金币不足抵扣;
 //
 //    //各种参数为空
-//    8000=>'cellphone(手机号为空)-为空',
+    8000=>'手机号为空-mobile',
 //    8001=>'ps(密码)-为空',
     8002=>'uid为空',
 //    8003=>'key为空',
@@ -293,7 +294,7 @@ return array(
 //    8273=>'不能对自己操作',
 //    8274=>'并没有将对方加入免打扰中',
 //    8275=>'不要重复添加免打扰',
-//    8276=>'手机号已存在',
+    8276=>'手机号已存在',
 //    8277=>'id不属于本人',
 //    8278=>'已结束',
 //    8279=>'今日玩游戏获取金币，已达上限',
@@ -387,7 +388,20 @@ return array(
     8365=>"详细地址为空",
     8366=>"scene is null",
     8367=>"getwxacodeunlimit is false",
-
-
-
+    8368=>"该用户不是代理",
+    8369=>"WithdrawMoney type not in array",
+    8370=>"一级代理邀请码为空，invite_agent_code",
+    8371=>"邀请码找不到agent,invite_agent_code not found agent",
+    8372=>"agent id is null",
+    8373=>"num is null",
+    8374=>"iods is null",
+    8375=>"提现金额<=0",
+    8376=>"只有订单状态为 已结束 {0} ",
+    8377=>"提现订单并不属于该UID 已结束 {0} ",
+    8378=>"提现 agent id 不属性该订单 {0}",
+    8379=>"该订单已经提现 {0}",
+    8380=>"地址无法识别 没有分隔符",
+    8381=>"address id is null",
+    8382=>"address uid 不属于 {}",
+    8383=>"str is null",
 );
