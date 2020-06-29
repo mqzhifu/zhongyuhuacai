@@ -109,8 +109,8 @@ function get_web_client_data(){
                 $f_channel = $data[13];
             }
         }elseif($api_type == 2){//项目2 - 微信 小程序
-            $data = explode(",",$data);
             LogLib::inc()->debug(["client data ori:",$data]);
+            $data = explode(",",$data);
             $dataArr = null;
             foreach ($data as $k=>$v){
                 $tmp = explode(":",$v);
