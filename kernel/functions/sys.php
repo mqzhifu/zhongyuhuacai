@@ -268,12 +268,13 @@ function out_pc($code = 200,$msg = '',$appKey = APP_NAME){
     }
     return array('code'=>$code,'msg'=>$msg);
 }
-function out_ajax($code = 500,$msg = "",$appKey = APP_NAME){
+function out_ajax($code = 500,$msg = ""){
     if($msg === ""){
         $errCode = ConfigCenter::get(APP_NAME,"err_code");
         $msg = $errCode[$code];
     }
-    LogLib::inc()->debug(json_encode($msg));
+
+    LogLib::inc()->debug("respone code:$code");
     echo json_encode(array('code'=>$code,'msg'=>$msg));
     exit;
 }
