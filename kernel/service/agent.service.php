@@ -129,6 +129,7 @@ class AgentService{
             'county_code'=>$data['county_code'],
             'towns_code'=>$data['town_code'],
             'villages'=>$data['address'],
+            'address'=>$data['address'],
 
             'mobile'=>$data['mobile'],
             'title'=>$data['title'],
