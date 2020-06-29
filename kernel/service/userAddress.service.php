@@ -108,19 +108,19 @@ class UserAddressService{
             return out_pc(8362);
         }
 
-        if(!$this->getProvinceByCode($data['province'])){
+        if(!$this->getProvinceByCode($data['province_code'])){
             return out_pc(1030);
         }
 
-        if(!$this->getCityByCode($data['city'])){
+        if(!$this->getCityByCode($data['city_code'])){
             return out_pc(1031);
         }
 
-        if(!$this->getCountyByCode($data['county'])){
+        if(!$this->getCountyByCode($data['county_code'])){
             return out_pc(1032);
         }
 
-        if(!$this->getTownByCode($data['town'])){
+        if(!$this->getTownByCode($data['town_code'])){
             return out_pc(1033);
         }
 
