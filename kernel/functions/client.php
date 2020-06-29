@@ -80,8 +80,8 @@ function get_web_client_data(){
 
         $device_version = 0;
     }elseif($cate == 'api') {
-        $api_type = $_SERVER['X-CLIENT-TYPE'];
-        $data =  $_SERVER['X-CLIENT-DATA'];
+        $api_type = $_SERVER['HTTP_X_CLIENT_TYPE'];
+        $data =  $_SERVER['HTTP_X_CLIENT_DATA'];
         if($api_type == 1){//项目1  - APP
             //客户端版本号|设备系统|设备系统版本|设备型号|设备型号版本|纬度|经度|sim_imsi|手机号|分辨率
             $data = explode( "|",$data);
@@ -109,24 +109,29 @@ function get_web_client_data(){
                 $f_channel = $data[13];
             }
         }elseif($api_type == 2){//项目2 - 微信 小程序
-            $data = json_decode($data,true);
+            $data = explode(",",$data);
+            $dataArr = null;
+            foreach ($data as $k=>$v){
+                $tmp = exp(":",$v);
+                $dataArr[tmp[0]] = $tmp[1];
+            }
             //IOS | 安卓
-            $osArr = explode(" ",data['system']);
+            $osArr = explode(" ",$dataArr['system']);
             $os = $osArr[0];
             $os_v = $osArr[1];
             //iphone
 //            $device_modelArr = explode(" ",data['model']);
-            $device_model =$data['brand'] . "-".$data['model'];
+            $device_model =$dataArr['brand'] . "-".$dataArr['model'];
             $device_version = $device_model;
 
 
 
             //微信版本号
-            $app_v = $data['version'];
-            $dpi = $data['screenHeight'] . "X" . $data['screenWidth'] ;
+            $app_v = $dataArr['version'];
+            $dpi = $dataArr['screenHeight'] . "X" . $dataArr['screenWidth'] ;
 
 
-            $wxLittleSdkVersion = $data['SDKVersion'];
+            $wxLittleSdkVersion = $dataArr['SDKVersion'];
 
             $lat = "";
             $lon = "";
@@ -682,7 +687,7 @@ function get_useragent_spider(){
 
 //获取用户请求的分类：wap pc api
 function get_request_cate(){
-    if(isset($_SERVER['X-CLIENT-TYPE']) && $_SERVER['X-HTTP-CLIENT-TYPE']){
+    if(isset($_SERVER['HTTP_X_CLIENT_TYPE']) && $_SERVER['HTTP_X_CLIENT_TYPE']){
         $rs = 'api';
     }elseif (  isMobile() ){
         $rs = 'wap';
