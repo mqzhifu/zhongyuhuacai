@@ -110,6 +110,7 @@ function get_web_client_data(){
             }
         }elseif($api_type == 2){//项目2 - 微信 小程序
             $data = explode(",",$data);
+            LogLib::inc()->debug(["client data ori:",$data]);
             $dataArr = null;
             foreach ($data as $k=>$v){
                 $tmp = explode(":",$v);
