@@ -208,11 +208,11 @@ class ToolsCtrl {
         exit;
     }
 
-    function tokenTransferUid($token){
-        if(!$token){
+    function tokenTransferUid($request){
+        if(!$request['token']){
             exit("token 为空");
         }
-        $uuid = TokenLib::getUid($token);
+        $uuid = TokenLib::getDecode($request['token']);
         var_dump($uuid);exit;
         $uid = $uuid['msg'];
 

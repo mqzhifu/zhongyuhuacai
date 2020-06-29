@@ -49,7 +49,6 @@ class IndexCtrl extends BaseCtrl  {
         $latitude = $request['latitude'];
         $longitude = $request['longitude'];
 
-
         $addr = AreaLib::getByGPS($latitude,$longitude);
 
         $data = array(

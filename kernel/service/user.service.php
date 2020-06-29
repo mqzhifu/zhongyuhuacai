@@ -497,6 +497,14 @@ class UserService{
         //注册时间
         $user['reg_dt'] = get_default_date($user['a_time']);
 
+        $agentService = new AgentService();
+        $agent = $agentService->getOneByUid($uid)['msg'];
+        if($agent){
+            $user['agent'] = array('id'=>$agent['id'],'type_desc'=>WithdrawMoneyService::TYPE_DESC[$agent['type']]);
+        }else{
+            $user['agent'] = "";
+        }
+
         return out_pc(200,$user);
 //        if(!arrKeyIssetAndExist($user,'avatar')){
 //            $user['avatar'] = "默认图占位符";
