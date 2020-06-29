@@ -110,29 +110,31 @@ function get_web_client_data(){
             }
         }elseif($api_type == 2){//项目2 - 微信 小程序
             LogLib::inc()->debug(["client data ori:",$_SERVER]);
-            $data = explode(",",$data);
-            $dataArr = null;
-            foreach ($data as $k=>$v){
-                $tmp = explode(":",$v);
-                $dataArr[$tmp[0]] = $tmp[1];
-            }
-            //IOS | 安卓
-            $osArr = explode(" ",$dataArr['system']);
-            $os = $osArr[0];
-            $os_v = $osArr[1];
-            //iphone
+
+            if($data){
+                $data = explode(",",$data);
+                $dataArr = null;
+                foreach ($data as $k=>$v){
+                    $tmp = explode(":",$v);
+                    $dataArr[$tmp[0]] = $tmp[1];
+                }
+                //IOS | 安卓
+                $osArr = explode(" ",$dataArr['system']);
+                $os = $osArr[0];
+                $os_v = $osArr[1];
+                //iphone
 //            $device_modelArr = explode(" ",data['model']);
-            $device_model =$dataArr['brand'] . "-".$dataArr['model'];
-            $device_version = $device_model;
+                $device_model =$dataArr['brand'] . "-".$dataArr['model'];
+                $device_version = $device_model;
+
+                //微信版本号
+                $app_v = $dataArr['version'];
+                $dpi = $dataArr['screenHeight'] . "X" . $dataArr['screenWidth'] ;
 
 
+                $wxLittleSdkVersion = $dataArr['SDKVersion'];
+            }
 
-            //微信版本号
-            $app_v = $dataArr['version'];
-            $dpi = $dataArr['screenHeight'] . "X" . $dataArr['screenWidth'] ;
-
-
-            $wxLittleSdkVersion = $dataArr['SDKVersion'];
 
             $lat = "";
             $lon = "";
