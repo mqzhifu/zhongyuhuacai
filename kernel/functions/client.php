@@ -112,7 +112,7 @@ function get_web_client_data(){
             $data = explode(",",$data);
             $dataArr = null;
             foreach ($data as $k=>$v){
-                $tmp = exp(":",$v);
+                $tmp = explode(":",$v);
                 $dataArr[tmp[0]] = $tmp[1];
             }
             //IOS | 安卓
@@ -180,6 +180,9 @@ function get_web_client_data(){
         'f_channel'=>$f_channel,
         'wx_little_sdk_version'=>$wxLittleSdkVersion,
     );
+
+    LogLib::inc()->debug(['client info :',$info]);
+
     return $info;
 
 
