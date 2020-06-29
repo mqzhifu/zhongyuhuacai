@@ -14,9 +14,9 @@ function get_client_info()
 
 function get_web_client_data(){
     // 这种情况，不太可能出现，可能是 后台脚本，也可能是爬虫
-    if ( !isset($_SERVER['HTTP_HOST']) || empty($_SERVER['HTTP_HOST'])  ){
-        return -1;
-    }
+//    if ( !isset($_SERVER['HTTP_HOST']) || empty($_SERVER['HTTP_HOST'])  ){
+//        return -1;
+//    }
     //静态资源的请求，就没必要记录了
 //    if(STATIC_URL == $_SERVER['HTTP_HOST']){
 //        return -2;
@@ -43,6 +43,7 @@ function get_web_client_data(){
     $deviceId = "";//设备号，因为有SIM卡、CDMA，同时有些手机会有双SIM卡，这个值安卓端暂定用 getDeviceId  函数，可能会有些不准
     $channel = "";//
     $f_channel = "";
+    $wxLittleSdkVersion = "";//微信小程序 SDK 类库版本
     $cate = get_request_cate();//类型api wap pc
     if ( $cate =='pc'){
         $browser = get_useragent_browser();
@@ -79,10 +80,11 @@ function get_web_client_data(){
 
         $device_version = 0;
     }elseif($cate == 'api') {
-        $api_type = $_SERVER['HTTP-CLIENT-TYPE'];
+        $api_type = $_SERVER['X-CLIENT-TYPE'];
+        $data =  $_SERVER['X-CLIENT-DATA'];
         if($api_type == 1){//项目1  - APP
-//客户端版本号|设备系统|设备系统版本|设备型号|设备型号版本|纬度|经度|sim_imsi|手机号|分辨率
-            $data = explode( "|",$_SERVER['HTTP_CLIENT_DATA']);
+            //客户端版本号|设备系统|设备系统版本|设备型号|设备型号版本|纬度|经度|sim_imsi|手机号|分辨率
+            $data = explode( "|",$data);
 
             $app_v = $data[0];                // 1.1.1
             $os = $data[1];   // 设备类型  android/ios
@@ -107,7 +109,31 @@ function get_web_client_data(){
                 $f_channel = $data[13];
             }
         }elseif($api_type == 2){//项目2 - 微信 小程序
+            $data = json_decode($data,true);
+            //IOS | 安卓
+            $osArr = explode(" ",data['system']);
+            $os = $osArr[0];
+            $os_v = $osArr[1];
+            //iphone
+//            $device_modelArr = explode(" ",data['model']);
+            $device_model =$data['brand'] . "-".$data['model'];
+            $device_version = $device_model;
 
+
+
+            //微信版本号
+            $app_v = $data['version'];
+            $dpi = $data['screenHeight'] . "X" . $data['screenWidth'] ;
+
+
+            $wxLittleSdkVersion = $data['SDKVersion'];
+
+            $lat = "";
+            $lon = "";
+            $sim_imsi = "";
+            $cellphone = "";
+            $imei = "";
+            $deviceId = "";
         }
     }else{
         exit("client info is error.");
@@ -147,6 +173,7 @@ function get_web_client_data(){
         'device_id'=>$deviceId,
         'channel'=>$channel,
         'f_channel'=>$f_channel,
+        'wx_little_sdk_version'=>$wxLittleSdkVersion,
     );
     return $info;
 
@@ -655,7 +682,7 @@ function get_useragent_spider(){
 
 //获取用户请求的分类：wap pc api
 function get_request_cate(){
-    if(isset($_SERVER['HTTP-CLIENT-TYPE']) && $_SERVER['HTTP-CLIENT-TYPE']){
+    if(isset($_SERVER['X-CLIENT-TYPE']) && $_SERVER['X-HTTP-CLIENT-TYPE']){
         $rs = 'api';
     }elseif (  isMobile() ){
         $rs = 'wap';

@@ -20,6 +20,7 @@ class BaseCtrl {
     public $userAddressService = null;
     public $agentService = null;
     function __construct($request){
+        LogLib::inc()->debug(['php_server'],$_SERVER);
         $this->request = $request;
 //        $this->checkSign();
 
