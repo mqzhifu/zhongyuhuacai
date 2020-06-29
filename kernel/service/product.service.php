@@ -81,6 +81,34 @@ class ProductService{
 //        return out_pc(200,$list);
     }
 
+
+    function getProductLinkPCAP($categoryAttrParaIds){
+        //下面两个变量，是优化读DB过多的情况
+        $pca_ids = [];
+        $pcap_ids = [];
+        foreach ($categoryAttrParaIds as $k=>$v){
+            $pca_ids[] = $k;
+            foreach ($v as $k2=>$v2){
+                $pcap_ids[] = $v2;
+            }
+        }
+
+        $pca_ids_str = implode(",",$pca_ids);
+        $pcap_ids_str = implode(",",$pcap_ids);
+        $pca = ProductCategoryAttrModel::db()->getAll(" id in ( $pca_ids_str ) ");
+        $pcap = ProductCategoryAttrParaModel::db()->getAll(" id in ( $pcap_ids_str ) ");
+
+        return array('pca'=>$pca,'pcap'=>$pcap);
+    }
+
+    function searchPcap($data,$id){
+        foreach ($data as $k=>$v){
+            if($v['id'] == $id){
+                return $v;
+            }
+        }
+    }
+
     function getOneDetail($id,$includeGoods,$uid){
         if(!$id){
             return out_pc(8072);
@@ -112,29 +140,32 @@ class ProductService{
                 $categoryAttrParaIds[ $v['pca_id']][] = $v['pcap_id'];
             }
 
-            foreach ($categoryAttrParaIds as $k=>$v){
+            $ProductLinkCategoryAttrDbData = $this->getProductLinkPCAP($categoryAttrParaIds);
 
-                //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
-                if(count($v ) >5){
-                    $tmp = null;
-                    foreach ($v as $k2=>$v2){
-                        if($k2 >5 ){
-                            break;
-                        }
-                        $tmp[] = $v2;
-                    }
-                    $categoryAttrParaIds[$k] = $tmp;
-                }
-            }
+            //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
+//            foreach ($categoryAttrParaIds as $k=>$v){
+//                if(count($v ) >5){
+//                    $tmp = null;
+//                    foreach ($v as $k2=>$v2){
+//                        if($k2 >5 ){
+//                            break;
+//                        }
+//                        $tmp[] = $v2;
+//                    }
+//                    $categoryAttrParaIds[$k] = $tmp;
+//                }
+//            }
 
             //将ID形式 转换成 多维数组，主要是为了获取汉字描述
             foreach ($categoryAttrParaIds as $k=>$v){
                 //先获取分类属性的  一条记录值
-                $row = ProductCategoryAttrModel::db()->getById($k);
+//                $row = ProductCategoryAttrModel::db()->getById($k);
+                $row = $this->searchPcap($ProductLinkCategoryAttrDbData['pca'],$k);
                 $para = null;
                 //再获取该属性下的所有参数的值
                 foreach ($v as $k2=>$v2){
-                    $para[] = ProductCategoryAttrParaModel::db()->getById($v2);
+//                    $para[] = ProductCategoryAttrParaModel::db()->getById($v2);
+                    $para[] = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'],$v2);
                 }
                 $row['category_attr_para'] = $para;
                 $productCategoryAttrParaData[] = $row;
