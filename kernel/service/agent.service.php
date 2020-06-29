@@ -139,7 +139,7 @@ class AgentService{
             'real_name'=>"",
             'type'=>$type,
             'status'=>AgentModel::STATUS_AUDITING,
-            'sex'=>"",
+            'sex'=>$data['sex'],
             'a_time'=>time(),
             'pic'=>"",
         );
