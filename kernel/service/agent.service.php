@@ -124,10 +124,10 @@ class AgentService{
         }
 
         $addData = array(
-            'province_code'=>$data['province'],
-            'city_code'=>$data['city'],
-            'county_code'=>$data['county'],
-            'towns_code'=>$data['town'],
+            'province_code'=>$data['province_code'],
+            'city_code'=>$data['city_code'],
+            'county_code'=>$data['county_code'],
+            'towns_code'=>$data['town_code'],
             'villages'=>$data['address'],
 
             'mobile'=>$data['mobile'],
