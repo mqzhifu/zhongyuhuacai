@@ -35,7 +35,7 @@ class AgentCtrl extends BaseCtrl  {
         $invite_agent_code = get_request_one( $this->request,'invite_agent_code','');
         $data = get_request_one( $this->request,'data',[]);
 
-        $data = array('mobile'=>"13511112222","province_code"=>110000,'city_code'=>110100,'county_code'=>'110102',"town_code"=>"110101007",'address_code'=>"东四十条，银楼大厦B座12层，1204",'title'=>"饰品小生活");
+        $data = array('mobile'=>"13511112222","province_code"=>110000,'city_code'=>110100,'county_code'=>'110102',"town_code"=>"110101007",'address'=>"东四十条，银楼大厦B座12层，1204",'title'=>"饰品小生活");
         $rs = $this->agentService->apply($this->uid,$type,$invite_agent_code,$data);
         var_dump($rs);exit;
     }
