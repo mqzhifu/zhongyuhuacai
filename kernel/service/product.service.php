@@ -339,6 +339,14 @@ class ProductService{
     }
 
     function search($condition,$page = 1,$limit = 10 ,$uid = 0){
+        $returnPageInfo = array(
+            'page'=>$page,
+            'limit'=>$limit,
+            'record_cnt'=>0,
+            'page_cnt'=>0,
+            'list'=>null,
+        );
+
         $where = " 1 = 1 ";
         if($condition){
 //            return out_pc(8978);
@@ -349,12 +357,11 @@ class ProductService{
             if(arrKeyIssetAndExist($condition,'category')){
                 $where .= " and category_id = {$condition['category']}";
             }
-
         }
         LogLib::inc()->debug($where);
         $cnt = self::getListCntByDb($where);
         if(!$cnt){
-            return  out_pc(200,null);
+            return  out_pc(200,$returnPageInfo);
         }
 
         $order = "";
@@ -392,7 +399,11 @@ class ProductService{
         }
 
 
-        return out_pc(200,$list);
+        $returnPageInfo['record_cnt'] = $cnt;
+        $returnPageInfo['page_cnt'] = $pageInfo['totalPage'];
+        $returnPageInfo['list'] = $list;
+
+        return out_pc(200,$returnPageInfo);
     }
 
     function format($list){

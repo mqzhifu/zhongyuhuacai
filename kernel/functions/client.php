@@ -180,7 +180,7 @@ function get_web_client_data(){
         'cellphone'=>$cellphone,
         'device_id'=>$deviceId,
         'channel'=>$channel,
-        'f_channel'=>$f_channel,
+//        'f_channel'=>$f_channel,
         'wx_little_sdk_version'=>$wxLittleSdkVersion,
     );
 
