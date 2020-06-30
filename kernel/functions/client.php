@@ -42,7 +42,7 @@ function get_web_client_data(){
 
     $deviceId = "";//设备号，因为有SIM卡、CDMA，同时有些手机会有双SIM卡，这个值安卓端暂定用 getDeviceId  函数，可能会有些不准
     $channel = "";//
-    $f_channel = "";
+//    $f_channel = "";
     $wxLittleSdkVersion = "";//微信小程序 SDK 类库版本
     $cate = get_request_cate();//类型api wap pc
     if ( $cate =='pc'){
@@ -105,9 +105,9 @@ function get_web_client_data(){
                 $channel = $data[12];
             }
 
-            if(arrKeyIssetAndExist($data,13)){
-                $f_channel = $data[13];
-            }
+//            if(arrKeyIssetAndExist($data,13)){
+//                $f_channel = $data[13];
+//            }
         }elseif($api_type == 2){//项目2 - 微信 小程序
             LogLib::inc()->debug(["client data ori:",$_SERVER]);
 
