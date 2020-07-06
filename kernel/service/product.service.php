@@ -127,6 +127,7 @@ class ProductService
         $goodsList = null;//商品及属性列表
         $productCategoryAttrParaData = null;//产品属性列表
         $goodsDb = null;
+        $goods_low_price_row = null;//价格最低的那个商品，要默认给选中状态(规格选中)
         if ($includeGoods) {
             $goodsDb = GoodsModel::db()->getAll(" pid = $id",null," id,status,a_time,stock,is_del,sale_price,original_price "  );
             if (!$goodsDb) {
@@ -189,7 +190,29 @@ class ProductService
                     $row['goods_link_category_attr'] = $linkList;
                     $goodsList[]= $row;
                 }
-                var_dump($goods_low_price_row);exit;
+                //找到最低价格那个，默认把 PCAP 规格参数 给选中 状态
+                foreach ($goodsList as $k=>$v){
+                    if($v['id'] == $goods_low_price_row['id']){
+                        $goods_low_price_row['pcap'] = $v['goods_link_category_attr'];
+                        break;
+                    }
+                }
+
+                var_dump($productCategoryAttrParaData);
+                foreach ($productCategoryAttrParaData as $k=>$v){
+                    foreach ($v as $k2=>$v2){
+                        foreach ($goods_low_price_row['pcap'] as $k3=>$v3){
+                            if($v2['id'] == $v3['pcap_id']){
+                                var_dump($v2);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                var_dump(1111);exit;
+
+
             } else {
                 //这里是，空属性的产品
             }
