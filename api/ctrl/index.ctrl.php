@@ -53,8 +53,16 @@ class IndexCtrl extends BaseCtrl  {
     }
     //微信获取用户GPS推给小程序，再推到后端
     function wxPushLocation($request){
-        $latitude = $request['latitude'];
-        $longitude = $request['longitude'];
+        $latitude =  get_request_one( $this->request,'latitude','');
+        $longitude =  get_request_one( $this->request,'longitude','');
+
+        if(!$latitude){
+            return $this->out(8111);
+        }
+
+        if(!$longitude){
+            return $this->out(8112);
+        }
 
         $addr = AreaLib::getByGPS($latitude,$longitude);
 
@@ -62,7 +70,7 @@ class IndexCtrl extends BaseCtrl  {
             'latitude'=>$latitude,'longitude'=>$longitude,'uid'=>$this->uid,'gps_parser_addr'=>$addr,'a_time'=>time(),
         );
         $newId = wxLocationModel::db()->add($data);
-        return $this->out(200,[$newId,$addr]);
+        return $this->out(200,$newId);
     }
     //首页轮播图
     function getBannerList(){

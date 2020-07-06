@@ -211,7 +211,8 @@ return array(
 //    //各种-数据格式-验证-错误
     8109=>'token解析失败',//
     8110=>"share_uid is null",
-
+    8111=>"latitude is null",
+    8112=>"longitude is null",
 
 //    8110=>'code验证失败',//
 //    8112=>'路径错误',
