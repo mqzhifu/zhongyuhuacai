@@ -172,7 +172,10 @@ class ProductService
                     //再获取该属性下的所有参数的值
                     foreach ($v as $k2 => $v2) {
 //                    $para[] = ProductCategoryAttrParaModel::db()->getById($v2);
-                        $para[] = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'], $v2);
+                        $row = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'], $v2);
+                        $row['default_low_sel'] = 0;
+                        $para[]  = $row;
+
                     }
                     $row['category_attr_para'] = $para;
                     $productCategoryAttrParaData[] = $row;
@@ -198,7 +201,6 @@ class ProductService
                     }
                 }
 
-                var_dump($productCategoryAttrParaData);
                 foreach ($productCategoryAttrParaData as $k=>$v){
                     $f = 0;
                     foreach ($v['category_attr_para'] as $k2=>$v2){
@@ -214,10 +216,6 @@ class ProductService
                         }
                     }
                 }
-
-                var_dump($productCategoryAttrParaData);exit;
-
-
             } else {
                 //这里是，空属性的产品
             }
