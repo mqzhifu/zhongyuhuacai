@@ -172,9 +172,9 @@ class ProductService
                     //再获取该属性下的所有参数的值
                     foreach ($v as $k2 => $v2) {
 //                    $para[] = ProductCategoryAttrParaModel::db()->getById($v2);
-                        $row = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'], $v2);
-                        $row['default_low_sel'] = 0;
-                        $para[]  = $row;
+                        $subRow = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'], $v2);
+                        $subRow['default_low_sel'] = 0;
+                        $para[]  = $subRow;
 
                     }
                     $row['category_attr_para'] = $para;
