@@ -166,6 +166,16 @@ class UserAddressService{
             $strArr[] = $x;
         }
 
+        $rs = array(
+            'name'=>'',
+            'province'=>'',
+            'city'=>'',
+            'county'=>'',
+            'town'=>'',
+            'village'=>'',
+            'mobile'=>'',
+        );
+
         if(count($strArr) == 6){
             $rs = array(
                 'name'=>$strArr[0],
@@ -177,7 +187,7 @@ class UserAddressService{
                 'mobile'=>$strArr[6],
             );
         }else{
-            out_ajax();
+            return out_pc(200,$rs);
         }
 
 //        foreach ($strArr as $k=>$v){

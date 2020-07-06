@@ -1,51 +1,54 @@
 <?php
 
-class ProductService{
+class ProductService
+{
     public $limit = 10;
     private $originalPricePercent = 0.1;
-    const ORDER_TYPE =array(
-        1=> array('id'=>1,"name"=>'默认1','field'=>"id"),
-        2=> array('id'=>2,"name"=>'新品2','field'=>"id"),
-        3=> array('id'=>3,"name"=>'销量3','field'=>"user_buy_total"),
-        4=> array('id'=>4,"name"=>'价格4','field'=>'lowest_price'),
+    const ORDER_TYPE = array(
+        1 => array('id' => 1, "name" => '默认1', 'field' => "id"),
+        2 => array('id' => 2, "name" => '新品2', 'field' => "id"),
+        3 => array('id' => 3, "name" => '销量3', 'field' => "user_buy_total"),
+        4 => array('id' => 4, "name" => '价格4', 'field' => 'lowest_price'),
     );
 
 
-
-    function getListByDb($where,$start,$limit ,$order = ""){
-        return ProductModel::db()->getAll($where  . ProductModel::getDefaultOrder() . $order . " limit $start,$limit"   );
-    }
-    function getListCntByDb($where){
-        return ProductModel::db()->getCount($where );
+    function getListByDb($where, $start, $limit, $order = "")
+    {
+        return ProductModel::db()->getAll($where . ProductModel::getDefaultOrder() . $order . " limit $start,$limit");
     }
 
-    function getRecommendList($page,$limit,$type){
+    function getListCntByDb($where)
+    {
+        return ProductModel::db()->getCount($where);
+    }
+
+    function getRecommendList($page = 1, $limit = 3, $type)
+    {
         $returnPageInfo = array(
-            'page'=>$page,
-            'limit'=>$limit,
-            'record_cnt'=>0,
-            'page_cnt'=>0,
-            'list'=>null,
+            'page' => $page,
+            'limit' => $limit,
+            'record_cnt' => 0,
+            'page_cnt' => 0,
+            'list' => null,
         );
 
-
-        if($type == 1){
-            $where = " recommend_detail = ".ProductModel::RECOMMEND_TRUE;
-        }else{
-            $where = " recommend = ".ProductModel::RECOMMEND_TRUE;
+        if ($type == 1) {
+            $where = " recommend_detail = " . ProductModel::RECOMMEND_TRUE;
+        } else {
+            $where = " recommend = " . ProductModel::RECOMMEND_TRUE;
         }
 
         $cnt = $this->getListCntByDb($where);
-        if(!$cnt){
-            return  out_pc(200,null);
+        if (!$cnt) {
+            return out_pc(200, null);
         }
 
-        if(!$limit){
+        if (!$limit) {
             $limit = $this->limit;
         }
 
-        $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
-        $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end']);
+        $pageInfo = PageLib::getPageInfo($cnt, $limit, $page);
+        $list = $this->getListByDb($where, $pageInfo['start'], $pageInfo['end']);
         $list = $this->format($list);
         $list = $this->formatShow($list);
 
@@ -56,93 +59,96 @@ class ProductService{
         $returnPageInfo['list'] = $list;
 
 
-        return out_pc(200,$returnPageInfo);
+        return out_pc(200, $returnPageInfo);
     }
 
-    function getListByCategory($categoryId,$page,$limit){
-        $where = " category_id = ".$categoryId;
-        $cnt = $this->getListCntByDb($where);
-        if(!$cnt){
-            return  out_pc(200,null);
-        }
-
-        if(!$limit){
-            $limit = $this->limit;
-        }
-
-        $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
-        $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end']);
-        $list = $this->format($list);
-        return out_pc(200,$list);
-
-
-//        $list = ProductModel::getListByCategory($categoryId);
+//    function getListByCategory($categoryId,$page,$limit){
+//        if(!$categoryId){
+//            return out_pc(8993);
+//        }
+//        $where = " category_id = ".$categoryId;
+//        $cnt = $this->getListCntByDb($where);
+//        if(!$cnt){
+//            return  out_pc(200,null);
+//        }
+//
+//        if(!$limit){
+//            $limit = $this->limit;
+//        }
+//
+//        $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
+//        $list = $this->getListByDb($where,$pageInfo['start'],$pageInfo['end']);
 //        $list = $this->format($list);
 //        return out_pc(200,$list);
-    }
+//    }
 
 
-    function getProductLinkPCAP($categoryAttrParaIds){
+    function getProductLinkPCAP($categoryAttrParaIds)
+    {
         //下面两个变量，是优化读DB过多的情况
         $pca_ids = [];
         $pcap_ids = [];
-        foreach ($categoryAttrParaIds as $k=>$v){
+        foreach ($categoryAttrParaIds as $k => $v) {
             $pca_ids[] = $k;
-            foreach ($v as $k2=>$v2){
+            foreach ($v as $k2 => $v2) {
                 $pcap_ids[] = $v2;
             }
         }
 
-        $pca_ids_str = implode(",",$pca_ids);
-        $pcap_ids_str = implode(",",$pcap_ids);
+        $pca_ids_str = implode(",", $pca_ids);
+        $pcap_ids_str = implode(",", $pcap_ids);
         $pca = ProductCategoryAttrModel::db()->getAll(" id in ( $pca_ids_str ) ");
         $pcap = ProductCategoryAttrParaModel::db()->getAll(" id in ( $pcap_ids_str ) ");
 
-        return array('pca'=>$pca,'pcap'=>$pcap);
+        return array('pca' => $pca, 'pcap' => $pcap);
     }
 
-    function searchPcap($data,$id){
-        foreach ($data as $k=>$v){
-            if($v['id'] == $id){
+    function searchPcap($data, $id)
+    {
+        foreach ($data as $k => $v) {
+            if ($v['id'] == $id) {
                 return $v;
             }
         }
     }
 
-    function getOneDetail($id,$includeGoods,$uid){
-        if(!$id){
+    function getOneDetail($id, $includeGoods = 1, $uid = 0)
+    {
+        if (!$id) {
             return out_pc(8072);
         }
 
-        $stock = 0;
+        $stock = 0;//总库存
         $product = ProductModel::db()->getById($id);
-        if(!$product){
+        if (!$product) {
             return out_pc(1026);
         }
 
         $goodsList = null;//商品及属性列表
         $productCategoryAttrParaData = null;//产品属性列表
-        $goodsDb = GoodsModel::db()->getAll(" pid = $id");
-        if(!$goodsDb){
-            return out_pc(8979);
-        }
-        //产品 属性参数  是否为空
-        if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
-            //获取一个产品的，所有类型 属性 参数
-            $ProductLinkCategoryAttrDb = ProductLinkCategoryAttrModel::db()->getAll(" pid = $id");
-            if(!$ProductLinkCategoryAttrDb){
-                return out_pc(8980);
+        $goodsDb = null;
+        if ($includeGoods) {
+            $goodsDb = GoodsModel::db()->getAll(" pid = $id",null," id,status,a_time,stock,is_del,sale_price,original_price "  );
+            if (!$goodsDb) {
+                return out_pc(8979);
             }
-            //格式化 属性参数   以ID 形式
-            //属性1 =》  N个参数  ,属性2 =》  N个参数
-            $categoryAttrParaIds = null;
-            foreach ($ProductLinkCategoryAttrDb as $k=>$v){
-                $categoryAttrParaIds[ $v['pca_id']][] = $v['pcap_id'];
-            }
+            //产品 属性参数  是否为空
+            if ($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE) {
+                //获取一个产品的，所有类型 属性 参数
+                $ProductLinkCategoryAttrDb = ProductLinkCategoryAttrModel::db()->getAll(" pid = $id");
+                if (!$ProductLinkCategoryAttrDb) {
+                    return out_pc(8980);
+                }
+                //格式化 属性参数   以ID 形式
+                //属性1 =》  N个参数  ,属性2 =》  N个参数
+                $categoryAttrParaIds = null;
+                foreach ($ProductLinkCategoryAttrDb as $k => $v) {
+                    $categoryAttrParaIds[$v['pca_id']][] = $v['pcap_id'];
+                }
 
-            $ProductLinkCategoryAttrDbData = $this->getProductLinkPCAP($categoryAttrParaIds);
+                $ProductLinkCategoryAttrDbData = $this->getProductLinkPCAP($categoryAttrParaIds);
 
-            //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
+                //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
 //            foreach ($categoryAttrParaIds as $k=>$v){
 //                if(count($v ) >5){
 //                    $tmp = null;
@@ -156,113 +162,98 @@ class ProductService{
 //                }
 //            }
 
-            //将ID形式 转换成 多维数组，主要是为了获取汉字描述
-            foreach ($categoryAttrParaIds as $k=>$v){
-                //先获取分类属性的  一条记录值
+                //将ID形式 转换成 多维数组，主要是为了获取汉字描述
+                foreach ($categoryAttrParaIds as $k => $v) {
+                    //先获取分类属性的  一条记录值
 //                $row = ProductCategoryAttrModel::db()->getById($k);
-                $row = $this->searchPcap($ProductLinkCategoryAttrDbData['pca'],$k);
-                $para = null;
-                //再获取该属性下的所有参数的值
-                foreach ($v as $k2=>$v2){
+                    $row = $this->searchPcap($ProductLinkCategoryAttrDbData['pca'], $k);
+                    $para = null;
+                    //再获取该属性下的所有参数的值
+                    foreach ($v as $k2 => $v2) {
 //                    $para[] = ProductCategoryAttrParaModel::db()->getById($v2);
-                    $para[] = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'],$v2);
+                        $para[] = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'], $v2);
+                    }
+                    $row['category_attr_para'] = $para;
+                    $productCategoryAttrParaData[] = $row;
                 }
-                $row['category_attr_para'] = $para;
-                $productCategoryAttrParaData[] = $row;
-            }
 //            //遍历该产品下的所有商品列表
-            foreach ($goodsDb as $k=>$v){
-                $stock += $v['stock'];
-//                $row = $v;
-//                //获取每个商品对应的  分类属性参数
-//                $row['category_attr_para'] = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}");
-//                $goodsList[]= $row;
+                foreach ($goodsDb as $k => $v) {
+                    $stock += $v['stock'];
+                    $row = $v;
+                    //获取每个商品对应的  分类属性参数
+                    $linkList = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}",null," pca_id , pcap_id");
+                    $row['goods_link_category_attr'] = $linkList;
+                    $goodsList[]= $row;
+                }
+            } else {
+                //这里是，空属性的产品
             }
         }
 
+        $product['goods_list'] = $goodsList;
         $product['pcap'] = $productCategoryAttrParaData;
-//        $product['goods_list'] = $goodsList;
         $product['stock'] = $stock;
 
-        if(arrKeyIssetAndExist($product,'desc_attr')){
-           $tmp = json_decode($product['desc_attr'],true);
-           $str = null;
-           foreach ($tmp as $k=>$v){
-               $str[] = array("key"=>$k,'value'=>$v);
-           }
+        if (arrKeyIssetAndExist($product, 'desc_attr')) {
+            $tmp = json_decode($product['desc_attr'], true);
+            $str = null;
+            foreach ($tmp as $k => $v) {
+                $str[] = array("key" => $k, 'value' => $v);
+            }
             $product['desc_attr_format'] = $str;
-        }else{
+        } else {
             $product['desc_attr_format'] = "";
         }
 
-        $orderService = new OrderService();
-        $product['cart_num'] = $orderService->getUserCartNum($uid)['msg'];
-
+//        $orderService = new OrderService();
+//        $product['cart_num'] = $orderService->getUserCartNum($uid)['msg'];
 
         $upService = new UpService();
         $collectService = new CollectService();
 
-        $hasLiked = 0;
-        if($upService->exist($id,$uid)){
-            $hasLiked = 1;
-        }
+        $hasLiked = 0;//产品 是否 已经 点赞过
+        $hasCollect = 0; //产品 是否 已经 收藏 过
+        if ($uid) {
+            if ($upService->exist($id, $uid)) {
+                $hasLiked = 1;
+            }
 
-        $hasCollect = 0;
-        if($collectService->exist($id,$uid)){
-            $hasCollect = 1;
+            if ($collectService->exist($id, $uid)) {
+                $hasCollect = 1;
+            }
+
+            //更新 pv uv
+            $this->upPvUv($id, $uid);
         }
 
         $product['has_collect'] = $hasCollect;
         $product['has_up'] = $hasLiked;
 
-
-
-        //处理 产品 属性-参数
-//        $attribute = $product['attribute'];
-//        //该产品所有包含的属性参数，但是不一定每种属性组合都有商品(库存)
-//        $attribute = json_decode($attribute,true);
-//        $categoryAttrArr = null;
-//        $categoryAttrParaArr = null;
-//        foreach ($attribute as $k=>$v){
-//            $categoryAttr = ProductCategoryAttrModel::db()->getById($k);
-//            $categoryAttrArr[$categoryAttr['id']] = $categoryAttr;
-//            $tmpArr = null;
-//            foreach ($v as $k2=>$v2){
-//                $tmpArr[] = ProductCategoryAttrParaModel::db()->getById($v2);
-//            }
-//            $categoryAttrParaArr[$categoryAttr['id']] = $tmpArr;
-//        }
-//
-//        $product['categoryAttrArr'] = $categoryAttrArr;
-//        $product['categoryAttrParaArr'] = $categoryAttrParaArr;
-
-//        if($includeGoods){
-//            if($includeGoods == 2){
-//                return out_pc(200,$product);
-//            }
-//        }
-//        $goods = $this->getGoodsListByPid($id);
-//        $product['goods_list'] = $goods;
-        $this->upPvUv($id,$uid);
         $product = $this->formatRow($product);
+        //价格 由分 转换 元
+        $product['original_price'] = $product['lowest_price'] + ($product['lowest_price'] * $this->originalPricePercent);
+        $product['original_price'] = ProductService::formatDataPrice(2, $product, 'original_price');
+        $product['lowest_price'] = ProductService::formatDataPrice(2, $product, 'lowest_price');
 
-        $product['original_price'] =$product['lowest_price'] + ( $product['lowest_price'] * $this->originalPricePercent);
-        $product['original_price'] = ProductService::formatDataPrice(2,$product,'original_price');
-        $product['lowest_price'] = ProductService::formatDataPrice(2,$product,'lowest_price');
 
-        return out_pc(200,$product);
+
+//        var_dump(strlen(json_encode($product)));
+//        echo json_encode($product);exit;
+//        var_dump($product);exit;
+        return out_pc(200, $product);
     }
 
-    static function formatDataPrice($type,$data,$key){
-        if(!arrKeyIssetAndExist($data,$key)){
+    static function formatDataPrice($type, $data, $key)
+    {
+        if (!arrKeyIssetAndExist($data, $key)) {
             return 0;
         }
 
         $salePrice = $data[$key];
-        if($salePrice > 0 && (int)($salePrice) > 0){
-            if($type == 1){//元 转换 分
+        if ($salePrice > 0 && (int)($salePrice) > 0) {
+            if ($type == 1) {//元 转换 分
                 return yuanToFen($salePrice);
-            }else{//分 转换 元
+            } else {//分 转换 元
                 return fenToYuan($salePrice);
             }
         }
@@ -270,62 +261,71 @@ class ProductService{
         return 0;
     }
 
-
-    function getUserHistoryPVList($pid){
-        if(!$pid){
-            exit("pid is null");
+    //获取用户访问一个产品的记录
+    //$top:只取最后新的20条
+    function getUserHistoryPVList($pid, $top = 0)
+    {
+        if (!$pid) {
+            return out_pc(8072);
         }
-        $list = UserProductLogModel::db()->getAll(" pid = $pid group by uid order by a_time desc limit 20");
-        if(!$list){
-            return out_pc(200,$list);
-        }
-        $service =  new UserService();
 
-        foreach ($list as $k=>$v){
-            $list[$k]['nickname'] = '游客'.$k;
+        $limit = "";
+        if ($top) {
+            $limit .= " limit 0,20";
+        }
+
+        $list = UserProductLogModel::db()->getAll(" pid = $pid group by uid order by a_time desc $limit");
+        if (!$list) {
+            return out_pc(200, $list);
+        }
+
+        foreach ($list as $k => $v) {
+            $list[$k]['nickname'] = '游客' . $k;
             $list[$k]['avatar'] = get_avatar_url("");
             $user = UserModel::db()->getById($v['uid']);
-            if($user){
+            if ($user) {
                 $list[$k]['nickname'] = $user['nickname'];
                 $list[$k]['avatar'] = get_avatar_url($user['avatar']);
             }
         }
-        return out_pc(200,$list);
+        return out_pc(200, $list);
     }
 
-    function upPvUv($pid,$uid){
-        $data = array("pv"=>array(1));
+    function upPvUv($pid, $uid)
+    {
+        $data = array("pv" => array(1));
         $info = UserProductLogModel::db()->getRow("uid = {$uid} and pid = $pid");
-        if(!$info){
-            $data['uv'] =  array(1);
+        if (!$info) {
+            $data['uv'] = array(1);
         }
 
-        $d = array('pid'=>$pid,'uid'=>$uid,'a_time'=>time());
+        $d = array('pid' => $pid, 'uid' => $uid, 'a_time' => time());
         UserProductLogModel::db()->add($d);
 
-        $rs = ProductModel::db()->upById($pid,$data);
+        $rs = ProductModel::db()->upById($pid, $data);
         return $rs;
     }
 
-    function formatShow($list){
-        if(!$list){
+    function formatShow($list)
+    {
+        if (!$list) {
             return $list;
         }
         $data = null;
-        foreach ( $list as $k=>$v){
+        foreach ($list as $k => $v) {
             $pic = "";
-            if(arrKeyIssetAndExist($v,'pic')){
-                $pic = explode(",",$v['pic']);
+            if (arrKeyIssetAndExist($v, 'pic')) {
+                $pic = explode(",", $v['pic']);
                 $pic = get_product_url($pic[0]);
             }
 
 
             $row = array(
-                'id'=>$v['id'],'goods_total'=>$v['goods_total'],'pic'=>$pic,
-                'lowest_price'=>fenToYuan($v['lowest_price']),'title'=>$v['title'],'user_buy_total'=>$v['user_buy_total'],
+                'id' => $v['id'], 'goods_total' => $v['goods_total'], 'pic' => $pic,
+                'lowest_price' => fenToYuan($v['lowest_price']), 'title' => $v['title'], 'user_buy_total' => $v['user_buy_total'],
             );
 
-            if(isset($v['has_cart'])){
+            if (isset($v['has_cart'])) {
                 $row['has_cart'] = $v['has_cart'];
             }
 
@@ -334,64 +334,65 @@ class ProductService{
         return $data;
     }
 
-    function getGoodsListByPid($pid){
+    function getGoodsListByPid($pid)
+    {
         return GoodsModel::db()->getAll(" pid = $pid ");
     }
 
-    function search($condition,$page = 1,$limit = 10 ,$uid = 0){
+    function search($condition, $page = 1, $limit = 10, $uid = 0)
+    {
         $returnPageInfo = array(
-            'page'=>$page,
-            'limit'=>$limit,
-            'record_cnt'=>0,
-            'page_cnt'=>0,
-            'list'=>null,
+            'page' => $page,
+            'limit' => $limit,
+            'record_cnt' => 0,
+            'page_cnt' => 0,
+            'list' => null,
         );
 
         $where = " 1 = 1 ";
-        if($condition){
+        if ($condition) {
 //            return out_pc(8978);
-            if(arrKeyIssetAndExist($condition,'keyword')){
-                $where .=" and ( title like '%{$condition['keyword']}%' or `desc`  like '%{$condition['keyword']}%')";
+            if (arrKeyIssetAndExist($condition, 'keyword')) {
+                $where .= " and ( title like '%{$condition['keyword']}%' or `desc`  like '%{$condition['keyword']}%')";
             }
 
-            if(arrKeyIssetAndExist($condition,'category')){
+            if (arrKeyIssetAndExist($condition, 'category')) {
                 $where .= " and category_id = {$condition['category']}";
             }
         }
         LogLib::inc()->debug($where);
         $cnt = self::getListCntByDb($where);
-        if(!$cnt){
-            return  out_pc(200,$returnPageInfo);
+        if (!$cnt) {
+            return out_pc(200, $returnPageInfo);
         }
 
         $order = "";
-        if(arrKeyIssetAndExist($condition,'orderType')){
-            $order .= " order by ".self::ORDER_TYPE[$condition['orderType']]['field'];
-            if($order == 'lowest_price'){
-                if(arrKeyIssetAndExist($condition ,'orderUpDown')){
-                    $order .=  " desc ";
-                }else{
-                    $order .=  " asc ";
+        if (arrKeyIssetAndExist($condition, 'orderType')) {
+            $order .= " order by " . self::ORDER_TYPE[$condition['orderType']]['field'];
+            if ($order == 'lowest_price') {
+                if (arrKeyIssetAndExist($condition, 'orderUpDown')) {
+                    $order .= " desc ";
+                } else {
+                    $order .= " asc ";
                 }
-            }else{
+            } else {
                 $order .= " desc";
             }
 
         }
 
-        $pageInfo = PageLib::getPageInfo($cnt,$limit,$page);
+        $pageInfo = PageLib::getPageInfo($cnt, $limit, $page);
         $where .= " $order limit {$pageInfo['start']} , {$pageInfo['end']}  ";
         $list = ProductModel::db()->getAll($where);
 
 
-
         $list = $this->format($list);
 
-        if($uid){
-            foreach ($list as $k=>$v){
+        if ($uid) {
+            foreach ($list as $k => $v) {
                 $userHasCart = 0;
                 $dbRs = CartModel::db()->getRow(" pid = {$v['id']} and uid = $uid");
-                if($dbRs){
+                if ($dbRs) {
                     $userHasCart = 1;
                 }
                 $list[$k]['has_cart'] = $userHasCart;
@@ -403,16 +404,17 @@ class ProductService{
         $returnPageInfo['page_cnt'] = $pageInfo['totalPage'];
         $returnPageInfo['list'] = $list;
 
-        return out_pc(200,$returnPageInfo);
+        return out_pc(200, $returnPageInfo);
     }
 
-    function format($list){
-        if(!$list){
+    function format($list)
+    {
+        if (!$list) {
             return $list;
         }
 
         $data = null;
-        foreach ($list as $k=>$v){
+        foreach ($list as $k => $v) {
             $row = $this->formatRow($v);
             $data[] = $row;
         }
@@ -420,19 +422,20 @@ class ProductService{
         return $data;
     }
 
-    function formatRow($row){
-        if(arrKeyIssetAndExist($row,'pic')){
-            $picsTmpUrl = explode(",",$row['pic']);
+    function formatRow($row)
+    {
+        if (arrKeyIssetAndExist($row, 'pic')) {
+            $picsTmpUrl = explode(",", $row['pic']);
             $realUrl = "";
-            foreach ($picsTmpUrl as $k=>$v){
+            foreach ($picsTmpUrl as $k => $v) {
                 //data-lazy-src=\"https:\/\/cbu01.alicdn.com\/img\/ibank\/2019\/972\/967\/10464769279_1593857209.jpg,https:\/\/cbu01.alicdn.com\/cms\/upload\/other\/lazyload.png\"
                 //这里有个BUG,应该是正则匹配的时候，出的问题，先不处理
-                if(strpos($v,'src') === false){
-                    $realUrl .=get_product_url($v) . ",";
+                if (strpos($v, 'src') === false) {
+                    $realUrl .= get_product_url($v) . ",";
                 }
 //                $realUrl .=get_product_url($v) . ",";
             }
-            $realUrl = substr($realUrl,0,strlen($realUrl)-1);
+            $realUrl = substr($realUrl, 0, strlen($realUrl) - 1);
             $row['pic'] = $realUrl;
 
         }
@@ -440,53 +443,54 @@ class ProductService{
         return $row;
     }
 
-    function addOne($data,$categoryAttrNull = 0,$categoryAttrPara = []){
+    function addOne($data, $categoryAttrNull = 0, $categoryAttrPara = [])
+    {
         $attribute = [];
-        if($categoryAttrNull){
+        if ($categoryAttrNull) {
             $attribute[$categoryAttrNull] = [];
             $data['category_attr_null'] = ProductModel::CATE_ATTR_NULL_TRUE;
-        }else{
-            foreach ($categoryAttrPara as $k=>$v) {
-                $tmp = explode("_",$v );
+        } else {
+            foreach ($categoryAttrPara as $k => $v) {
+                $tmp = explode("_", $v);
                 $attribute[$tmp[0]][] = $tmp[1];
             }
             $data['category_attr_null'] = ProductModel::CATE_ATTR_NULL_FALSE;
         }
 
         $data['attribute'] = json_encode($attribute);
-        if(!arrKeyIssetAndExist($data,'recommend')){
+        if (!arrKeyIssetAndExist($data, 'recommend')) {
             $data['recommend'] = 2;
         }
         $addId = ProductModel::db()->add($data);
 
         out(" productService addOne,so add product is ok ~id:$addId , next add ProductLinkCategoryAttrModel");
-        if($categoryAttrPara){
-            foreach ( $categoryAttrPara as $k=>$v) {
-                $exp = explode("_",$v);
+        if ($categoryAttrPara) {
+            foreach ($categoryAttrPara as $k => $v) {
+                $exp = explode("_", $v);
                 $categoryAttr = $exp[0];
                 $categoryAttrPara = $exp[1];
 
                 $exist = ProductLinkCategoryAttrModel::db()->getRow(" pid = $addId and pca_id = $categoryAttr and pcap_id = $categoryAttrPara");
-                if($exist){
+                if ($exist) {
                     continue;
                 }
-                
+
                 $addData = array(
-                    'pid'=>$addId,
-                    'pc_id'=>$data['category_id'],
-                    'pca_id'=>$categoryAttr,
-                    'pcap_id'=>$categoryAttrPara,
+                    'pid' => $addId,
+                    'pc_id' => $data['category_id'],
+                    'pca_id' => $categoryAttr,
+                    'pcap_id' => $categoryAttrPara,
                 );
 
                 ProductLinkCategoryAttrModel::db()->add($addData);
             }
-        }else{
-            $noParaAttr = ProductCategoryAttrModel::db()->getRow(" pc_id = {$data['category_id']} and is_no = ".ProductCategoryAttrModel::NO_ATTR_TRUE);
+        } else {
+            $noParaAttr = ProductCategoryAttrModel::db()->getRow(" pc_id = {$data['category_id']} and is_no = " . ProductCategoryAttrModel::NO_ATTR_TRUE);
             $data = array(
-                'pid'=>$addId,
-                'pc_id'=>$data['category_id'],
-                'pca_id'=>$noParaAttr['id'],
-                'pcap_id'=>0,
+                'pid' => $addId,
+                'pc_id' => $data['category_id'],
+                'pca_id' => $noParaAttr['id'],
+                'pcap_id' => 0,
             );
             $newNewId = ProductLinkCategoryAttrModel::db()->add($data);
         }
@@ -495,16 +499,17 @@ class ProductService{
         return $addId;
     }
 
-    function goodsLinkProductPCAP($gid,$pid,$categoryId,$categoryAttrId,$categoryAttrParaId = 0){
+    function goodsLinkProductPCAP($gid, $pid, $categoryId, $categoryAttrId, $categoryAttrParaId = 0)
+    {
 //        if(!$categoryAttrParaId){//证明是个空属性
 //        }else{
 //        }
 
         $data = array(
-            'gid'=>$gid,
-            'pc_id'=>$categoryId,
-            'pca_id'=>$categoryAttrId,
-            'pcap_id'=>$categoryAttrParaId
+            'gid' => $gid,
+            'pc_id' => $categoryId,
+            'pca_id' => $categoryAttrId,
+            'pcap_id' => $categoryAttrParaId
         );
         $rs = GoodsLinkCategoryAttrModel::db()->add($data);
     }

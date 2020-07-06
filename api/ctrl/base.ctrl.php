@@ -53,13 +53,13 @@ class BaseCtrl {
 //            if(RUN_ENV != 'WEBSOCKET'){
 //                $rs = $this->checkIfUserBlocked($this->uid);
 //                if($rs){
-//                    return $this->out(6004);
+//                    return return $this->out(6004);
 //                }
 //            }
 //        }
 //
 //        if(arrKeyIssetAndExist($this->uinfo,'status')){
-//            return $this->out(4009);
+//            return return $this->out(4009);
 //        }
 //
 //        if($this->uid){
@@ -100,57 +100,67 @@ class BaseCtrl {
     function checkSign(){
         $sign = _g('sign');
         if(!$sign){
-            $this->out(3000);
+            return $this->out(3000);
         }
 
         $checkSign = TokenLib::checkSign($request , $sign,$this->app['apiSecret']);
         if(!$checkSign){
-            $this->out(3001);
+            return $this->out(3001);
         }
 
     }
+    //返回的数据，1检查格式2如果弱类型要转移成前端想要的类型
+    function checkDataAndFormat($data){
+        $api = ConfigCenter::get(APP_NAME,"api");
+        if(!arrKeyIssetAndExist($api,$this->request['ctrl'])){
+            return $this->out(7060);
+        }
+
+        if(!arrKeyIssetAndExist($api[$this->request['ctrl']],$this->request['ac'])){
+            return $this->out(7061);
+        }
+        if(!arrKeyIssetAndExist($api[$this->request['ctrl']][$this->request['ac']],'return')){
+            return $this->out(7062);
+        }
+
+        $apiMethodReturn = $api[$this->request['ctrl']][$this->request['ac']]['return'];
+        $data = FilterLib::apiReturnDataCheckInit($apiMethodReturn,$data);
+        return $data;
+    }
+
 
     function out($code,$msg = ""){
         if($code == 200){
-            if(!$msg){
-                if($msg === ""){
-                    $msg = $GLOBALS['code'][$code];
-                }elseif($msg === 0){
-                    $msg = 0;
-                }else{
-                    $msg = [];
-                }
-            }
-
-            if(is_string($msg) && $msg == 'space_string'){
-                $msg = "";
-            }
-
-            $apiMethod = null;
-            if(isset($GLOBALS[APP_NAME]['api'][$this->request['ctrl']][$this->request['ac']])){
-                $apiMethod =$GLOBALS[APP_NAME]['api'][$this->request['ctrl']][$this->request['ac']];
-            }
-
-//            if(!$apiMethod){
-//                LogLib::appWriteFileHash("apimethod");
+//            if(!$msg){
+//                if($msg === ""){
+//                    $msg = $GLOBALS['code'][$code];
+//                }elseif($msg === 0){
+//                    $msg = 0;
+//                }else{
+//                    $msg = [];
+//                }
 //            }
-            if($apiMethod && arrKeyIssetAndExist($apiMethod,'return')){
-                $msg = FilterLib::apiReturnDataCheckInit($apiMethod['return'],$msg);
+//
+//            if(is_string($msg) && $msg == 'space_string'){
+//                $msg = "";
+//            }
+//
+//            $apiMethod = null;
+//            if(isset($GLOBALS[APP_NAME]['api'][$this->request['ctrl']][$this->request['ac']])){
+//                $apiMethod =$GLOBALS[APP_NAME]['api'][$this->request['ctrl']][$this->request['ac']];
+//            }
+            $msg = $this->checkDataAndFormat($msg);
+            if(arrKeyIssetAndExist($msg,'code')){
+                $data = $msg;
+            }else{
+                $data = array('code'=>$code,"msg"=>$msg);
             }
 
-            $data = array('code'=>$code,"msg"=>$msg);
-//            if(RUN_ENV == 'WEBSOCKET'){
-//                return $data;
-//            }else{
-                return $data;
-//            }
+            return $data;
         }else{
             $data = array('code'=>$code,"msg"=>$msg);
             return $data;
-//            ThrowErr::unknow(APP_NAME,$code,array($msg));
         }
-
-
     }
 
     //有些接口，必须是登陆后，才能访问~有些不需要

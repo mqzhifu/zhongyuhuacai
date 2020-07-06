@@ -156,7 +156,6 @@ class FilterLib {
 // 	　	return $idcard;
 	}
 
-
     static function checkIPRequest($ip = null) {
 	    if(!$GLOBALS[KERNEL_NAME]['main']['ipCntLimit']){
             return true;
@@ -180,144 +179,149 @@ class FilterLib {
         return true;
     }
 
-    static function apiReturnDataCheckInit($apiReturn,$msg){
-        foreach($apiReturn as $k=>$v){
-            //标量
-            if($k =='scalar') {
-                if ($v['must']) {
-                    if ($v['type'] == 'int') {
-                        $msg = intval($msg);
-                    } elseif ($v['type'] == 'string') {
-                        $msg = (string)$msg;
-                    }
-                } else {
-                    if( ! $msg ){
-                        continue;
-                    }
+    static $prefix = "apiReturnDataCheckInit";
 
-                    if ($v['type'] == 'int') {
-                        $msg = intval($msg);
-                    } elseif ($v['type'] == 'string') {
-                        $msg = (string)$msg;
-                    }
-                }
-                //判断当前KEY   是不是  一维数据
-            }elseif($k == 'array_key_number_one'){
-                if($v['must']){
-                    if(!$msg){
-                        exit("return value must have value.array_key_number_one");
-                    }
-                }
-                foreach($msg as $k3=>$v3){
-                    foreach($v['list'] as $k2=>$v2){
-                        if($v2['must']){
-                            if($v2['type'] == 'int'){
-                                $msg[$k2] = intval($msg[$k2]);
-                            }elseif($v2['type'] == 'string'){
-                                $msg[$k2] = (string)$msg[$k2];
-                            }
-                        }else{
-                            if(arrKeyIssetAndExist($msg,$k2)){
-                                if($v2['type'] == 'int'){
-                                    $msg[$k2] = intval($msg[$k2]);
-                                }elseif($v2['type'] == 'string'){
-                                    $msg[$k2] = (string)$msg[$k2];
-                                }
-                            }
-                        }
+    static function  intelligentCheck($type,$value){
+        if ($type == 'int') {
+            $value = intval($value);
+        } elseif ($type == 'string') {
+            $value = (string)$value;
+        }
 
-                    }
-                }
-                //是个 二维数组
-            }elseif($k == 'array_key_number_two'){
-                if($v['must']){
-                    if(!$msg){
-                        exit("return value must have value.array_key_number_two");
-                    }
-                }
+        return $value;
+    }
 
-                foreach($msg as $k3=>$v3){
-                    foreach($v['list'] as $k2=>$v2){
-                        if($v2['type'] == 'int'){
-                            $msg[$k3][$k2] = intval($msg[$k3][$k2]);
-                        }elseif($v2['type'] == 'string'){
-                            $msg[$k3][$k2] = (string)$msg[$k3][$k2];
-                        }
-                    }
-                }
-            }elseif(arrKeyIssetAndExist($v,'type')){
-                if ($v['must']) {
-                    if ($v['type'] == 'int') {
-                        $msg[$k] = intval($msg[$k]);
-                    } elseif ($v['type'] == 'string') {
-                        $msg[$k] = (string)$msg[$k];
-                    }
-                } else {
-                    if( ! $msg ){
-                        continue;
-                    }
 
-                    if ($v['type'] == 'int') {
-                        $msg[$k] = intval($msg[$k]);
-                    } elseif ($v['type'] == 'string') {
-                        $msg[$k] = (string)$msg[$k];
-                    }
-                }
+    static function throwErr($msg){
+        exit(self::$prefix . "-".$msg);
+    }
+
+    //一个规则，检查一个值，最小单位
+    static function checkOneKey($rule,$value){
+        if (arrKeyIssetAndExist($rule,'must')) {
+            if(!$value){
+                self::throwErr("checkOneKey is null");
             }
-
-
-            elseif($v['array_type'] =='array_key_number_one'){
-                if($v['must']){
-                    if(!arrKeyIssetAndExist($msg,$k)){
-                        exit("return value must have value.array_type array_key_number_one");
-                    }
-                }
-                foreach($msg[$k] as $k3=>$v3){
-                    foreach($v['list'] as $k2=>$v2){
-                        if($v2['must']){
-                            if($v2['type'] == 'int'){
-                                $msg[$k][$k3] = intval($msg[$k][$k3]);
-                            }elseif($v2['type'] == 'string'){
-                                $msg[$k][$k3] = (string)$msg[$k][$k3];
-                            }
-                        }else{
-                            if(arrKeyIssetAndExist($msg[$k],$k3)){
-                                if($v2['type'] == 'int'){
-                                    $msg[$k][$k3] = intval($msg[$k][$k3]);
-                                }elseif($v2['type'] == 'string'){
-                                    $msg[$k][$k3] = (string)$msg[$k][$k3];
-                                }
-                            }
-                        }
-                    }
-                }
-            }elseif($v['array_type'] =='array_key_number_two'){
-                if(!$v['must']){
-                    if(!arrKeyIssetAndExist($msg,$k)){
-                        continue;
-                    }
-                }
-
-                foreach($msg[$k] as $k3=>$v3){
-                    foreach($v['list'] as $k2=>$v2){
-                        if($v2['type'] == 'int'){
-                            $msg[$k][$k3][$k2] = intval($msg[$k][$k3][$k2]);
-                        }elseif($v2['type'] == 'string'){
-                            $msg[$k][$k3][$k2] = (string)$msg[$k][$k3][$k2];
-                        }
-                    }
-                }
-            }else{
-                exit("api config return info err!");
+        }
+        $value = self::intelligentCheck($rule['type'],$value);
+        return $value;
+    }
+    //检测一维 数字下标 数组
+    static function checkArrayNumberAutoIncr($rule,$data){
+        if (arrKeyIssetAndExist($rule,'must')) {
+            if(!$data){
+                self::throwErr("checkArrayNumberAutoIncr is null");
             }
         }
 
-        return $msg;
+        if(!is_array($data)){
+            self::throwErr("checkArrayNumberAutoIncr is not arr type");
+        }
+
+        if(arrKeyIssetAndExist($rule,'list')){
+            $nextRule = array($rule['list']['subset']['subset_key'] =>$rule['list']['subset']);
+            foreach ($data as $k=>$v){
+                $data[$k] = self::apiReturnDataCheckInit( $nextRule ,$v);
+            }
+        }elseif(!arrKeyIssetAndExist($rule,'subset')){
+            $oneRule = array("type"=>$rule['type'],'must'=>$rule['type']);
+            foreach ($data as $k=>$v){
+                $value = self::checkOneKey($oneRule,$v);
+                $data[$k] = $value;
+            }
+        }else{
+            $nextRule = array($rule['subset']['subset_key'] =>$rule['subset']);
+            foreach ($data as $k=>$v){
+                $data[$k] = self::apiReturnDataCheckInit( $nextRule ,$v);
+            }
+        }
+
+        return $data;
+    }
+
+    //检测一维 数字下标 数组
+    static function checkObj($rule,$data){
+        if (arrKeyIssetAndExist($rule,'must')) {
+            if(!$data){
+                self::throwErr("checkObj is null 1");
+            }
+        }
+
+        if(!is_array($data)){
+            self::throwErr("checkObj is not arr type");
+        }
+
+        //证明，已经是最底层了，不会再有子集了
+        if(!arrKeyIssetAndExist($rule,'subset')){
+            $ruleList = $rule['list'];
+//            var_dump($ruleList);exit;
+            foreach ($ruleList as $k=>$v){
+                if($v['must']){
+//                    var_dump($k);
+                    if(!$data[$k]){
+                        self::throwErr("checkObj <$k> is null 2");
+                    }
+                }
+
+                if(!arrKeyIssetAndExist($v,'subset')){
+                    $value = self::checkOneKey($v,$data[$k]);
+                    $data[$k] = $value;
+                }else{
+                    $nextRule = array($v['subset']['subset_key'] =>$v['subset']);
+                    $data[$k] = self::apiReturnDataCheckInit($nextRule,$data[$k]);
+                }
+            }
+            return $data;
+        }else{
+            $nextRule = array($rule['subset']['subset_key'] =>$rule['subset']);
+            foreach ($data as $k=>$v){
+                $data[$k] = self::apiReturnDataCheckInit( $nextRule ,$v);
+            }
+        }
+
+        return $data;
+    }
+
+
+    // string bool int float
+    // array obj
+
+    //[1,2,3,4,5,6] 一维 对等 数组    key:array_number_auto_incr   rule:   type:int  must:1
+    //[ [1,2,3,4,5,6] , [1,2,3,4,5,6] , [1,2,3,4,5,6] ]  二维 对等 数组   key:array_number_auto_incr   rule:   must:1  list:[array_number_auto_incr]
+
+    //{a:"12345",b:"5678",c:"wang"} key:obj
+    //{a:"12345",b:"5678",c:" {a:"12345",b:"5678",c:"wang"} } 二维 非对等 对象
+
+
+    //key:array_number_auto_incr   rule:   must:1  list:[object]
+    //[ {a:"12345",b:"5678",c:"wang"} ,{a:"12345",b:"5678",c:"wang"}  ,{a:"12345",b:"5678",c:"wang"}  ]  ,一维数组 嵌  一维 对等 对象
+    //{ [1,2,3,4,5,6] , [1,2,3,4,5,6] , [1,2,3,4,5,6] }    //一维对象 嵌入 一维对等数组
+
+
+
+    // {a:"12345",b:"5678",c:"wang"}
+    // {a:"12345",b:"5678",c:"wang":[]}
+    static function apiReturnDataCheckInit($apiReturn,$data){
+	    //这是根节点的处理
+        foreach($apiReturn as $k=>$v){
+            if($k =='scalar') {//标量
+                $data = self::checkOneKey($v,$data);
+                return $data;
+            }elseif($k == 'array_number_auto_incr'){//一维数组，数字自增下标
+                $data = self::checkArrayNumberAutoIncr($v,$data);
+                return $data;
+            }elseif($k == 'obj'){//正常，最普通的一个KEY的数组
+                    $data = self::checkObj($v,$data);
+            }else{
+                self::throwErr(" api config return info err!");
+            }
+        }
+
+        return $data;
+    }
+
+    static function apiReturnDataCheck($rule,$data){
+
     }
 	
 }
-
-
-
-
-?>

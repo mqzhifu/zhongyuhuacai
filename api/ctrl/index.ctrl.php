@@ -2,15 +2,22 @@
 class IndexCtrl extends BaseCtrl  {
 
     function index(){
-        //密码登陆
-        //商品，获取二维码
-        //短信登陆
-        //短信找回密码
-        //发送短信
-        //退出
+//        return "ok";
 
-        //提现列表
-        //发起提现
+//        $data = array(
+//            'uid'=>1,
+//            'pid'=>1,
+//            'gid'=>1,
+//            'payList'=>array(
+//                array('status'=>1,'time'=>2,'price'=>"4444"),
+//                array('status'=>3,'time'=>4,'price'=>"4444"),
+//                array('status'=>5,'time'=>6,'price'=>"4444"),
+//            )
+//        );
+
+//        $this->checkDataAndFormat($data);
+
+        return $this->out(200,"ok");
     }
 
     //根据用户输入的一段字符串，转换成相关的地址
@@ -18,7 +25,7 @@ class IndexCtrl extends BaseCtrl  {
     {
         $str =  get_request_one( $this->request,'address_str','');
         $rs = $this->userAddressService->parserAddressByStr($str);
-        return out_ajax($rs['code'],$rs['msg']);
+        return $this->out($rs['code'],$rs['msg']);
     }
     function shareProduct($request){
         $pid = $request['pid'];
@@ -55,12 +62,12 @@ class IndexCtrl extends BaseCtrl  {
             'latitude'=>$latitude,'longitude'=>$longitude,'uid'=>$this->uid,'gps_parser_addr'=>$addr,'a_time'=>time(),
         );
         $newId = wxLocationModel::db()->add($data);
-        out_ajax(200,[$newId,$addr]);
+        return $this->out(200,[$newId,$addr]);
     }
     //首页轮播图
     function getBannerList(){
         $data = BannerModel::getIndexList();
-        out_ajax(200,$data);
+        return $this->out(200,$data);
     }
 
 //    function getAppVersionInfo($versionCode = 0){

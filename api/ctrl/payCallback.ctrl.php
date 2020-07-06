@@ -1,5 +1,5 @@
 <?php
-class PayCallbackCtrl{
+class PayCallbackCtrl extends BaseCtrl {
     function wxJsapi(){
         LogLib::inc()->debug("im wxJsapi");
         LogLib::inc()->debug($_REQUEST);

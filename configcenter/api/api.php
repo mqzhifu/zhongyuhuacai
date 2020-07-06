@@ -7,29 +7,166 @@ $arr = array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'测试',
             'request'=>array(),
+
+
+
+            //最简单的类型
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
+            ),
+
+ //           //一维 数组 - 数字自增
+//            'return'=>array(
+//                'array_number_auto_incr'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'一维-数字自增-下标-数组'),
+//            ),
+//            //二维 数组 - 数字自增
+//            'return'=>array(
+//                'array_number_auto_incr'=>array('must'=>1,'default'=>1,'title'=>'一维-数字自增-下标-数组',
+//                    'subset'=>array("subset_key"=>'array_number_auto_incr','type'=>'int','must'=>1 )
+//                ),
+//            ),
+//
+//            //一维 数字下标自增 数组 ，嵌入 一维对象
+//            'return'=>array(
+//                'array_number_auto_incr'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出',
+//                    'subset'=>array("cate"=>'obj','must'=>1 ,'list'=>array(
+//                        'uid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'用户ID'),
+//                        'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'产品ID'),
+//                        'gid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'商品ID'),
+//                        'time'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'添加时间'),
+//                    )
+//                    )
+//                ),
+//            ),
+//
+//            //一维 对象
+//            'return'=>array(
+//                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
+//                        'uid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'用户ID'),
+//                        'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'产品ID'),
+//                        'gid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'商品ID'),
+//                        'time'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'添加时间'),
+//                    )
+//                ),
+//            ),
+//            //一维 对象 中，某个键值，是一个对象
+//            'return'=>array(
+//                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
+//                    'uid'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'用户ID'),
+//                    'pid'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'产品ID'),
+//                    'gid'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'商品ID'),
+//                    'payList'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'支付列表',
+//                            'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+//                                'status'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'状态'),
+//                                'time'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'时间'),
+//                                'price'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'价格'),
+//                                )
+//                            ),
+//                        )
+//                    ),
+//                ),
+//            ),
+//            //一维 对象 中，某个键值，是一个  数字自增数组  - ，同时 再包含一个对象
+//            'return'=>array(
+//                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'前置索引','list'=>array(
+//                    'uid'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'用户ID'),
+//                    'pid'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'产品ID'),
+//                    'gid'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'商品ID'),
+//                    'payList'=>array('must'=>1,'default'=>1,'title'=>'支付列表',
+//                        'subset'=>array("subset_key"=>'array_number_auto_incr','must'=>1 ,'list'=>array(
+//                            'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+//                                        'status'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'状态'),
+//                                        'time'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'时间'),
+//                                        'price'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'价格'),
+//                                        )
+//                                    ),
+//                                ),
+//                            )
+//                        ),
+//                    ),
+//                ),
+//            ),
+
+
+        ),
+
+        'parserAddressByStr'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'地址字符串，解析成，一个个字段',
+            'request'=>array(
+                'address_str'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'地址解析字符串-省,市,县,乡镇,详细地址,收货人姓名,收货人手机号'),
+            ),
+            'return'=>array(
+                'obj'=>array("must"=>1 ,'title'=>"数组",'list'=>array(
+                        'name'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'收货人姓名'),
+                        'province'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'省'),
+                        'city'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'市'),
+                        'county'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'县'),
+                        'town'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'乡镇'),
+                        'village'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'村'),
+                        'mobile'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'手机号'),
+                    )
+                )
+            ),
+        ),
+
+        'shareProduct'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'测试',
+            'request'=>array(
+                'pid'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'产品ID'),
+                'source'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'来源类型 1微信指向朋友'),
+            ),
             'return'=>array(
 
             ),
         ),
 
+        'checkToken'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'检测token是否合法',
+            'request'=>array(
+                'token'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'token'),
+            ),
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
+            ),
+        ),
+
+        'wxPushLocation'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'微信端获取用户gps位置信息',
+            'request'=>array(
+                'latitude'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'纬度'),
+                'longitude'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'经度'),
+            ),
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
+            ),
+        ),
         'getBannerList'=>array(
             'title'=>'轮播图',
             'ws'=>array('request_code'=>5013,'response_code'=>5014),
             'request'=>array(
             ),
             'return'=>array(
-                'array_key_number_two'=>array("must"=>1,'list'=>array(
-//                    'type' => array('type'=>'int','title'=>'Banner位置（1、游戏页面顶部轮播；2、任务页面顶部轮播；3、任务页面中部滑动；4、我的页面中部轮播）','must'=>1),
-                    'id' => array('type'=>'int','title'=>'id','must'=>1),
-                    'title'=>  array('type'=>'int','title'=>'标题-描述','must'=>1),
-                    'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
-                    'pid'=>  array('type'=>'string','title'=>'产品ID','must'=>1),
-//                    'is_relative'=>  array('type'=>'int','title'=>'链接地址1站内2非站内（目前只有站内,默认返回1）','must'=>1),
-                    //'relative_path'=>  array('type'=>'string','title'=>'APP内跳转地址（1：游戏，2：邀请，3：任务，4：金币欢乐送）','must'=>1),
-//                    'weight'=>  array('type'=>'int','title'=>'排序（数字越小，展示位置越靠前）','must'=>1),
-//                    'banner_name'=>  array('type'=>'string','title'=>'跳转类型中文名称','must'=>1),
-                )
-                ),
+                'array_number_auto_incr'=>array("must"=>1,'list'=>array(
+                    'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                                    'type' => array('type'=>'int','title'=>'类型（1、直接跳转产品详情页）','must'=>1),
+                                    'id' => array('type'=>'int','title'=>'id','must'=>1),
+                                    'title'=>  array('type'=>'int','title'=>'标题-描述','must'=>1),
+                                    'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                                    'pid'=>  array('type'=>'string','title'=>'产品ID','must'=>1),
+                                    'a_time'=>  array('type'=>'int','title'=>'添加时间','must'=>1),
+                                    'sort'=>  array('type'=>'int','title'=>'排序','must'=>1),
+                                    'status'=>  array('type'=>'int','title'=>'1上架2下架','must'=>1),
+            //                    'is_relative'=>  array('type'=>'int','title'=>'链接地址1站内2非站内（目前只有站内,默认返回1）','must'=>1),
+            //                    'relative_path'=>  array('type'=>'string','title'=>'APP内跳转地址（1：游戏，2：邀请，3：任务，4：金币欢乐送）','must'=>1),
+                                )
+                            ),
+                        ),
+                    )
+
             ),
         ),
 
@@ -38,23 +175,86 @@ $arr = array(
     'product'=>array(
         'title'=>'产品',
 
+        'getAllCategory'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'产品的所有分类',
+            'request'=>array(),
+            'return'=>array(
+                'array_number_auto_incr'=>array("must"=>1,'list'=>array(
+                    'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                        'name' => array('type'=>'string','title'=>'名称','must'=>1),
+                        'id' => array('type'=>'int','title'=>'id','must'=>1),
+                        'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                    )
+                    ),
+                ),
+                )
+
+            ),
+        ),
+
         'getRecommendList'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'后台推荐的产品列表',
             'request'=>array(),
             'return'=>array(
+                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
+                    'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
+                    'limit'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'每页多少条'),
+                    'record_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总记录数'),
+                    'page_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总页数'),
+                    'list'=>array('must'=>1,'default'=>1,'title'=>'数据列表',
+                            'subset'=>array("must"=>1,"subset_key"=>'array_number_auto_incr','list'=>array(
+                                'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                                            'goods_total' => array('type'=>'string','title'=>'商品总数','must'=>0),
+                                            'id' => array('type'=>'int','title'=>'id','must'=>1),
+                                            'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                                            'title'=>  array('type'=>'string','title'=>'标题','must'=>1),
+                                            'user_buy_total'=>  array('type'=>'string','title'=>'用户购买统计','must'=>0),
+                                            'lowest_price'=>  array('type'=>'string','title'=>'最低价格','must'=>0),
+                                        )
+                                    ),
+                                ),
+                            )
+                        )
+                    ),
+                ),
             ),
         ),
 
-        'getListByCategory'=>array(
+        'getUserHistoryPVList'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'获取一个分类下的所有产品',
+            'title'=>'后台推荐的产品列表',
             'request'=>array(
-                'category_id'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'分类'),
+                'id'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'产品ID'),
             ),
             'return'=>array(
-            ),
+                    'array_number_auto_incr'=>array("must"=>1,'list'=>array(
+                        'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                            'pid' => array('type'=>'string','title'=>'名称','must'=>1),
+                            'uid' => array('type'=>'int','title'=>'用户ID','must'=>1),
+                            'a_time'=>  array('type'=>'string','title'=>'添加时间','must'=>1),
+                            'nickname'=>  array('type'=>'string','title'=>'昵称','must'=>1),
+                            'avatar'=>  array('type'=>'string','title'=>'头像' , 'must'=>1),
+
+                        )
+                        ),
+                    ),
+                ),
+            )
         ),
+
+
+
+//        'getListByCategory'=>array(
+//            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+//            'title'=>'获取一个分类下的所有产品',
+//            'request'=>array(
+//                'category_id'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'分类'),
+//            ),
+//            'return'=>array(
+//            ),
+//        ),
 
         'getOneDetail'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
@@ -66,21 +266,46 @@ $arr = array(
             'return'=>array(
                 'id' => array('type'=>'int','title'=>'id','must'=>1),
                 'title' => array('type'=>'string','title'=>'标题','must'=>1),
-                'subtitle' => array('type'=>'string','title'=>'副标题','must'=>1),
-                'desc' => array('type'=>'string','title'=>'详细描述','must'=>1),
-                'brand' => array('type'=>'string','title'=>'品牌','must'=>1),
-                'attribute' => array('type'=>'string','title'=>'属性','must'=>1),
-                'notice' => array('type'=>'string','title'=>'购买须知','must'=>1),
+                'subtitle' => array('type'=>'string','title'=>'副标题','must'=>0),
+                'desc' => array('type'=>'string','title'=>'详细描述','must'=>0),
+                'brand' => array('type'=>'string','title'=>'品牌','must'=>0),
+                'attribute' => array('type'=>'string','title'=>'属性参数','must'=>0),
+                'notice' => array('type'=>'string','title'=>'购买须知','must'=>0),
                 'category_id' => array('type'=>'int','title'=>'分类ID','must'=>1),
-                'status' => array('type'=>'int','title'=>'状态','must'=>1),
-                'recommend' => array('type'=>'int','title'=>'是否推荐首页','must'=>1),
-                'pv' => array('type'=>'int','title'=>'总访问数','must'=>1),
-                'uv' => array('type'=>'int','title'=>'总用户访问数','must'=>1),
+                'status' => array('type'=>'int','title'=>'状态1上架2下架','must'=>1),
+                'a_time'=>  array('type'=>'string','title'=>'添加时间','must'=>1),
+                'admin_id'=>  array('type'=>'string','title'=>'管理员ID','must'=>0),
                 'pic' => array('type'=>'string','title'=>'详情描述图片','must'=>1),
-                'lowest_price' => array('type'=>'int','title'=>'最低价格','must'=>1),
-                'category_attr_null' => array('type'=>'int','title'=>'产品没有任何属性参数','must'=>1),
+
+                'lowest_price' => array('type'=>'int','title'=>'最低价格(分)','must'=>1),
+                'desc_attr' => array('type'=>'string','title'=>'产品描述的详细参数，逗号分隔','must'=>0),
+                'desc_attr_format' => array('type'=>'int','title'=>'产品描述的详细参数,数组(格式化desc_attr)','must'=>1),
+
+                'category_attr_null' => array('type'=>'int','title'=>'产品没有任何属性参数1是2否','must'=>1),
                 'goods_total' => array('type'=>'int','title'=>'包含多少个商品数','must'=>1),
-                'goods_list' => array('type'=>'string','title'=>'包含的商品列表','must'=>1),
+                'user_buy_total' => array('type'=>'int','title'=>'用户总购买数','must'=>0),
+                'user_up_total' => array('type'=>'int','title'=>'用户点赞总数','must'=>0),
+                'user_collect_total' => array('type'=>'int','title'=>'用户收藏总数','must'=>0),
+                'user_comment_total' => array('type'=>'int','title'=>'用户总评论数','must'=>0),
+                'recommend' => array('type'=>'int','title'=>'是否推荐首页1是2否','must'=>1),
+                'recommend_detail' => array('type'=>'int','title'=>'1是2否,推荐详情页','must'=>1),
+                'goods_list' => array('type'=>'int','title'=>'商品列表','must'=>1),
+
+                'pcap' => array('type'=>'int','title'=>'产品参数属性列表','must'=>1),
+                'stock' => array('type'=>'int','title'=>'总库存数','must'=>0),
+
+
+                'has_collect' => array('type'=>'int','title'=>'用户是否已收藏','must'=>0),
+                'has_up' => array('type'=>'int','title'=>'用户是否已点赞','must'=>0),
+
+                'pv' => array('type'=>'int','title'=>'总访问数','must'=>0),
+                'uv' => array('type'=>'int','title'=>'总用户访问数','must'=>0),
+
+//                'original_price' => array('type'=>'int','title'=>'原始价格','must'=>1),
+//                'factory_uid' => array('type'=>'int','title'=>'工厂ID','must'=>1),
+//                'sort' => array('type'=>'int','title'=>'排序','must'=>1),
+//                'spider_source_type' => array('type'=>'int','title'=>'抓取来源1平台自己2:1688','must'=>1),
+//                'spider_source_pid' => array('type'=>'int','title'=>'抓取来源-产品ID','must'=>1),
             ),
         ),
 

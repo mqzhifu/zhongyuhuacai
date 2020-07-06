@@ -1,5 +1,5 @@
 <?php
-class WxLittleCallbackCtrl{
+class WxLittleCallbackCtrl extends BaseCtrl {
     public $_msgEncodingAESKey = "";
     public $_msgToken = "";
 

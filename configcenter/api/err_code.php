@@ -108,7 +108,15 @@ return array(
 //    7057=>'the withdrawal limit has been reached today',// 今日提现已达上限;
 //    7058=>'there is a withdrawal under processing',// 有一笔正在处理中的提现;
 //    7059=>'gold coin shortage',// 金币不足抵扣;
-//
+
+
+    7060=>"checkDataAndFormat ctrl is null",
+    7061=>"checkDataAndFormat ac is null",
+    7062=>"checkDataAndFormat return is null",
+    7063=>"",
+
+
+
 //    //各种参数为空
     8000=>'手机号为空-mobile',
 //    8001=>'ps(密码)-为空',
@@ -194,6 +202,7 @@ return array(
     8980=>"product not ProductLinkCategoryAttr",
     8981=>"oid is null",
     8982=>"gidsNums is null",
+    8993=>"category id is null",
 ////    5003=>'token验证错误',
 ////    5004=>'key验证错误',
 //    8101=>'邮箱格式错误',

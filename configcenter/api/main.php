@@ -21,14 +21,24 @@ $main = array(
     'loginAPIExcept'=> array(
 //        array("login","webSocketLogin",),
 
+            array("index",'index'),
+
             array("login",'wxLittleLoginByCode'),//小程序登陆
             array("login","guest",),//游客登陆
             array("login","index",),//手机/邮箱/用户名 + 密码
             array("login","cellphoneSMS",),//手机验证码登陆
             array("login","third",),//其它，3方平台登陆
 
+            array("PayCallbackCtrl","wxJsapi",),//微信支付回调  jsapi模式
+
+
+            array("WxLittleCallbackCtrl","receive",),
+            array("WxLittleCallbackCtrl","log",),
+            array("WxLittleCallbackCtrl","getShareQrCode",),
 
             array("user","reg",),//注册
+
+            array("index",'parserAddressByStr'),
 
 //        array(   'index','getServer',),
 //        array(   'index','testProtoBuf',),
