@@ -158,8 +158,8 @@ $arr = array(
                                     'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
                                     'pid'=>  array('type'=>'string','title'=>'产品ID','must'=>1),
 //                                    'a_time'=>  array('type'=>'int','title'=>'添加时间','must'=>1),
-                                    'sort'=>  array('type'=>'int','title'=>'排序','must'=>1),
-                                    'status'=>  array('type'=>'int','title'=>'1上架2下架','must'=>1),
+//                                    'sort'=>  array('type'=>'int','title'=>'排序','must'=>1),
+//                                    'status'=>  array('type'=>'int','title'=>'1上架2下架','must'=>1),
             //                    'is_relative'=>  array('type'=>'int','title'=>'链接地址1站内2非站内（目前只有站内,默认返回1）','must'=>1),
             //                    'relative_path'=>  array('type'=>'string','title'=>'APP内跳转地址（1：游戏，2：邀请，3：任务，4：金币欢乐送）','must'=>1),
                                 )
