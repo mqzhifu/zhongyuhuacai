@@ -151,11 +151,12 @@ class Z{
             $exec_time = $GLOBALS['start_time'] - microtime(TRUE);
             $logData = $exec_time;
             if( $returnData ){
-                if( strlen( $returnData ) >1000){
-                    $returnData = substr( $returnData,0,1000);
+                $tmpReturnData = $returnData;
+                if( strlen( $tmpReturnData ) >1000){
+                    $tmpReturnData = substr( $tmpReturnData,0,1000);
                 }
 
-                $logData .= $returnData;
+                $logData .= $tmpReturnData;
             }
             LogLib::inc()->response($logData);
             if(OUT_TYPE == 'json'){
