@@ -204,7 +204,7 @@ class ProductService
                     foreach ($v['category_attr_para'] as $k2=>$v2){
                         foreach ($goods_low_price_row['pcap'] as $k3=>$v3){
                             if($v2['id'] == $v3['pcap_id']){
-                                $productCategoryAttrParaData[$k][$k2]['default_low_sel'] = 1;
+                                $productCategoryAttrParaData[$k]['category_attr_para'][$k2]['default_low_sel'] = 1;
                                 $f = 1;
                                 break;
                             }
