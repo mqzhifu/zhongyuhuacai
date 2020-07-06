@@ -200,12 +200,17 @@ class ProductService
 
                 var_dump($productCategoryAttrParaData);
                 foreach ($productCategoryAttrParaData as $k=>$v){
+                    $f = 0;
                     foreach ($v['category_attr_para'] as $k2=>$v2){
                         foreach ($goods_low_price_row['pcap'] as $k3=>$v3){
                             if($v2['id'] == $v3['pcap_id']){
-                                var_dump($v2);
+                                $productCategoryAttrParaData[$k][$k2]['default_low_sel'] = 1;
+                                $f = 1;
                                 break;
                             }
+                        }
+                        if($f){
+                            break;
                         }
                     }
                 }
