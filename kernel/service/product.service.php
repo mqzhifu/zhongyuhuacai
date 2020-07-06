@@ -177,7 +177,11 @@ class ProductService
                     $productCategoryAttrParaData[] = $row;
                 }
 //            //遍历该产品下的所有商品列表
+                $goods_low_price_row = $goodsDb[0];
                 foreach ($goodsDb as $k => $v) {
+                    if($goods_low_price_row['salve_price'] > $v['sale_price'] ){
+                        $goods_low_price_row = $v;
+                    }
                     $stock += $v['stock'];
                     $row = $v;
                     //获取每个商品对应的  分类属性参数
@@ -185,6 +189,7 @@ class ProductService
                     $row['goods_link_category_attr'] = $linkList;
                     $goodsList[]= $row;
                 }
+                var_dump($goods_low_price_row);exit;
             } else {
                 //这里是，空属性的产品
             }
