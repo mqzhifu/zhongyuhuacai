@@ -215,7 +215,7 @@ class ProductService
                     }
                 }
 
-                var_dump(1111);exit;
+                var_dump($productCategoryAttrParaData);exit;
 
 
             } else {
