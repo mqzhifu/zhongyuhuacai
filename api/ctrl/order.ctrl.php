@@ -31,7 +31,7 @@ class OrderCtrl extends BaseCtrl  {
     }
     //统计一个用户的所有订单的，各种状态，有多少条记录
     function getUserCnt(){
-        $orderList = OrderModel::db()->getAll(" uid = {$this->uid} group by status" , null, " count(status) as cnt ");
+        $orderList = OrderModel::db()->getAll(" uid = {$this->uid} group by status" , null, " count(status) as cnt,status ");
         if(!$orderList){
             return out_ajax(200,$orderList);
         }
