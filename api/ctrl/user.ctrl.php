@@ -111,7 +111,7 @@ class UserCtrl extends BaseCtrl  {
         }
 
 
-        $cartList = $this->orderService->getUserCart($this->uid);
+        $cartList = $this->orderService->getUserCart($this->uid)['msg'];
         $rs = null;
         foreach ($list as $k=>$v){
             $row = $v;
