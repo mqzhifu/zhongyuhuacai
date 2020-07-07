@@ -142,7 +142,15 @@ class UserCtrl extends BaseCtrl  {
     function viewProductHistory(){
         $uid = $this->uid;
         $list = UserProductLogModel::db()->getAll(" uid = $uid group by pid order by id desc limit 30");
-        out_ajax(200,$list);
+        $productList = null;
+        if($list){
+            $productList = null;
+            foreach ($list as $k=>$v){
+                $productList[] = ProductModel::db()->getById($v['pid']);
+            }
+            $productList = $this->productService->formatShow($productList);
+        }
+        out_ajax(200,$productList);
     }
 
     function getAddress(){
