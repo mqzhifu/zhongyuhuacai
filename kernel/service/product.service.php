@@ -112,6 +112,15 @@ class ProductService
         }
     }
 
+    function goodsListCoverPrice($goodsList){
+        foreach ($goodsList as $k=>$v){
+            $goodsList[$k]['original_price'] = ProductService::formatDataPrice(2, $v, 'original_price');
+            $goodsList[$k]['sale_price'] = ProductService::formatDataPrice(2, $v, 'sale_price');
+        }
+
+        return $goodsList;
+    }
+
     function processProductGoodsInfo($product,$ProductLinkCategoryAttrDb){
         //产品 属性参数  是否为空
         $productCategoryAttrParaData = null;
@@ -124,6 +133,7 @@ class ProductService
             if (!$goodsDb) {
                 return out_pc(8979);
             }
+            $goodsDb = $this->goodsListCoverPrice($goodsDb);
             //格式化 属性参数   以ID 形式
             //属性1 =》  N个参数  ,属性2 =》  N个参数
             $categoryAttrParaIds = null;
@@ -151,21 +161,17 @@ class ProductService
             $goodsLowPriceRow = $goodsDb[0];
             //处理 商品：最低价 总库存 商品关联PCAP 数据
             foreach ($goodsDb as $k => $v) {
+                $row = $v;
                 //价格最低的那个商品
                 if($goodsLowPriceRow['sale_price'] > $v['sale_price'] ){
                     $goodsLowPriceRow = $v;
                 }
                 //总库存
                 $stock += $v['stock'];
-                $row = $v;
+
                 //获取每个商品对应的  分类属性参数
                 $linkList = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}",null," pca_id , pcap_id");
                 $row['goods_link_category_attr'] = $linkList;
-
-                $row['original_price'] = ProductService::formatDataPrice(2, $v, 'original_price');
-                $row['sale_price'] = ProductService::formatDataPrice(2, $v, 'sale_price');
-
-
                 $goodsList[]= $row;
             }
 
