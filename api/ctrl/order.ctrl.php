@@ -36,7 +36,9 @@ class OrderCtrl extends BaseCtrl  {
             return out_ajax(200,$orderList);
         }
 
-        $list = null;
+        $list = array(
+            "wait_pay"=>0,"wait_transport"=>0,"wait_signin"=>0,"wait_comment"=>0
+        );
         foreach ($orderList as $k=>$v){
             if($v['status'] == 1){//待付款
                 $list['wait_pay'] = $v['cnt'];
