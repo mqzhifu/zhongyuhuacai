@@ -162,8 +162,8 @@ class ProductService
                 $linkList = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}",null," pca_id , pcap_id");
                 $row['goods_link_category_attr'] = $linkList;
 
-                $row['original_price'] = ProductService::formatDataPrice(2, $product, 'original_price');
-                $row['sale_price'] = ProductService::formatDataPrice(2, $product, 'sale_price');
+                $row['original_price'] = ProductService::formatDataPrice(2, $v, 'original_price');
+                $row['sale_price'] = ProductService::formatDataPrice(2, $v, 'sale_price');
 
 
                 $goodsList[]= $row;
