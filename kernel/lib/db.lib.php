@@ -347,7 +347,7 @@ class DbLib{
 //        if ( DEBUG && DEBUG == 1  ) {// 记录操作结束时间
             G('queryEndTime');
             $db_sql_cnt[] =  $sql.' [ RunTime:'.G('queryStartTime','queryEndTime',6).'s ]';
-            LogLib::inc()->debug([ $sql,' [ '.G('queryStartTime','queryEndTime',6).'s ]']);
+            LogLib::inc()->mysql([ $sql,' [ '.G('queryStartTime','queryEndTime',6).'s ]']);
 //        }
     }
     //验证数据库配置文件信息

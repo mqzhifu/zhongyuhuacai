@@ -47,6 +47,11 @@ class LogLib {
         $dir = LOG_PATH.DS .APP_NAME .DS."debug";
         $this->write($dir,$content);
     }
+    function mysql($content){
+        $dir = LOG_PATH.DS .APP_NAME .DS."mysql";
+        $this->write($dir,$content);
+    }
+
 
 
     //根据时间，HASH分散存储
