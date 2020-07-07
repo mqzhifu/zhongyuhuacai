@@ -6,6 +6,7 @@ class OrderCtrl extends BaseCtrl  {
 //        return out_pc(200,$list);
 //    }
 
+    //下单
     function doing(){
 //        $agentUid = get_request_one( $this->request,'agent_uid',0);
         $couponId = get_request_one( $this->request,'coupon_id',0);
@@ -22,13 +23,33 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->doing($this->uid,$gidsNum,$couponId,$memo,$share_uid,$userSelAddressId);
         return out_ajax($rs['code'],$rs['msg']);
     }
-
+    //获取一个用户的所有订单
     function getUserList(){
         $status = get_request_one( $this->request,'status',0);
         $rs = $this->orderService->getUserList($this->uid,$status);
         return out_ajax($rs['code'],$rs['msg']);
     }
+    //统计一个用户的所有订单的，各种状态，有多少条记录
+    function getUserCnt(){
+        $orderList = OrderModel::db()->getAll(" uid = {$this->uid} group by status" , null, " count(status) as cnt ");
+        if(!$orderList){
+            return out_ajax(200,$orderList);
+        }
 
+        $list = null;
+        foreach ($orderList as $k=>$v){
+            if($v['status'] == 1){//待付款
+                $list['wait_pay'] = $v['cnt'];
+            }elseif($v['status'] == 2){//已付款，待发货
+                $list['wait_transport'] = $v['cnt'];
+            }elseif($v['status'] == 5){//已发货，待签收
+                $list['wait_signin'] = $v['cnt'];
+            }elseif($v['status'] == 8){//完成，待评价
+                $list['wait_comment'] = $v['cnt'];
+            }
+        }
+        out_ajax(200,$list);
+    }
     //某一个产品，近期购买记录
     function getNearUserBuyHistory(){
         $pid = $agentUid =get_request_one( $this->request,'pid',0);
@@ -46,38 +67,31 @@ class OrderCtrl extends BaseCtrl  {
 
         return out_ajax(200,$list);
     }
-
-    function cntUserOrderByType(){
-        $list = OrderModel::db()->getAll("uid = {$this->uid} ");
-        if(!$list){
-
-        }
-    }
-
+    //获取订单详情
     function getOneDetail(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
         $order = $this->orderService->getOneDetail($id);
         return out_pc(200,$order);
     }
-
+    //取消一个订单
     function cancel(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
         $rs = $this->orderService->cancel($id);
         out_ajax($rs['code'],$rs['msg']);
     }
-
+    //确认已收货
     function confirmReceive(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
         $rs = $this->orderService->confirmReceive($id);
         out_ajax($rs['code'],$rs['msg']);
     }
-
+    //申请退款
     function applyRefund(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
         $rs = $this->orderService->applyRefund($id);
         out_ajax($rs['code'],$rs['msg']);
     }
-
+    //唤起支付
     function pay(){
         $oid = $agentUid =get_request_one( $this->request,'oid',0);
         $uid = $this->uid;
@@ -109,22 +123,7 @@ class OrderCtrl extends BaseCtrl  {
         }
 
         out_ajax($rs['code'],$rs['msg']);
-
-
-
     }
-
-    function getUserCartCnt(){
-        $cnt = $list = CartModel::db()->getCount(" uid = {$this->uid}");
-        out_ajax(200,$cnt);
-    }
-
-    function getUserCart(){
-//        $oid = $agentUid =get_request_one( $this->request,'oid',0);
-        $list = $this->orderService->getUserCart($this->uid);
-        out_ajax($list['code'],$list['msg']);
-    }
-
     function confirmOrder(){
 //        $pid =get_request_one( $this->request,'pid',0);
 //        $pcap = get_request_one( $this->request,'pcap',"");
@@ -134,6 +133,19 @@ class OrderCtrl extends BaseCtrl  {
 
         $rs = $this->orderService->confirmOrder($gidsNums);
         out_ajax($rs['code'],$rs['msg']);
+    }
+
+
+    //获取用户购物车内的产品数
+    function getUserCartCnt(){
+        $cnt = $list = CartModel::db()->getCount(" uid = {$this->uid}");
+        out_ajax(200,$cnt);
+    }
+    //获取用户购物车内的产品列表
+    function getUserCart(){
+//        $oid = $agentUid =get_request_one( $this->request,'oid',0);
+        $list = $this->orderService->getUserCart($this->uid);
+        out_ajax($list['code'],$list['msg']);
     }
 
     function delUserCart(){
