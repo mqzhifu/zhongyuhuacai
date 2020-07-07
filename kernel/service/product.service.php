@@ -293,7 +293,7 @@ class ProductService
 
 
 //        var_dump(strlen(json_encode($product)));
-        echo json_encode($product);exit;
+//        echo json_encode($product);exit;
 //        var_dump($product);exit;
         return out_pc(200, $product);
     }
