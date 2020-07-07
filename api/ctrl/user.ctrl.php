@@ -141,7 +141,7 @@ class UserCtrl extends BaseCtrl  {
     //浏览产品 - 历史 记录
     function viewProductHistory(){
         $uid = $this->uid;
-        $list = UserProductLogModel::db()->getAll(" uid = $uid");
+        $list = UserProductLogModel::db()->getAll(" uid = $uid group by pid order by id desc limit 30");
         out_ajax(200,$list);
     }
 
