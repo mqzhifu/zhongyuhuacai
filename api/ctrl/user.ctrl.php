@@ -19,7 +19,7 @@ class UserCtrl extends BaseCtrl  {
         $code = $agentUid =get_request_one( $this->request,'code',0);
         $this->agentService->userBindAgent($this->uid,$mobile,$code);
     }
-
+    //用户详细信息
     function getOneDetail(){
         $userRs  = $this->userService->getUinfoById($this->uid);
         if($userRs['code'] != 200){
@@ -33,18 +33,17 @@ class UserCtrl extends BaseCtrl  {
         out_ajax(200,$user);
 
     }
-
+    //删除一个收货地址
     function delAddress($request){
         $id = get_request_one($request,'id',0);
         $rs =  $this->userAddressService->addOne($this->uid,$id);
         out_ajax($rs['code'],$rs['msg']);
     }
-
+    //添加一个收货地址
     function addAddress($request){
         $rs =  $this->userAddressService->addOne($this->uid,$request);
         out_ajax($rs['code'],$rs['msg']);
     }
-
     //用户反馈
     function feedback(){
         $title = get_request_one($this->request,'title',0);
@@ -111,12 +110,30 @@ class UserCtrl extends BaseCtrl  {
             out_ajax(200,$list);
         }
 
+
+        $cartList = $this->orderService->getUserCart($this->uid);
         $rs = null;
         foreach ($list as $k=>$v){
             $row = $v;
-            $product = $this->productService->getOneDetail($v['pid']);
-            $row['price'] = $product['price'];
+            $product = ProductModel::db()->getById($v['id']);
+            $productList = $this->productService->formatShow(array($product));
+            $row['lowest_price'] = $productList[0]['lowest_price'];
+            $row['title'] = $productList[0]['title'];
+            $row['pic'] = $productList[0]['pic'];
+
+            $row['lowest_price'] = fenToYuan( $product['lowest_price']) ;
             $row['title'] = $product['title'];
+            $hasInCart = 0;
+            if($cartList){
+                foreach ($cartList as $k2=>$cart){
+                    if($cart['pid'] == $v['pid']){
+                        $hasInCart = 1;
+                        break;
+                    }
+                }
+            }
+            $row['has_cart'] = $hasInCart;
+
             $rs[] = $row;
         }
         out_ajax(200,$rs);
