@@ -126,7 +126,7 @@ class UserCtrl extends BaseCtrl  {
             $hasInCart = 0;
             if($cartList){
                 foreach ($cartList as $k2=>$cart){
-                    if($cart['pid'] == $v['pid']){
+                    if($cart['id'] == $v['pid']){
                         $hasInCart = 1;
                         break;
                     }
