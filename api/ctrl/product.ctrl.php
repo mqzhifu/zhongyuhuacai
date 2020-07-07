@@ -4,11 +4,6 @@ class ProductCtrl extends BaseCtrl  {
         parent::__construct($request);
     }
 
-//    //获取所有分类下的，所有商品列表
-//    function getListAllCategory(){
-//
-//    }
-
     //首页，分类ICON
     function getAllCategory(){
         $list = ProductCategoryModel::db()->getAll(" is_show_index = 1 ");
@@ -23,7 +18,6 @@ class ProductCtrl extends BaseCtrl  {
             }
         }
         return $this->out(200,$list);
-//        out_ajax(200,$list);
     }
     //获取 后台 推荐的商品的列表
     function getRecommendList(){
@@ -63,12 +57,14 @@ class ProductCtrl extends BaseCtrl  {
         $includeGoods = get_request_one( $this->request,'include_goods',1);
 
         $data = $this->productService->getOneDetail($id,$includeGoods,$this->uid);
-        out_ajax($data['code'],$data['msg']);
+//        echo json_encode($data['msg']);exit;
+        return $this->out($data['code'],$data['msg']);
+//        out_ajax($data['code'],$data['msg']);
     }
 
     //搜索
     function search(){
-        $page = get_request_one( $this->request,'page',0);
+        $page = get_request_one( $this->request,'page',1);
         $limit = get_request_one( $this->request,'limit',3);
 
         $condition = array(
@@ -82,34 +78,36 @@ class ProductCtrl extends BaseCtrl  {
             return out_ajax($rs['code'],$rs['msg']);
         }
 
+
         $rs['msg']['list'] = $this->productService->formatShow($rs['msg']['list']);
-        out_ajax($rs['code'],$rs['msg']);
+//        var_dump($rs['msg']);exit;
+        return $this->out($rs['code'],$rs['msg']);
 
     }
     //点赞
     function up(){
         $id = get_request_one( $this->request,'id',0);
         $rs = $this->upService->add($this->uid,$id);
-        out_ajax($rs['code'],$rs['msg']);
+        return $this->out($rs['code'],$rs['msg']);
     }
     //收藏
     function collect(){
         $id = get_request_one( $this->request,'id',0);
         $rs = $this->collectService->add($this->uid,$id);
-        out_ajax(200,$rs['msg']);
+        return $this->out(200,$rs['msg']);
     }
 
     //点赞
     function cancelUp(){
         $id = get_request_one( $this->request,'id',0);
         $rs = $this->upService->cancel($this->uid,$id);
-        out_ajax($rs['code'],$rs['msg']);
+        return $this->out($rs['code'],$rs['msg']);
     }
     //收藏
     function cancelCollect(){
         $id = get_request_one( $this->request,'id',0);
         $rs = $this->collectService->cancel($this->uid,$id);
-        out_ajax(200,$rs['msg']);
+        return $this->out(200,$rs['msg']);
     }
 
 
@@ -131,11 +129,11 @@ class ProductCtrl extends BaseCtrl  {
         $rs = $this->commentService->getListByPid($pid,$page,$limit);
         out_ajax($rs['code'],$rs['msg']);
     }
-
+    //产品详情页的推荐
     function getDetailRecommend(){
         $pid = get_request_one( $this->request,'pid',0);
         $rs = $this->productService->getDetailRecommend($pid);
-        out_ajax($rs['code'],$rs['msg']);
+        return $this->out($rs['code'],$rs['msg']);
     }
 
     function getSearchAttr(){
@@ -143,6 +141,6 @@ class ProductCtrl extends BaseCtrl  {
         $orderType =ProductService::ORDER_TYPE;
 
         $rs = array('category'=>$category,'order_type'=>$orderType);
-        out_ajax(200,$rs);
+        return $this->out(200,$rs);
     }
 }

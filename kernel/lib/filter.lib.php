@@ -257,8 +257,8 @@ class FilterLib {
 //            var_dump($ruleList);exit;
             foreach ($ruleList as $k=>$v){
                 if($v['must']){
-//                    var_dump($k);
-                    if(!$data[$k]){
+                    if(!isset($data[$k]) && !$data[$k]){
+                        var_dump($k);
                         self::throwErr("checkObj <$k> is null 2");
                     }
                 }

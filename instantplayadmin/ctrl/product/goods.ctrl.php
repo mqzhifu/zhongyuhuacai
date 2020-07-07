@@ -57,20 +57,20 @@ class GoodsCtrl extends BaseCtrl{
                     $attrParaStr .= $k ."-". $attrPara[$k] . ",";
                 }
                 $attrParaStr = substr($attrParaStr,0,strlen($attrParaStr)-1);
+                $exist = GoodsModel::db()->getRow(" product_attr_ids = '$attrParaStr'");
+                if($exist){
+                    $this->notice("该商品已存在 ，请不要重复添加:".$attrParaStr);
+                }
             }else{
-                $attrParaGroup = ProductLinkCategoryAttrModel::getAttrParaGroup($product['id']);
-                $attrParaStr = "";
-                foreach ($attrParaGroup as $k=>$v){
-                    $attrPara[$k] = $v;
-                    $attrParaStr = $k . "-" . $v;
+                $goods = GoodsModel::db()->getRow(" pid = $pid");
+                if($goods){
+                    $this->notice("<空属性>的产品，只能添加一个商品.");
                 }
 
-                var_dump("测试无商品属性情况 ",$attrParaStr);exit;
-            }
-
-            $exist = GoodsModel::db()->getRow(" product_attr_ids = '$attrParaStr'");
-            if($exist){
-                $this->notice("该商品已存在 ，请不要重复添加:".$attrParaStr);
+                $attrParaGroup = ProductLinkCategoryAttrModel::getAttrParaGroup($product['id']);
+                foreach ($attrParaGroup as $k=>$v){
+                    $attrPara[$k] = $v;
+                }
             }
 
             $newId = GoodsModel::addOne($data,$product,$attrPara);

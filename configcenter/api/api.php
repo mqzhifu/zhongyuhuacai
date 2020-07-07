@@ -92,7 +92,7 @@ $arr = array(
 
         'parserAddressByStr'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'地址字符串，解析成，一个个字段',
+            'title'=>'将字符串，解析成，一个个<地址>字段',
             'request'=>array(
                 'address_str'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'地址解析字符串-省,市,县,乡镇,详细地址,收货人姓名,收货人手机号'),
             ),
@@ -112,7 +112,7 @@ $arr = array(
 
         'shareProduct'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'测试',
+            'title'=>'记录分享',
             'request'=>array(
                 'pid'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'产品ID'),
                 'source'=>array('type'=>'string','must'=>0,'default'=>1,'title'=>'来源类型 1微信指向朋友'),
@@ -145,7 +145,7 @@ $arr = array(
             ),
         ),
         'getBannerList'=>array(
-            'title'=>'轮播图',
+            'title'=>'首页轮播图',
             'ws'=>array('request_code'=>5013,'response_code'=>5014),
             'request'=>array(
             ),
@@ -193,10 +193,45 @@ $arr = array(
             ),
         ),
 
+        'getDetailRecommend'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'详情页-推荐的产品列表',
+            'request'=>array(
+                'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
+                'limit'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'每页多少条'),
+            ),
+            'return'=>array(
+                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
+                    'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
+                    'limit'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'每页多少条'),
+                    'record_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总记录数'),
+                    'page_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总页数'),
+                    'list'=>array('must'=>1,'default'=>1,'title'=>'数据列表',
+                        'subset'=>array("must"=>1,"subset_key"=>'array_number_auto_incr','list'=>array(
+                            'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                                'goods_total' => array('type'=>'string','title'=>'商品总数','must'=>0),
+                                'id' => array('type'=>'int','title'=>'id','must'=>1),
+                                'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                                'title'=>  array('type'=>'string','title'=>'标题','must'=>1),
+                                'user_buy_total'=>  array('type'=>'string','title'=>'用户购买统计','must'=>0),
+                                'lowest_price'=>  array('type'=>'string','title'=>'最低价格','must'=>0),
+                            )
+                            ),
+                        ),
+                        )
+                    )
+                ),
+                ),
+            ),
+        ),
+
         'getRecommendList'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'后台推荐的产品列表',
-            'request'=>array(),
+            'title'=>'首页-推荐的产品列表',
+            'request'=>array(
+                'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
+                'limit'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'每页多少条'),
+            ),
             'return'=>array(
                 'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
                     'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
@@ -224,7 +259,7 @@ $arr = array(
 
         'getUserHistoryPVList'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'后台推荐的产品列表',
+            'title'=>'一个产品的，最近访客',
             'request'=>array(
                 'id'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'产品ID'),
             ),
@@ -244,18 +279,6 @@ $arr = array(
             )
         ),
 
-
-
-//        'getListByCategory'=>array(
-//            'ws'=>array('request_code'=>1001,'response_code'=>1002),
-//            'title'=>'获取一个分类下的所有产品',
-//            'request'=>array(
-//                'category_id'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'分类'),
-//            ),
-//            'return'=>array(
-//            ),
-//        ),
-
         'getOneDetail'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
             'title'=>'产品详情页',
@@ -264,48 +287,148 @@ $arr = array(
                 'include_goods'=>array('type'=>'int','must'=>1,'default'=>2,     'title'=>'是否包含商品1是2否'),
             ),
             'return'=>array(
-                'id' => array('type'=>'int','title'=>'id','must'=>1),
-                'title' => array('type'=>'string','title'=>'标题','must'=>1),
-                'subtitle' => array('type'=>'string','title'=>'副标题','must'=>0),
-                'desc' => array('type'=>'string','title'=>'详细描述','must'=>0),
-                'brand' => array('type'=>'string','title'=>'品牌','must'=>0),
-                'attribute' => array('type'=>'string','title'=>'属性参数','must'=>0),
-                'notice' => array('type'=>'string','title'=>'购买须知','must'=>0),
-                'category_id' => array('type'=>'int','title'=>'分类ID','must'=>1),
-                'status' => array('type'=>'int','title'=>'状态1上架2下架','must'=>1),
-                'a_time'=>  array('type'=>'string','title'=>'添加时间','must'=>1),
-                'admin_id'=>  array('type'=>'string','title'=>'管理员ID','must'=>0),
-                'pic' => array('type'=>'string','title'=>'详情描述图片','must'=>1),
+                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
+                    'id' => array('type'=>'int','title'=>'id','must'=>1),
+                    'title' => array('type'=>'string','title'=>'标题','must'=>1),
+                    'subtitle' => array('type'=>'string','title'=>'副标题','must'=>0),
+                    'desc' => array('type'=>'string','title'=>'详细描述','must'=>0),
+                    'brand' => array('type'=>'string','title'=>'品牌','must'=>0),
+                    'attribute' => array('type'=>'string','title'=>'属性参数','must'=>0),
+                    'notice' => array('type'=>'string','title'=>'购买须知','must'=>0),
+                    'category_id' => array('type'=>'int','title'=>'分类ID','must'=>1),
+                    'status' => array('type'=>'int','title'=>'状态1上架2下架','must'=>1),
+                    'a_time'=>  array('type'=>'string','title'=>'添加时间','must'=>1),
+                    'admin_id'=>  array('type'=>'string','title'=>'管理员ID','must'=>0),
+                    'pic' => array('type'=>'string','title'=>'详情描述图片','must'=>1),
 
-                'lowest_price' => array('type'=>'int','title'=>'最低价格(分)','must'=>1),
-                'desc_attr' => array('type'=>'string','title'=>'产品描述的详细参数，逗号分隔','must'=>0),
-                'desc_attr_format' => array('type'=>'int','title'=>'产品描述的详细参数,数组(格式化desc_attr)','must'=>1),
+                    'lowest_price' => array('type'=>'int','title'=>'最低价格(分)','must'=>1),
+                    'desc_attr' => array('type'=>'string','title'=>'产品描述的详细参数，逗号分隔','must'=>0),
+                    'desc_attr_format' => array('type'=>'int','title'=>'产品描述的详细参数,数组(格式化desc_attr)','must'=>0),
 
-                'category_attr_null' => array('type'=>'int','title'=>'产品没有任何属性参数1是2否','must'=>1),
-                'goods_total' => array('type'=>'int','title'=>'包含多少个商品数','must'=>1),
-                'user_buy_total' => array('type'=>'int','title'=>'用户总购买数','must'=>0),
-                'user_up_total' => array('type'=>'int','title'=>'用户点赞总数','must'=>0),
-                'user_collect_total' => array('type'=>'int','title'=>'用户收藏总数','must'=>0),
-                'user_comment_total' => array('type'=>'int','title'=>'用户总评论数','must'=>0),
-                'recommend' => array('type'=>'int','title'=>'是否推荐首页1是2否','must'=>1),
-                'recommend_detail' => array('type'=>'int','title'=>'1是2否,推荐详情页','must'=>1),
-                'goods_list' => array('type'=>'int','title'=>'商品列表','must'=>1),
+                    'category_attr_null' => array('type'=>'int','title'=>'产品没有任何属性参数1是2否','must'=>1),
+                    'goods_total' => array('type'=>'int','title'=>'包含多少个商品数','must'=>1),
+                    'user_buy_total' => array('type'=>'int','title'=>'用户总购买数','must'=>0),
+                    'user_up_total' => array('type'=>'int','title'=>'用户点赞总数','must'=>0),
+                    'user_collect_total' => array('type'=>'int','title'=>'用户收藏总数','must'=>0),
+                    'user_comment_total' => array('type'=>'int','title'=>'用户总评论数','must'=>0),
+                    'recommend' => array('type'=>'int','title'=>'是否推荐首页1是2否','must'=>1),
+                    'recommend_detail' => array('type'=>'int','title'=>'1是2否,推荐详情页','must'=>1),
+    //                'goods_list' => array('type'=>'int','title'=>'商品列表','must'=>1),
+    //                'pcap' => array('type'=>'int','title'=>'产品参数属性列表','must'=>1),
+    //                'goodsLowPriceRow'=>array('type'=>'int','title'=>'最低价的商品','must'=>0),
+                    'stock' => array('type'=>'int','title'=>'总库存数','must'=>0),
 
-                'pcap' => array('type'=>'int','title'=>'产品参数属性列表','must'=>1),
-                'stock' => array('type'=>'int','title'=>'总库存数','must'=>0),
 
 
-                'has_collect' => array('type'=>'int','title'=>'用户是否已收藏','must'=>0),
-                'has_up' => array('type'=>'int','title'=>'用户是否已点赞','must'=>0),
+                    'has_collect' => array('type'=>'int','title'=>'用户是否已收藏','must'=>0),
+                    'has_up' => array('type'=>'int','title'=>'用户是否已点赞','must'=>0),
 
-                'pv' => array('type'=>'int','title'=>'总访问数','must'=>0),
-                'uv' => array('type'=>'int','title'=>'总用户访问数','must'=>0),
-
+                    'pv' => array('type'=>'int','title'=>'总访问数','must'=>0),
+                    'uv' => array('type'=>'int','title'=>'总用户访问数','must'=>0),
+                ),
 //                'original_price' => array('type'=>'int','title'=>'原始价格','must'=>1),
 //                'factory_uid' => array('type'=>'int','title'=>'工厂ID','must'=>1),
 //                'sort' => array('type'=>'int','title'=>'排序','must'=>1),
 //                'spider_source_type' => array('type'=>'int','title'=>'抓取来源1平台自己2:1688','must'=>1),
 //                'spider_source_pid' => array('type'=>'int','title'=>'抓取来源-产品ID','must'=>1),
+            ),
+        ),
+            ),
+
+
+        'search'=>array(
+            'ws'=>array('request_code'=>1009,'response_code'=>1010),
+            'title'=>'搜索产品',
+            'request'=>array(
+                'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
+                'limit'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'每页多少条'),
+
+                'keyword'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'关键字'),
+                'category'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'产品类型ID'),
+                'orderType'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'排序字段'),
+                'orderUpDown'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'升/降'),
+            ),
+            'return'=>array(
+                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
+                    'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
+                    'limit'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'每页多少条'),
+                    'record_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总记录数'),
+                    'page_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总页数'),
+                    'list'=>array('must'=>1,'default'=>1,'title'=>'数据列表',
+                        'subset'=>array("must"=>1,"subset_key"=>'array_number_auto_incr','list'=>array(
+                            'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                                'goods_total' => array('type'=>'string','title'=>'商品总数','must'=>0),
+                                'id' => array('type'=>'int','title'=>'id','must'=>1),
+                                'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                                'title'=>  array('type'=>'string','title'=>'标题','must'=>1),
+                                'user_buy_total'=>  array('type'=>'string','title'=>'用户购买统计','must'=>0),
+                                'lowest_price'=>  array('type'=>'string','title'=>'最低价格','must'=>0),
+                            )
+                            ),
+                        ),
+                        )
+                    )
+                ),
+                ),
+            ),
+        ),
+
+        'up'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'点赞一个产品',
+            'request'=>array(
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
+            ),
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
+            ),
+        ),
+
+        'cancelUp'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'取消-点赞一个产品',
+            'request'=>array(
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
+            ),
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
+            ),
+        ),
+
+        'collect'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'收藏一个产品',
+            'request'=>array(
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
+            ),
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
+            ),
+        ),
+
+        'cancelCollect'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'取消-收藏一个产品',
+            'request'=>array(
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
+            ),
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
+            ),
+        ),
+
+
+        'comment'=>array(
+            'ws'=>array('request_code'=>1001,'response_code'=>1002),
+            'title'=>'评论一个产品',
+            'request'=>array(
+                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
+                'title' => array('type'=>'string','title'=>'标题','default'=>"",'must'=>1),
+                'content' => array('type'=>'string','title'=>'内容','default'=>"",'must'=>1),
+                'pic' => array('type'=>'string','title'=>'图片','default'=>"",'must'=>1),
+            ),
+            'return'=>array(
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
             ),
         ),
 
@@ -325,55 +448,41 @@ $arr = array(
             ),
         ),
 
-        'up'=>array(
+        'getSearchAttr'=>array(
             'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'点赞',
+            'title'=>'产品列表-搜索项(分类&排序)',
             'request'=>array(
-                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
             ),
             'return'=>array(
+                'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
+                        'category' => array('type'=>'int','title'=>'aaa','must'=>1,
+                            'subset'=>array("must"=>1,"subset_key"=>'array_number_auto_incr','list'=>array(
+                                'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                                            'name' => array('type'=>'string','title'=>'商品总数','must'=>0),
+                                            'id' => array('type'=>'int','title'=>'id','must'=>1),
+                                            'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                                        )
+                                    ),
+                                ),
+                            )
+                        ),
+                        'order_type' => array('type'=>'int','title'=>'aaa','must'=>1,
+                            'subset'=>array("must"=>1,"subset_key"=>'array_number_auto_incr','list'=>array(
+                                        'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                                            'name' => array('type'=>'string','title'=>'商品总数','must'=>0),
+                                            'id' => array('type'=>'int','title'=>'id','must'=>1),
+                                            'field'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
+                                        )
+                                    ),
+                                ),
+                            )
+                        ),
+                    )
+                ),
             ),
         ),
 
-        'collect'=>array(
-            'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'收藏',
-            'request'=>array(
-                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
-            ),
-            'return'=>array(
-            ),
-        ),
 
-        'comment'=>array(
-            'ws'=>array('request_code'=>1001,'response_code'=>1002),
-            'title'=>'评论',
-            'request'=>array(
-                'pid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'id'),
-                'title' => array('type'=>'string','title'=>'标题','default'=>"",'must'=>1),
-                'content' => array('type'=>'string','title'=>'内容','default'=>"",'must'=>1),
-                'pic' => array('type'=>'string','title'=>'图片','default'=>"",'must'=>1),
-            ),
-            'return'=>array(
-            ),
-        ),
-
-        'search'=>array(
-            'ws'=>array('request_code'=>1009,'response_code'=>1010),
-            'title'=>'搜索产品',
-            'request'=>array(
-                'keyword'=>array('type'=>'string','must'=>1,'default'=>100001,'title'=>'关键词'),
-            ),
-            'return'=>array(
-//                'array_key_number_two'=>array("must"=>0,'list'=>array(
-//                    'uid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'用户ID'),
-//                    'isFollow'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否已关注你，1是2否'),
-//                    'nickname'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'昵称'),
-//                    'avatar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'头像'),
-//                    'sex'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'0未知1男2女'),
-//                ),),
-            ),
-        ),
     ),
 
     'pay'=>array(
@@ -469,37 +578,6 @@ $arr = array(
         'title'=>'登陆',
 
 
-        'logout'=>array(
-            'ws'=>array('request_code'=>2007,'response_code'=>2008),
-            'title'=>'登出',
-            'request'=>array(
-            ),
-            'return'=>array(
-                'scalar'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'成功/失败'),
-            ),
-        ),
-
-        'third'=>array(
-            'ws'=>array('request_code'=>2007,'response_code'=>2008),
-            'title'=>'3方平台-登陆/3方平台注册',
-            'request'=>array(
-                'type'=>    array('type'=>'int','title'=>'类型，类型，4:微信.6:facebook.9:qq','must'=>1,'default'=>6),
-                'uniqueId'=>    array('type'=>'int','title'=>'3方平台用户唯一标识','default'=>"fb123fbi",'must'=>1),
-                'nickname'=>    array('type'=>'string','title'=>'昵称','default'=>"imZ",'must'=>1),
-                'avatar'=>    array('type'=>'string','title'=>'头像','must'=>1,'default'=>"https://b-ssl.duitang.com/uploads/people/201805/21/20180521200051_imuch.thumb.36_36_c.jpeg"),
-                'sex'=>    array('type'=>'int','title'=>'性别，1男2女','must'=>0,'default'=>2),
-                'unionId'=>    array('type'=>'string','title'=>'3方联合ID，跨应用的','must'=>0,'default'=>2),
-            ),
-            'return'=>array(
-                'array_key_number_one'=>array("must"=>0,'list'=>array(
-                    'token'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'token'),
-                    'isReg'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否为注册，1是0不是'),
-                ))
-            ),
-        ),
-//
-
-
         'wxLittleLoginByCode'=>array(
             'ws'=>array('request_code'=>2005,'response_code'=>2006),
             'title'=>'小程序登陆并注册',
@@ -510,51 +588,80 @@ $arr = array(
                 'array_key_number_one'=>array("must"=>0,'list'=>array(
                     'token'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'token'),
                     'isReg'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否为注册，1是0不是'),
+                    'session_key'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'微信返回的session'),
                 ))
             ),
         ),
 
-
-        'cellphoneSMS'=>array(
-            'ws'=>array('request_code'=>2005,'response_code'=>2006),
-            'title'=>'手机-验证码-登陆',
-            'request'=>array(
-                'cellphone'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'手机号'),
-                'smsCode'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'短信验证码'),
-            ),
-            'return'=>array(
-                'array_key_number_one'=>array("must"=>0,'list'=>array(
-                    'token'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'token'),
-                    'isReg'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否为注册，1是0不是'),
-                ))
-            ),
-        ),
-
-        'cellphonePS'=>array(
-            'ws'=>array('request_code'=>2005,'response_code'=>2006),
-            'title'=>'手机-密码-登陆',
-            'request'=>array(
-                'cellphone'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'手机号'),
-                'ps'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'密码'),
-            ),
-            'return'=>array(
-                'array_key_number_one'=>array("must"=>0,'list'=>array(
-                    'token'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'token'),
-                ))
-            ),
-        ),
-
-        'index'=>array(
-            'ws'=>array('request_code'=>2009,'response_code'=>2010),
-            'title'=>'用户名密码登陆',
-            'request'=>array(
-                'username'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'任务ID'),
-                'ps'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否为分享，加倍奖励~'),
-            ),
-            'return'=>array(
-                'taskId'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'任务ID'),
-            ),
-        ),
+//        'logout'=>array(
+//            'ws'=>array('request_code'=>2007,'response_code'=>2008),
+//            'title'=>'登出',
+//            'request'=>array(
+//            ),
+//            'return'=>array(
+//                'scalar'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'成功/失败'),
+//            ),
+//        ),
+//
+//        'third'=>array(
+//            'ws'=>array('request_code'=>2007,'response_code'=>2008),
+//            'title'=>'3方平台-登陆/3方平台注册',
+//            'request'=>array(
+//                'type'=>    array('type'=>'int','title'=>'类型，类型，4:微信.6:facebook.9:qq','must'=>1,'default'=>6),
+//                'uniqueId'=>    array('type'=>'int','title'=>'3方平台用户唯一标识','default'=>"fb123fbi",'must'=>1),
+//                'nickname'=>    array('type'=>'string','title'=>'昵称','default'=>"imZ",'must'=>1),
+//                'avatar'=>    array('type'=>'string','title'=>'头像','must'=>1,'default'=>"https://b-ssl.duitang.com/uploads/people/201805/21/20180521200051_imuch.thumb.36_36_c.jpeg"),
+//                'sex'=>    array('type'=>'int','title'=>'性别，1男2女','must'=>0,'default'=>2),
+//                'unionId'=>    array('type'=>'string','title'=>'3方联合ID，跨应用的','must'=>0,'default'=>2),
+//            ),
+//            'return'=>array(
+//                'array_key_number_one'=>array("must"=>0,'list'=>array(
+//                    'token'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'token'),
+//                    'isReg'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否为注册，1是0不是'),
+//                ))
+//            ),
+//        ),
+//
+//        'cellphoneSMS'=>array(
+//            'ws'=>array('request_code'=>2005,'response_code'=>2006),
+//            'title'=>'手机-验证码-登陆',
+//            'request'=>array(
+//                'cellphone'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'手机号'),
+//                'smsCode'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'短信验证码'),
+//            ),
+//            'return'=>array(
+//                'array_key_number_one'=>array("must"=>0,'list'=>array(
+//                    'token'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'token'),
+//                    'isReg'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否为注册，1是0不是'),
+//                ))
+//            ),
+//        ),
+//
+//        'cellphonePS'=>array(
+//            'ws'=>array('request_code'=>2005,'response_code'=>2006),
+//            'title'=>'手机-密码-登陆',
+//            'request'=>array(
+//                'cellphone'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'手机号'),
+//                'ps'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'密码'),
+//            ),
+//            'return'=>array(
+//                'array_key_number_one'=>array("must"=>0,'list'=>array(
+//                    'token'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'token'),
+//                ))
+//            ),
+//        ),
+//
+//        'index'=>array(
+//            'ws'=>array('request_code'=>2009,'response_code'=>2010),
+//            'title'=>'用户名密码登陆',
+//            'request'=>array(
+//                'username'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'任务ID'),
+//                'ps'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否为分享，加倍奖励~'),
+//            ),
+//            'return'=>array(
+//                'taskId'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'任务ID'),
+//            ),
+//        ),
 
     ),
 

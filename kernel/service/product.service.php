@@ -175,15 +175,17 @@ class ProductService
                 $goodsList[]= $row;
             }
 
-        } else {
-            //这里是，空属性的产品
+        } else {//这里是，空属性的产品
+            //获取该产品下的所有商品列表
+            exit("暂时处理不了，没有属性的产品，后续优化");
         }
 
         $productCategoryAttrParaData = $this->defaultSelGoods($productCategoryAttrParaData,$goodsList,$goodsLowPriceRow);
 
 
-        return array('productCategoryAttrParaData'=>$productCategoryAttrParaData,'goodsList'=>$goodsList,'goodsLowPriceRow'=>$goodsLowPriceRow,'stock'=>$stock);
+        $data = array('productCategoryAttrParaData'=>$productCategoryAttrParaData,'goodsList'=>$goodsList,'goodsLowPriceRow'=>$goodsLowPriceRow,'stock'=>$stock);
 
+        return out_pc(200,$data);
 //        //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
 //            foreach ($categoryAttrParaIds as $k=>$v){
 //                if(count($v ) >5){
@@ -250,7 +252,11 @@ class ProductService
         }
 
         if ($includeGoods) {
-            $processProductGoodsInfo = $this->processProductGoodsInfo($product,$ProductLinkCategoryAttrDb);
+            $processProductGoodsInfoRs = $this->processProductGoodsInfo($product,$ProductLinkCategoryAttrDb);
+            if($processProductGoodsInfoRs['code'] != 200 ){
+                return out_pc($processProductGoodsInfoRs['code'],$processProductGoodsInfoRs['msg']);
+            }
+            $processProductGoodsInfo = $processProductGoodsInfoRs['msg'];
             $productCategoryAttrParaData = $processProductGoodsInfo['productCategoryAttrParaData'];
             $goodsList = $processProductGoodsInfo['goodsList'];
             $stock = $processProductGoodsInfo['stock'];

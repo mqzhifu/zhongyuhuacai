@@ -45,11 +45,11 @@ class IndexCtrl extends BaseCtrl  {
         }
 
         $newId = ShareProductModel::db()->add($data);
-        out_ajax(200,$newId);
+        return $this->out(200,$newId);
     }
 
     function checkToken(){
-        out_ajax(200);
+        return $this->out(200,"ok");
     }
     //微信获取用户GPS推给小程序，再推到后端
     function wxPushLocation($request){
