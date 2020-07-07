@@ -83,7 +83,7 @@ class ProductService
 //    }
 
 
-    function getProductLinkPCAP($categoryAttrParaIds)
+    function initPCAPDataFromDb($categoryAttrParaIds)
     {
         //下面两个变量，是优化读DB过多的情况
         $pca_ids = [];
@@ -112,6 +112,110 @@ class ProductService
         }
     }
 
+    function processProductGoodsInfo($product,$ProductLinkCategoryAttrDb){
+        //产品 属性参数  是否为空
+        $productCategoryAttrParaData = null;
+        $goodsList = null;
+        $goodsLowPriceRow = null;
+        $stock = 0;
+        if ($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE) {
+            //获取该产品下的所有商品列表
+            $goodsDb = GoodsModel::db()->getAll(" pid = {$product['id']}",null," id,status,a_time,stock,is_del,sale_price,original_price "  );
+            if (!$goodsDb) {
+                return out_pc(8979);
+            }
+            //格式化 属性参数   以ID 形式
+            //属性1 =》  N个参数  ,属性2 =》  N个参数
+            $categoryAttrParaIds = null;
+            foreach ($ProductLinkCategoryAttrDb as $k => $v) {
+                $categoryAttrParaIds[$v['pca_id']][] = $v['pcap_id'];
+            }
+            //将PCAP ID 从DB中一次性取出
+            $ProductLinkCategoryAttrDbData = $this->initPCAPDataFromDb($categoryAttrParaIds);
+            //将ID形式 转换成 多维数组，主要是为了获取汉字描述，给前端展示使用
+            foreach ($categoryAttrParaIds as $k => $v) {
+                //先获取分类属性(pca)的  一条记录值
+                $row = $this->searchPcap($ProductLinkCategoryAttrDbData['pca'], $k);
+                $para = null;
+                //再获取该属性(pca)下的所有参数的值(pcap)
+                foreach ($v as $k2 => $v2) {
+                    //从初始化好的DB数据中，找到该记录
+                    $subRow = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'], $v2);
+                    //此PCAP 规格，默认是否展示。 先初始化为0
+                    $subRow['default_low_sel'] = 0;
+                    $para[]  = $subRow;
+                }
+                $row['category_attr_para'] = $para;
+                $productCategoryAttrParaData[] = $row;
+            }
+            $goodsLowPriceRow = $goodsDb[0];
+            //处理 商品：最低价 总库存 商品关联PCAP 数据
+            foreach ($goodsDb as $k => $v) {
+                //价格最低的那个商品
+                if($goodsLowPriceRow['sale_price'] > $v['sale_price'] ){
+                    $goodsLowPriceRow = $v;
+                }
+                //总库存
+                $stock += $v['stock'];
+                $row = $v;
+                //获取每个商品对应的  分类属性参数
+                $linkList = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}",null," pca_id , pcap_id");
+                $row['goods_link_category_attr'] = $linkList;
+                $goodsList[]= $row;
+            }
+
+        } else {
+            //这里是，空属性的产品
+        }
+
+        $productCategoryAttrParaData = $this->defaultSelGoods($productCategoryAttrParaData,$goodsList,$goodsLowPriceRow);
+
+
+        return array('productCategoryAttrParaData'=>$productCategoryAttrParaData,'goodsList'=>$goodsList,'goodsLowPriceRow'=>$goodsLowPriceRow,'stock'=>$stock);
+
+//        //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
+//            foreach ($categoryAttrParaIds as $k=>$v){
+//                if(count($v ) >5){
+//                    $tmp = null;
+//                    foreach ($v as $k2=>$v2){
+//                        if($k2 >5 ){
+//                            break;
+//                        }
+//                        $tmp[] = $v2;
+//                    }
+//                    $categoryAttrParaIds[$k] = $tmp;
+//                }
+//            }
+    }
+    //找到最低价格那个，默认把 PCAP 规格参数 给选中 状态
+    private function defaultSelGoods($productCategoryAttrParaData,$goodsList,$goods_low_price_row){
+
+        foreach ($goodsList as $k=>$v){
+            if($v['id'] == $goods_low_price_row['id']){
+                $goods_low_price_row['pcap'] = $v['goods_link_category_attr'];
+                break;
+            }
+        }
+
+        foreach ($productCategoryAttrParaData as $k=>$v){
+            $f = 0;
+            foreach ($v['category_attr_para'] as $k2=>$v2){
+                foreach ($goods_low_price_row['pcap'] as $k3=>$v3){
+                    if($v2['id'] == $v3['pcap_id']){
+                        $productCategoryAttrParaData[$k]['category_attr_para'][$k2]['default_low_sel'] = 1;
+                        $f = 1;
+                        break;
+                    }
+                }
+                if($f){
+                    break;
+                }
+            }
+        }
+
+        return $productCategoryAttrParaData;
+    }
+
     function getOneDetail($id, $includeGoods = 1, $uid = 0)
     {
         if (!$id) {
@@ -127,103 +231,26 @@ class ProductService
         $goodsList = null;//商品及属性列表
         $productCategoryAttrParaData = null;//产品属性列表
         $goodsDb = null;
-        $goods_low_price_row = null;//价格最低的那个商品，要默认给选中状态(规格选中)
+        $goodsLowPriceRow = null;//价格最低的那个商品，要默认给选中状态(规格选中)
+        //获取一个产品的，所有类型 属性 参数
+        $ProductLinkCategoryAttrDb = ProductLinkCategoryAttrModel::db()->getAll(" pid = {$product['id']}");
+        if (!$ProductLinkCategoryAttrDb) {
+            return out_pc(8980);
+        }
+
         if ($includeGoods) {
-            $goodsDb = GoodsModel::db()->getAll(" pid = $id",null," id,status,a_time,stock,is_del,sale_price,original_price "  );
-            if (!$goodsDb) {
-                return out_pc(8979);
-            }
-            //产品 属性参数  是否为空
-            if ($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE) {
-                //获取一个产品的，所有类型 属性 参数
-                $ProductLinkCategoryAttrDb = ProductLinkCategoryAttrModel::db()->getAll(" pid = $id");
-                if (!$ProductLinkCategoryAttrDb) {
-                    return out_pc(8980);
-                }
-                //格式化 属性参数   以ID 形式
-                //属性1 =》  N个参数  ,属性2 =》  N个参数
-                $categoryAttrParaIds = null;
-                foreach ($ProductLinkCategoryAttrDb as $k => $v) {
-                    $categoryAttrParaIds[$v['pca_id']][] = $v['pcap_id'];
-                }
-
-                $ProductLinkCategoryAttrDbData = $this->getProductLinkPCAP($categoryAttrParaIds);
-
-                //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
-//            foreach ($categoryAttrParaIds as $k=>$v){
-//                if(count($v ) >5){
-//                    $tmp = null;
-//                    foreach ($v as $k2=>$v2){
-//                        if($k2 >5 ){
-//                            break;
-//                        }
-//                        $tmp[] = $v2;
-//                    }
-//                    $categoryAttrParaIds[$k] = $tmp;
-//                }
-//            }
-
-                //将ID形式 转换成 多维数组，主要是为了获取汉字描述
-                foreach ($categoryAttrParaIds as $k => $v) {
-                    //先获取分类属性的  一条记录值
-//                $row = ProductCategoryAttrModel::db()->getById($k);
-                    $row = $this->searchPcap($ProductLinkCategoryAttrDbData['pca'], $k);
-                    $para = null;
-                    //再获取该属性下的所有参数的值
-                    foreach ($v as $k2 => $v2) {
-//                    $para[] = ProductCategoryAttrParaModel::db()->getById($v2);
-                        $subRow = $this->searchPcap($ProductLinkCategoryAttrDbData['pcap'], $v2);
-                        $subRow['default_low_sel'] = 0;
-                        $para[]  = $subRow;
-
-                    }
-                    $row['category_attr_para'] = $para;
-                    $productCategoryAttrParaData[] = $row;
-                }
-//            //遍历该产品下的所有商品列表
-                $goods_low_price_row = $goodsDb[0];
-                foreach ($goodsDb as $k => $v) {
-                    if($goods_low_price_row['sale_price'] > $v['sale_price'] ){
-                        $goods_low_price_row = $v;
-                    }
-                    $stock += $v['stock'];
-                    $row = $v;
-                    //获取每个商品对应的  分类属性参数
-                    $linkList = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}",null," pca_id , pcap_id");
-                    $row['goods_link_category_attr'] = $linkList;
-                    $goodsList[]= $row;
-                }
-                //找到最低价格那个，默认把 PCAP 规格参数 给选中 状态
-                foreach ($goodsList as $k=>$v){
-                    if($v['id'] == $goods_low_price_row['id']){
-                        $goods_low_price_row['pcap'] = $v['goods_link_category_attr'];
-                        break;
-                    }
-                }
-
-                foreach ($productCategoryAttrParaData as $k=>$v){
-                    $f = 0;
-                    foreach ($v['category_attr_para'] as $k2=>$v2){
-                        foreach ($goods_low_price_row['pcap'] as $k3=>$v3){
-                            if($v2['id'] == $v3['pcap_id']){
-                                $productCategoryAttrParaData[$k]['category_attr_para'][$k2]['default_low_sel'] = 1;
-                                $f = 1;
-                                break;
-                            }
-                        }
-                        if($f){
-                            break;
-                        }
-                    }
-                }
-            } else {
-                //这里是，空属性的产品
-            }
+            $processProductGoodsInfo = $this->processProductGoodsInfo($product,$ProductLinkCategoryAttrDb);
+            $productCategoryAttrParaData = $processProductGoodsInfo['productCategoryAttrParaData'];
+            $goodsList = $processProductGoodsInfo['goodsList'];
+            $stock = $processProductGoodsInfo['stock'];
+            $goodsLowPriceRow = $processProductGoodsInfo['goodsLowPriceRow'];
         }
 
         $product['goods_list'] = $goodsList;
         $product['pcap'] = $productCategoryAttrParaData;
         $product['stock'] = $stock;
+        $product['goodsLowPriceRow'] = $goodsLowPriceRow;
+
 
         if (arrKeyIssetAndExist($product, 'desc_attr')) {
             $tmp = json_decode($product['desc_attr'], true);
@@ -235,9 +262,6 @@ class ProductService
         } else {
             $product['desc_attr_format'] = "";
         }
-
-//        $orderService = new OrderService();
-//        $product['cart_num'] = $orderService->getUserCartNum($uid)['msg'];
 
         $upService = new UpService();
         $collectService = new CollectService();
@@ -269,7 +293,7 @@ class ProductService
 
 
 //        var_dump(strlen(json_encode($product)));
-//        echo json_encode($product);exit;
+        echo json_encode($product);exit;
 //        var_dump($product);exit;
         return out_pc(200, $product);
     }
