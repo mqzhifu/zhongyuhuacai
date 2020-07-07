@@ -27,7 +27,7 @@ class UserCtrl extends BaseCtrl  {
         }
 
         $user = $userRs['msg'];
-        $user['view_product_history_cnt'] = UserProductLogModel::db()->getCount(" uid = {$this->uid}");
+        $user['view_product_history_cnt'] = UserProductLogModel::db()->getCount(" uid = {$this->uid} order by pid");
         $user['collect_cnt'] = UserCollectionModel::db()->getCount(" uid =  {$this->uid}");
         $user['coupon_cnt'] = CouponModel::db()->getCount(" uid = {$this->uid} and status = 1");
         out_ajax(200,$user);
