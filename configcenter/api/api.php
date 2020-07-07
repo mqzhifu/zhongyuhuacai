@@ -312,7 +312,7 @@ $arr = array(
                     'user_collect_total' => array('type'=>'int','title'=>'用户收藏总数','must'=>0),
                     'user_comment_total' => array('type'=>'int','title'=>'用户总评论数','must'=>0),
                     'recommend' => array('type'=>'int','title'=>'是否推荐首页1是2否','must'=>1),
-                    'recommend_detail' => array('type'=>'int','title'=>'1是2否,推荐详情页','must'=>1),
+                    'recommend_detail' => array('type'=>'int','title'=>'1是2否,推荐详情页','must'=>0),
     //                'goods_list' => array('type'=>'int','title'=>'商品列表','must'=>1),
     //                'pcap' => array('type'=>'int','title'=>'产品参数属性列表','must'=>1),
     //                'goodsLowPriceRow'=>array('type'=>'int','title'=>'最低价的商品','must'=>0),

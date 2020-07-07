@@ -200,6 +200,7 @@ class FilterLib {
     static function checkOneKey($rule,$value){
         if (arrKeyIssetAndExist($rule,'must')) {
             if(!$value){
+                var_dump($rule,$value);
                 self::throwErr("checkOneKey is null");
             }
         }
