@@ -354,7 +354,7 @@ $arr = array(
                     'limit'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'每页多少条'),
                     'record_cnt'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'总记录数'),
                     'page_cnt'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'总页数'),
-                    'list'=>array('must'=>1,'default'=>0,'title'=>'数据列表',
+                    'list'=>array('must'=>0,'default'=>0,'title'=>'数据列表',
                         'subset'=>array("must"=>0,"subset_key"=>'array_number_auto_incr','list'=>array(
                             'subset'=>array("subset_key"=>'obj','must'=>0 ,'list'=>array(
                                 'goods_total' => array('type'=>'string','title'=>'商品总数','must'=>0),
