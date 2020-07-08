@@ -203,6 +203,10 @@ class FilterLib {
                 var_dump($rule,$value);
                 self::throwErr("checkOneKey is null");
             }
+        }else{
+            if(!$value){
+                return "";
+            }
         }
         $value = self::intelligentCheck($rule['type'],$value);
         return $value;
@@ -212,6 +216,10 @@ class FilterLib {
         if (arrKeyIssetAndExist($rule,'must')) {
             if(!$data){
                 self::throwErr("checkArrayNumberAutoIncr is null");
+            }
+        }else{
+            if(!$data){
+                return null;
             }
         }
 
@@ -225,7 +233,7 @@ class FilterLib {
                 $data[$k] = self::apiReturnDataCheckInit( $nextRule ,$v);
             }
         }elseif(!arrKeyIssetAndExist($rule,'subset')){
-            $oneRule = array("type"=>$rule['type'],'must'=>$rule['type']);
+            $oneRule = array("type"=>$rule['type'],'must'=>$rule['must']);
             foreach ($data as $k=>$v){
                 $value = self::checkOneKey($oneRule,$v);
                 $data[$k] = $value;
@@ -246,6 +254,10 @@ class FilterLib {
             if(!$data){
                 self::throwErr("checkObj is null 1");
             }
+        }else{
+            if(!$data){
+                return null;
+            }
         }
 
         if(!is_array($data)){
@@ -261,6 +273,10 @@ class FilterLib {
                     if(!isset($data[$k]) && !$data[$k]){
                         var_dump($k);
                         self::throwErr("checkObj <$k> is null 2");
+                    }
+                }else{
+                    if(!$data){
+                        return null;
                     }
                 }
 

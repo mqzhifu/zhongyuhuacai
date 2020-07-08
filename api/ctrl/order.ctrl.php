@@ -9,19 +9,18 @@ class OrderCtrl extends BaseCtrl  {
     //下单
     function doing(){
 //        $agentUid = get_request_one( $this->request,'agent_uid',0);
-        $couponId = get_request_one( $this->request,'coupon_id',0);
+//        $pid = get_request_one( $this->request,'pid',0);
+//        $gid = get_request_one( $this->request,'gid',0);
+//        $couponId = get_request_one( $this->request,'coupon_id',0);
 
         $share_uid = get_request_one( $this->request,'share_uid',0);
-
         $userSelAddressId = get_request_one( $this->request,'userSelAddressId',0);
-//        $gid = get_request_one( $this->request,'gid',0);
         $gidsNum = get_request_one( $this->request,'gidsNums',0);
-//        $pid = get_request_one( $this->request,'pid',0);
         $memo = get_request_one( $this->request,'memo','');
 
 
-        $rs = $this->orderService->doing($this->uid,$gidsNum,$couponId,$memo,$share_uid,$userSelAddressId);
-        return out_ajax($rs['code'],$rs['msg']);
+        $rs = $this->orderService->doing($this->uid,$gidsNum,"",$memo,$share_uid,$userSelAddressId);
+        return $this->out($rs['code'],$rs['msg']);
     }
     //获取一个用户的所有订单
     function getUserList(){

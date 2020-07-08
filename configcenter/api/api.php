@@ -350,13 +350,13 @@ $arr = array(
             ),
             'return'=>array(
                 'obj'=>array( 'must'=>1,'default'=>1,'title'=>'任意输出','list'=>array(
-                    'page'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'当前请求的页数'),
-                    'limit'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'每页多少条'),
-                    'record_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总记录数'),
-                    'page_cnt'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'总页数'),
-                    'list'=>array('must'=>1,'default'=>1,'title'=>'数据列表',
-                        'subset'=>array("must"=>1,"subset_key"=>'array_number_auto_incr','list'=>array(
-                            'subset'=>array("subset_key"=>'obj','must'=>1 ,'list'=>array(
+                    'page'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'当前请求的页数'),
+                    'limit'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'每页多少条'),
+                    'record_cnt'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'总记录数'),
+                    'page_cnt'=>array('type'=>'int','must'=>0,'default'=>1,'title'=>'总页数'),
+                    'list'=>array('must'=>1,'default'=>0,'title'=>'数据列表',
+                        'subset'=>array("must"=>0,"subset_key"=>'array_number_auto_incr','list'=>array(
+                            'subset'=>array("subset_key"=>'obj','must'=>0 ,'list'=>array(
                                 'goods_total' => array('type'=>'string','title'=>'商品总数','must'=>0),
                                 'id' => array('type'=>'int','title'=>'id','must'=>1),
                                 'pic'=>  array('type'=>'string','title'=>'图片地址','must'=>1),
@@ -558,18 +558,13 @@ $arr = array(
             'ws'=>array('request_code'=>1009,'response_code'=>1010),
             'title'=>'下单',
             'request'=>array(
-                'gid'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'商品ID'),
-                'num'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'购买数量'),
-                'agent_id'=>array('type'=>'int','must'=>0,'default'=>100001,'title'=>'代理ID'),
+                'share_uid'=>array('type'=>'int','must'=>0,'default'=>100001,'title'=>'商品ID'),
+                'userSelAddressId'=>array('type'=>'int','must'=>0,'default'=>100001,'title'=>'购买数量'),
+                'gidsNums'=>array('type'=>'int','must'=>1,'default'=>100001,'title'=>'代理ID'),
+                'memo'=>array('type'=>'int','must'=>0,'default'=>100001,'title'=>'代理ID'),
             ),
             'return'=>array(
-                'array_key_number_two'=>array("must"=>0,'list'=>array(
-                    'uid'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'用户ID'),
-                    'isFollow'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'是否已关注你，1是2否'),
-                    'nickname'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'昵称'),
-                    'avatar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'头像'),
-                    'sex'=>array('type'=>'int','must'=>1,'default'=>1,'title'=>'0未知1男2女'),
-                ),),
+                'scalar'=>array('type'=>'string','must'=>1,'default'=>1,'title'=>'任意输出'),
             ),
         ),
     ),
@@ -913,6 +908,7 @@ $arr = array(
             'return'=>array(
             ),
         ),
+
 
         'unreadNum'=>array(
             'title'=>'未读数',
