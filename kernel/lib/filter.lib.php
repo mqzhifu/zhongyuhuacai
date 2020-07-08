@@ -205,7 +205,7 @@ class FilterLib {
             }
         }else{
             if(!$value){
-                return "";
+                return 0;
             }
         }
         $value = self::intelligentCheck($rule['type'],$value);
@@ -219,7 +219,7 @@ class FilterLib {
             }
         }else{
             if(!$data){
-                return null;
+                return 0;
             }
         }
 
@@ -256,7 +256,7 @@ class FilterLib {
             }
         }else{
             if(!$data){
-                return null;
+                return 0;
             }
         }
 
@@ -276,7 +276,7 @@ class FilterLib {
                     }
                 }else{
                     if(!$data){
-                        return null;
+                        return 0;
                     }
                 }
 
