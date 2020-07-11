@@ -13,6 +13,11 @@ class UserAddressService{
         }
 
         $list = UserAddressModel::db()->getAll($where);
+        if($list){
+            foreach ($list as $k=>$v){
+                $list[$k] = $this->formatRow($v);
+            }
+        }
         return out_pc(200,$list);
     }
 
@@ -30,6 +35,50 @@ class UserAddressService{
         $info['town_cn'] =   $this->getProvinceByCode($info['town_code']);
 
         return out_pc(200,$info);
+    }
+
+    function formatRow($row){
+        $row['province_cn'] = $this->coverProvinceCn( $row['province_code']);
+        $row['county_cn'] = $this->coverProvinceCn( $row['county_code']);
+        $row['city_cn'] = $this->coverProvinceCn( $row['city_code']);
+        $row['town_cn'] = $this->coverProvinceCn( $row['town_code']);
+        return $row;
+    }
+
+    function coverProvinceCn($code,$default = "--"){
+        $province = $this->getProvinceByCode($code) ;
+        if(!$province){
+            return $default;
+        }
+
+        return $province['name'];
+    }
+
+    function coverCityCn($code,$default = "--"){
+        $province = $this->getCityByCode($code) ;
+        if(!$province){
+            return $default;
+        }
+
+        return $province['name'];
+    }
+
+    function coverCountyCn($code,$default = "--"){
+        $province = $this->getCountyByCode($code) ;
+        if(!$province){
+            return $default;
+        }
+
+        return $province['name'];
+    }
+
+    function coverTownCn($code,$default = "--"){
+        $province = $this->getTownByCode($code) ;
+        if(!$province){
+            return $default;
+        }
+
+        return $province['name'];
     }
 
 
