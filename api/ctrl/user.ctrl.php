@@ -108,6 +108,17 @@ class UserCtrl extends BaseCtrl  {
 //        }
 
     }
+
+    function getCollectListCnt(){
+        $cnt = CartModel::db()->getCount(" uid = {$this->uid}");
+        out_ajax(200,$cnt);
+    }
+
+    function viewProductHistoryCnt(){
+        $cnt = UserProductLogModel::db()->getCount(" uid = {$this->uid}");
+        out_ajax(200,$cnt);
+    }
+
     //已收藏的产品列表
     function getCollectList(){
         $list = UserCollectionModel::getListByUid($this->uid);
