@@ -21,6 +21,21 @@ class UserAddressService{
         return out_pc(200,$list);
     }
 
+    function getUserAddressDefault($uid){
+        $list = UserAddressModel::db()->getAll(" uid = $uid ");
+        if(!$list){
+            return out_pc(200,$list);
+        }
+
+        foreach ($list as $k=>$v){
+            if($v['is_default'] == UserAddressService::IS_DEFAULT_TRUE){
+                return out_pc(200,$v);
+            }
+        }
+
+        return out_pc(200,$list[0]);
+    }
+
     function getRowById($id){
         $info = UserAddressService::getById($id);
         if($info['code'] != 200){
