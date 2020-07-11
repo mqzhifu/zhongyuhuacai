@@ -39,9 +39,9 @@ class UserAddressService{
 
     function formatRow($row){
         $row['province_cn'] = $this->coverProvinceCn( $row['province_code']);
-        $row['county_cn'] = $this->coverProvinceCn( $row['county_code']);
-        $row['city_cn'] = $this->coverProvinceCn( $row['city_code']);
-        $row['town_cn'] = $this->coverProvinceCn( $row['town_code']);
+        $row['county_cn'] = $this->coverCountyCn( $row['county_code']);
+        $row['city_cn'] = $this->coverCityCn( $row['city_code']);
+        $row['town_cn'] = $this->coverTownCn( $row['town_code']);
         return $row;
     }
 
