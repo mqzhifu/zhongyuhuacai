@@ -115,7 +115,7 @@ class UserCtrl extends BaseCtrl  {
     }
 
     function viewProductHistoryCnt(){
-        $cnt = UserProductLogModel::db()->getCount(" uid = {$this->uid}");
+        $cnt = UserProductLogModel::db()->getCount(" uid = {$this->uid} group by pid order by id desc");
         out_ajax(200,$cnt);
     }
 
@@ -154,6 +154,7 @@ class UserCtrl extends BaseCtrl  {
         }
         out_ajax(200,$rs);
     }
+
     //浏览产品 - 历史 记录
     function viewProductHistory(){
         $uid = $this->uid;
