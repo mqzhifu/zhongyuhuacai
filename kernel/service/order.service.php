@@ -53,7 +53,7 @@ class OrderService{
             }
 
             if(!$goods['stock'] || $goods['stock'] < 0){
-                return out_pc(8336);
+                return out_pc(8336,array($gid));
             }
 
             $product = ProductModel::db()->getById($goods['pid']);
@@ -141,6 +141,7 @@ class OrderService{
 
         //优惠卷
         $couponPrice = 0;
+        $couponId = "";
         if($couponId){
             $couponInfo = CouponModel::db()->getById($couponId);
             if($couponInfo){

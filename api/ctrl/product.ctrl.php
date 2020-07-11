@@ -116,8 +116,11 @@ class ProductCtrl extends BaseCtrl  {
         $id = get_request_one( $this->request,'id',0);
         $title = get_request_one( $this->request,'title','');
         $content = get_request_one( $this->request,'content','');
+        $pic = get_request_one( $this->request,'pic','');
+        $star = get_request_one( $this->request,'star','');
 
-        $newId = $this->commentService->add($this->uid,$id,$title,$content);
+
+        $newId = $this->commentService->add($this->uid,$id,$title,$content,$pic,$star);
         out_ajax(200,$newId);
     }
     //获取产品 - 评论列表

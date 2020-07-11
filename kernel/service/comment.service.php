@@ -43,7 +43,7 @@ class CommentService{
         return $data;
     }
 
-    function add($uid,$pid,$title,$content = "",$pic = ""){
+    function add($uid,$pid,$title,$content = "",$pic = "",$star){
         if(!$uid){
             return out_pc(8002);
         }
@@ -63,6 +63,7 @@ class CommentService{
             'pid'=>$pid,
             'uid'=>$uid,
             'pic'=>$pic,
+            'star'=>$star,
         );
         $newId = UserCommentModel::db()->add($data);
 
