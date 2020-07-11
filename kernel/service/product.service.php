@@ -455,6 +455,9 @@ class ProductService
 
         $pageInfo = PageLib::getPageInfo($cnt, $limit, $page);
         $where .= " $order limit {$pageInfo['start']} , {$pageInfo['end']}  ";
+
+        LogLib::inc()->debug($where);
+
         $list = ProductModel::db()->getAll($where);
 
 
