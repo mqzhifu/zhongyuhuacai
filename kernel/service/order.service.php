@@ -141,7 +141,7 @@ class OrderService{
 
         //优惠卷
         $couponPrice = 0;
-        $couponId = "";
+        $couponId = 0;
         if($couponId){
             $couponInfo = CouponModel::db()->getById($couponId);
             if($couponInfo){
