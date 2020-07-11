@@ -6,8 +6,13 @@ class UserAddressService{
         self::IS_DEFAULT_TRUE =>"是",
         self::IS_DEFAULT_TRUE =>"否",
     ];
-    function getList($uid){
-        $list = UserAddressModel::db()->getAll(" uid = {$uid} and is_default = ".UserAddressService::IS_DEFAULT_TRUE);
+    function getList($uid,$is_default = 0){
+        $where = "uid = {$uid}";
+        if($is_default){
+            $where .= "  and is_default = ".UserAddressService::IS_DEFAULT_TRUE;
+        }
+
+        $list = UserAddressModel::db()->getAll($where);
         return out_pc(200,$list);
     }
 

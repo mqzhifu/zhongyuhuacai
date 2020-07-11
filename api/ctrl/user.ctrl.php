@@ -170,8 +170,13 @@ class UserCtrl extends BaseCtrl  {
         out_ajax(200,$productList);
     }
 
-    function getAddress(){
+    function getAddressList(){
         $list = $this->userAddressService->getList($this->uid);
+        out_ajax(200,$list['msg']);
+    }
+
+    function getAddress(){
+        $list = $this->userAddressService->getList($this->uid,1);
         out_ajax(200,$list['msg']);
 
     }
