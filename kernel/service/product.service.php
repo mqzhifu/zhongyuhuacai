@@ -442,6 +442,7 @@ class ProductService
         if (arrKeyIssetAndExist($condition, 'orderType')) {
             $order .= " order by " . self::ORDER_TYPE[$condition['orderType']]['field'];
             if ($order == 'lowest_price') {
+                LogLib::inc()->debug($condition);
                 if (arrKeyIssetAndExist($condition, 'orderUpDown')) {
                     $order .= " desc ";
                 } else {
