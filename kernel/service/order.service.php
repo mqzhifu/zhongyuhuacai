@@ -53,7 +53,7 @@ class OrderService{
             }
 
             if(!$goods['stock'] || $goods['stock'] < 0){
-                return out_pc(8336,array($gid));
+                return out_pc(8336,"库存不足：gid $gid");
             }
 
             $product = ProductModel::db()->getById($goods['pid']);
