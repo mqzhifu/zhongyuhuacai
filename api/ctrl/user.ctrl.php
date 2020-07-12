@@ -178,6 +178,12 @@ class UserCtrl extends BaseCtrl  {
     function getUserAddressDefault(){
         $list = $this->userAddressService->getUserAddressDefault($this->uid,1);
         out_ajax($list['code'],$list['msg']);
+    }
 
+    function getAddressById(){
+        $id = get_request_one($this->request,'id',0);
+        $row = UserAddressModel::db()->getById($id);
+
+        out_ajax(200,$row);
     }
 }
