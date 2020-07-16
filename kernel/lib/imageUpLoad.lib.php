@@ -83,10 +83,10 @@ class ImageUpLoadLib{
             $extFileType = 'png';
         }
 
-        //这个验证就比较关键了，防止用户上传恶意文件~
-        //但实际上黑客还是能攻击，但至少能防一些低级的攻击者
-        $extFileType = $this->getFileType($_FILE["tmp_name"]);
-        if(!$isVideo){//视频就不做校验了，权宜之计
+        if(!$isVideo){//视频就不做校验了，权宜之计，视频先不做处理
+            //这个验证就比较关键了，防止用户上传恶意文件~
+            //但实际上黑客还是能攻击，但至少能防一些低级的攻击者
+            $extFileType = $this->getFileType($_FILE["tmp_name"]);
             if(!in_array($extFileType,$this->fileType)){
                 exit($errInfo . " tmp_name  type error");
             }
