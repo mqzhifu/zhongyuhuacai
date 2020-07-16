@@ -82,7 +82,7 @@ class UploadService
     function commentVideo($postInputName){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();
-        $rs = $lib->upLoadOneFile($postInputName,'comment',array('mp4','avi','flv',"mkv",'rmvb','wmv','rm'),0);
+        $rs = $lib->upLoadOneFile($postInputName,'comment',array('mp4','avi','flv',"mkv",'rmvb','wmv','rm'),0,null,1);
         return $rs;
     }
 

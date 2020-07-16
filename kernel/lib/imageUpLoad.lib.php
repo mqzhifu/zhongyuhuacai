@@ -15,7 +15,7 @@ class ImageUpLoadLib{
 
     }
 
-    function realUpLoadOneFile($postInputName,$path ,$allowFileTypes = array(),$useHash = 0,$fileName = ""){
+    function realUpLoadOneFile($postInputName,$path ,$allowFileTypes = array(),$useHash = 0,$fileName = "",$isVideo = 0){
         $errInfo = " upLoadOneFile ";
         if(!is_dir($path))
             exit($errInfo." path not dir");
@@ -86,9 +86,12 @@ class ImageUpLoadLib{
         //这个验证就比较关键了，防止用户上传恶意文件~
         //但实际上黑客还是能攻击，但至少能防一些低级的攻击者
         $extFileType = $this->getFileType($_FILE["tmp_name"]);
-        if(!in_array($extFileType,$this->fileType)){
-            exit($errInfo . " tmp_name  type error");
+        if(!$isVideo){//视频就不做校验了，权宜之计
+            if(!in_array($extFileType,$this->fileType)){
+                exit($errInfo . " tmp_name  type error");
+            }
         }
+
 
         $createFileName = date("YmdHis")."_" .rand(1000,9999);
         if($fileName){
@@ -119,16 +122,14 @@ class ImageUpLoadLib{
     //$path:文件上传路径
     //$fileType：文件类型|文件扩展名
     //$postNames:input name
-    function upLoadOneFile($postInputName,$module ,$allowFileTypes = array(),$useHash = 0 ,$fileName = "" ){
+    function upLoadOneFile($postInputName,$module ,$allowFileTypes = array(),$useHash = 0 ,$fileName = "" ,$isVideo = 0){
         $errInfo = " upLoadOneFile ";
         if(!$module){
             exit($errInfo." module is null");
         }
 
-
-
         $path = $this->path . DS . get_upload_cdn_evn() . DS .$module;
-        return $this->realUpLoadOneFile($postInputName,$path,$allowFileTypes,$useHash,$fileName);
+        return $this->realUpLoadOneFile($postInputName,$path,$allowFileTypes,$useHash,$fileName,$isVideo);
     }
 	//上传多文件
 	function upLoad(){
