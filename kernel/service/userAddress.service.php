@@ -140,7 +140,7 @@ class UserAddressService{
             'county_code'=>$data['county_code'],
             'town_code'=>$data['town_code'],
             'mobile'=>$data['mobile'],
-            'uid'=>$data['uid'],
+            'uid'=>$uid,
             'name'=>$data['name'],
             'address'=>$data['address'],
             'uid'=>$uid,
