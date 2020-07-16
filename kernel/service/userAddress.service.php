@@ -152,9 +152,9 @@ class UserAddressService{
         }
 
         if(!$editId){
-            $newId = UserAddressModel::db()->add($data);
+            $newId = UserAddressModel::db()->add($addData);
         }else{
-            $newId = UserAddressModel::db()->upById($editId,$data);
+            $newId = UserAddressModel::db()->upById($editId,$addData);
         }
 
         return out_pc(200,$newId);
