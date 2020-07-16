@@ -52,7 +52,7 @@ class CommentService{
             return out_pc(8981);
         }
 
-        if(!$content){
+        if(!$title){
             return out_pc(8975);
         }
 
@@ -60,10 +60,8 @@ class CommentService{
         $orderDetail = $orderService->getOneDetail($oid);
 
 
-        var_dump($orderDetail);exit;
-
         $data = array("user_comment_total"=>array(1));
-        ProductModel::db()->upById($orderDetail[0]['id'],$data);
+        ProductModel::db()->upById($orderDetail['msg'][0]['id'],$data);
 
 
 
@@ -78,10 +76,6 @@ class CommentService{
             'oid'=>$oid,
         );
         $newId = UserCommentModel::db()->add($data);
-
-
-
-
         return out_pc(200,$newId);
     }
 

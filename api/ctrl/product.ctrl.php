@@ -140,8 +140,8 @@ class ProductCtrl extends BaseCtrl  {
         $star = get_request_one( $this->request,'star','');
         $pic = get_request_one( $this->request,'pic','');
 
-        $newId = $this->commentService->add($this->uid,$oid,$title,$content,$pic,$star);
-        out_ajax(200,$newId);
+        $rs = $this->commentService->add($this->uid,$oid,$title,$content,$pic,$star);
+        out_ajax($rs['code'],$rs['msg']);
     }
     //获取产品 - 评论列表
     function getCommentList(){
