@@ -60,6 +60,10 @@ class CommentService{
         $orderDetail = $orderService->getOneDetail($oid);
 
 
+        $existComment = UserCommentModel::db()->getRow(" oid = $oid and uid = $uid");
+        if($existComment){
+            return out_pc(8384);
+        }
         $data = array("user_comment_total"=>array(1));
         ProductModel::db()->upById($orderDetail['msg'][0]['id'],$data);
 

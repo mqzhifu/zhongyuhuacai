@@ -414,4 +414,5 @@ return array(
     8381=>"address id is null",
     8382=>"address uid 不属于 {}",
     8383=>"str is null",
+    8384=>"请不要重复评论",
 );
