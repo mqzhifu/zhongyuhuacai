@@ -79,5 +79,9 @@ class CommentService{
         return out_pc(200,$newId);
     }
 
+    function getRowById($id){
+        return UserCommentModel::db()->getById($id);
+    }
+
 
 }

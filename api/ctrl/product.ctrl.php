@@ -122,22 +122,22 @@ class ProductCtrl extends BaseCtrl  {
         $oid = get_request_one( $this->request,'oid',0);
         $cid = get_request_one( $this->request,'cid',0);
 
-
-
-        exit;
-
         $uploadRs = $this->uploadService->comment('comment');
         if($uploadRs['code'] != 200){
             exit(" uploadService->comment error ".json_encode($uploadRs));
         }
 
-        $data['avatar'] = $uploadRs['msg'];
-        $this->userService->upUserInfo($this->uid,$data);
+        $comment = $this->commentService->getRowById($cid);
 
+        $picUrl = $uploadRs['msg'];
+        $upData = array(
+            "pic"=>$comment['pic'] . ",".$picUrl
+        );
+        UserCommentModel::db()->upById($cid,$upData);
+//        $avatarUrl = get_avatar_url( $data['avatar']);
 
-        $avatarUrl = get_avatar_url( $data['avatar']);
-
-        out_ajax(200,$avatarUrl);
+        $url = get_comment_url($picUrl);
+        out_ajax(200,$url);
     }
 
     //评论
