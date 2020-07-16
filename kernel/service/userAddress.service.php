@@ -151,7 +151,7 @@ class UserAddressService{
             $addData['is_default'] = self::IS_DEFAULT_TRUE;
         }
 
-        if($editId){
+        if(!$editId){
             $newId = UserAddressModel::db()->add($data);
         }else{
             $newId = UserAddressModel::db()->upById($editId,$data);
