@@ -111,12 +111,31 @@ class ProductCtrl extends BaseCtrl  {
     }
 
     function uploadCommentVideo(){
+        LogLib::inc()->debug(['uploadComment video',$_REQUEST]);
+        LogLib::inc()->debug(['php $_FILES ',$_FILES]);
 
+
+        $oid = get_request_one( $this->request,'oid',0);
+        $cid = get_request_one( $this->request,'cid',0);
+
+        $uploadRs = $this->uploadService->commentVideo('comment');
+        if($uploadRs['code'] != 200){
+            exit(" uploadService->comment error ".json_encode($uploadRs));
+        }
+
+        $url = $uploadRs['msg'];
+        $upData = array(
+            "video"=>$url
+        );
+        UserCommentModel::db()->upById($cid,$upData);
+
+        $url = get_comment_url($url);
+        out_ajax(200,$url);
     }
 
     function uploadCommentPic(){
         LogLib::inc()->debug(['uploadCommentPic',$_REQUEST]);
-        LogLib::inc()->debug(["php fifle",$_FILES]);
+        LogLib::inc()->debug(['php $_FILES ',$_FILES]);
 
 
         $oid = get_request_one( $this->request,'oid',0);
@@ -128,10 +147,13 @@ class ProductCtrl extends BaseCtrl  {
         }
 
         $comment = $this->commentService->getRowById($cid);
-
+        $commentOldPicStr = "";
+        if(arrKeyIssetAndExist($comment,'pic')){
+            $commentOldPicStr = $comment['pic'] . ",";
+        }
         $picUrl = $uploadRs['msg'];
         $upData = array(
-            "pic"=>$comment['pic'] . ",".$picUrl
+            "pic"=>$commentOldPicStr . $picUrl
         );
         UserCommentModel::db()->upById($cid,$upData);
 //        $avatarUrl = get_avatar_url( $data['avatar']);

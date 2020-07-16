@@ -79,6 +79,13 @@ class UploadService
         return $rs;
     }
 
+    function commentVideo($postInputName){
+        $lib = new ImageUpLoadLib();
+        $lib->path = $this->getAdminProjectDir();
+        $rs = $lib->upLoadOneFile($postInputName,'comment',array('mp4','avi','flv',"mkv",'rmvb','wmv','rm'),0);
+        return $rs;
+    }
+
     function factory($postInputName){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();
