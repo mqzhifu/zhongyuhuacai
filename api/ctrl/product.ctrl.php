@@ -118,6 +118,14 @@ class ProductCtrl extends BaseCtrl  {
         LogLib::inc()->debug(['uploadCommentPic',$_REQUEST]);
         LogLib::inc()->debug(["php fifle",$_FILES]);
 
+
+        $oid = get_request_one( $this->request,'oid',0);
+        $cid = get_request_one( $this->request,'cid',0);
+
+
+
+        exit;
+
         $uploadRs = $this->uploadService->comment('comment');
         if($uploadRs['code'] != 200){
             exit(" uploadService->comment error ".json_encode($uploadRs));
