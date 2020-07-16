@@ -118,9 +118,9 @@ class UserAddressService{
 
         $this->checkArea($data);
 
-        if(!arrKeyIssetAndExist($data,'uid')){
-            return out_pc(8002);
-        }
+//        if(!arrKeyIssetAndExist($data,'uid')){
+//            return out_pc(8002);
+//        }
 
         if(!arrKeyIssetAndExist($data,'mobile')){
             return out_pc(8364);
@@ -173,9 +173,9 @@ class UserAddressService{
             return out_pc(8361);
         }
 
-        if(!arrKeyIssetAndExist($data,'town_code')){
-            return out_pc(8362);
-        }
+//        if(!arrKeyIssetAndExist($data,'town_code')){
+//            return out_pc(8362);
+//        }
 
         if(!$this->getProvinceByCode($data['province_code'])){
             return out_pc(1030);
@@ -189,9 +189,9 @@ class UserAddressService{
             return out_pc(1032);
         }
 
-        if(!$this->getTownByCode($data['town_code'])){
-            return out_pc(1033);
-        }
+//        if(!$this->getTownByCode($data['town_code'])){
+//            return out_pc(1033);
+//        }
 
         return out_pc(200);
     }
