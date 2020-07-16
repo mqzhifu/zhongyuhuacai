@@ -43,32 +43,45 @@ class CommentService{
         return $data;
     }
 
-    function add($uid,$pid,$title,$content = "",$pic = "",$star){
+    function add($uid,$oid,$title,$content = "",$pic = "",$star){
         if(!$uid){
             return out_pc(8002);
         }
 
-        if(!$pid){
-            return out_pc(8072);
+        if(!$oid){
+            return out_pc(8981);
         }
 
-        if(!$title){
+        if(!$content){
             return out_pc(8975);
         }
+
+        $orderService = new OrderService();
+        $orderDetail = $orderService->getOneDetail($oid);
+
+
+        var_dump($orderDetail);exit;
+
+        $data = array("user_comment_total"=>array(1));
+        ProductModel::db()->upById($orderDetail[0]['id'],$data);
+
+
 
         $data = array(
             'title'=>$title,
             'content'=>$content,
             'a_time'=>time(),
-            'pid'=>$pid,
+            'pid'=>0,
             'uid'=>$uid,
             'pic'=>$pic,
             'star'=>$star,
+            'oid'=>$oid,
         );
         $newId = UserCommentModel::db()->add($data);
 
-        $data = array("user_comment_total"=>array(1));
-        ProductModel::db()->upById($pid,$data);
+
+
+
         return out_pc(200,$newId);
     }
 

@@ -110,17 +110,37 @@ class ProductCtrl extends BaseCtrl  {
         return $this->out(200,$rs['msg']);
     }
 
+    function uploadCommentVideo(){
+
+    }
+
+    function uploadCommentPic(){
+        LogLib::inc()->debug(['uploadCommentPic',$_REQUEST]);
+        LogLib::inc()->debug(["php fifle",$_FILES]);
+
+        $uploadRs = $this->uploadService->comment('comment');
+        if($uploadRs['code'] != 200){
+            exit(" uploadService->comment error ".json_encode($uploadRs));
+        }
+
+        $data['avatar'] = $uploadRs['msg'];
+        $this->userService->upUserInfo($this->uid,$data);
+
+
+        $avatarUrl = get_avatar_url( $data['avatar']);
+
+        out_ajax(200,$avatarUrl);
+    }
 
     //评论
     function comment(){
-        $id = get_request_one( $this->request,'id',0);
+        $oid = get_request_one( $this->request,'oid',0);
         $title = get_request_one( $this->request,'title','');
         $content = get_request_one( $this->request,'content','');
-        $pic = get_request_one( $this->request,'pic','');
         $star = get_request_one( $this->request,'star','');
+        $pic = get_request_one( $this->request,'pic','');
 
-
-        $newId = $this->commentService->add($this->uid,$id,$title,$content,$pic,$star);
+        $newId = $this->commentService->add($this->uid,$oid,$title,$content,$pic,$star);
         out_ajax(200,$newId);
     }
     //获取产品 - 评论列表
