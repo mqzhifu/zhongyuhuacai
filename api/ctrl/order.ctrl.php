@@ -72,7 +72,7 @@ class OrderCtrl extends BaseCtrl  {
     function getOneDetail(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
         $order = $this->orderService->getOneDetail($id);
-        return out_pc(200,$order);
+        return out_pc($order['code'],$order['msg']);
     }
     //取消一个订单
     function cancel(){
