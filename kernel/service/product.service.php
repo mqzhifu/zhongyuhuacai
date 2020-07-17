@@ -22,7 +22,7 @@ class ProductService
         return ProductModel::db()->getCount($where);
     }
 
-    function getRecommendList($page = 1, $limit = 3, $type)
+    function getRecommendList($page = 1, $limit = 3, $type ,$uid)
     {
         $returnPageInfo = array(
             'page' => $page,
@@ -51,6 +51,19 @@ class ProductService
         $list = $this->getListByDb($where, $pageInfo['start'], $pageInfo['end']);
         $list = $this->format($list);
         $list = $this->formatShow($list);
+
+
+        if ($uid) {
+            foreach ($list as $k => $v) {
+                $userHasCart = 0;
+                $dbRs = CartModel::db()->getRow(" pid = {$v['id']} and uid = $uid");
+                if ($dbRs) {
+                    $userHasCart = 1;
+                }
+                $list[$k]['has_cart'] = $userHasCart;
+            }
+        }
+
 
         $returnPageInfo['page'] = $page;
         $returnPageInfo['limit'] = $limit;

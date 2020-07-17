@@ -35,7 +35,7 @@ class ProductCtrl extends BaseCtrl  {
         $type = get_request_one( $this->request,'type',1);
         $page = get_request_one( $this->request,'page',1);
         $limit = get_request_one( $this->request,'limit',3);
-        $rs = $this->productService->getRecommendList($page,$limit,$type);
+        $rs = $this->productService->getRecommendList($page,$limit,$type,$this->uid);
 
         return $this->out($rs['code'],$rs['msg']);
     }
