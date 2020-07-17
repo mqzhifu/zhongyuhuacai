@@ -50,8 +50,6 @@ class ProductService
         $pageInfo = PageLib::getPageInfo($cnt, $limit, $page);
         $list = $this->getListByDb($where, $pageInfo['start'], $pageInfo['end']);
         $list = $this->format($list);
-        $list = $this->formatShow($list);
-
 
         if ($uid) {
             foreach ($list as $k => $v) {
@@ -63,6 +61,11 @@ class ProductService
                 $list[$k]['has_cart'] = $userHasCart;
             }
         }
+
+        $list = $this->formatShow($list);
+
+
+
 
 
         $returnPageInfo['page'] = $page;
