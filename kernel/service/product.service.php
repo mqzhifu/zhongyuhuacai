@@ -32,9 +32,9 @@ class ProductService
             'list' => null,
         );
 
-        if ($type == 1) {
+        if ($type == 2) {
             $where = " recommend_detail = " . ProductModel::RECOMMEND_TRUE;
-        } else {
+        } elseif ($type == 1) {
             $where = " recommend = " . ProductModel::RECOMMEND_TRUE;
         }
 
