@@ -56,7 +56,7 @@ class LoginCtrl extends BaseCtrl {
         if($loginRs['code'] == 200){//登陆成功
             //返回token
             $return['token'] = $loginRs['msg'];
-            return $this->out(200,$return);
+            out_ajax(200,$return);
         }
         //正常登陆没问题，但，DB中找不到此用户，默认就要走注册流程了
         if($loginRs['code'] == 1006){
@@ -70,10 +70,10 @@ class LoginCtrl extends BaseCtrl {
             $return['token'] = $token;
             LogLib::inc()->debug("create token:$token");
             $return['isReg'] = 1;
-            return $this->out(200,$return);
+            out_ajax( 200,$return);
 //            out_ajax(200,$return);
         }else{
-            return $this->out($loginRs['code'],$loginRs['msg']);
+            out_ajax($loginRs['code'],$loginRs['msg']);
 //            out_ajax($loginRs['code'],$loginRs['msg']);
         }
 
