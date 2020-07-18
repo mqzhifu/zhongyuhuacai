@@ -13,7 +13,7 @@ class CommentService{
 
         $list = $this->format($list);
 
-        return out_pc(200,$this->format($list));
+        return out_pc(200,$list);
     }
 
     function format($list){
@@ -25,9 +25,21 @@ class CommentService{
         $data = null;
         foreach ($list as $k=>$v){
             $row = $v;
+            $picsUrl = "";
             if(arrKeyIssetAndExist($v,'pic')){
-                $row['pic'] = get_comment_url($v['pic']);
+                $pics = explode(",",$v['pic']);
+                $picsUrl = [];
+                foreach ($pics as $k2=>$v2){
+                    $picsUrl[] = get_comment_url($v2);
+                }
             }
+
+            if(arrKeyIssetAndExist($v,'video')){
+                $picsUrl[]  = get_comment_url($v['video']);
+            }
+
+            $row['pic'] = $picsUrl;
+
             if(arrKeyIssetAndExist($v,'uid')){
                 $userRs =$userService->getUinfoById($v['uid']);
                 $row['nickname'] = $userRs['msg']['nickname'];
