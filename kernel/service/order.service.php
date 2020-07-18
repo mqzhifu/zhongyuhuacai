@@ -381,6 +381,10 @@ class OrderService{
         return out_pc(200,$rs);
     }
 
+    function getRowById($id){
+        return OrderModel::db()->getById($id);
+    }
+
     function getOneDetail($id){
         if(!$id){
             return out_pc(8981);

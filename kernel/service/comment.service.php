@@ -57,30 +57,33 @@ class CommentService{
         }
 
         $orderService = new OrderService();
-        $orderDetail = $orderService->getOneDetail($oid);
+        $orderDetail = $orderService->getRowById($oid);
+        $pids = explode(",",$orderDetail['pids']);
 
+//        $existComment = UserCommentModel::db()->getRow(" oid = $oid and uid = $uid");
+//        if($existComment){
+//            return out_pc(8384);
+//        }
 
-        $existComment = UserCommentModel::db()->getRow(" oid = $oid and uid = $uid");
-        if($existComment){
-            return out_pc(8384);
+        $newIds = null;
+        foreach ($pids as $k=>$v){
+            $data = array("user_comment_total"=>array(1));
+            ProductModel::db()->upById($v,$data);
+
+            $data = array(
+                'title'=>$title,
+                'content'=>$content,
+                'a_time'=>time(),
+                'pid'=>$v,
+                'uid'=>$uid,
+                'pic'=>$pic,
+                'star'=>$star,
+                'oid'=>$oid,
+            );
+            $newId = UserCommentModel::db()->add($data);
+            $newIds[] = $newId;
         }
-        $data = array("user_comment_total"=>array(1));
-        ProductModel::db()->upById($orderDetail['msg'][0]['id'],$data);
-
-
-
-        $data = array(
-            'title'=>$title,
-            'content'=>$content,
-            'a_time'=>time(),
-            'pid'=>0,
-            'uid'=>$uid,
-            'pic'=>$pic,
-            'star'=>$star,
-            'oid'=>$oid,
-        );
-        $newId = UserCommentModel::db()->add($data);
-        return out_pc(200,$newId);
+        return out_pc(200,$newIds);
     }
 
     function getRowById($id){
