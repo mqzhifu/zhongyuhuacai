@@ -116,6 +116,30 @@ class ProductCtrl extends BaseCtrl  {
         return $this->out(200,$rs['msg']);
     }
 
+    //用户上传 - 评论 视频封面图
+    function uploadCommentVideoTopPic(){
+        LogLib::inc()->debug(['uploadComment video top pic',$_REQUEST]);
+        LogLib::inc()->debug(['php $_FILES ',$_FILES]);
+
+        $oid = get_request_one( $this->request,'oid',0);
+        $cid = get_request_one( $this->request,'cid',0);
+
+        $uploadRs = $this->uploadService->comment('comment');
+        if($uploadRs['code'] != 200){
+            exit(" uploadService->comment error ".json_encode($uploadRs));
+        }
+
+        $url = $uploadRs['msg'];
+        $upData = array(
+            "video_thumb"=>$url
+        );
+        UserCommentModel::db()->upById($cid,$upData);
+
+        $url = get_comment_url($url);
+        out_ajax(200,$url);
+    }
+
+    //用户上传 - 评论视频
     function uploadCommentVideo(){
         LogLib::inc()->debug(['uploadComment video',$_REQUEST]);
         LogLib::inc()->debug(['php $_FILES ',$_FILES]);
@@ -138,7 +162,7 @@ class ProductCtrl extends BaseCtrl  {
         $url = get_comment_url($url);
         out_ajax(200,$url);
     }
-
+    //用户上传 - 评论图片
     function uploadCommentPic(){
         LogLib::inc()->debug(['uploadCommentPic',$_REQUEST]);
         LogLib::inc()->debug(['php $_FILES ',$_FILES]);
