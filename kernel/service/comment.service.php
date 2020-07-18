@@ -34,8 +34,13 @@ class CommentService{
                 }
             }
 
+
+            if(arrKeyIssetAndExist($v,'video_thumb')){
+                $picsUrl[]  = get_comment_url($v['video_thumb']);
+            }
+
             if(arrKeyIssetAndExist($v,'video')){
-                $picsUrl[]  = get_comment_url($v['video']);
+                $row['video']  = get_comment_url($v['video']);
             }
 
             $row['pic'] = $picsUrl;
