@@ -20,7 +20,7 @@ class UserAddressService{
         }
         return out_pc(200,$list);
     }
-
+    //获取用户的，一个默认收货地址，如果没有，就选择随便选择一个
     function getUserAddressDefault($uid){
         $list = UserAddressModel::db()->getAll(" uid = $uid ");
         if(!$list){
@@ -149,7 +149,7 @@ class UserAddressService{
 
         if(arrKeyIssetAndExist($data,'is_default')){
             //先把之前已经 设置成默认收货地址 置0
-            UserAddressModel::db()->update(array("is_default"=>0,"uid = {$uid} limit 100" ));
+            UserAddressModel::db()->update(array("is_default"=>self::IS_DEFAULT_FALSE,"uid = {$uid} limit 100" ));
             $addData['is_default'] = self::IS_DEFAULT_TRUE;
         }
 
