@@ -46,7 +46,8 @@ class UserCtrl extends BaseCtrl  {
     }
     //添加一个收货地址
     function addAddress($request){
-        $rs =  $this->userAddressService->addOne($this->uid,$request,0);
+        $edit_id =  get_request_one($request,'edit_id',0);
+        $rs =  $this->userAddressService->addOne($this->uid,$request,$edit_id);
         out_ajax($rs['code'],$rs['msg']);
     }
     //用户反馈
