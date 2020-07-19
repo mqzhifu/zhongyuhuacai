@@ -115,7 +115,7 @@ class UserAddressService{
     }
 
     function addOne($uid,$data,$editId = 0){
-        if(!arrKeyIssetAndExist($data,'uid')){
+        if(!$uid){
             return out_pc(8002);
         }
 
