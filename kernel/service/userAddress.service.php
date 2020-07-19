@@ -149,7 +149,8 @@ class UserAddressService{
 
         if(arrKeyIssetAndExist($data,'is_default')){
             //先把之前已经 设置成默认收货地址 置0
-            UserAddressModel::db()->update(array("is_default"=>self::IS_DEFAULT_FALSE,"uid = {$uid} limit 100" ));
+            $data = array("is_default"=>self::IS_DEFAULT_FALSE);
+            UserAddressModel::db()->update($data,"uid = {$uid} limit 100" );
             $addData['is_default'] = self::IS_DEFAULT_TRUE;
         }
 
