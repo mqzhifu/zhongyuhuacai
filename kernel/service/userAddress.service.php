@@ -115,12 +115,9 @@ class UserAddressService{
     }
 
     function addOne($uid,$data,$editId = 0){
-
-        $this->checkArea($data);
-
-//        if(!arrKeyIssetAndExist($data,'uid')){
-//            return out_pc(8002);
-//        }
+        if(!arrKeyIssetAndExist($data,'uid')){
+            return out_pc(8002);
+        }
 
         if(!arrKeyIssetAndExist($data,'mobile')){
             return out_pc(8364);
@@ -133,6 +130,8 @@ class UserAddressService{
         if(!arrKeyIssetAndExist($data,'address')){
             return out_pc(8365);
         }
+        //检查  省市县镇
+//        $this->checkArea($data);
 
         $addData = array(
             'province_code'=>$data['province_code'],
@@ -149,6 +148,8 @@ class UserAddressService{
         );
 
         if(arrKeyIssetAndExist($data,'is_default')){
+            //先把之前已经 设置成默认收货地址 置0
+            UserAddressModel::db()->update(array("is_default"=>0,"uid = {$uid} limit 100" ));
             $addData['is_default'] = self::IS_DEFAULT_TRUE;
         }
 
