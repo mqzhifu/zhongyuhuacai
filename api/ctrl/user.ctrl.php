@@ -184,6 +184,6 @@ class UserCtrl extends BaseCtrl  {
         $id = get_request_one($this->request,'id',0);
         $row = $this->userAddressService->getById($id);
 
-        out_ajax(200,$row);
+        out_ajax($row['code'],$row['msg']);
     }
 }
