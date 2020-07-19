@@ -182,7 +182,7 @@ class UserCtrl extends BaseCtrl  {
 
     function getAddressById(){
         $id = get_request_one($this->request,'id',0);
-        $row = UserAddressModel::db()->getById($id);
+        $row = $this->userAddressService->getById($id);
 
         out_ajax(200,$row);
     }

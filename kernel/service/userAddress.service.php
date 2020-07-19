@@ -272,6 +272,12 @@ class UserAddressService{
 
     function getById($id){
         $row = UserAddressModel::db()->getRow($id);
+        if(!$row){
+            return out_pc(200,$row);
+        }
+
+        $row = $this->formatRow($row);
+
         return out_pc(200,$row);
     }
 
