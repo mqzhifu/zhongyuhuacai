@@ -67,7 +67,6 @@ class ProductService
         }
 
         $product = $this->formatRow($product,$uid,$upPvUv);
-        var_dump($product);exit;
         return out_pc(200, $product);
     }
     //产品推荐列表
@@ -423,6 +422,7 @@ class ProductService
                 $pic = get_product_url($pic[0]);
             }
 
+            var_dump($row);
             $newRow = array(
                 'id' => $row['id'],
                 'goods_total' => $row['goods_total'],
