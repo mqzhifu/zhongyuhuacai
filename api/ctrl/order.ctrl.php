@@ -57,9 +57,10 @@ class OrderCtrl extends BaseCtrl  {
         $type = $agentUid =get_request_one( $this->request,'type',0);
         $reason = $agentUid =get_request_one( $this->request,'reason',0);
         $content = $agentUid =get_request_one( $this->request,'content',0);
-        $pic = $agentUid =get_request_one( $this->request,'pic',0);
+        $pic = $agentUid =get_request_one( $this->request,'pic',"");
+        $mobile = $agentUid =get_request_one( $this->request,'mobile',"");
 
-        $rs = $this->orderService->applyRefund($id,$this->uid,$type,$reason,$content,$pic);
+        $rs = $this->orderService->applyRefund($id,$this->uid,$type,$content,$reason,$pic,$mobile);
         out_ajax($rs['code'],$rs['msg']);
     }
     //用户申请退款记录列表

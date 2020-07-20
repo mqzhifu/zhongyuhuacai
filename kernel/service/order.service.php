@@ -305,7 +305,7 @@ class OrderService{
         return out_pc(200);
     }
     //申请退款
-    function applyRefund($oid,$uid,$type,$content,$reason,$pic){
+    function applyRefund($oid,$uid,$type,$content,$reason,$pic,$mobile){
         if(!$oid){
             return out_pc(8981);
         }
@@ -314,12 +314,17 @@ class OrderService{
             return out_pc(1029);
         }
 
+        $exist = OrderRefundModel::db()->getRow(" oid = $oid");
+        if($exist){
+
+        }
+
         $allowStatus = array(
             OrderModel::STATUS_WAIT_PAY,OrderModel::STATUS_SIGN_IN,OrderModel::STATUS_TRANSPORT
         );
-        if(!in_array($orders['status'],$allowStatus)){
-            return out_pc(8353);
-        }
+//        if(!in_array($orders['status'],$allowStatus)){
+//            return out_pc(8353);
+//        }
 
         if(!in_array($type,array_flip(self::REFUND_TYPE_DESC))){
 
@@ -338,12 +343,14 @@ class OrderService{
             'a_time'=>time(),
             'uid'=>$uid,
             'oid'=>$oid,
+            'price'=>$orders['total_price'],
+            "mobile"=>$mobile,
         );
 
         $orderRefundId = OrderRefundModel::db()->add($data);
 
         $rs = $this->upStatus($oid,OrderModel::STATUS_REFUND,array("refund_id"=>$orderRefundId));
-        return out_pc(200,$rs);
+        return out_pc(200,$orderRefundId);
     }
     //获取用户 订单申请的记录列表
     function getUserRefundList($uid){
@@ -376,9 +383,9 @@ class OrderService{
 
         $rs['product_title'] = $product['title'];
 
-        $rs['type_desc'] = self::REFUND_REASON_DESC[$row['type']];
+        $rs['type_desc'] = self::REFUND_TYPE_DESC[$row['type']];
         $rs['reason_desc'] = self::REFUND_REASON_DESC[$row['reason']];
-        $rs['status_desc'] = self::REFUND_REASON_DESC[$row['status']];
+        $rs['status_desc'] = self::REFUND_STATS[$row['status']];
         $rs['dt'] = get_default_date($row['a_time']);
 
         return $rs;
@@ -414,6 +421,7 @@ class OrderService{
             $data['signin_time'] = time();
         }elseif($status == OrderModel::STATUS_REFUND_FINISH   || $status == OrderModel::STATUS_REFUND_REJECT){
             $data['refund_memo'] = $upData['refund_memo'];
+        }elseif($status == OrderModel::STATUS_REFUND){
             $data['refund_id'] = $upData['refund_id'];
         }
         return OrderModel::db()->upById($oid,$data);
