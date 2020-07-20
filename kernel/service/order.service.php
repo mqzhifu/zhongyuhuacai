@@ -747,6 +747,7 @@ class OrderService{
 //            $row['goods_price'] = $goods['sale_price'];
 
             $row = $service->getOneDetail($v['pid'] , 0 , $uid , 0 );
+            $row = $service->formatShow();
             $row['cart_id'] = $v['id'];
             $rs[] = $row;
         }

@@ -408,6 +408,38 @@ class ProductService
         }
         return $data;
     }
+
+    function formatShowRow($row)
+    {
+        if (!$row) {
+            return $row;
+        }
+//        $data = null;
+//        foreach ($list as $k => $v) {
+            $pic = "";
+            if (arrKeyIssetAndExist($row, 'pic')) {
+                $pic = explode(",", $row['pic']);
+                $pic = get_product_url($pic[0]);
+            }
+
+            $newRow = array(
+                'id' => $row['id'],
+                'goods_total' => $row['goods_total'],
+                'pic' => $pic,
+                'lowest_price' => $row['lowest_price'],
+                'original_price' => $row['original_price'],
+                'title' => $row['title'],
+                'user_buy_total' => $row['user_buy_total'],
+            );
+
+            if (isset($row['has_cart'])) {
+                $newRow['has_cart'] = $row['has_cart'];
+            }
+
+//            $data[] = $row;
+//        }
+        return $newRow;
+    }
     //======================格式化数据 - end ===========================================================================
 
     //获取一个产品下的所有商品列表
