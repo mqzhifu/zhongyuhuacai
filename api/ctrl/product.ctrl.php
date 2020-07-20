@@ -201,16 +201,4 @@ class ProductCtrl extends BaseCtrl  {
         $rs = array('category'=>$category,'order_type'=>$orderType);
         return $this->out(200,$rs);
     }
-
-//    //获取一个分类下的所有商品列表
-//    function getListByCategory(){
-//        $categoryId =get_request_one( $this->request,'category_id',0);
-//        $page = get_request_one( $this->request,'page',0);
-//        $limit = get_request_one( $this->request,'limit',0);
-//        $rs = $this->productService->getListByCategory($categoryId,$page,$limit);
-//        if(!$rs['msg']){
-//            out_ajax($rs['code'],$rs['msg']);
-//        }
-//        out_ajax(200,$this->productService->formatShow($rs['msg']));
-//    }
 }

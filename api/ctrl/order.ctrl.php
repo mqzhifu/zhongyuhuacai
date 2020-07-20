@@ -116,29 +116,6 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->confirmOrder($gidsNums);
         out_ajax($rs['code'],$rs['msg']);
     }
-    //获取用户购物车内的产品数
-    function getUserCartCnt(){
-        $cnt = $list = CartModel::db()->getCount(" uid = {$this->uid}");
-        out_ajax(200,$cnt);
-    }
-    //获取用户购物车内的产品列表
-    function getUserCart(){
-//        $oid = $agentUid =get_request_one( $this->request,'oid',0);
-        $list = $this->orderService->getUserCart($this->uid);
-        out_ajax($list['code'],$list['msg']);
-    }
-
-    function delUserCart(){
-        $ids = get_request_one( $this->request,'ids',"");
-        $rs = $this->orderService->delUserCart($ids,$this->uid);
-        out_ajax($rs['code'],$rs['msg']);
-    }
-
-    function addUserCart(){
-        $pid = $agentUid =get_request_one( $this->request,'pid',0);
-        $rs = $this->orderService->addUserCart($this->uid,$pid);
-        out_ajax($rs['code'],$rs['msg']);
-    }
 
 
     function getGoodsIdByPcap(){
@@ -149,5 +126,30 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->getGoodsIdByPcap($pid,$pcap,$num);
         out_ajax($rs['code'],$rs['msg']);
     }
+//    //获取用户购物车内的产品数
+//    function getUserCartCnt(){
+//        $cnt = $list = CartModel::db()->getCount(" uid = {$this->uid}");
+//        out_ajax(200,$cnt);
+//    }
+//    //获取用户购物车内的产品列表
+//    function getUserCart(){
+////        $oid = $agentUid =get_request_one( $this->request,'oid',0);
+//        $list = $this->orderService->getUserCart($this->uid);
+//        out_ajax($list['code'],$list['msg']);
+//    }
+//
+//    function delUserCart(){
+//        $ids = get_request_one( $this->request,'ids',"");
+//        $rs = $this->orderService->delUserCart($ids,$this->uid);
+//        out_ajax($rs['code'],$rs['msg']);
+//    }
+//
+//    function addUserCart(){
+//        $pid = $agentUid =get_request_one( $this->request,'pid',0);
+//        $rs = $this->orderService->addUserCart($this->uid,$pid);
+//        out_ajax($rs['code'],$rs['msg']);
+//    }
+
+
 
 }
