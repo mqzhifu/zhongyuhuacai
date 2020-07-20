@@ -746,7 +746,7 @@ class OrderService{
 //            $goods = GoodsModel::db()->getById($row['gid']);
 //            $row['goods_price'] = $goods['sale_price'];
 
-            $row = $service->getOneDetail($v['pid'] , 0 , $this->uid , 0 );
+            $row = $service->getOneDetail($v['pid'] , 0 , $uid , 0 );
             $row['cart_id'] = $v['id'];
             $rs[] = $row;
         }
