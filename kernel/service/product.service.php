@@ -422,7 +422,6 @@ class ProductService
                 $pic = get_product_url($pic[0]);
             }
 
-            var_dump($row);
             $newRow = array(
                 'id' => $row['id'],
                 'goods_total' => $row['goods_total'],
