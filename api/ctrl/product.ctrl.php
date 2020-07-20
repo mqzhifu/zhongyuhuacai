@@ -3,14 +3,12 @@ class ProductCtrl extends BaseCtrl  {
     function __construct($request){
         parent::__construct($request);
     }
-
-    //首页，分类ICON
+    //首页，分类ICON ，后台可动态配置
     function getAllCategory(){
         $list = ProductCategoryModel::db()->getAll(" is_show_index = 1 ");
         if($list){
             foreach ($list as $k=>$v){
                 if(arrKeyIssetAndExist($v,'pic')){
-//                    $pic = explode(",",$v['pic']);
                     $list[$k]['pic'] = get_category_url($v['pic']);
                 }else{
                     $list[$k]['pic'] = "";
@@ -19,16 +17,6 @@ class ProductCtrl extends BaseCtrl  {
         }
         return $this->out(200,$list);
     }
-//    //获取各种页面，附加的产品推荐列表
-//    function getAttachRecommendList(){
-//        $page = get_request_one( $this->request,'page',1);
-//        $limit = get_request_one( $this->request,'limit',3);
-//        $rs = $this->productService->getRecommendList($page,$limit,$type);
-//
-//        return $this->out($rs['code'],$rs['msg']);
-//    }
-
-
     //获取 后台 推荐的商品的列表
     function getRecommendList(){
         //type=1,推荐到详情页,type=2，首页
@@ -39,33 +27,20 @@ class ProductCtrl extends BaseCtrl  {
 
         return $this->out($rs['code'],$rs['msg']);
     }
-
+    //用户 历史 浏览 产品列表
     function getUserHistoryPVList(){
         $id = get_request_one( $this->request,'id',0);
         $rs = $this->productService->getUserHistoryPVList($id,1);
         return $this->out($rs['code'],($rs['msg']));
     }
-
-//    //获取一个分类下的所有商品列表
-//    function getListByCategory(){
-//        $categoryId =get_request_one( $this->request,'category_id',0);
-//        $page = get_request_one( $this->request,'page',0);
-//        $limit = get_request_one( $this->request,'limit',0);
-//        $rs = $this->productService->getListByCategory($categoryId,$page,$limit);
-//        if(!$rs['msg']){
-//            out_ajax($rs['code'],$rs['msg']);
-//        }
-//        out_ajax(200,$this->productService->formatShow($rs['msg']));
-//    }
     //产品详情
     function getOneDetail(){
         $id = get_request_one( $this->request,'id',0);
+        //是否包含商品信息
         $includeGoods = get_request_one( $this->request,'include_goods',1);
 
         $data = $this->productService->getOneDetail($id,$includeGoods,$this->uid);
-//        echo json_encode($data['msg']);exit;
         return $this->out($data['code'],$data['msg']);
-//        out_ajax($data['code'],$data['msg']);
     }
 
     //搜索
@@ -226,4 +201,16 @@ class ProductCtrl extends BaseCtrl  {
         $rs = array('category'=>$category,'order_type'=>$orderType);
         return $this->out(200,$rs);
     }
+
+//    //获取一个分类下的所有商品列表
+//    function getListByCategory(){
+//        $categoryId =get_request_one( $this->request,'category_id',0);
+//        $page = get_request_one( $this->request,'page',0);
+//        $limit = get_request_one( $this->request,'limit',0);
+//        $rs = $this->productService->getListByCategory($categoryId,$page,$limit);
+//        if(!$rs['msg']){
+//            out_ajax($rs['code'],$rs['msg']);
+//        }
+//        out_ajax(200,$this->productService->formatShow($rs['msg']));
+//    }
 }

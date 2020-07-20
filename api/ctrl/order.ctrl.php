@@ -89,9 +89,26 @@ class OrderCtrl extends BaseCtrl  {
     //申请退款
     function applyRefund(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
-        $rs = $this->orderService->applyRefund($id);
+        $type = $agentUid =get_request_one( $this->request,'type',0);
+        $reason = $agentUid =get_request_one( $this->request,'reason',0);
+        $content = $agentUid =get_request_one( $this->request,'content',0);
+        $pic = $agentUid =get_request_one( $this->request,'pic',0);
+
+        $rs = $this->orderService->applyRefund($id,$this->uid,$type,$reason,$content,$pic);
         out_ajax($rs['code'],$rs['msg']);
     }
+    //用户申请退款记录列表
+    function getUserRefundList(){
+        $rs = $this->orderService->getUserRefundList($this->uid);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+    //获取一条退款记录的详情信息
+    function getUserRefundById(){
+        $id = $agentUid =get_request_one( $this->request,'id',0);
+        $rs = $this->orderService->getUserRefundById($id,$this->uid);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
     //唤起支付
     function pay(){
         $oid = $agentUid =get_request_one( $this->request,'oid',0);

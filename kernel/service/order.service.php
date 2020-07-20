@@ -2,6 +2,38 @@
 
 class OrderService{
     public $timeout = 30 * 60;//订单超时时间
+
+    const REFUND_STATS_APPLY = 1;
+    const REFUND_STATS_OK = 2;
+    const REFUND_STATS_REJECT = 3;
+
+    const REFUND_STATS = [
+        self::REFUND_STATS_APPLY=>"申请退款",
+        self::REFUND_STATS_OK=>"退款通过",
+        self::REFUND_STATS_REJECT=>"驳回",
+    ];
+
+    const REFUND_REASON_WRONG = 1;
+    const REFUND_REASON_REPEAT = 2;
+    const REFUND_REASON_NO_REASON = 3;
+
+    const REFUND_REASON_DESC = [
+        self::REFUND_REASON_WRONG=>"拍错了",
+        self::REFUND_REASON_REPEAT=>"拍多了",
+        self::REFUND_REASON_NO_REASON=>"不想要了",
+    ];
+
+
+    const REFUND_TYPE_GOODS_PRICE = 1;
+    const REFUND_TYPE_PRICE = 2;
+
+    const REFUND_TYPE_DESC = [
+        self::REFUND_TYPE_GOODS_PRICE=>"退款退货",
+        self::REFUND_TYPE_PRICE=>"退款不退货",
+    ];
+
+
+
     function getListByAgentId($agentIds , $status = 0 ,$agent_one_withdraw = 0 ,$agent_two_withdraw = 0){
         $where = " agent_id in ( $agentIds ) ";
         if($status){
@@ -290,11 +322,11 @@ class OrderService{
         return out_pc(200);
     }
 
-    function applyRefund($id){
-        if(!$id){
+    function applyRefund($oid,$uid,$type,$content,$reason,$pic){
+        if(!$oid){
             return out_pc(8981);
         }
-        $orders = OrderModel::db()->getById($id);
+        $orders = OrderModel::db()->getById($oid);
         if(!$orders){
             return out_pc(1029);
         }
@@ -306,10 +338,67 @@ class OrderService{
             return out_pc(8353);
         }
 
-        $rs = $this->upStatus($id,OrderModel::STATUS_REFUND);
+        if(!in_array($type,array_flip(self::REFUND_TYPE_DESC))){
+
+        }
+
+        if(!in_array($reason,array_flip(self::REFUND_REASON_DESC))){
+
+        }
+
+        $data = array(
+            'type'=>$type,
+            'reason'=>$reason,
+            'content'=>$content,
+            'pic'=>$pic,
+            'status'=>self::REFUND_STATS_APPLY,
+            'a_time'=>time(),
+            'uid'=>$uid,
+            'oid'=>$oid,
+        );
+
+        $orderRefundId = OrderRefundModel::db()->add($data);
+
+        $rs = $this->upStatus($oid,OrderModel::STATUS_REFUND,array("refund_id"=>$orderRefundId));
         return out_pc(200,$rs);
+    }
 
+    function getUserRefundList($uid){
+        $list = OrderRefundModel::db()->getAll(" uid = $uid");
+        if(!$list){
+            return out_pc(200,$list);
+        }
+        foreach ($list as $k=>$v){
+            $list[$k] = $this->formatRefundRow($v);
+        }
 
+        return out_pc(200,$list);
+    }
+
+    function getUserRefundById($id , $uid){
+        $row = OrderRefundModel::db()->getRowById($id);
+        if(!$row){
+            return out_pc(200,$row);
+        }
+        $row = $this->formatRefundRow($row);
+        return out_pc(200,$row);
+    }
+
+    function formatRefundRow($row){
+        $rs = $row;
+
+        $order = OrderModel::db()->getById( $row['oid']);
+        $orderPids = explode(",",$order['pids']);
+        $product = ProductModel::db()->getById($orderPids[0]);
+
+        $rs['product_title'] = $product['title'];
+
+        $rs['type_desc'] = self::REFUND_REASON_DESC[$row['type']];
+        $rs['reason_desc'] = self::REFUND_REASON_DESC[$row['reason']];
+        $rs['status_desc'] = self::REFUND_REASON_DESC[$row['status']];
+        $rs['dt'] = get_default_date($row['a_time']);
+
+        return $rs;
     }
 
     function refund($id){
@@ -342,6 +431,7 @@ class OrderService{
             $data['signin_time'] = time();
         }elseif($status == OrderModel::STATUS_REFUND_FINISH   || $status == OrderModel::STATUS_REFUND_REJECT){
             $data['refund_memo'] = $upData['refund_memo'];
+            $data['refund_id'] = $upData['refund_id'];
         }
         return OrderModel::db()->upById($oid,$data);
     }
@@ -665,12 +755,14 @@ class OrderService{
         }
         $rs = null;
         foreach ($list as $k=>$v){
-            $product = ProductModel::db()->getById($v['pid']);
-            $row = $service->formatRow($product);
-            $row = $service->formatShow(array($row))[0];
-            $row['gid'] = $v['gid'];
-            $goods = GoodsModel::db()->getById($row['gid']);
-            $row['goods_price'] = $goods['sale_price'];
+//            $product = ProductModel::db()->getById($v['pid']);
+//            $row = $service->formatRow($product);
+//            $row = $service->formatShow(array($row))[0];
+//            $row['gid'] = $v['gid'];
+//            $goods = GoodsModel::db()->getById($row['gid']);
+//            $row['goods_price'] = $goods['sale_price'];
+
+            $row = $service->getOneDetail($v['pid'] , 0 , $this->uid , 0 );
             $row['cart_id'] = $v['id'];
             $rs[] = $row;
         }

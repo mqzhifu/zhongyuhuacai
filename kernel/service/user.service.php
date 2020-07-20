@@ -454,48 +454,50 @@ class UserService{
     }
 
     function getUinfoById($uid){
-        if(!$uid){
-            return out_pc(8002);
-        }
-
 //        if(!$appName){
 //            $appName = IS_NAME;
 //        }
+
+//        if($this->redisCacheUser){
+//            $uinfo = $this->getUserCache($uid,$appName);
+//            // var_dump($uinfo);exit;
+//            if($uinfo){
+//                if(!arrKeyIssetAndExist($uinfo,'im_tencent_sign')){
+//                    $sign = $this->generateSign($uid);
+//                    UserDetailModel::db()->upById($uid,array('im_tencent_sign'=>$sign));
+//                    $uinfo['im_tencent_sign'] =$sign;
+//                }else{
+//                    $authRs = $this->authImTencentSign($uinfo['im_tencent_sign'],$uid);
+//                    if(!$authRs['rs']){
+//                        UserDetailModel::db()->upById($uid,array('im_tencent_sign'=>$authRs['sig']));
+//                        $uinfo['im_tencent_sign'] = $authRs['sig'];
+//                    }
+//                }
+//
+//                return $uinfo;
+//            }
+//        }
+
+        if(!$uid){
+            return out_pc(8002);
+        }
 
         $uid = intval($uid);
         if(!is_int($uid)){
             return out_pc(8233);
         }
 
-        if($this->redisCacheUser){
-            $uinfo = $this->getUserCache($uid,$appName);
-            // var_dump($uinfo);exit;
-            if($uinfo){
-                if(!arrKeyIssetAndExist($uinfo,'im_tencent_sign')){
-                    $sign = $this->generateSign($uid);
-                    UserDetailModel::db()->upById($uid,array('im_tencent_sign'=>$sign));
-                    $uinfo['im_tencent_sign'] =$sign;
-                }else{
-                    $authRs = $this->authImTencentSign($uinfo['im_tencent_sign'],$uid);
-                    if(!$authRs['rs']){
-                        UserDetailModel::db()->upById($uid,array('im_tencent_sign'=>$authRs['sig']));
-                        $uinfo['im_tencent_sign'] = $authRs['sig'];
-                    }
-                }
-
-                return $uinfo;
-            }
-        }
-
         $user = UserModel::db()->getById($uid);
         if(!$user){
             return out_pc(1000);
         }
-
-//        if(arrKeyIssetAndExist($user,'avatar'))
+        //头像
         $user['avatar'] = get_avatar_url($user['avatar']);
         //注册时间
         $user['reg_dt'] = get_default_date($user['a_time']);
+        if(!arrKeyIssetAndExist($user,"nickname")){
+            $user['nickname'] = "游客";
+        }
 
         $agentService = new AgentService();
         $agent = $agentService->getOneByUid($uid)['msg'];
@@ -539,11 +541,11 @@ class UserService{
 //        $user = array_merge($user,$userDetail);
 
 
-        if($this->redisCacheUser){
-            $key = RedisPHPLib::getAppKeyById($GLOBALS['rediskey']['userinfo']['key'],$uid,$appName);
-            $rs = RedisPHPLib::getServerConnFD()->hmset($key,$user);
-            RedisPHPLib::getServerConnFD()->expire($key,$GLOBALS['rediskey']['userinfo']['expire']);
-        }
+//        if($this->redisCacheUser){
+//            $key = RedisPHPLib::getAppKeyById($GLOBALS['rediskey']['userinfo']['key'],$uid,$appName);
+//            $rs = RedisPHPLib::getServerConnFD()->hmset($key,$user);
+//            RedisPHPLib::getServerConnFD()->expire($key,$GLOBALS['rediskey']['userinfo']['expire']);
+//        }
 
         return $user;
     }
@@ -1163,6 +1165,23 @@ class UserService{
         $rs = RedisPHPLib::getServerConnFD()->hmset($key,$fields);
         return $rs;
     }
+
+//    function getUserNickname($uid,$default = '游客'){
+//        if(!$uid){
+//            return $default;
+//        }
+//        $user = UserModel::db()->getById($uid);
+//        if(!$user){
+//            return $default;
+//        }
+//
+//        if(arrKeyIssetAndExist($user,"nickname")){
+//            return $user['nickname'];
+//        }
+//
+//        return $default;
+//
+//    }
 
     function getUserDataInit(){
         //初始化数据，防止接口返回数据类型 不对
