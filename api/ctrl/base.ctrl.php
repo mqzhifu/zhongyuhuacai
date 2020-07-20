@@ -19,6 +19,8 @@ class BaseCtrl {
     public $payService = null;
     public $userAddressService = null;
     public $agentService = null;
+    public $goodsService = null;
+
     function __construct($request){
         LogLib::inc()->debug(['php_server',$_SERVER]);
         $this->request = $request;
@@ -43,6 +45,7 @@ class BaseCtrl {
         $this->payService = new PayService();
         $this->userAddressService = new UserAddressService();
         $this->agentService = new AgentService();
+        $this->goodsService = new GoodsService();
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){

@@ -1,11 +1,5 @@
 <?php
 class OrderCtrl extends BaseCtrl  {
-//    function getListByUser(){
-//        $status = get_request_one( $this->request,'status',0);
-//        $list = $this->orderService->getUserList($this->uid,$status);
-//        return out_pc(200,$list);
-//    }
-
     //下单
     function doing(){
 //        $agentUid = get_request_one( $this->request,'agent_uid',0);

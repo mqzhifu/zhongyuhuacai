@@ -70,6 +70,13 @@ class OrderService{
         $numsArr = null;
 
         $gidsNumsArr = explode(",",$gidsNums);
+
+        $userService = new UserService();
+        $agentService = new AgentService();
+        $addressService = new UserAddressService();
+        $goodsService =  new GoodsService();
+        $productService = new ProductService();
+
         foreach ($gidsNumsArr as $k=>$v){
             $arr = explode("-",$v);
             $gid = $arr[0];
@@ -79,7 +86,7 @@ class OrderService{
                 return out_pc(8021);
             }
 
-            $goods = GoodsModel::db()->getById($gid);
+            $goods = $goodsService->getOneDetail($gid);
             if(!$goods){
                 return out_pc(1027);
             }
@@ -88,7 +95,7 @@ class OrderService{
                 return out_pc(8336,"库存不足：gid $gid");
             }
 
-            $product = ProductModel::db()->getById($goods['pid']);
+            $product =$productService->getOneDetail($goods['pid'],0,$uid,0);
             if(!$product){
                 return out_pc(1026);
             }
@@ -118,29 +125,6 @@ class OrderService{
 //            $productGoods[] = $product;
         }
 
-
-//        $goods = GoodsModel::db()->getById($gid);
-//        if(!$goods){
-//            return out_pc(1027);
-//        }
-
-//        $product = ProductModel::db()->getById($pid);
-//        if(!$product){
-//            return out_pc(1026);
-//        }
-
-
-//        if(!$categoryAttrPara){
-//            return out_pc(8977);
-//        }
-
-//        if($goods['stock'] - $num <= 0 ){
-//            return out_pc(8336);
-//        }
-
-        $userService = new UserService();
-        $agentService = new AgentService();
-        $addressService = new UserAddressService();
 
         $userSelAddress = "";//用户收货地址详细信息
         $shareUser = null;//分享者的用户信息
