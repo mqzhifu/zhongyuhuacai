@@ -111,12 +111,12 @@ class UserCtrl extends BaseCtrl  {
     }
 
     function getCollectListCnt(){
-        $cnt = CartModel::db()->getCount(" uid = {$this->uid}");
+        $cnt = $this->collectService->getUserCnt($this->uid);
         out_ajax(200,$cnt);
     }
 
     function viewProductHistoryCnt(){
-        $cnt = UserProductLogModel::db()->getCount(" uid = {$this->uid} group by pid order by id desc");
+        $cnt = $this->productService->viewProductHistoryCnt($this->uid);
         out_ajax(200,$cnt);
     }
 

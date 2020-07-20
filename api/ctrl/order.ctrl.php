@@ -24,42 +24,13 @@ class OrderCtrl extends BaseCtrl  {
     }
     //统计一个用户的所有订单的，各种状态，有多少条记录
     function getUserCnt(){
-        $orderList = OrderModel::db()->getAll(" uid = {$this->uid} group by status" , null, " count(status) as cnt,status ");
-        if(!$orderList){
-            return out_ajax(200,$orderList);
-        }
-
-        $list = array(
-            "wait_pay"=>0,"wait_transport"=>0,"wait_signin"=>0,"wait_comment"=>0
-        );
-        foreach ($orderList as $k=>$v){
-            if($v['status'] == 1){//待付款
-                $list['wait_pay'] = $v['cnt'];
-            }elseif($v['status'] == 2){//已付款，待发货
-                $list['wait_transport'] = $v['cnt'];
-            }elseif($v['status'] == 5){//已发货，待签收
-                $list['wait_signin'] = $v['cnt'];
-            }elseif($v['status'] == 8){//完成，待评价
-                $list['wait_comment'] = $v['cnt'];
-            }
-        }
-        out_ajax(200,$list);
+        $rs = $this->orderService->getUserCntGroupByStatus($this->uid);
+        return out_ajax($rs['code'],$rs['msg']);
     }
     //某一个产品，近期购买记录
     function getNearUserBuyHistory(){
         $pid = $agentUid =get_request_one( $this->request,'pid',0);
-        $list = OrderGoodsModel::db()->getAll("pid = $pid group by uid order by a_time desc limit 20 ");
-        foreach ($list as $k=>$v){
-            $list[$k]['nickname'] = '游客'.$k;
-            $list[$k]['avatar'] = get_avatar_url("");
-            $list[$k]['dt'] = get_default_date($v['a_time']);
-            $user = UserModel::db()->getById($v['uid']);
-            if($user){
-                $list[$k]['nickname'] = $user['nickname'];
-                $list[$k]['avatar'] = get_avatar_url( $user['avatar']);
-            }
-        }
-
+        $list = $this->orderService->getNearUserBuyHistory($pid);
         return out_ajax(200,$list);
     }
     //获取订单详情
@@ -146,8 +117,6 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->confirmOrder($gidsNums);
         out_ajax($rs['code'],$rs['msg']);
     }
-
-
     //获取用户购物车内的产品数
     function getUserCartCnt(){
         $cnt = $list = CartModel::db()->getCount(" uid = {$this->uid}");

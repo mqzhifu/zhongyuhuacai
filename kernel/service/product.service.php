@@ -248,7 +248,7 @@ class ProductService
 
         $userService = new UserService();
         foreach ($list as $k => $v) {
-            $uinfo = $userService->getUinfoById($v['uid']);
+            $uinfo = $userService->getUinfoById($v['uid'])['msg'];
             $list[$k]['nickname'] = $uinfo['nickname'];
             $list[$k]['avatar'] = $uinfo['avatar'];
         }
@@ -638,7 +638,9 @@ class ProductService
         return ProductModel::db()->getCount($where);
     }
 
-
+    function viewProductHistoryCnt($uid){
+        return UserProductLogModel::db()->getCount(" uid = {$uid} group by pid order by id desc");
+    }
 
 
 }

@@ -52,6 +52,12 @@ class CollectService{
         $exist = UserCollectionModel::db()->getRow(" pid = $pid and uid = $uid");
         return $exist;
     }
+
+    function getUserCnt($uid){
+        $cnt = CartModel::db()->getCount(" uid = {$uid}");
+        return $cnt;
+    }
+
 //    function getListByPid($pid,$page = 0,$limit = 0){
 //        if(!$pid){
 //            return out_pc(8002);

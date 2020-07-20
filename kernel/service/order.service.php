@@ -755,4 +755,46 @@ class OrderService{
         return out_pc(200,$rs);
 
     }
+
+    //统计一个用户的所有订单的，各种状态，有多少条记录
+    function getUserCntGroupByStatus($uid){
+        $orderList = OrderModel::db()->getAll(" uid = {$uid} group by status" , null, " count(status) as cnt,status ");
+        if(!$orderList){
+            return out_ajax(200,$orderList);
+        }
+
+        $list = array(
+            "wait_pay"=>0,"wait_transport"=>0,"wait_signin"=>0,"wait_comment"=>0
+        );
+        foreach ($orderList as $k=>$v){
+            if($v['status'] == 1){//待付款
+                $list['wait_pay'] = $v['cnt'];
+            }elseif($v['status'] == 2){//已付款，待发货
+                $list['wait_transport'] = $v['cnt'];
+            }elseif($v['status'] == 5){//已发货，待签收
+                $list['wait_signin'] = $v['cnt'];
+            }elseif($v['status'] == 8){//完成，待评价
+                $list['wait_comment'] = $v['cnt'];
+            }
+        }
+        return out_pc(200,$list);
+    }
+
+    //某一个产品，近期购买记录
+    function getNearUserBuyHistory($pid){
+
+        $list = OrderGoodsModel::db()->getAll("pid = $pid group by uid order by a_time desc limit 20 ");
+        if(!$list){
+            return $list;
+        }
+        $usrService = new UserService();
+        foreach ($list as $k=>$v){
+            $uinfo = $usrService->getUinfoById($v['uid'])['msg'];
+            $list[$k]['nickname'] = $uinfo['nickname'];
+            $list[$k]['avatar'] = $uinfo['avatar'];
+            $list[$k]['dt'] = get_default_date($v['a_time']);
+        }
+
+        return $list;
+    }
 }
