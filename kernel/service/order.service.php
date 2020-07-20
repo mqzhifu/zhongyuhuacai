@@ -33,7 +33,6 @@ class OrderService{
     ];
 
 
-
     function getListByAgentId($agentIds , $status = 0 ,$agent_one_withdraw = 0 ,$agent_two_withdraw = 0){
         $where = " agent_id in ( $agentIds ) ";
         if($status){
@@ -305,7 +304,7 @@ class OrderService{
         LogLib::inc()->debug(" pay callback ,process (up order info0 ok");
         return out_pc(200);
     }
-
+    //申请退款
     function applyRefund($oid,$uid,$type,$content,$reason,$pic){
         if(!$oid){
             return out_pc(8981);
@@ -346,7 +345,7 @@ class OrderService{
         $rs = $this->upStatus($oid,OrderModel::STATUS_REFUND,array("refund_id"=>$orderRefundId));
         return out_pc(200,$rs);
     }
-
+    //获取用户 订单申请的记录列表
     function getUserRefundList($uid){
         $list = OrderRefundModel::db()->getAll(" uid = $uid");
         if(!$list){
@@ -358,7 +357,7 @@ class OrderService{
 
         return out_pc(200,$list);
     }
-
+    //获取一条退款记录
     function getUserRefundById($id , $uid){
         $row = OrderRefundModel::db()->getRowById($id);
         if(!$row){
@@ -419,7 +418,7 @@ class OrderService{
         }
         return OrderModel::db()->upById($oid,$data);
     }
-
+    //下单未支付，取消一个订单
     function cancel($id){
         if(!$id){
             return out_pc(8981);
@@ -437,7 +436,7 @@ class OrderService{
         return out_pc(200,$rs);
 
     }
-
+    //确认已收货
     function confirmReceive($id){
         if(!$id){
             return out_pc(8981);
@@ -455,10 +454,12 @@ class OrderService{
         return out_pc(200,$rs);
     }
 
-    function getRowById($id){
-        return OrderModel::db()->getById($id);
-    }
+//    function getRowById($id){
+//        return OrderModel::db()->getById($id);
+//    }
 
+
+    //一个订单的详情
     function getOneDetail($id){
         if(!$id){
             return out_pc(8981);
@@ -509,37 +510,11 @@ class OrderService{
         return out_pc(200,$productGoods);
     }
 
-    function addUserCart($uid,$pid){
-        $exist = CartModel::db()->getRow(" uid = $uid and pid = $pid");
-        if($exist){
-            return out_pc(8339);
-        }
-
-        $goods = GoodsModel::db()->getRow(" pid = $pid order by sale_price asc ");
-        if(!$goods){
-            return out_pc(8979);
-        }
-        $data = array(
-            'uid'=>$uid,
-            'pid'=>$pid,
-            'a_time'=>time(),
-            'gid'=>$goods['id'],
-        );
-        $newId = CartModel::db()->add($data);
-        return out_pc(200,$newId);
-    }
-
-    function delUserCart($ids,$uid){
-        $newId = CartModel::db()->delete(" id in ($ids) and uid = $uid limit 100");
-        return out_pc(200,$newId);
-    }
-
+    //确认订单页面，数据列表
     function confirmOrder($gidsNums = ""){
         if(!$gidsNums){
             return out_pc(8982);
         }
-
-
 
         $productService = new ProductService();
 
@@ -724,38 +699,6 @@ class OrderService{
         return out_pc(200,$goods);
     }
 
-
-    function getUserCartNum($uid){
-        $list = CartModel::db()->getCount(" uid = $uid");
-        return out_pc(200,$list);
-    }
-
-    function getUserCart($uid){
-        $service  =  new ProductService();
-        $list = CartModel::db()->getAll(" uid = $uid");
-
-        if(!$list){
-            return out_pc(200);
-        }
-        $rs = null;
-        foreach ($list as $k=>$v){
-//            $product = ProductModel::db()->getById($v['pid']);
-//            $row = $service->formatRow($product);
-//            $row = $service->formatShow(array($row))[0];
-//            $row['gid'] = $v['gid'];
-//            $goods = GoodsModel::db()->getById($row['gid']);
-//            $row['goods_price'] = $goods['sale_price'];
-
-            $row = $service->getOneDetail($v['pid'] , 0 , $uid , 0 );
-            $row = $service->formatShowRow($row['msg']);
-            $row['cart_id'] = $v['id'];
-            $rs[] = $row;
-        }
-
-        return out_pc(200,$rs);
-
-    }
-
     //统计一个用户的所有订单的，各种状态，有多少条记录
     function getUserCntGroupByStatus($uid){
         $orderList = OrderModel::db()->getAll(" uid = {$uid} group by status" , null, " count(status) as cnt,status ");
@@ -797,4 +740,62 @@ class OrderService{
 
         return $list;
     }
+
+//    //添加一个产品到购物车
+//    function addUserCart($uid,$pid){
+//        $exist = CartModel::db()->getRow(" uid = $uid and pid = $pid");
+//        if($exist){
+//            return out_pc(8339);
+//        }
+//
+//        $goods = GoodsModel::db()->getRow(" pid = $pid order by sale_price asc ");
+//        if(!$goods){
+//            return out_pc(8979);
+//        }
+//        $data = array(
+//            'uid'=>$uid,
+//            'pid'=>$pid,
+//            'a_time'=>time(),
+//            'gid'=>$goods['id'],
+//        );
+//        $newId = CartModel::db()->add($data);
+//        return out_pc(200,$newId);
+//    }
+//
+//    function delUserCart($ids,$uid){
+//        $newId = CartModel::db()->delete(" id in ($ids) and uid = $uid limit 100");
+//        return out_pc(200,$newId);
+//    }
+//
+//    function getUserCartNum($uid){
+//        $list = CartModel::db()->getCount(" uid = $uid");
+//        return out_pc(200,$list);
+//    }
+//
+//    function getUserCart($uid){
+//        $service  =  new ProductService();
+//        $list = CartModel::db()->getAll(" uid = $uid");
+//
+//        if(!$list){
+//            return out_pc(200);
+//        }
+//        $rs = null;
+//        foreach ($list as $k=>$v){
+////            $product = ProductModel::db()->getById($v['pid']);
+////            $row = $service->formatRow($product);
+////            $row = $service->formatShow(array($row))[0];
+////            $row['gid'] = $v['gid'];
+////            $goods = GoodsModel::db()->getById($row['gid']);
+////            $row['goods_price'] = $goods['sale_price'];
+//
+//            $row = $service->getOneDetail($v['pid'] , 0 , $uid , 0 );
+//            $row = $service->formatShowRow($row['msg']);
+//            $row['cart_id'] = $v['id'];
+//            $rs[] = $row;
+//        }
+//
+//        return out_pc(200,$rs);
+//
+//    }
+
 }

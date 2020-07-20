@@ -73,7 +73,6 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->getUserRefundById($id,$this->uid);
         out_ajax($rs['code'],$rs['msg']);
     }
-
     //唤起支付
     function pay(){
         $oid = $agentUid =get_request_one( $this->request,'oid',0);
@@ -83,7 +82,6 @@ class OrderCtrl extends BaseCtrl  {
         if(!$type){
             out_ajax(8004);
         }
-
 
         if(!$oid){
             out_ajax(8981);
@@ -107,6 +105,7 @@ class OrderCtrl extends BaseCtrl  {
 
         out_ajax($rs['code'],$rs['msg']);
     }
+    //
     function confirmOrder(){
 //        $pid =get_request_one( $this->request,'pid',0);
 //        $pcap = get_request_one( $this->request,'pcap',"");

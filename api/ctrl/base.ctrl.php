@@ -20,7 +20,7 @@ class BaseCtrl {
     public $userAddressService = null;
     public $agentService = null;
     public $goodsService = null;
-
+    public $cartService = null;
     function __construct($request){
         LogLib::inc()->debug(['php_server',$_SERVER]);
         $this->request = $request;
@@ -46,6 +46,7 @@ class BaseCtrl {
         $this->userAddressService = new UserAddressService();
         $this->agentService = new AgentService();
         $this->goodsService = new GoodsService();
+        $this->cartService = new CartService();
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){
