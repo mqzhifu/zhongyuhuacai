@@ -270,6 +270,12 @@ class OrderService{
             if(arrKeyIssetAndExist($orderInfo,'sigin_time')){
                 $orderInfo['sigin_time_dt'] = get_default_date($orderInfo['sigin_time']);
             }
+            //发货时间
+            $orderInfo['ship_time_time_dt'] = 0;
+            if(arrKeyIssetAndExist($orderInfo,'ship_time')){
+                $orderInfo['ship_time_time_dt'] = get_default_date($orderInfo['ship_time']);
+            }
+
             $existComment = 0;
             //已签收 或 已完成的，可以进行评论
             if($orderInfo['status'] == OrderModel::STATUS_FINISH || $orderInfo['status'] == OrderModel::STATUS_SIGN_IN){
