@@ -58,6 +58,47 @@ class CollectService{
         return $cnt;
     }
 
+    function getUserList($uid){
+        $list = UserCollectionModel::db()->getAll(" uid = $uid");
+        if(!$list){
+            return out_pc(200,$list);
+        }
+
+        $list = $this->formatList($list,$uid);
+        return out_pc(200,$list);
+    }
+
+    function formatList($list,$uid){
+        $cartService = new CartService();
+        $cartList = $cartService->getUserCart($uid)['msg'];
+        $rs = null;
+        foreach ($list as $k=>$v){
+            $row = $v;
+            $product = ProductModel::db()->getById($v['id']);
+            $productList = $this->productService->formatShow(array($product));
+            $row['lowest_price'] = fenToYuan( $productList[0]['lowest_price'] );
+            $row['title'] = $productList[0]['title'];
+            $row['pic'] = $productList[0]['pic'];
+
+//            $row['lowest_price'] = fenToYuan( $product['lowest_price']) ;
+//            $row['title'] = $product['title'];
+            $hasInCart = 0;
+            if($cartList){
+                foreach ($cartList as $k2=>$cart){
+                    if($cart['id'] == $v['pid']){
+                        $hasInCart = 1;
+                        break;
+                    }
+                }
+            }
+            $row['has_cart'] = $hasInCart;
+
+            $rs[] = $row;
+        }
+
+        return $rs;
+    }
+
 //    function getListByPid($pid,$page = 0,$limit = 0){
 //        if(!$pid){
 //            return out_pc(8002);

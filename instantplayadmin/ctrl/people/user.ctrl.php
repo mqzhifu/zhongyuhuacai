@@ -133,7 +133,7 @@ class UserCtrl extends BaseCtrl{
                 'county_code'=> _g('county'),
                 'town_code'=> _g('town'),
                 'province_code'=> _g('province'),
-                'id_card_num'=> _g('id_card_num'),
+                'id_card_no'=> _g('id_card_no'),
                 'a_time'=>time(),
             );
             if(_g("a_time")){

@@ -87,5 +87,8 @@ class UpService{
 //        return $data;
 //    }
 
+    function getUserCnt($uid){
+        return UserLikedModel::db()->getCount(" uid = $uid");
+    }
 
 }

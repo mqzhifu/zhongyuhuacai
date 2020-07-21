@@ -638,8 +638,28 @@ class ProductService
         return ProductModel::db()->getCount($where);
     }
 
-    function viewProductHistoryCnt($uid){
-        return UserProductLogModel::db()->getCount(" uid = {$uid} group by pid order by id desc");
+//    function viewProductHistoryCnt($uid){
+//        return UserProductLogModel::db()->getCount(" uid = {$uid} group by pid order by id desc");
+//    }
+
+    //一个用户，浏览过多少产品
+    function getUserViewProduct($uid){
+        $list = UserProductLogModel::db()->getAll(" uid = $uid group by pid order by id desc limit 30");
+        if($list){
+            return out_pc(200,$list);
+        }
+
+        $productList = null;
+        foreach ($list as $k=>$v){
+            $productList[] = ProductModel::db()->getById($v['pid']);
+        }
+
+        $productList = $this->productService->formatShow($productList);
+        return out_pc(200,$productList);
+    }
+    //一个用户，浏览过多少产品
+    function getUserViewProductCnt($uid){
+        return UserProductLogModel::db()->getCount(" uid = {$uid} group by pid");
     }
 
 

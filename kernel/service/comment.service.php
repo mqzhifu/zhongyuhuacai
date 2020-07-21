@@ -107,5 +107,8 @@ class CommentService{
         return UserCommentModel::db()->getById($id);
     }
 
+    function getUserCnt($uid){
+        return UserCommentModel::db()->getCount(" uid = $uid");
+    }
 
 }

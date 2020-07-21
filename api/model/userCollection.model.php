@@ -17,10 +17,10 @@ class UserCollectionModel {
         return call_user_func_array(array(self::db(),$func), $arguments);
     }
 
-    static function getListByUid($uid){
-        $list = self::db()->getAll(" uid = $uid");
-        return $list;
-    }
+//    static function getListByUid($uid){
+//        $list = self::db()->getAll(" uid = $uid");
+//        return $list;
+//    }
 
 
 }

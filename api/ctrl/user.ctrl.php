@@ -3,9 +3,10 @@ class UserCtrl extends BaseCtrl  {
 
     function reg($request){
 
-        $type = get_request_one($request,'type',0);
-//        $userInfo = $request['userInfo'];
+        //        $userInfo = $request['userInfo'];
         $userInfo = null;
+        $type = get_request_one($request,'type',0);
+
         $ps = get_request_one($request,'ps',"") ;
         $name =  get_request_one($request,'name','') ;
 
@@ -26,15 +27,21 @@ class UserCtrl extends BaseCtrl  {
             return out_ajax($userRs['code'],$userRs['msg']);
         }
 
-        $user = $userRs['msg'];
-        $view_product_history_cnt = 0;
-        $viewList = UserProductLogModel::db()->getAll(" uid = {$this->uid} group by pid");
-        if($viewList){
-            $view_product_history_cnt = count($viewList);
-        }
-        $user['view_product_history_cnt'] = $view_product_history_cnt;
-        $user['collect_cnt'] = UserCollectionModel::db()->getCount(" uid =  {$this->uid}");
-        $user['coupon_cnt'] = CouponModel::db()->getCount(" uid = {$this->uid} and status = 1");
+//        $user = $userRs['msg'];
+//        $view_product_history_cnt = 0;
+//        $viewList = UserProductLogModel::db()->getAll(" uid = {$this->uid} group by pid");
+//        if($viewList){
+//            $view_product_history_cnt = count($viewList);
+//        }
+//        $user['view_product_history_cnt'] = $view_product_history_cnt;
+//        $user['collect_cnt'] = UserCollectionModel::db()->getCount(" uid =  {$this->uid}");
+//        $user['coupon_cnt'] = CouponModel::db()->getCount(" uid = {$this->uid} and status = 1");
+
+        $user['view_product_history_cnt'] = $this->productService->getUserViewProductCnt($this->uid);
+        $user['collect_cnt'] =      $this->collectService->getUserCnt($this->uid);
+        $user['comment_cnt'] =      $this->commentService->getUserCnt($this->uid);
+        $user['up_cnt'] =           $this->upService->getUserCnt($this->uid);
+
         out_ajax(200,$user);
 
     }
@@ -83,12 +90,8 @@ class UserCtrl extends BaseCtrl  {
     }
     //更新头像
     function upAvatar(){
-        LogLib::inc()->debug(['up avatar',$_REQUEST]);
-
-        LogLib::inc()->debug(["php fifle",$_FILES]);
-
-
-        $userInfo = $this->userService->getUinfoById($this->uid);
+//        LogLib::inc()->debug(['up avatar',$_REQUEST]);
+        LogLib::inc()->debug(['up avatar php $_FILES ',$_FILES]);
 
         $uploadRs = $this->uploadService->avatar('avatar');
         if($uploadRs['code'] != 200){
@@ -98,77 +101,43 @@ class UserCtrl extends BaseCtrl  {
         $data['avatar'] = $uploadRs['msg'];
         $this->userService->upUserInfo($this->uid,$data);
 
-
         $avatarUrl = get_avatar_url( $data['avatar']);
 
         out_ajax(200,$avatarUrl);
-
-
-//        if(arrKeyIssetAndExist($userInfo,'avatar')){
-//            $this->uploadService->delAvatar($userInfo['avatar']);
-//        }
-
     }
 
+    function viewProductHistoryCnt(){
+        $cnt = $this->productService->getUserViewProduct($this->uid);
+        out_ajax(200,$cnt);
+    }
+
+    //用户收获产品 统计
     function getCollectListCnt(){
         $cnt = $this->collectService->getUserCnt($this->uid);
         out_ajax(200,$cnt);
     }
-
-    function viewProductHistoryCnt(){
-        $cnt = $this->productService->viewProductHistoryCnt($this->uid);
-        out_ajax(200,$cnt);
-    }
-
     //已收藏的产品列表
     function getCollectList(){
-        $list = UserCollectionModel::getListByUid($this->uid);
-        if(!$list){
-            out_ajax(200,$list);
-        }
-
-
-        $cartList = $this->orderService->getUserCart($this->uid)['msg'];
-        $rs = null;
-        foreach ($list as $k=>$v){
-            $row = $v;
-            $product = ProductModel::db()->getById($v['id']);
-            $productList = $this->productService->formatShow(array($product));
-            $row['lowest_price'] = $productList[0]['lowest_price'];
-            $row['title'] = $productList[0]['title'];
-            $row['pic'] = $productList[0]['pic'];
-
-            $row['lowest_price'] = fenToYuan( $product['lowest_price']) ;
-            $row['title'] = $product['title'];
-            $hasInCart = 0;
-            if($cartList){
-                foreach ($cartList as $k2=>$cart){
-                    if($cart['id'] == $v['pid']){
-                        $hasInCart = 1;
-                        break;
-                    }
-                }
-            }
-            $row['has_cart'] = $hasInCart;
-
-            $rs[] = $row;
-        }
-        out_ajax(200,$rs);
+        $list = $this->collectService->getUserList($this->uid);
+        out_ajax(200,$list['msg']);
     }
 
     //浏览产品 - 历史 记录
     function viewProductHistory(){
-        $uid = $this->uid;
-        $list = UserProductLogModel::db()->getAll(" uid = $uid group by pid order by id desc limit 30");
-        $productList = null;
-        if($list){
-            $productList = null;
-            foreach ($list as $k=>$v){
-                $productList[] = ProductModel::db()->getById($v['pid']);
-            }
-            $productList = $this->productService->formatShow($productList);
-        }
-        out_ajax(200,$productList);
+//        $uid = $this->uid;
+//        $list = UserProductLogModel::db()->getAll(" uid = $uid group by pid order by id desc limit 30");
+//        $list = $this->productService->getUserViewProduct($this->uid);
+//        $productList = null;
+//        if($list){
+//            $productList = null;
+//            foreach ($list as $k=>$v){
+//                $productList[] = ProductModel::db()->getById($v['pid']);
+//            }
+//            $productList = $this->productService->formatShow($productList);
+//        }
+//        out_ajax(200,$productList);
+        $list = $this->productService->getUserViewProduct($this->uid);
+        out_ajax(200,$list['msg']);
     }
 
     function getAddressList(){
