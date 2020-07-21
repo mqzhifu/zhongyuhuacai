@@ -338,6 +338,17 @@
         });
     });
 
+
+    $("#datatable_products").on("editship",".upstatus",function(){
+        //alert($(this).attr("data-id"));
+        UTHING.ajax({
+            url:"/finance/no/order/editShip/",
+            data:{id:$(this).attr("data-id")},
+            title:"编辑物流信息"
+        });
+    });
+
+
     if (!jQuery().datetimepicker) {
         alert(333);
     }

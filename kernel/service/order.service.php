@@ -33,6 +33,30 @@ class OrderService{
     ];
 
 
+    const SHIP_TYPE_SHUNFENG = 1;
+    const SHIP_TYPE_YUNDA = 1;
+    const SHIP_TYPE_YUANTONG = 1;
+    const SHIP_TYPE_ZHONGTONG = 1;
+    const SHIP_TYPE_SHENTONG = 1;
+    const SHIP_TYPE_TIANTIAN = 1;
+    const SHIP_TYPE_BAISHI = 1;
+
+    const SHIP_TYPE_DESC = [
+        self::SHIP_TYPE_SHUNFENG=>"顺丰",
+        self::SHIP_TYPE_YUNDA=>"韵达",
+        self::SHIP_TYPE_YUANTONG=>"圆通",
+        self::SHIP_TYPE_ZHONGTONG=>"中通",
+        self::SHIP_TYPE_SHENTONG=>"申通",
+        self::SHIP_TYPE_TIANTIAN=>"天天",
+        self::SHIP_TYPE_BAISHI=>"百世",
+    ];
+
+
+
+
+
+
+
     function getListByAgentId($agentIds , $status = 0 ,$agent_one_withdraw = 0 ,$agent_two_withdraw = 0){
         $where = " agent_id in ( $agentIds ) ";
         if($status){

@@ -85,6 +85,29 @@ class OrderCtrl extends BaseCtrl{
         $this->display("/finance/order_add.html");
     }
 
+    function editShip(){
+        $aid = _g("id");
+        $order = OrderModel::db()->getById($aid);
+
+        if(_g('opt')){
+            var_dump($_REQUEST);exit;
+            exit;
+        }
+        $shipTypeDesc = OrderService::SHIP_TYPE_DESC;
+        $shipTypeDescHtml = "";
+        foreach ($shipTypeDesc as $k=>$v) {
+            $shipTypeDescHtml .= "<option name='$k'>$v</option>";
+        }
+
+        $data = array(
+            'shipTypeDescHtml'=>$shipTypeDescHtml,
+        );
+
+        $html = $this->_st->compile("/people/order_edit_ship.html",$data);
+        $html = file_get_contents($html);
+        echo_json($html);
+    }
+
     function getWhere(){
         $where = " 1 ";
         if($mobile = _g("mobile"))
@@ -190,7 +213,8 @@ class OrderCtrl extends BaseCtrl{
                     '<a target="_blank"  href="/finance/no/order/edit/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 编辑 </a>'.
                     '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
                     '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_TWO.'&oids='.$v['id'].'&uid=2" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二级代理提现 </a>'.
-                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_FACTORY.'&oids='.$v['id'].'&fid=3" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 工厂提现 </a>',
+                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_FACTORY.'&oids='.$v['id'].'&fid=3" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 工厂提现 </a>'.
+                    '<button class="btn btn-xs default red editship margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 快递信息</button>'. "&nbsp;",
                 );
 
                 $records["data"][] = $row;
@@ -265,7 +289,7 @@ class OrderCtrl extends BaseCtrl{
         $address = array("area"=>"","detail"=>"");
         if(arrKeyIssetAndExist($order,'address_id')){
             $addressService =  new UserAddressService();
-            $addressRow = $addressService->getRowById($order['address_id'])['msg'];
+            $addressRow = $addressService->getById($order['address_id']);
             if($addressRow['code'] != 200){
                 $this->notice($addressRow['msg']);
             }
