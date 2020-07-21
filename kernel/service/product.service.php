@@ -12,7 +12,7 @@ class ProductService
     );
     //$includeGoods:是否包含该产品下的商品信息
     //upPvUv : 更新PV UV 值，必须uid 存在 才行
-    function getOneDetail($id, $includeGoods = 1, $uid = 0, $upPvUv = 1)
+    function getOneDetail($id, $includeGoods = 1, $uid = 0, $upPvUv = 1 ,$filterNoStockGoods = 0)
     {
         if (!$id) {
             return out_pc(8072);
@@ -35,7 +35,7 @@ class ProductService
         }
         //处理 该商品下的所有商品
         if ($includeGoods) {
-            $processProductGoodsInfoRs = $this->processProductGoodsInfo($product,$ProductLinkCategoryAttrDb);
+            $processProductGoodsInfoRs = $this->processProductGoodsInfo($product,$ProductLinkCategoryAttrDb,$filterNoStockGoods);
             if($processProductGoodsInfoRs['code'] != 200 ){
                 return out_pc($processProductGoodsInfoRs['code'],$processProductGoodsInfoRs['msg']);
             }
@@ -121,7 +121,7 @@ class ProductService
         return out_pc(200, $returnPageInfo);
     }
     //一个产品下的，所有商品的处理
-    function processProductGoodsInfo($product,$ProductLinkCategoryAttrDb){
+    function processProductGoodsInfo($product,$ProductLinkCategoryAttrDb, $filterNoStockGoods = 0){
         //产品 属性参数  是否为空
         $productCategoryAttrParaData = null;
         $goodsList = null;
@@ -129,7 +129,11 @@ class ProductService
         $stock = 0;
         if ($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE) {
             //获取该产品下的所有商品列表
-            $goodsDb = GoodsModel::db()->getAll(" pid = {$product['id']}",null," id,status,a_time,stock,is_del,sale_price,original_price "  );
+            $where = " pid = {$product['id']}";
+            if($filterNoStockGoods){
+                $where .= " and stock > 0 ";
+            }
+            $goodsDb = GoodsModel::db()->getAll($where,null," id,status,a_time,stock,is_del,sale_price,original_price "  );
             if (!$goodsDb) {
                 return out_pc(8979);
             }

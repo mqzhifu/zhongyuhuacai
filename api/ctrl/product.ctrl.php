@@ -39,7 +39,7 @@ class ProductCtrl extends BaseCtrl  {
         //是否包含商品信息
         $includeGoods = get_request_one( $this->request,'include_goods',1);
 
-        $data = $this->productService->getOneDetail($id,$includeGoods,$this->uid);
+        $data = $this->productService->getOneDetail($id,$includeGoods,$this->uid,1,1);
         return $this->out($data['code'],$data['msg']);
     }
 
