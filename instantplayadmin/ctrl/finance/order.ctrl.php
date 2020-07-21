@@ -86,9 +86,8 @@ class OrderCtrl extends BaseCtrl{
     }
 
     function editShip(){
-        $aid = _g("id");
-        $order = OrderModel::db()->getById($aid);
-
+        $id = _g("id");
+        $order = OrderModel::db()->getById($id);
         if(_g('opt')){
             var_dump($_REQUEST);exit;
             exit;
@@ -103,7 +102,7 @@ class OrderCtrl extends BaseCtrl{
             'shipTypeDescHtml'=>$shipTypeDescHtml,
         );
 
-        $html = $this->_st->compile("/people/order_edit_ship.html",$data);
+        $html = $this->_st->compile("/finance/order_edit_ship.html",$data);
         $html = file_get_contents($html);
         echo_json($html);
     }
