@@ -87,10 +87,27 @@ class OrderCtrl extends BaseCtrl{
 
     function editShip(){
         $id = _g("id");
+        if(!$id){
+            exit("id 为空");
+        }
         $order = OrderModel::db()->getById($id);
+        if(!$order){
+            exit("id 不在 db中");
+        }
         if(_g('opt')){
-            var_dump($_REQUEST);exit;
-            exit;
+            $no = _g("no");
+            $shipType = _g("ship_type");
+
+            $data = array(
+                'ship_time'=>time(),
+                'no'=>$no,
+                'ship_type'=>$shipType,
+            );
+
+            $upRs = OrderModel::db()->upById($id,$data);
+
+            var_dump($upRs);
+            var_dump($data);exit;
         }
         $shipTypeDesc = OrderService::SHIP_TYPE_DESC;
         $shipTypeDescHtml = "";
@@ -100,6 +117,7 @@ class OrderCtrl extends BaseCtrl{
 
         $data = array(
             'shipTypeDescHtml'=>$shipTypeDescHtml,
+            'id'=>$id,
         );
 
         $html = $this->_st->compile("/finance/order_edit_ship.html",$data);
