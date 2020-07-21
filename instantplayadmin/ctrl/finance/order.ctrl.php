@@ -265,7 +265,7 @@ class OrderCtrl extends BaseCtrl{
         $address = array("area"=>"","detail"=>"");
         if(arrKeyIssetAndExist($order,'address_id')){
             $addressService =  new UserAddressService();
-            $addressRow = $addressService->getRowById($order['address_id']);
+            $addressRow = $addressService->getRowById($order['address_id'])['msg'];
             if($addressRow['code'] != 200){
                 $this->notice($addressRow['msg']);
             }
