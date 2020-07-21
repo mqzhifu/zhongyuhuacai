@@ -100,7 +100,7 @@ class OrderCtrl extends BaseCtrl{
 
             $data = array(
                 'ship_time'=>time(),
-                'no'=>$no,
+                'express_no'=>$no,
                 'ship_type'=>$shipType,
             );
 
