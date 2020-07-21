@@ -256,6 +256,7 @@ class OrderService{
         }
 
         $orderList = null;
+        $commentService = new CommentService();
         foreach ($list as $k=>$v){
             $orderInfo = OrderModel::db()->getById( $v['id']);
             $orderInfo['goods_total_num'] = count(explode(",",$orderInfo['gids']));
@@ -269,7 +270,16 @@ class OrderService{
             if(arrKeyIssetAndExist($orderInfo,'sigin_time')){
                 $orderInfo['sigin_time_dt'] = get_default_date($orderInfo['sigin_time']);
             }
+            $existComment = 0;
+            //已签收 或 已完成的，可以进行评论
+            if($orderInfo['status'] == OrderModel::STATUS_FINISH || $orderInfo['status'] == OrderModel::STATUS_SIGN_IN){
+                $existCommentRow = $commentService->getUserByOid($uid,$v['id']);
+                if($existCommentRow){
+                    $existComment = 1;
+                }
+            }
 
+            $orderInfo['exist_comment'] = $existComment;
             $orderInfo['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
             $orderInfo['goods_list'] = $this->getOneDetail($v['id'])['msg'];
 
@@ -390,7 +400,7 @@ class OrderService{
 
         return $rs;
     }
-
+    //真的执行 退款  到微信
     function refund($id){
         if(!$id){
             return out_pc(8981);

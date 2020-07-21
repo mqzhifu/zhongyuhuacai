@@ -111,4 +111,8 @@ class CommentService{
         return UserCommentModel::db()->getCount(" uid = $uid");
     }
 
+    function getUserByOid($uid,$oid){
+        return UserCommentModel::db()->getRow(" uid = $uid and oid = $oid");
+    }
+
 }
