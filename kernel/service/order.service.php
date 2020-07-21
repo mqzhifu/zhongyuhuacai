@@ -279,6 +279,8 @@ class OrderService{
                 }
             }
 
+            $orderInfo['receive_address'] = $this->getUserAddress($v);
+
             $orderInfo['exist_comment'] = $existComment;
             $orderInfo['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
             $orderInfo['goods_list'] = $this->getOneDetail($v['id'])['msg'];
@@ -288,6 +290,22 @@ class OrderService{
 
         return out_pc(200,$orderList);
     }
+    //获取收货地址
+    function getUserAddress($row){
+        $default = "--";
+        if(!arrKeyIssetAndExist($row,'address_id')){
+            return $default ."_" .$row['address']  ;
+        }
+
+
+        $addressService  =  new UserAddressService();
+        $row = $addressService->getRowById($row['address_id']);
+
+        $p_c_c_t = $row['province_cn'] . "-" .  $row['city_cn']. $row['county_cn']. "-" .  $row['town_cn']."_" .$row['address']  ;
+
+        return $p_c_c_t;
+    }
+
     //支付完成 - 通知订单变更状态
     function finish($wx_callback_data){
         $orderNo = $wx_callback_data['out_trade_no'];
