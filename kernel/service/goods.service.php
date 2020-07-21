@@ -45,7 +45,6 @@ class GoodsService
         }
         $goods['pcap'] = $pcap;
         $product = $this->formatRow($goods,$uid);
-        echo json_encode($product);exit;
         return out_pc(200, $product);
     }
     //格式化价格

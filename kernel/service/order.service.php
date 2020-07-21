@@ -85,7 +85,7 @@ class OrderService{
                 return out_pc(8021);
             }
 
-            $goods = $goodsService->getOneDetail($gid);
+            $goods = $goodsService->getOneDetail($gid)['msg'];
             if(!$goods){
                 return out_pc(1027);
             }
