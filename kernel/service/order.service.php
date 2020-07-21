@@ -34,12 +34,12 @@ class OrderService{
 
 
     const SHIP_TYPE_SHUNFENG = 1;
-    const SHIP_TYPE_YUNDA = 1;
-    const SHIP_TYPE_YUANTONG = 1;
-    const SHIP_TYPE_ZHONGTONG = 1;
-    const SHIP_TYPE_SHENTONG = 1;
-    const SHIP_TYPE_TIANTIAN = 1;
-    const SHIP_TYPE_BAISHI = 1;
+    const SHIP_TYPE_YUNDA = 2;
+    const SHIP_TYPE_YUANTONG = 3;
+    const SHIP_TYPE_ZHONGTONG = 4;
+    const SHIP_TYPE_SHENTONG = 5;
+    const SHIP_TYPE_TIANTIAN = 6;
+    const SHIP_TYPE_BAISHI = 7;
 
     const SHIP_TYPE_DESC = [
         self::SHIP_TYPE_SHUNFENG=>"顺丰",
