@@ -300,12 +300,12 @@ class OrderService{
     function getUserAddress($row){
         $default = "--";
         if(!arrKeyIssetAndExist($row,'address_id')){
-            return $default ."_" .$row['address']  ;
+            return $default ;
         }
 
 
         $addressService  =  new UserAddressService();
-        $row = $addressService->getRowById($row['address_id']);
+        $row = $addressService->getById($row['address_id'])['msg'];
 
         $p_c_c_t = $row['province_cn'] . "-" .  $row['city_cn']. $row['county_cn']. "-" .  $row['town_cn']."_" .$row['address']  ;
 
