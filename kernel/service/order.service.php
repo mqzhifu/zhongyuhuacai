@@ -290,9 +290,9 @@ class OrderService{
             $orderInfo['goods_price'] = ProductService::formatDataPrice(2,$orderInfo,'goods_price');
             $orderInfo['haulage'] = ProductService::formatDataPrice(2,$orderInfo,'haulage');
 
-            $orderInfo['sigin_time_dt'] = 0;
-            if(arrKeyIssetAndExist($orderInfo,'sigin_time')){
-                $orderInfo['sigin_time_dt'] = get_default_date($orderInfo['sigin_time']);
+            $orderInfo['signin_time_dt'] = 0;
+            if(arrKeyIssetAndExist($orderInfo,'signin_time')){
+                $orderInfo['signin_time_dt'] = get_default_date($orderInfo['signin_time']);
             }
             //发货时间
             $orderInfo['ship_time_time_dt'] = 0;
