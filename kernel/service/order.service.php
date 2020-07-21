@@ -109,7 +109,8 @@ class OrderService{
                 return out_pc(8021);
             }
 
-            $goods = $goodsService->getOneDetail($gid)['msg'];
+//            $goods = $goodsService->getOneDetail($gid)['msg'];
+            $goods = GoodsModel::db()->getById($gid);
             if(!$goods){
                 return out_pc(1027);
             }
@@ -147,7 +148,6 @@ class OrderService{
 //            $product['haulage'] = $goods['haulage'];
 //            $productGoods[] = $product;
         }
-
 
         $userSelAddress = "";//用户收货地址详细信息
         $shareUser = null;//分享者的用户信息

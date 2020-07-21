@@ -50,7 +50,7 @@ class GoodsService
     //格式化价格
     function formatPrice($product){
         $product['original_price'] = ProductService::formatDataPrice(2, $product, 'original_price');
-        $product['sale_price'] = ProductService::formatDataPrice(2, $product, 'lowest_price');
+        $product['sale_price'] = ProductService::formatDataPrice(2, $product, 'sale_price');
         $product['haulage'] = ProductService::formatDataPrice(2, $product, 'haulage');
 
         return $product;
