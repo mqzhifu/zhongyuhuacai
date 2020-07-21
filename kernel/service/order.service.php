@@ -530,7 +530,7 @@ class OrderService{
     }
 
     //确认订单页面，数据列表
-    function confirmOrder($gidsNums = ""){
+    function confirmOrder($gidsNums = "",$uid){
         if(!$gidsNums){
             return out_pc(8982);
         }
@@ -561,7 +561,7 @@ class OrderService{
             if(!$product){
                 return out_pc(1026);
             }
-
+            $product = $productService->formatRow($product,$uid,0);
             $product = $productService->formatShow(array($product))[0];
             $product['price'] = $goods['sale_price'];
             $product['price'] = ProductService::formatDataPrice(2,$product,'price');

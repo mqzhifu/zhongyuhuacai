@@ -114,7 +114,7 @@ class OrderCtrl extends BaseCtrl  {
 //
         $gidsNums = get_request_one( $this->request,'gidsNums',"");
 
-        $rs = $this->orderService->confirmOrder($gidsNums);
+        $rs = $this->orderService->confirmOrder($gidsNums,$this->uid);
         out_ajax($rs['code'],$rs['msg']);
     }
 
