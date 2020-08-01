@@ -649,7 +649,7 @@ class ProductService
     //一个用户，浏览过多少产品
     function getUserViewProduct($uid){
         $list = UserProductLogModel::db()->getAll(" uid = $uid group by pid order by id desc limit 30");
-        if($list){
+        if(!$list){
             return out_pc(200,$list);
         }
 
