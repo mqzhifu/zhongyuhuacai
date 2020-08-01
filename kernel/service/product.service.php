@@ -655,7 +655,7 @@ class ProductService
 
         $productList = null;
         foreach ($list as $k=>$v){
-            $productList[] = ProductModel::db()->getById($v['pid']);
+            $productList[] = $this->getOneDetail($v['pid'],0,0,0);
         }
 
         $productList = $this->formatShow($productList);
