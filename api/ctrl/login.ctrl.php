@@ -61,9 +61,9 @@ class LoginCtrl extends BaseCtrl {
         //正常登陆没问题，但，DB中找不到此用户，默认就要走注册流程了
         if($loginRs['code'] == 1006){
             //注册一个新的用户，使用微信的用户基础信息
-            $rawData = json_decode($request['rawData'],true);
-            //language city  province country
-            if($rawData){
+            if(arrKeyIssetAndExist($request,"rawData")){
+                //language city  province country
+                $rawData = json_decode($request['rawData'],true);
                 $userInfo = array('nickname'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
             }else{
                 $userInfo = array('nickname'=>'游客'.rand(1000000,999999));
