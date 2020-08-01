@@ -37,6 +37,8 @@ class UserCtrl extends BaseCtrl  {
 //        $user['collect_cnt'] = UserCollectionModel::db()->getCount(" uid =  {$this->uid}");
 //        $user['coupon_cnt'] = CouponModel::db()->getCount(" uid = {$this->uid} and status = 1");
 
+        $user = $userRs['msg'];
+
         $user['view_product_history_cnt'] = $this->productService->getUserViewProductCnt($this->uid);
         $user['collect_cnt'] =      $this->collectService->getUserCnt($this->uid);
         $user['comment_cnt'] =      $this->commentService->getUserCnt($this->uid);
