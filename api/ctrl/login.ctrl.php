@@ -66,7 +66,7 @@ class LoginCtrl extends BaseCtrl {
             if($rawData){
                 $userInfo = array('nickname'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
             }else{
-                $userInfo = array('nickname'=>'游客'.rand(1000,9999));
+                $userInfo = array('nickname'=>'游客'.rand(1000000,999999));
             }
 
             $newUserInfo = $this->userService->register($openId,"",UserModel::$_type_wechat,$userInfo);
