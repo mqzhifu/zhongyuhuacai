@@ -79,6 +79,7 @@ class UserCtrl extends BaseCtrl  {
         out_ajax(200,$newId);
     }
 
+
     function wxUserInfoBind(){
 //        $sex = get_request_one($this->request,'sex',0);
 //        $nickname = get_request_one($this->request,'nickname',0);
@@ -132,7 +133,7 @@ class UserCtrl extends BaseCtrl  {
 
     function viewProductHistoryCnt(){
         $cnt = $this->productService->getUserViewProduct($this->uid);
-        out_ajax(200,$cnt);
+        out_ajax($cnt['code'],$cnt['msg']);
     }
 
     //用户收获产品 统计

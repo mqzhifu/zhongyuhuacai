@@ -658,7 +658,7 @@ class ProductService
             $productList[] = ProductModel::db()->getById($v['pid']);
         }
 
-        $productList = $this->productService->formatShow($productList);
+        $productList = $this->formatShow($productList);
         return out_pc(200,$productList);
     }
     //一个用户，浏览过多少产品
