@@ -483,6 +483,9 @@ class DbLib{
 
     function getOneBySQL($sql){
         $dbRs = $this->query($sql);
+        if(!$dbRs){
+            return 0;
+        }
 
         return $dbRs[0]['total'];
     }
