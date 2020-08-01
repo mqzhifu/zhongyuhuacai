@@ -29,6 +29,7 @@ class UserAddressService{
 
         foreach ($list as $k=>$v){
             if($v['is_default'] == UserAddressService::IS_DEFAULT_TRUE){
+                $v = $this->formatRow($v);
                 return out_pc(200,$v);
             }
         }
