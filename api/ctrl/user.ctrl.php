@@ -101,17 +101,18 @@ class UserCtrl extends BaseCtrl  {
 
     //更新资料
     function upInfo(){
-        $sex = get_request_one($this->request,'sex',0);
+//        $sex = get_request_one($this->request,'sex',0);
         $nickname = get_request_one($this->request,'nickname',0);
-        $avatar = get_request_one($this->request,'avatar',0);
+//        $avatar = get_request_one($this->request,'avatar',0);
 
         $data = array(
-            'sex'=>$sex,
+//            'sex'=>$sex,
             'nickname'=>$nickname,
-            'avatar'=>$avatar,
+//            'avatar'=>$avatar,
         );
 
-        $this->userService->upUserInfo($this->uid,$data);
+        $rs = $this->userService->upUserInfo($this->uid,$data);
+        return out_ajax($rs['code'],$rs['msg']);
     }
     //更新头像
     function upAvatar(){
