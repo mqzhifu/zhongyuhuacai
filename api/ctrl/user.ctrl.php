@@ -85,7 +85,7 @@ class UserCtrl extends BaseCtrl  {
         LogLib::inc()->debug(["wxUserInfoBind",$_REQUEST]);
 
         $rawData = get_request_one($this->request,'rawData',0);
-        $rawData = json_decode($rawData['rawData'],true);
+        $rawData = json_decode($rawData,true);
 
         $data = array(
             'sex'=>$rawData['gender'],
