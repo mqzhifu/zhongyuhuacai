@@ -63,7 +63,12 @@ class LoginCtrl extends BaseCtrl {
             //注册一个新的用户，使用微信的用户基础信息
             $rawData = json_decode($request['rawData'],true);
             //language city  province country
-            $userInfo = array('nickname'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
+            if($rawData){
+                $userInfo = array('nickname'=>$rawData['nickName'],'avatar'=>$rawData['avatarUrl'],'sex'=>$rawData['gender']);
+            }else{
+                $userInfo = array('nickname'=>'游客'.rand(1000,9999));
+            }
+
             $newUserInfo = $this->userService->register($openId,"",UserModel::$_type_wechat,$userInfo);
 //            var_dump("new uid :",$newUserInfo['id']);
             $token =  $this->userService->createToken($newUserInfo['msg']['id']);
