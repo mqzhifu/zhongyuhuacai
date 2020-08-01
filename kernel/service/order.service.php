@@ -447,6 +447,24 @@ class OrderService{
         return out_pc(200,$row);
     }
 
+    function formatRow($row){
+        $row['total_price'] = ProductService::formatDataPrice(2,$row,'total_price');
+        $row['goods_price'] = ProductService::formatDataPrice(2,$row,'goods_price');
+        $row['haulage'] = ProductService::formatDataPrice(2,$row,'haulage');
+
+        return  $row;
+    }
+
+    function getById($oid){
+        $row = OrderModel::db()->getById( $oid);
+        if(!$row){
+            return out_pc(200,$row);
+        }
+
+        $row = $this->formatRow($row);
+        return out_pc(200,$row);
+    }
+
     function formatRefundRow($row){
         $rs = $row;
 
