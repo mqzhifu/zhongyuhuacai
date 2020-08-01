@@ -655,7 +655,7 @@ class ProductService
 
         $productList = null;
         foreach ($list as $k=>$v){
-            $productList[] = $this->getOneDetail($v['pid'],0,0,0);
+            $productList[] = $this->getOneDetail($v['pid'],0,0,0)['msg'];
         }
 
         $productList = $this->formatShow($productList);
