@@ -51,6 +51,13 @@ class UploadService
         return $rs;
     }
 
+    function refund($postInputName){
+        $lib = new ImageUpLoadLib();
+        $lib->path = $this->getAdminProjectDir();
+        $rs = $lib->upLoadOneFile($postInputName,'refund',array('png','jpg','bmp'),0);
+        return $rs;
+    }
+
     function category($postInputName){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();

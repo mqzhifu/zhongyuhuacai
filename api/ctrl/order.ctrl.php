@@ -51,6 +51,9 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->confirmReceive($id);
         out_ajax($rs['code'],$rs['msg']);
     }
+
+    //--------------退款 相关------------start---------
+
     //申请退款
     function applyRefund(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
@@ -63,6 +66,12 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->applyRefund($id,$this->uid,$type,$content,$reason,$pic,$mobile);
         out_ajax($rs['code'],$rs['msg']);
     }
+    //申请退款 上传的图片
+    function applyRefundUploadPic(){
+        $rs = $this->orderService->applyRefundUploadPic($this->uid);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
     //用户申请退款记录列表
     function getUserRefundList(){
         $rs = $this->orderService->getUserRefundList($this->uid);
@@ -74,6 +83,18 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->getUserRefundById($id,$this->uid);
         out_ajax($rs['code'],$rs['msg']);
     }
+    function getRefundConst(){
+        $arr = array(
+            'status'=>OrderService::REFUND_STATS,
+            'type'=>OrderService::REFUND_TYPE_DESC,
+            'reason'=>OrderService::REFUND_REASON_DESC,
+        );
+
+        out_ajax(200,$arr);
+    }
+
+    //--------------退款 相关------------end---------
+
     //唤起支付
     function pay(){
         $oid = $agentUid =get_request_one( $this->request,'oid',0);
@@ -127,30 +148,5 @@ class OrderCtrl extends BaseCtrl  {
         $rs = $this->orderService->getGoodsIdByPcap($pid,$pcap,$num);
         out_ajax($rs['code'],$rs['msg']);
     }
-//    //获取用户购物车内的产品数
-//    function getUserCartCnt(){
-//        $cnt = $list = CartModel::db()->getCount(" uid = {$this->uid}");
-//        out_ajax(200,$cnt);
-//    }
-//    //获取用户购物车内的产品列表
-//    function getUserCart(){
-////        $oid = $agentUid =get_request_one( $this->request,'oid',0);
-//        $list = $this->orderService->getUserCart($this->uid);
-//        out_ajax($list['code'],$list['msg']);
-//    }
-//
-//    function delUserCart(){
-//        $ids = get_request_one( $this->request,'ids',"");
-//        $rs = $this->orderService->delUserCart($ids,$this->uid);
-//        out_ajax($rs['code'],$rs['msg']);
-//    }
-//
-//    function addUserCart(){
-//        $pid = $agentUid =get_request_one( $this->request,'pid',0);
-//        $rs = $this->orderService->addUserCart($this->uid,$pid);
-//        out_ajax($rs['code'],$rs['msg']);
-//    }
-
-
 
 }

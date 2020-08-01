@@ -107,6 +107,13 @@ function get_comment_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     return get_admin_upload_url($tmpPath,"comment",$protocol);
 }
 
+function get_refund_url( $tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return false;
+    }
+    return get_admin_upload_url($tmpPath,"refund",$protocol);
+}
+
 function get_default_user_url($protocol = "http"){
     $staticUrl = get_static_url($protocol);
     return $staticUrl . "/nouser.png";

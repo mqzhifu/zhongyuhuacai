@@ -74,6 +74,21 @@ class OrderService{
         $list = OrderModel::db()->getAll($where);
         return $list;
     }
+    function applyRefundUploadPic($uid){
+        $uploadService =  new UploadService();
+        LogLib::inc()->debug(['up avatar php $_FILES ',$_FILES]);
+
+        $uploadRs = $uploadService->avatar('pic');
+        if($uploadRs['code'] != 200){
+            exit(" uploadService->product error ".json_encode($uploadRs));
+        }
+
+        $tmpUrl = $uploadRs['msg'];
+        $url = get_refund_url( $tmpUrl );
+
+        $return = array("tmpUrl"=>$tmpUrl,'url'=>$url);
+        out_ajax(200,$return);
+    }
     //下单入口
     function doing($uid,$gidsNums,$couponId = 0,$memo = '',$share_uid = 0,$userSelAddressId = 0){
         LogLib::inc()->debug([$uid,$gidsNums,$couponId ,$memo ,$share_uid ]);
