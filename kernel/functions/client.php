@@ -116,7 +116,10 @@ function get_web_client_data(){
                 $dataArr = null;
                 foreach ($data as $k=>$v){
                     $tmp = explode(":",$v);
-                    $dataArr[$tmp[0]] = $tmp[1];
+                    if($tmp && isset($tmp[0]) && isset($tmp[1])){
+
+                        $dataArr[$tmp[0]] = $tmp[1];
+                    }
                 }
                 //IOS | 安卓
                 $osArr = explode(" ",$dataArr['system']);
