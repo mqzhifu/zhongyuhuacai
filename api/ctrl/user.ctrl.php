@@ -78,14 +78,36 @@ class UserCtrl extends BaseCtrl  {
         $newId = UserFeedbackModel::db()->add($data);
         out_ajax(200,$newId);
     }
+
+    function wxUserInfoBind(){
+//        $sex = get_request_one($this->request,'sex',0);
+//        $nickname = get_request_one($this->request,'nickname',0);
+        LogLib::inc()->debug(["wxUserInfoBind",$_REQUEST]);
+
+        $rawData = get_request_one($this->request,'rawData',0);
+        $rawData = json_decode($rawData['rawData'],true);
+
+        $data = array(
+            'sex'=>$rawData['gender'],
+            'nickname'=>$rawData['nickName'],
+            'avatar'=>$rawData['avatarUrl'],
+        );
+
+        $rs = $this->userService->upUserInfo($this->uid,$data);
+
+        return out_ajax($rs['code'],$rs['msg']);
+    }
+
     //更新资料
     function upInfo(){
         $sex = get_request_one($this->request,'sex',0);
         $nickname = get_request_one($this->request,'nickname',0);
+        $avatar = get_request_one($this->request,'avatar',0);
 
         $data = array(
             'sex'=>$sex,
             'nickname'=>$nickname,
+            'avatar'=>$avatar,
         );
 
         $this->userService->upUserInfo($this->uid,$data);

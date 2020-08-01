@@ -738,15 +738,15 @@ class UserService{
             return out_pc(8220);
         }
         $rs = UserModel::db()->upById($uid,$data);
-        if($this->redisCacheUser){
-            if(arrKeyIssetAndExist($data,'avatar')){
-                $user = $this->getUinfoById($uid);
-                $user['avatar'] = $data['avatar'];
-                $newAvatar = getUserAvatar($user);
-                $data['avatar'] = $newAvatar;
-            }
-            $this->upCacheUinfoByField($uid,$data, IS_NAME);
-        }
+//        if($this->redisCacheUser){
+//            if(arrKeyIssetAndExist($data,'avatar')){
+//                $user = $this->getUinfoById($uid);
+//                $user['avatar'] = $data['avatar'];
+//                $newAvatar = getUserAvatar($user);
+//                $data['avatar'] = $newAvatar;
+//            }
+//            $this->upCacheUinfoByField($uid,$data, IS_NAME);
+//        }
 
 //        $this->upCacheUinfoByField($uid,$data);
 
