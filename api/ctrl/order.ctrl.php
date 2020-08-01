@@ -87,7 +87,7 @@ class OrderCtrl extends BaseCtrl  {
     function getById(){
         $id = $agentUid =get_request_one( $this->request,'id',0);
 
-        $rs = $this->orderService->getUserRefundById($id,$this->uid);
+        $rs = $this->orderService->getById($id,$this->uid);
         out_ajax($rs['code'],$rs['msg']);
     }
 

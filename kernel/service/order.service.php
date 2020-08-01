@@ -455,7 +455,7 @@ class OrderService{
         return  $row;
     }
 
-    function getById($oid){
+    function getById($oid,$uid = 0){
         $row = OrderModel::db()->getById( $oid);
         if(!$row){
             return out_pc(200,$row);
