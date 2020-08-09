@@ -486,13 +486,14 @@ class OrderService{
         $order = OrderModel::db()->getById( $row['oid']);
         $orderPids = explode(",",$order['pids']);
         $product = ProductModel::db()->getById($orderPids[0]);
-        $product = $productService->formatRow($product,0,0);
-
-
-        var_dump($product);exit;
+        $product = $productService->formatShow($product,0,0);
+        $productPicUrl = null;
+        if(arrKeyIssetAndExist($product,'pic')){
+            $productPicUrl = explode($product['pic'])[0];
+        }
 
         $rs['product_title'] = $product['title'];
-        $rs['product_pic_url'] = $product['title'];
+        $rs['product_pic_url'] = $productPicUrl;
 
         $rs['type_desc'] = self::REFUND_TYPE_DESC[$row['type']];
         $rs['reason_desc'] = self::REFUND_REASON_DESC[$row['reason']];
