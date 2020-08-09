@@ -458,6 +458,17 @@ class OrderService{
         return  $row;
     }
 
+    function refundCancel($id){
+        $row = OrderRefundModel::db()->getRowById($id);
+        if(!$row){
+            return out_pc(8385,$row);
+        }
+
+        $rs = OrderRefundModel::db()->delById($id);
+
+        return out_pc(200,$rs);
+    }
+
     function getById($oid,$uid = 0){
         $row = OrderModel::db()->getById( $oid);
         if(!$row){

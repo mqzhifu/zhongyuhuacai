@@ -91,6 +91,13 @@ class OrderCtrl extends BaseCtrl  {
         out_ajax($rs['code'],$rs['msg']);
     }
 
+    function refundCancel(){
+        $id = $agentUid =get_request_one( $this->request,'id',0);
+
+        $rs = $this->orderService->refundCancel($id,$this->uid);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
     function getRefundConst(){
         $arr = array(
             'status'=>OrderService::REFUND_STATS,
