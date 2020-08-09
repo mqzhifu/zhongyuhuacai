@@ -493,6 +493,8 @@ class OrderService{
         $rs['status_desc'] = self::REFUND_STATS[$row['status']];
         $rs['dt'] = get_default_date($row['a_time']);
 
+        $rs['price'] = ProductService::formatDataPrice(2,$row,'price');
+
         return $rs;
     }
     //真的执行 退款  到微信
