@@ -480,13 +480,19 @@ class OrderService{
     }
 
     function formatRefundRow($row){
+        $productService = new ProductService();
         $rs = $row;
 
         $order = OrderModel::db()->getById( $row['oid']);
         $orderPids = explode(",",$order['pids']);
         $product = ProductModel::db()->getById($orderPids[0]);
+        $product = $productService->formatRow($product,0,0);
+
+
+        var_dump($product);exit;
 
         $rs['product_title'] = $product['title'];
+        $rs['product_pic_url'] = $product['title'];
 
         $rs['type_desc'] = self::REFUND_TYPE_DESC[$row['type']];
         $rs['reason_desc'] = self::REFUND_REASON_DESC[$row['reason']];
