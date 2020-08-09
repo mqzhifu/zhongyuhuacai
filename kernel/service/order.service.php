@@ -486,7 +486,7 @@ class OrderService{
         $order = OrderModel::db()->getById( $row['oid']);
         $orderPids = explode(",",$order['pids']);
         $product = ProductModel::db()->getById($orderPids[0]);
-        $product = $productService->formatShow($product,0,0);
+        $product = $productService->formatRow($product,0,0);
         $productPicUrl = null;
         if(arrKeyIssetAndExist($product,'pic')){
             $productPicUrl = explode($product['pic'])[0];
