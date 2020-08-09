@@ -78,7 +78,7 @@ class OrderService{
         $uploadService =  new UploadService();
         LogLib::inc()->debug(['up avatar php $_FILES ',$_FILES]);
 
-        $uploadRs = $uploadService->avatar('pic');
+        $uploadRs = $uploadService->refund('pic');
         if($uploadRs['code'] != 200){
             exit(" uploadService->product error ".json_encode($uploadRs));
         }
@@ -419,6 +419,9 @@ class OrderService{
             'price'=>$orders['total_price'],
             "mobile"=>$mobile,
         );
+
+
+        var_dump($data);exit;
 
         $orderRefundId = OrderRefundModel::db()->add($data);
 
