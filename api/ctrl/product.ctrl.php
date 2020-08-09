@@ -31,7 +31,8 @@ class ProductCtrl extends BaseCtrl  {
     function getUserHistoryPVList(){
         $id = get_request_one( $this->request,'id',0);
         $rs = $this->productService->getUserHistoryPVList($id,1);
-        return $this->out($rs['code'],($rs['msg']));
+//        return $this->out($rs['code'],($rs['msg']));
+        out_ajax($rs['code'],$rs['msg']);
     }
     //产品详情
     function getOneDetail(){

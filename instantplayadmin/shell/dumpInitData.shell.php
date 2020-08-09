@@ -1,4 +1,5 @@
 <?php
+//表中的数据，也包括元数据，初始化的时候，得备份
 class DumpInitData{
 
     private $_initTable = array(
@@ -7,7 +8,7 @@ class DumpInitData{
         ),
         'dynamic'=>array(
             'menu','admin_user','roles',
-            'user','sms_rule','agent','factory',
+            'user','sms_rule','agent','factory','banner',
             'product_category','product_category_attr','product_category_attr_para'
         ),
     );
