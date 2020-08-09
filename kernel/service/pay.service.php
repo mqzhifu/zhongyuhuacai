@@ -20,7 +20,7 @@ class PayService{
 
         $totalPrice = $order['total_price'];
         //测试使用的金额
-        $totalPrice = 1;
+//        $totalPrice = 1;
 
         $config = ConfigCenter::get(APP_NAME,"wx")['pay'];
         $notifyUrl  = get_domain_url() . $config['notify_url'];
