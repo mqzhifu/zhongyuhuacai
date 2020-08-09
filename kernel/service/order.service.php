@@ -23,6 +23,8 @@ class OrderService{
         self::REFUND_REASON_NO_REASON=>"不想要了",
     ];
 
+    const REFUND_CYCLE_TIME = 172800;//2天内没人处理，将自动退款给用户
+
 
     const REFUND_TYPE_GOODS_PRICE = 1;
     const REFUND_TYPE_PRICE = 2;
@@ -420,8 +422,6 @@ class OrderService{
             "mobile"=>$mobile,
         );
 
-
-        var_dump($data);exit;
 
         $orderRefundId = OrderRefundModel::db()->add($data);
 

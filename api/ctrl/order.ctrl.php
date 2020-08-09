@@ -96,6 +96,7 @@ class OrderCtrl extends BaseCtrl  {
             'status'=>OrderService::REFUND_STATS,
             'type'=>OrderService::REFUND_TYPE_DESC,
             'reason'=>OrderService::REFUND_REASON_DESC,
+            'cycle_time'=>OrderService::REFUND_CYCLE_TIME,
         );
 
         out_ajax(200,$arr);
