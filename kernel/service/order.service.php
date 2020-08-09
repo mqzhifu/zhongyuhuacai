@@ -489,7 +489,7 @@ class OrderService{
         $product = $productService->formatRow($product,0,0);
         $productPicUrl = null;
         if(arrKeyIssetAndExist($product,'pic')){
-            $productPicUrl = explode($product['pic'])[0];
+            $productPicUrl = explode(",",$product['pic'])[0];
         }
 
         $rs['product_title'] = $product['title'];
