@@ -430,7 +430,7 @@ class OrderService{
     }
     //获取用户 订单申请的记录列表
     function getUserRefundList($uid){
-        $list = OrderRefundModel::db()->getAll(" uid = $uid");
+        $list = OrderRefundModel::db()->getAll(" uid = $uid order by id desc");
         if(!$list){
             return out_pc(200,$list);
         }
