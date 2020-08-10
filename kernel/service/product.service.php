@@ -327,7 +327,8 @@ class ProductService
         }
 
         $salePrice = $data[$key];
-        if ($salePrice > 0 && (int)($salePrice) > 0) {
+//        if ($salePrice > 0 && (int)($salePrice) > 0) {
+        if ($salePrice > 0){
             if ($type == 1) {//元 转换 分
                 return yuanToFen($salePrice);
             } else {//分 转换 元
