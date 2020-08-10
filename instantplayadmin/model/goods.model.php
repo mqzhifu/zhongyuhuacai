@@ -62,6 +62,7 @@ class GoodsModel {
         $data['sale_price'] = ProductService::formatDataPrice(1,$data,'sale_price');
         $data['original_price'] = ProductService::formatDataPrice(1,$data,'original_price');
 
+
         $data['pid'] = $product['id'];
         $data['product_attr_ids'] = $product_attr_ids;
         $newId =  self::db()->add($data);
