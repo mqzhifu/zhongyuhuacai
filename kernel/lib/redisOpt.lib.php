@@ -61,7 +61,7 @@ class RedisOptLib{
 
 
     static function delToken($uid){
-        $key = RedisPHPLib::getAppKeyById($GLOBALS['rediskey']['token']['key'],$uid);
+        $key = RedisPHPLib::getAppKeyById( self::$_kernelRedisKeyConfig['token']['key']  ,$uid);
         $redisToken = RedisPHPLib::del($key);
         return $redisToken;
     }
