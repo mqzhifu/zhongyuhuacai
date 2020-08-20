@@ -28,6 +28,13 @@ class ToolsCtrl {
     function index(){
         echo "im index";exit;
     }
+
+    function delUserToken($uid){
+        var_dump($uid);
+        $rs = RedisOptLib::delToken($uid);
+        var_dump($rs);exit;
+    }
+
     //有些接口，必须是登陆后，才能访问~有些不需要
     function loginAPIExcept($ctrl = "",$ac = ""){
         if(!$ctrl && !$ac ){
