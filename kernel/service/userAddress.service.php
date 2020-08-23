@@ -277,7 +277,7 @@ class UserAddressService{
             $provinceData[$k] = $v['short_name'];
         }
 
-        $cityList = AreaCityModel::db()->getAll(null,null,"code,short_name");
+        $cityList = AreaCityModel::db()->getAll(1,null,"code,short_name");
         $cityData = null;
         foreach ($cityList as $k=>$v){
             $cityData[$k] = $v['short_name'];
