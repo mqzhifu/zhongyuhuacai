@@ -60,6 +60,7 @@ class CartService{
             $row = $service->getOneDetail($v['pid'] , 0 , $uid , 0 );
             $row = $service->formatShowRow($row['msg']);
             $row['cart_id'] = $v['id'];
+            $row['gid'] = $v['gid'];
             $rs[] = $row;
         }
 
