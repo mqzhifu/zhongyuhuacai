@@ -469,7 +469,7 @@ class ProductService
             'list' => null,
         );
 
-        $where = " 1 = 1 ";
+        $where = " 1 = 1 " . $this->getTableWhereStatusByOnline();
         if ($condition) {
 //            return out_pc(8978);
             if (arrKeyIssetAndExist($condition, 'keyword')) {
