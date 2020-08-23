@@ -685,7 +685,7 @@ class ProductService
                 continue;
             }
             //未上架的产品，应该删除掉
-            if($product == $productService->getTableWhereStatusByOnline()){
+            if($product['status'] == $productService->getTableWhereStatusByOnline()){
                 $total++;
             }
         }
@@ -695,7 +695,6 @@ class ProductService
 
     //一个用户，浏览过多少产品
     function getUserViewProductCnt($uid){
-
         $where = " uid = {$uid} ";
         $rs =  UserProductLogModel::db()->getAll(" $where group by pid",null," count(id) as total ,id,pid");
         return $rs;
