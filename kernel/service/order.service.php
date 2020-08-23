@@ -355,6 +355,7 @@ class OrderService{
 
     //支付完成 - 通知订单变更状态
     function finish($wx_callback_data){
+        $productService = new ProductService();
         $orderNo = $wx_callback_data['out_trade_no'];
         $order = OrderModel::db()->getRow(" no = '$orderNo'");
         if(!$order){
@@ -375,8 +376,18 @@ class OrderService{
 
         OrderModel::db()->upById($order['id'], $upData );
 
+        $orderGoods = OrderGoodsModel::db()->getAll(" oid = {$order['id']}");
+        if(!$order){
+            LogLib::inc()->debug("table order not has info by oid({$order['id']})");
+        }else{
+            foreach ($orderGoods as $k=>$v){
+                $num = "-".$v['num'];
+                $productService->upGoodsStock($v['gid'],$num);
+            }
+        }
 
-        LogLib::inc()->debug(" pay callback ,process (up order info0 ok");
+
+        LogLib::inc()->debug(" pay callback ,process (up order info ok");
         return out_pc(200);
     }
     //申请退款

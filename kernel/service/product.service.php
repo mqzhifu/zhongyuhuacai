@@ -700,5 +700,12 @@ class ProductService
         return $rs;
     }
 
+    function upGoodsStock($gid,$num){
+        LogLib::inc()->debug(" upGoodsStock gid($gid) num($num)");
+
+        $data = array("stock"=>array($num));
+        return GoodsModel::db()->upById($gid,$data);
+    }
+
 
 }
