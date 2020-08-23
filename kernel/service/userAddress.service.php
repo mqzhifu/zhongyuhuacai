@@ -284,7 +284,7 @@ class UserAddressService{
         }
 
         $final = array('province_data'=>$provinceData,'city_data'=>$cityData);
-        var_dump($final);exit;
+//        var_dump($final);exit;
 
         return out_pc(200,$final);
     }
