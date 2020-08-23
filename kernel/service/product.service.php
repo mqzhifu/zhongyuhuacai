@@ -675,21 +675,29 @@ class ProductService
             return 0;
         }
 
-        $total = count($list);
-//        $total = 0;
-//        foreach ($list as $k=>$v){
-//            $total += $v['total'];
-//        }
+        $productService = new ProductService();
 
-        var_dump($total);exit;
+//        $total = count($list);
+        $total = 0;
+        foreach ($list as $k=>$v){
+            $product = ProductModel::db()->getById($v['pid']);
+            if(!$product){
+                continue;
+            }
+            //未上架的产品，应该删除掉
+            if($product == $productService->getTableWhereStatusByOnline()){
+                $total++;
+            }
+        }
+
         return $total;
     }
 
     //一个用户，浏览过多少产品
     function getUserViewProductCnt($uid){
-        $productService = new ProductService();
-        $where = " uid = {$uid} ". $productService->getTableWhereStatusByOnline();
-        $rs =  UserProductLogModel::db()->getAll(" $where group by pid",null," count(id) as total ,id,status,pid");
+
+        $where = " uid = {$uid} ";
+        $rs =  UserProductLogModel::db()->getAll(" $where group by pid",null," count(id) as total ,id,pid");
         var_dump($rs);
         return $rs;
     }
