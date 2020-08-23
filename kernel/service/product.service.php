@@ -85,6 +85,8 @@ class ProductService
             $where = " recommend = " . ProductModel::RECOMMEND_TRUE;
         }
 
+        $where .= $this->getTableWhereStatusByOnline();
+
         $cnt = $this->getListCntByDb($where);
         if (!$cnt) {
             return out_pc(200, null);
@@ -120,6 +122,11 @@ class ProductService
 
         return out_pc(200, $returnPageInfo);
     }
+    //已上架的产品 where
+    function getTableWhereStatusByOnline(){
+        return " and status =   ".ProductModel::STATUS_ON;
+    }
+
     //一个产品下的，所有商品的处理
     function processProductGoodsInfo($product,$ProductLinkCategoryAttrDb, $filterNoStockGoods = 0){
         //产品 属性参数  是否为空
