@@ -675,10 +675,11 @@ class ProductService
             return 0;
         }
 
-        $total = 0;
-        foreach ($list as $k=>$v){
-            $total += $v['total'];
-        }
+        $total = count($list);
+//        $total = 0;
+//        foreach ($list as $k=>$v){
+//            $total += $v['total'];
+//        }
 
         var_dump($total);exit;
         return $total;
