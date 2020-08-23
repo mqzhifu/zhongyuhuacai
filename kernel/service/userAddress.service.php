@@ -270,6 +270,16 @@ class UserAddressService{
 //        }
     }
 
+    function getAllCounty(){
+        $List = AreaCountyModel::db()->getAll(1,null,"code,short_name");
+        $listData = null;
+        foreach ($List as $k=>$v){
+            $listData[$v['code']] = $v['short_name'];
+        }
+
+        return out_pc(200,$listData);
+    }
+
     function getAreaProvinceCity(){
         $provinceList = AreaProvinceModel::db()->getAll(1,null,"code,short_name");
         $provinceData = null;
@@ -284,7 +294,6 @@ class UserAddressService{
         }
 
         $final = array('province_data'=>$provinceData,'city_data'=>$cityData);
-//        var_dump($final);exit;
 
         return out_pc(200,$final);
     }

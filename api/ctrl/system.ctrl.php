@@ -5,6 +5,12 @@ class SystemCtrl extends BaseCtrl  {
         $rs = $this->userAddressService->getAreaProvinceCity();
         out_ajax($rs['code'],$rs['msg']);
     }
+
+    function getAreaAllCounty(){
+        $rs = $this->userAddressService->getAllCounty();
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
     //发送短信，如：验证码
     function sendSMS($cellphone,$ruleId){
         $class = new VerifierCodeLib();
