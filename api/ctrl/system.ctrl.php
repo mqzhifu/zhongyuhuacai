@@ -1,5 +1,9 @@
 <?php
 class SystemCtrl extends BaseCtrl  {
+    //获取所有的省-市
+    function getAreaProvinceCity(){
+        $this->userAddressService
+    }
     //发送短信，如：验证码
     function sendSMS($cellphone,$ruleId){
         $class = new VerifierCodeLib();

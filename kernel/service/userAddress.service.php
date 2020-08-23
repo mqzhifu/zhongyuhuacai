@@ -270,6 +270,22 @@ class UserAddressService{
 //        }
     }
 
+    function getAreaProvinceCity(){
+        $provinceList = AreaProvinceModel::db()->getAll(null,null,"code,short_name");
+        $provinceData = null;
+        foreach ($provinceList as $k=>$v){
+            $provinceData[$k] = $v['short_name'];
+        }
+
+        $cityList = AreaCityModel::db()->getAll(null,null,"code,short_name");
+        $cityData = null;
+        foreach ($cityList as $k=>$v){
+            $cityData[$k] = $v['short_name'];
+        }
+
+        $final = array('province_data'=>$provinceData,'city_data'=>$cityData);
+        var_dump($final);exit;
+    }
 
     function getById($id){
         $row = UserAddressModel::db()->getRow($id);
