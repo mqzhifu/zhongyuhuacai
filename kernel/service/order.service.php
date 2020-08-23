@@ -267,9 +267,9 @@ class OrderService{
             $arr = explode("-",$v);
             $gid = $arr[0];
             $num = $arr[1];
-
-            $data = array("stock"=>array(-1));
-            $upGoodsStock = GoodsModel::db()->upById($gid,$data);
+//            $data = array("stock"=>array(-1));
+//            $upGoodsStock = GoodsModel::db()->upById($gid,$data);
+            $productService->upGoodsStock($gid,$num);
         }
 
         foreach ($pidsArr as $k=>$v){
@@ -284,6 +284,39 @@ class OrderService{
         return out_pc(200,$newId);
 
     }
+    //检查已超时订单，并更新状态，归还库存
+    function checkTimeoutAndRollback(){
+        $timeoutOrder = $this->getAllTimeoutOrder();
+        if(!$timeoutOrder){
+            LogLib::inc()->debug(" no timeout order");
+            return -1;
+        }
+
+        var_dump($timeoutOrder);exit;
+        $productService = new ProductService();
+        $return = array('recordCnt'=>count($productService));
+        foreach ($timeoutOrder as $k=>$v){
+            //先更新订单状态已超时
+            $rs = $this->upStatus($v['id'],OrderModel::STATUS_TIMEOUT);
+            $return[$v['id']]['upOrderStatus'] = $rs;
+            //归还库存
+            $goods = OrderGoodsModel::db()->getAll(" oid = {$v['id']}");
+            var_dump($goods);exit;
+            foreach ($goods as $k2=>$v2){
+                $rs = $productService->upGoodsStock($v['gid'],$v2['num']);
+                $return[$v['id']]['rollbackGoods'] = array("gid"=>$v['gid'],'num'=>$v2['num'],'upRs'=>$rs);
+            }
+        }
+
+        return $return;
+    }
+
+    function getAllTimeoutOrder(){
+        $now = time();
+        $orderList = OrderModel::db()->getAll(" $now > expire_time ");
+        return $orderList;
+    }
+
     //用户订单列表
     function getUserList($uid,$status){
         $where = " uid = $uid ";
@@ -376,15 +409,16 @@ class OrderService{
 
         OrderModel::db()->upById($order['id'], $upData );
 
-        $orderGoods = OrderGoodsModel::db()->getAll(" oid = {$order['id']}");
-        if(!$order){
-            LogLib::inc()->debug("table order not has info by oid({$order['id']})");
-        }else{
-            foreach ($orderGoods as $k=>$v){
-                $num = "-".$v['num'];
-                $productService->upGoodsStock($v['gid'],$num);
-            }
-        }
+        //下单后，即扣库存，这里不用再操作了
+//        $orderGoods = OrderGoodsModel::db()->getAll(" oid = {$order['id']}");
+//        if(!$order){
+//            LogLib::inc()->debug("table order not has info by oid({$order['id']})");
+//        }else{
+//            foreach ($orderGoods as $k=>$v){
+//                $num = "-".$v['num'];
+//                $productService->upGoodsStock($v['gid'],$num);
+//            }
+//        }
 
 
         LogLib::inc()->debug(" pay callback ,process (up order info ok");
@@ -542,12 +576,17 @@ class OrderService{
     function upStatus($oid,$status,$upData = []){
         LogLib::inc()->debug(['up order status:',$oid,$status]);
         $data = array('status'=>$status,'u_time'=>time());
-        if($status == OrderModel::STATUS_SIGN_IN){
+        if($status == OrderModel::STATUS_SIGN_IN){//签收
             $data['signin_time'] = time();
         }elseif($status == OrderModel::STATUS_REFUND_FINISH   || $status == OrderModel::STATUS_REFUND_REJECT){
+            //已完成  退款被驳回
             $data['refund_memo'] = $upData['refund_memo'];
         }elseif($status == OrderModel::STATUS_REFUND){
+            //申请退款
             $data['refund_id'] = $upData['refund_id'];
+        }elseif($status == OrderModel::STATUS_TIMEOUT){
+            //超时回收
+//            $data['refund_id'] = $upData['refund_id'];
         }
         return OrderModel::db()->upById($oid,$data);
     }

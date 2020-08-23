@@ -18,6 +18,11 @@ class SystemCtrl extends BaseCtrl  {
 
         return $this->out($rs['code'],$rs['msg']);
     }
+    //订单超时回收
+    function checkTimeoutAndRollback(){
+        $this->orderService->checkTimeoutAndRollback();
+    }
+
     //发送邮件，如：通知、找回密码，验证码
     function sendEmail($email,$ruleId){
         $class = new VerifierCodeLib();
