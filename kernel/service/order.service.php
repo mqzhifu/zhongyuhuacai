@@ -302,7 +302,7 @@ class OrderService{
             $goods = OrderGoodsModel::db()->getAll(" oid = {$v['id']}");
             foreach ($goods as $k2=>$v2){
                 $rs = $productService->upGoodsStock($v2['gid'],$v2['num']);
-                $return[$v['id']]['rollbackGoods'] = array("gid"=>$v['gid'],'num'=>$v2['num'],'upRs'=>$rs);
+                $return[$v['id']]['rollbackGoods'] = array("gid"=>$v2['gid'],'num'=>$v2['num'],'upRs'=>$rs);
             }
         }
 
@@ -311,7 +311,7 @@ class OrderService{
 
     function getAllTimeoutOrder(){
         $now = time();
-        $orderList = OrderModel::db()->getAll(" $now > expire_time ");
+        $orderList = OrderModel::db()->getAll(" $now > expire_time and status =  ".OrderModel::STATUS_WAIT_PAY);
         return $orderList;
     }
 
