@@ -292,18 +292,16 @@ class OrderService{
             return -1;
         }
 
-        var_dump($timeoutOrder);exit;
         $productService = new ProductService();
-        $return = array('recordCnt'=>count($productService));
+        $return = array('recordCnt'=>count($timeoutOrder));
         foreach ($timeoutOrder as $k=>$v){
             //先更新订单状态已超时
             $rs = $this->upStatus($v['id'],OrderModel::STATUS_TIMEOUT);
             $return[$v['id']]['upOrderStatus'] = $rs;
             //归还库存
             $goods = OrderGoodsModel::db()->getAll(" oid = {$v['id']}");
-            var_dump($goods);exit;
             foreach ($goods as $k2=>$v2){
-                $rs = $productService->upGoodsStock($v['gid'],$v2['num']);
+                $rs = $productService->upGoodsStock($v2['gid'],$v2['num']);
                 $return[$v['id']]['rollbackGoods'] = array("gid"=>$v['gid'],'num'=>$v2['num'],'upRs'=>$rs);
             }
         }

@@ -20,7 +20,8 @@ class SystemCtrl extends BaseCtrl  {
     }
     //订单超时回收
     function checkTimeoutAndRollback(){
-        $this->orderService->checkTimeoutAndRollback();
+        $rs = $this->orderService->checkTimeoutAndRollback();
+        var_dump($rs);exit;
     }
 
     //发送邮件，如：通知、找回密码，验证码
