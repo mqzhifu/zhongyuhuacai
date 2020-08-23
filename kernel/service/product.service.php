@@ -669,9 +669,28 @@ class ProductService
         $productList = $this->formatShow($productList);
         return out_pc(200,$productList);
     }
+    function getUserViewProductTotalCnt($uid){
+        $list = $this->getUserViewProductCnt($uid);
+        if($list){
+            return 0;
+        }
+
+        $total = 0;
+        foreach ($list as $k=>$v){
+            $total += $v['total'];
+        }
+
+        var_dump($total);exit;
+        return $total;
+    }
+
     //一个用户，浏览过多少产品
     function getUserViewProductCnt($uid){
-        return UserProductLogModel::db()->getCount(" uid = {$uid} group by pid");
+        $productService = new ProductService();
+        $where = " uid = {$uid} ". $productService->getTableWhereStatusByOnline();
+        $rs =  UserProductLogModel::db()->getAll(" $where group by pid",null," count(id) as total ");
+        var_dump($rs);
+        return $rs;
     }
 
 
