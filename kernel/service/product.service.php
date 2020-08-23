@@ -689,7 +689,7 @@ class ProductService
     function getUserViewProductCnt($uid){
         $productService = new ProductService();
         $where = " uid = {$uid} ". $productService->getTableWhereStatusByOnline();
-        $rs =  UserProductLogModel::db()->getAll(" $where group by pid",null," count(id) as total ");
+        $rs =  UserProductLogModel::db()->getAll(" $where group by pid",null," count(id) as total ,id,status,pid");
         var_dump($rs);
         return $rs;
     }
