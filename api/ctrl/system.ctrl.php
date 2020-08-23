@@ -2,7 +2,8 @@
 class SystemCtrl extends BaseCtrl  {
     //获取所有的省-市
     function getAreaProvinceCity(){
-        $this->userAddressService
+        $rs = $this->userAddressService->getAreaProvinceCity();
+        out_ajax($rs['code'],$rs['msg']);
     }
     //发送短信，如：验证码
     function sendSMS($cellphone,$ruleId){
