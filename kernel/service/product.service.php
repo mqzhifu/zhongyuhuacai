@@ -698,7 +698,6 @@ class ProductService
 
         $where = " uid = {$uid} ";
         $rs =  UserProductLogModel::db()->getAll(" $where group by pid",null," count(id) as total ,id,pid");
-        var_dump($rs);
         return $rs;
     }
 
