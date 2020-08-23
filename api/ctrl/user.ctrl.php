@@ -133,7 +133,7 @@ class UserCtrl extends BaseCtrl  {
     }
 
     function viewProductHistoryCnt(){
-        $cnt = $this->productService->getUserViewProduct($this->uid);
+        $cnt = $this->productService->getUserViewProductCnt($this->uid);
         out_ajax($cnt['code'],$cnt['msg']);
     }
 
