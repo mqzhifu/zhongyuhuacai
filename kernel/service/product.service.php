@@ -675,7 +675,7 @@ class ProductService
             return 0;
         }
 
-        $productService = new ProductService();
+//        $productService = new ProductService();
 
 //        $total = count($list);
         $total = 0;
@@ -685,7 +685,7 @@ class ProductService
                 continue;
             }
             //未上架的产品，应该删除掉
-            if($product['status'] == $productService->getTableWhereStatusByOnline()){
+            if($product['status'] == ProductModel::STATUS_ON){
                 $total++;
             }
         }
