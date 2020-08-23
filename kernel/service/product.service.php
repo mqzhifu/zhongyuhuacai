@@ -671,7 +671,7 @@ class ProductService
     }
     function getUserViewProductTotalCnt($uid){
         $list = $this->getUserViewProductCnt($uid);
-        if($list){
+        if(!$list){
             return 0;
         }
 
