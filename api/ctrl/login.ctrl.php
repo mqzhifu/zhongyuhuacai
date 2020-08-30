@@ -17,10 +17,10 @@ class LoginCtrl extends BaseCtrl {
 //        $rs =  $this->userService->loginRegister(null,null,UserModel::$_type_guest,$this->clientInfo);
 //        return $this->out($rs['code'],$rs['msg']);
 //    }
-//    //手机/邮箱/用户名 + 密码
-//    function index($username,$ps){
-//        return $this->userService->login($username,$ps);
-//    }
+    //手机/邮箱/用户名 + 密码
+    function index($username,$ps){
+        return $this->userService->login($username,$ps);
+    }
 //    //手机 - 短信 - 验证码 - 登陆
 //    // 1 API-手机端-登陆：是只需要手机短信验证码的
 //    // 2 PC端：是需要图片验证码的

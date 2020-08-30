@@ -1,0 +1,48 @@
+<html>
+
+
+<body>
+
+<table>
+    <tr>
+
+        <td>描述</td>
+        <td>方法名</td>
+        <td>控制器</td>
+        <td>登陆</td>
+        <td>模块</td>
+        <td>参数</td>
+        <td>测试</td>
+    </tr>
+
+
+    {foreach ($list as $k=>$v) }
+    <tr>
+        <td>{$v['title']}</td>
+        <td>{$v['ac']}</td>
+        <td>{$v['ctrl']}</td>
+        <td>{$v['is_login']}</td>
+        <td>{$v['module']}</td>
+        <td>
+            {if $v['para']}
+            <table border="1">
+                {foreach ($v['para'] as $k2=>$v2) }
+                    <tr>
+                        <td>{$v2['name']}</td>
+                    </tr>
+                {/foreach}
+            </table>
+            {/if}
+        </td>
+        <td><a href="/index/apitest/apiId={$v['id']}">请求</a> </td>
+    </tr>
+
+    {/foreach}
+
+
+</table>
+
+</body>
+
+
+</html>

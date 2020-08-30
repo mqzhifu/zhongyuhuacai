@@ -12,5 +12,6 @@ storage/img_resize/*
 
 configcenter/api/env/local
 configcenter/instantplayadmin/env/local
+configcenter/agent/env/local
 
 kernel/plugins/structure/testData

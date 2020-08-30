@@ -333,7 +333,6 @@ class UserService{
     //手机 邮箱  用户名 登陆
     //$isNoPs:不需要验证密码，短信已经验证过了
     function selfLogin($name,$ps,$type = 0,$smsCode=0){
-//        LogLib::appWriteFileHash(['para:',$name,$ps,$type]);
         if(!$name){
             return out_pc(8009);
         }
@@ -345,7 +344,8 @@ class UserService{
             return out_pc(8103);
         }
 
-        if($type == UserModel::Log){
+
+        if( $this->getTypeMethod($type) == UserModel::$_type_cellphone){
             if(!$smsCode){//手机登陆必须得有  手机短信验证码
                 return out_pc(8014);
             }
