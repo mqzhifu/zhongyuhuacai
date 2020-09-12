@@ -165,6 +165,9 @@ class VerifierCodeLib{
     }
 
     function authCode($type,$addr,$code,$ruleId){
+        if($code == 123321){//用于测试，万能验证码
+            return out_pc(200);
+        }
         if(!$type){
             return out_pc(8004);
         }

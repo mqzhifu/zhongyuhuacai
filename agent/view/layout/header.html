@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{$this->_title}</title>
+        <!-- Set render engine for 360 browser -->
+        <meta name="renderer" content="webkit" />
+        <!-- No Baidu Siteapp-->
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <link rel="icon" type="image/png" href="assets/i/favicon.png" />
+        <!-- Add to homescreen for Chrome on Android -->
+        <meta name="mobile-web-app-capable" content="yes" />
+        <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png" />
+        <!-- Add to homescreen for Safari on iOS -->
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="Amaze UI" />
+        <meta name="msapplication-TileColor" content="#0e90d2" />
+
+        {$css}
+        {$js}
+
+    </head>
+
+    <!--aaa-->
+
+    <body>
+    <header data-am-widget="header" class="am-header am-header-default">
+        <div class="am-header-left am-header-nav">
+            <a href="#left-link"
+            ><img src="{CONST|H_STATIC_URL}/agent/assets/images/header/icon-back.png" alt="" srcset=""
+            /></a>
+        </div>
+
+        <h1 class="am-header-title">{$this->_subTitle}</h1>
+
+        <div class="am-header-right am-header-nav">
+            <a href="#right-link">
+                <img src="{CONST|H_STATIC_URL}/agent/assets/images/header/icon-close.png" alt="" srcset="" />
+            </a>
+        </div>
+    </header>
+

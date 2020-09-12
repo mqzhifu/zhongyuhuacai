@@ -1,0 +1,94 @@
+
+<div class="pageMyEdit">
+    <div class="avatar">
+        <img src="{CONST|H_STATIC_URL}/agent/assets/images/loginLogo.png" alt="" />
+        <p>新零售代理平台</p>
+    </div>
+    <!-- //End  avatar-->
+
+    <div class="baseForm">
+        <form action="">
+            <input type="hidden" name="opt" value="1" />
+            <div class="group">
+                <label>手机号</label>
+                <input
+                        id="phone"
+                        name = "phone"
+                    type="text"
+                    class="ipt"
+                    placeholder="请输入手机号"
+                    required
+                />
+            </div>
+            <div class="group vGroup">
+                <label>验证码</label>
+                <input
+
+                        name="smsCode"
+                    type="text"
+                    class="ipt"
+                    placeholder="请输入验证码"
+                    required
+                />
+                <span class="vCode">发送验证码</span>
+            </div>
+            <input type="submit" class="iptBtn" value="登录" />
+        </form>
+    </div>
+</div>
+<!-- //End -->
+
+<script>
+    $(function () {
+        //获取短信验证码
+        var validCode = true
+        $('.vCode').click(function () {
+            var time = 60
+            var code = $(this)
+            if (validCode) {
+
+                var phone = $("#phone").val();
+                if(!phone || phone == 'undefined' || typeof(phone) == "undefined"){
+                    return alert("手机号为空");
+                }
+                $.ajax({
+                    //请求方式
+                    type : "POST",
+                    //请求的媒体类型
+                    // contentType: "application/json;charset=UTF-8",
+                    //请求地址
+                    url : "/system/sendSms",
+                    //数据，json字符串
+                    // data : JSON.stringify(list),
+                    data : "phone="+phone,
+                    //请求成功
+                    success : function(result) {
+                        console.log(result);
+                    },
+                    //请求失败，包含具体的错误信息
+                    error : function(e){
+                        console.log(e.status);
+                        console.log(e.responseText);
+                    }
+                });
+
+
+                validCode = false
+
+                var t = setInterval(function () {
+                    code.addClass('msgs1')
+                    time--
+                    code.html(time + '秒')
+                    if (time == 0) {
+                        clearInterval(t)
+                        code.html('重新获取')
+                        validCode = true
+                        code.removeClass('msgs1')
+                    }
+                }, 1000)
+            }
+        })
+    })
+</script>
+</body>
+</html>

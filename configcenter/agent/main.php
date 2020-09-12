@@ -21,12 +21,14 @@ $main = array(
     'loginAPIExcept'=> array(
 //        array("login","webSocketLogin",),
 
-        array("gentLogin",'ps'),
-        array("gentLogin",'sms'),
-        array("gentLogin",'psSms'),
-        array("gentLogin",'findPsBySms'),
+        array("login",'index'),
+        array("login",'ps'),
+        array("login",'sms'),
+        array("login",'psSms'),
+        array("login",'findPsBySms'),
 
-//        array(   'index','getServer',),
+//        array(   'index','index',),
+
 //        array(   'index','testProtoBuf',),
 //        array(   'index','getUiShowConfig',),
 //        array(   'system','getAppUpgradeInfo',),

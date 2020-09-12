@@ -46,7 +46,7 @@ function get_product_url( $tmpPath , $protocol = HTTP_PROTOCOL){
 
 function get_agent_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
-        return false;
+        return get_default_user_url(HTTP_PROTOCOL);
     }
     return get_admin_upload_url($tmpPath,"agent",$protocol);
 }

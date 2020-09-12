@@ -1,0 +1,91 @@
+<div class="pageMy">
+    <div class="base">
+        <img class="avatar" src="{$uinfo['avatar_url']}" alt="" />
+        <div class="info">
+            <p class="t">ID：{$uinfo['id']}</p>
+            <p>姓名：{$uinfo['real_name']}</p>
+            <p>绑定UID：{$bindUserInfo}</p>
+            <p>代理级别：{$uinfo['type']}</p>
+            <p>我的邀请码：{$uinfo['invite_code']}</p>
+        </div>
+        <div class="tool">
+            <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/base-edit.png" onclick="clickEditUinfo()" alt="" />
+            <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/base-unbind.png" onclick="clickUnbind()" alt="" />
+        </div>
+    </div>
+    <!-- //End base-->
+
+    <div class="infos">
+        <div class="info">
+            <p>¥{$allowWithdrawMoneyTotalNum}</p>
+            <p>可提现金佣金</p>
+        </div>
+        <div class="info">
+            <p>{$allOrderCnt}</p>
+            <p>成功订单数</p>
+        </div>
+        <div class="info">
+            <p>{$subAgentCnt}</p>
+            <p>我的下级</p>
+        </div>
+        <div class="info">
+            <p>{$shareProductCnt}</p>
+            <p>产品分享数</p>
+        </div>
+    </div>
+    <!-- //End infos-->
+
+    <div class="level">
+        <div class="tb">
+            <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/level.png" alt="" />
+            <span>我的上级</span>
+            <span class="name">{$myLeader}</span>
+        </div>
+    </div>
+    <!-- //End level-->
+
+    <div class="tools">
+        <div class="item">
+            <a href="/withdraw/lists/">
+                <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools1.png" alt="" />
+                <p>提现记录</p>
+            </a>
+        </div>
+        <div class="item">
+            <a href="/withdraw/orderList/">
+            <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools2.png" alt="" />
+            <p>订单列表</p>
+            </a>
+        </div>
+        <div class="item">
+            <a href="/withdraw/apply/">
+            <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools3.png" alt="" />
+            <p>申请提现</p>
+            </a>
+        </div>
+        <div class="item">
+            <a href="/agent/bindUser/">
+            <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
+            <p>绑定用户</p>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function clickEditUinfo(){
+        location.href="/agent/editUinfo/";
+    }
+
+    function clickUnbind(){
+        location.href="/agent/unbindUser/";
+    }
+
+
+
+</script>
+
+<!-- //End -->
+</body>
+</html>

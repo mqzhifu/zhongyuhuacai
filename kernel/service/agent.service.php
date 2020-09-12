@@ -84,11 +84,10 @@ class AgentService{
         return out_pc(200,$newId);
 
     }
-
+    //根据手机号，获取一个代理
     function getRowByMobile($mobile){
         return AgentModel::db()->getRow(" mobile = '$mobile'");
     }
-
     //获取一个代理，分享出去的连接，所成交的所有订单
     function getOrderListByAId($aid,$status = 0){
         $list =  $this->orderService ->getListByAgentId($aid,$status);
@@ -174,6 +173,12 @@ class AgentService{
         $list = AgentModel::db()->getAll(" invite_agent_uid = $aid");
         return $list;
     }
+    //获取  一级代理下的，所有二级代理数
+    function getSubAgentCnt($aid){
+        $list = AgentModel::db()->getCount(" invite_agent_uid = $aid");
+        return $list;
+    }
+
     //获取一个 一级代理，下的，所有二级代理的，所有订单
     function getAgentSubOrderList($aid,$type){
         $subAgent = $this->getSubAgentList($aid);
@@ -248,6 +253,12 @@ class AgentService{
 
         return array('fee'=>$fee,'sub_fee'=>$subFee);
     }
+
+    //获取一个代理，分享产品数
+    function getShareProductCnt($aid){
+        return ShareProductModel::db()->getCount(" agent_id = $aid");
+    }
+
     //获取一批用户的ID
     function getSomeAgentFee($uids){
         $orderService = new OrderService();

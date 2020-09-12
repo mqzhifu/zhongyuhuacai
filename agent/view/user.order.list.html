@@ -1,0 +1,128 @@
+<div class="pageMyTx pageMyShare bgColor">
+    <div class="tabs" id="tabs">
+        <span class="tab" onclick="sel_tab(1);">未支付</span>
+        <span class="tab" onclick="sel_tab(2);">已支付</span>
+        <span class="tab" onclick="sel_tab(3);">已完成</span>
+    </div>
+    <div class="container" id="container">
+        <div class="item">
+            <div class="num">ID：1200110231</div>
+            <div class="timeSq">商品名称：纯天然无公害秋梨膏</div>
+            <div class="price">
+                ¥420<img class="go" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />
+            </div>
+            <div class="timeDk">下单时间：2020/08/31 09:30</div>
+            <div class="status"><span>用户ID：200010001</span></div>
+        </div>
+        <div class="item">
+            <div class="num">ID：1200110231</div>
+            <div class="timeSq">商品名称：纯天然无公害秋梨膏</div>
+            <div class="price">
+                ¥420<img class="go" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png" />
+            </div>
+            <div class="timeDk">下单时间：2020/08/31 09:30</div>
+            <div class="status"><span>用户ID：200010001</span></div>
+        </div>
+    </div>
+    <div class="tools">
+        <span class="btnDefault" id="selAllBng" onclick="selAll()">
+            <img  class="go"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />全选</span>
+        <span class="btnSelected">申请提现</span>
+    </div>
+</div>
+
+
+
+
+<script>
+    var orderList = eval( {$orderList});
+    var selAllFlag = 0;
+
+    function sel_tab(type){
+        var tabs = $("#tabs > *");
+        tabs.each(function(i,n){
+            var obj = $(n)
+            obj.removeClass("active");
+        });
+
+        tabs.each(function(i,n){
+            if(i + 1 == type){
+                var obj = $(n)
+                obj.addClass('active');
+
+
+                var container = "";
+                if(orderList[type]){
+                    // alert(orderList[type]);
+                    for(var i=0;i<orderList[type].length;i++){
+                        var itemHtml = getItemHtml();
+                        itemHtml = itemHtml.replace("#id#",orderList[type][i]['id']);
+                        itemHtml = itemHtml.replace("#a_date#",orderList[type][i]['a_date']);
+                        itemHtml = itemHtml.replace("#uid#",orderList[type][i]['uid']);
+                        itemHtml = itemHtml.replace("#price#",orderList[type][i]['total_price']);
+                        // itemHtml = itemHtml.replace("#a_date#",orderList[type][i]['a_date']);
+
+                        selAllFlag = 0;
+                        if(type == 2){
+                            var imgHtml = '<img class="go" id="'+orderList[type][i]['id']+'" onclick="selItem(this);"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />';
+                            itemHtml = itemHtml.replace("#img#",imgHtml);
+                            $("#selAllBng").css('display',"");
+                        }else{
+                            itemHtml = itemHtml.replace("#img#","");
+                            $("#selAllBng").css('display',"none" );
+                        }
+
+                        container +=itemHtml;
+                    }
+                }
+
+                // alert(container);
+                $("#container").html(container);
+            }
+        });
+    }
+
+    function selItem(obj){
+        var obj = $(obj);
+        var src = obj.attr("src");
+        if(src.search("default") != -1){
+            obj.attr("src","{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png");
+        }else{
+            obj.attr("src","{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png");
+        }
+    }
+
+    function getItemHtml(){
+        var html =
+            '<div class="item">'+
+                '<div class="num">ID：#id#</div>'+
+                '<div class="timeSq">商品名称：#goods_name#</div>'+
+                '<div class="price">'+
+                    '¥#price# #img#'+
+                '</div>'+
+                '<div class="timeDk">下单时间：#a_date#</div>'+
+                '<div class="status"><span>用户ID：#uid#</span></div>'+
+            '</div>';
+        return html;
+    }
+
+
+    function selAll(){
+        var imgUrl = "{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png";
+        if(!selAllFlag){
+            imgUrl = "{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png";
+        }
+        $("#container > *").each(function(i,n){
+
+        });
+    }
+
+    sel_tab(2);
+
+</script>
+
+
+
+<!-- //End -->
+</body>
+</html>

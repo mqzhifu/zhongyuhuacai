@@ -1,0 +1,67 @@
+<div class="pageMyEdit">
+    <div class="avatar">
+        <img src="{CONST|H_STATIC_URL}/agent/assets/images/bingUser.png" alt="" />
+    </div>
+    <!-- //End  avatar-->
+
+    <div class="baseForm baseFormA">
+        <form action="">
+            <div class="group">
+                <label>用户ID</label>
+                <input type="text" class="ipt" placeholder="请输入" required />
+            </div>
+            <div class="group">
+                <label>手机号</label>
+                <input
+                    type="text"
+                    class="ipt"
+                    placeholder="请输入手机号"
+                    required
+                />
+            </div>
+            <div class="group vGroup">
+                <label>验证码</label>
+                <input
+                    type="text"
+                    class="ipt"
+                    placeholder="请输入验证码"
+                    required
+                />
+                <span class="vCode">发送验证码</span>
+            </div>
+            <div class="btns">
+                <span class="btnCancel">取消</span>
+                <span class="btnbind">绑定</span>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- //End -->
+
+<script>
+    $(function () {
+        //获取短信验证码
+        var validCode = true
+        $('.vCode').click(function () {
+            var time = 60
+            var code = $(this)
+            if (validCode) {
+                validCode = false
+
+                var t = setInterval(function () {
+                    code.addClass('msgs1')
+                    time--
+                    code.html(time + '秒')
+                    if (time == 0) {
+                        clearInterval(t)
+                        code.html('重新获取')
+                        validCode = true
+                        code.removeClass('msgs1')
+                    }
+                }, 1000)
+            }
+        })
+    })
+</script>
+</body>
+</html>
