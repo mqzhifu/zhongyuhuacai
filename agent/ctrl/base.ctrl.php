@@ -31,7 +31,7 @@ class BaseCtrl {
     public $agentService = null;
     public $goodsService = null;
     public $cartService = null;
-
+    public $withdrawMoneyService = null;
     public $session = null;
     function __construct($request)
     {
@@ -63,7 +63,7 @@ class BaseCtrl {
         $this->agentService = new AgentService();
         $this->goodsService = new GoodsService();
         $this->cartService = new CartService();
-
+        $this->withdrawMoneyService = new WithdrawMoneyService();
 
         $this->_st = getAppSmarty();
         $this->_sess = new SessionLib();

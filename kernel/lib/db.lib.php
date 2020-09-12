@@ -593,7 +593,7 @@ class DbLib{
         $table = $this->getTable($table);
         $id_filed = $this->getPrimary();
         $sql = "select $filed  from `$table` where $id_filed in ( $ids )";
-        $rs = $this->getRowBySQL( $sql );
+        $rs = $this->getAllBySQL( $sql );
         return $rs;
     }
 

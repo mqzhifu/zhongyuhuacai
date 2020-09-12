@@ -24,7 +24,7 @@
             <p>{$allOrderCnt}</p>
             <p>成功订单数</p>
         </div>
-        <div class="info">
+        <div class="info" onclick="gotoLeader()">
             <p>{$subAgentCnt}</p>
             <p>我的下级</p>
         </div>
@@ -69,6 +69,14 @@
             <p>绑定用户</p>
             </a>
         </div>
+
+        <div class="item">
+            <a href="/agent/apply/">
+                <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
+                <p>申请代理</p>
+            </a>
+        </div>
+
     </div>
 </div>
 
@@ -81,6 +89,11 @@
     function clickUnbind(){
         location.href="/agent/unbindUser/";
     }
+
+    function gotoLeader(){
+        location.href="/agent/mysub/";
+    }
+
 
 
 

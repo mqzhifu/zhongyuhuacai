@@ -2,11 +2,11 @@
     <div class="baseFormC">
         <div class="group">
             <label>提现订单</label>
-            <div class="ipt">1200110231</div>
+            <div class="ipt">{$info['orders_ids']}</div>
         </div>
         <div class="group">
             <label>金额</label>
-            <div class="ipt">¥320.08</div>
+            <div class="ipt">¥{$info['price']}</div>
         </div>
         <div class="group">
             <label>打款方式</label>
@@ -14,28 +14,42 @@
         </div>
         <div class="group">
             <label>开户银行</label>
-            <div class="ipt">北京市招商银行团结湖支行</div>
+            <div class="ipt">{$info['bank']}</div>
         </div>
         <div class="group">
             <label>户主</label>
-            <div class="ipt">王建国</div>
+            <div class="ipt">{$info['account_master']}</div>
         </div>
         <div class="group">
             <label>支付宝号</label>
-            <div class="ipt">6000123499881109</div>
+            <div class="ipt">{$info['ali']}</div>
         </div>
         <div class="group">
+            <label>微信号</label>
+            <div class="ipt">{$info['wx']}</div>
+        </div>
+
+        <div class="group">
             <label>状态</label>
-            <div class="ipt">已打款</div>
+            <div class="ipt">{$info['status_desc']}</div>
+        </div>
+        <div class="group">
+            <label>申请时间</label>
+            <div class="ipt">{$info['a_date']}</div>
         </div>
         <div class="group">
             <label>审批时间</label>
-            <div class="ipt">2020/08/30 15:30</div>
+            <div class="ipt">{$info['u_date']}</div>
         </div>
+
         <div class="group textarea">
             <div class="text">
                 <p class="t1">备注</p>
+                {if !$info['memo']}
                 <p>暂无备注</p>
+                {else}
+                <p>{$info['memo']}</p>
+                {/if}
             </div>
         </div>
         <div class="btn">返回</div>

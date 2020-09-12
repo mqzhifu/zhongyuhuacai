@@ -911,4 +911,8 @@ class OrderService{
 
         return $list;
     }
+
+    function upWithdrawStatus($oid,$data){
+        return OrderModel::db()->upById($oid,$data);
+    }
 }

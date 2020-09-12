@@ -6,18 +6,105 @@ class WithdrawCtrl extends BaseCtrl{
 
     function apply(){
         $this->setTitle('申请提现');
+        $this->setSubTitle('申请提现');
 
+        $orderIds = _g("orderIds");
+        if(!$orderIds){
+            exit("orderIds ids is null");
+        }
+
+
+
+        $orderList = OrderModel::db()->getByIds($orderIds);
+        $totalPrice =0;
+        foreach ($orderList as $k=>$v){
+            $totalPrice += $v['total_price'];
+        }
+
+        if(_g("opt")){
+            $bank = _g("bank");
+            $account_num = _g("account_num");
+            $account_master = _g("account_master");
+            $ali = _g("ali");
+            $wx = _g("wx");
+
+
+
+            $oids = explode(",",$orderIds);
+            $upData = array();
+            foreach ($oids as $k=>$v){
+                if($this->uinfo['type'] == AgentModel::ROLE_LEVEL_ONE){
+                    $upData['agent_one_withdraw'] = WithdrawMoneyService::WITHDRAW_STATUS_WAIT;
+                }elseif($this->uinfo['type'] == AgentModel::ROLE_LEVEL_TWO){
+                    $upData['agent_two_withdraw'] = WithdrawMoneyService::WITHDRAW_STATUS_WAIT;
+                }else{
+                    exit("uinfo type err.");
+                }
+
+                $this->orderService->upWithdrawStatus($v,$upData);
+            }
+
+            $data = array(
+                'a_time'=>time(),
+                'u_time'=>time(),
+                'orders_ids'=>$orderIds,
+                'agent_id'=>$this->uinfo['id'],
+                'price'=>$totalPrice,
+                'bank'=>$bank,
+                'account_num'=>$account_num,
+                'account_master'=>$account_master,
+                'ali'=>$ali,
+                'wx'=>$wx,
+                'type'=>$this->uinfo['type'],
+                'status'=>WithdrawMoneyService::WITHDRAW_STATUS_WAIT,
+            );
+
+            $id = WithdrawModel::db()->add($data);
+            var_dump($id);exit;
+        }
+
+        $this->assign("totalPrice",$totalPrice);
+        $this->assign("orderIds",$orderIds);
         $this->display("apply.withdraw.html");
     }
 
     function detail(){
         $this->setTitle('提现详情');
+        $this->setSubTitle('提现详情');
+
+        $id = _g("id");
+        if(!$id){
+            exit("id is null");
+        }
+
+        $info = WithdrawModel::db()->getById($id);
+        if(!$info){
+            exit(" id not in db");
+        }
+
+        $info['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$info['status']];
+        $info['u_date'] = get_default_date($info['u_time']);
+        $info['a_date'] = get_default_date($info['a_time']);
+
+        $this->assign("info",$info);
+
 
         $this->display("withdraw.detail.html");
     }
 
     function lists(){
         $this->setTitle('提现列表');
+        $this->setSubTitle('提现列表');
+
+
+        $list = $this->withdrawMoneyService->getAgentWithdrawApplyList($this->uinfo['id']);
+        if($list){
+            foreach ($list as $k=>$v){
+                $list[$k]['a_date'] = get_default_date($v['a_time']);
+                $list[$k]['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['type']];
+            }
+        }
+        $this->assign("list",$list);
 
         $this->display("withdraw.list.html");
     }

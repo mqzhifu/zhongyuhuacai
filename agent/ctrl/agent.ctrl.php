@@ -26,6 +26,9 @@ class AgentCtrl extends BaseCtrl  {
     }
     //申请成为一个代理
     function apply($request){
+        $this->setTitle('申请成为代理');
+        $this->setSubTitle('申请成为代理');
+
         if(_g("opt")){
             $type =  get_request_one( $this->request,'type',0);
             $invite_agent_code = get_request_one( $this->request,'invite_agent_code','');
@@ -44,24 +47,57 @@ class AgentCtrl extends BaseCtrl  {
 
     function editUinfo(){
         $this->setTitle('编辑个人资料');
+        $this->setSubTitle('编辑个人资料');
 
         $this->display("editInfo.html");
     }
 
     function bindUser(){
         $this->setTitle('绑定小程序用户');
+        $this->setSubTitle('绑定小程序用户');
+
+        if($this->uinfo['uid']){
+            exit("您已经绑定了小程序用户，请先解绑~再来绑定关系~~~");
+        }
+
+        if(_g("opt")){
+            $uid = _g("uid");
+            $mobile = _g("mobile");
+            $smsCode = _g("smsCode");
+
+            $this->agentService->userBindAgent($uid,$mobile,$smsCode);
+
+            var_dump(2134234234);exit;
+        }
+
+
 
         $this->display("bind.user.html");
     }
 
     function unbindUser(){
         $this->setTitle('解绑小程序用户');
+        $this->setSubTitle('解绑小程序用户');
+
+        if(!$this->uinfo['uid']){
+            exit("您并没有绑定小程序用户，请先绑定，再来解除绑定关系~~~");
+        }
+
+        if(_g("opt")){
+            $rs = $this->agentService->unbind($this->uinfo['id'],$this->uinfo['uid']);
+            $uinfo = $this->uinfo;
+            $uinfo['uid'] = 0;
+            $this->_sess->setValue("uinfo",$uinfo);
+            var_dump($rs);exit;
+        }
+
 
         $this->display("unbind.user.html");
     }
 
     function mysub(){
         $this->setTitle('我的下级');
+        $this->setSubTitle('我的下级');
 
         $this->display("mysub.html");
     }

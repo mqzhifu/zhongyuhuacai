@@ -274,7 +274,9 @@ class AgentService{
 
         return $fee;
     }
-
+    function unbind($aid,$uid){
+        return AgentModel::db()->upById($aid,array("uid"=>""));
+    }
     //普通用户绑定一个代理
     function userBindAgent($uid,$agentMobile,$mobileCode){
         if(!$uid){

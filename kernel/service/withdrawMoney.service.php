@@ -35,6 +35,9 @@ class WithdrawMoneyService{
         return  WithdrawModel::db()->getRow(" find_in_set ($oid, oids )  ");
     }
 
+    function getAgentWithdrawApplyList($aid){
+        return WithdrawModel::db()->getAll(" agent_id = $aid ");
+    }
 
     function agentWithdrawMoney($aid,$uid,$num,$oids){
         if(!$aid){

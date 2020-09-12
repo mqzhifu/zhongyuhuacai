@@ -24,10 +24,10 @@
             <div class="status"><span>用户ID：200010001</span></div>
         </div>
     </div>
-    <div class="tools">
-        <span class="btnDefault" id="selAllBng" onclick="selAll()">
+    <div class="tools" id="showBnt">
+        <span class="btnDefault"  onclick="selAll()">
             <img  class="go"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />全选</span>
-        <span class="btnSelected">申请提现</span>
+        <span class="btnSelected" onclick="subMoney();">申请提现</span>
     </div>
 </div>
 
@@ -64,12 +64,12 @@
 
                         selAllFlag = 0;
                         if(type == 2){
-                            var imgHtml = '<img class="go" id="'+orderList[type][i]['id']+'" onclick="selItem(this);"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />';
+                            var imgHtml = '<img name="selElement" class="go" id="'+orderList[type][i]['id']+'" onclick="selItem(this);"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />';
                             itemHtml = itemHtml.replace("#img#",imgHtml);
-                            $("#selAllBng").css('display',"");
+                            $("#showBnt").css('display',"");
                         }else{
                             itemHtml = itemHtml.replace("#img#","");
-                            $("#selAllBng").css('display',"none" );
+                            $("#showBnt").css('display',"none" );
                         }
 
                         container +=itemHtml;
@@ -112,9 +112,31 @@
         if(!selAllFlag){
             imgUrl = "{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png";
         }
-        $("#container > *").each(function(i,n){
 
+        $("[name='selElement']").each(function(i,n){
+            var obj = $(n);
+            obj.attr("src",imgUrl);
+            selAllFlag = 1;
         });
+    }
+    //申请提现按钮
+    function subMoney(){
+        var selOrderIds = "";
+        $("[name='selElement']").each(function(i,n){
+            var obj = $(n);
+            var src = obj.attr("src");
+            if(src.search("selected") != -1){
+                selOrderIds += obj.attr("id") +",";
+            }
+
+            selOrderIds = selOrderIds.substr(0,selOrderIds.length - 1);
+        });
+
+        if(!selOrderIds){
+            return alert("至少选择一条记录!");
+        }
+
+        location.href="/withdraw/apply/orderIds="+selOrderIds;
     }
 
     sel_tab(2);

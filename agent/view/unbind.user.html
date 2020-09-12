@@ -17,11 +17,18 @@
 
             <div class="btns">
                 <span class="btnCancel">取消</span>
-                <span class="btnbind">解除绑定</span>
+                <span class="btnbind" onclick="goto()">解除绑定</span>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    function goto(){
+        location.href="/agent/unbindUser/opt=1";
+    }
+</script>
+
 <!-- //End -->
 </body>
 </html>
