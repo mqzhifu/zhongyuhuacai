@@ -17,7 +17,8 @@ class LoginCtrl extends BaseCtrl  {
 
     function index(){
         $this->setTitle('登陆');
-
+        $this->setSubTitle('登陆');
+        
         if($this->uinfo){
             jump("/");
         }
