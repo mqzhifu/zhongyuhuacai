@@ -258,7 +258,6 @@ class AgentService{
     function getShareProductCnt($aid){
         return ShareProductModel::db()->getCount(" agent_id = $aid");
     }
-
     //获取一批用户的ID
     function getSomeAgentFee($uids){
         $orderService = new OrderService();
@@ -321,6 +320,10 @@ class AgentService{
 
         return out_pc(200,$upRs);
 
+    }
+    //编辑信息
+    function editOne($aid,$data){
+        return AgentModel::db()->upById($aid,$data);
     }
 
 

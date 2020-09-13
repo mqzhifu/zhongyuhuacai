@@ -7,7 +7,7 @@
     <!-- //End  avatar-->
 
     <div class="baseForm">
-        <form action="">
+        <form action="" id="myForm">
             <input type="hidden" name="opt" value="1" />
             <div class="group">
                 <label>手机号</label>
@@ -32,11 +32,14 @@
                 />
                 <span class="vCode">发送验证码</span>
             </div>
-            <input type="submit" class="iptBtn" value="登录" />
+            <input type="" class="iptBtn" value="登录" onclick="submitData();"/>
         </form>
     </div>
 </div>
 <!-- //End -->
+
+
+
 
 <script>
     $(function () {
@@ -64,6 +67,7 @@
                     //请求成功
                     success : function(result) {
                         console.log(result);
+                        alert(result);
                     },
                     //请求失败，包含具体的错误信息
                     error : function(e){
@@ -89,6 +93,26 @@
             }
         })
     })
+
+    function submitData(){
+        $.ajax({
+            url:'/login/index/',
+            data:$('#myForm').serialize(),                 //将表单数据序列化，格式为name=value
+            type:'POST',
+            dataType:'json',
+            success:function(data){
+                var backData = eval( data);
+                // alert(backData.code);
+                if(backData.code != 200){
+                    toastFail(backData.msg);
+                }
+            },
+            error:function(){
+                console.log("提交ajax函数异常");
+            },
+
+        });
+    }
 </script>
 </body>
 </html>

@@ -32,6 +32,10 @@ class LoginCtrl extends BaseCtrl  {
                 out_ajax(8000);
             }
 
+            if(!FilterLib::preg($mobile,'phone')){
+                out_ajax(8003);
+            }
+
             if(!$smsCode){
                 out_ajax(8002);
             }

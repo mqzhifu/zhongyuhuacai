@@ -29,12 +29,79 @@ class AgentCtrl extends BaseCtrl  {
         $this->setTitle('申请成为代理');
         $this->setSubTitle('申请成为代理');
 
-        if(_g("opt")){
-            $type =  get_request_one( $this->request,'type',0);
-            $invite_agent_code = get_request_one( $this->request,'invite_agent_code','');
-            $data = get_request_one( $this->request,'data',[]);
+        $this->addJs("/agent/assets/js/area_province.js");
 
-            $data = array('mobile'=>"13511112222","province_code"=>110000,'city_code'=>110100,'county_code'=>'110102',"town_code"=>"110101007",'address'=>"东四十条，银楼大厦B座12层，1204",'title'=>"饰品小生活",'sex'=>1);
+//        $this->printAreaData();
+
+        if(_g("opt")){
+            $address = _g('address');
+            $sex = _g('sex');
+            $title = _g('title');
+            $real_name = _g('real_name');
+            $area = _g('area');
+            $invite_agent_code = _g("invite_agent_code");
+            $fee_percent = _g('fee_percent');
+            $sub_fee_percent = _g('sub_fee_percent');
+
+            $mobile = _g("mobile");
+            $smsCode  = _g("sms_code");
+//            $pic = _g("pic");
+//            $town_code = _g("town_code");
+
+            if(!$mobile){
+                exit("mobile is null");
+            }
+
+            $type = _g("type");
+            if(!$type){
+                exit("type is null");
+            }
+
+            if(!$address){
+                exit("address is null");
+            }
+
+            if(!$sex){
+                exit("sex is null");
+            }
+
+            if(!$title){
+                exit("title is null");
+            }
+
+            if(!$real_name){
+                exit("real_name is null");
+            }
+
+            if(!$area){
+                exit("area is null");
+            }
+
+
+            $area = explode(",",$area);
+
+            $province = $area[0];
+            $city = $area[1];
+            $county = $area[2];
+
+            $data = array(
+                "address"=>$address,
+                "sex"=>$sex,
+                "title"=>$title,
+                "real_name"=>$real_name,
+                "province_code"=>$province,
+                "city_code"=>$city,
+                "county_code"=>$county,
+                "mobile"=>$mobile,
+                'fee_percent'=>$fee_percent,
+                "sub_fee_percent"=>$sub_fee_percent,
+            );
+
+//            $picClass = new UploadService();
+//            if($pic){
+//                $rs = $picClass->agent("pic");
+//            }
+
             $rs = $this->agentService->apply($this->uid,$type,$invite_agent_code,$data);
             var_dump($rs);exit;
         }
@@ -102,13 +169,56 @@ class AgentCtrl extends BaseCtrl  {
 
         if(_g("opt")){
             $address = _g('address');
-            $address = _g('sex');
-            $address = _g('title');
-            $address = _g('real_name');
+            $sex = _g('sex');
+            $title = _g('title');
+            $real_name = _g('real_name');
+            $area = _g('area');
+            $pic = _g("pic");
+            if(!$address){
+                exit("address is null");
+            }
+
+            if(!$sex){
+                exit("sex is null");
+            }
+
+            if(!$title){
+                exit("title is null");
+            }
+
+            if(!$real_name){
+                exit("real_name is null");
+            }
+
+            if(!$area){
+                exit("area is null");
+            }
 
 
-            var_dump($_REQUEST);exit;
-            var_dump(111);exit;
+            $area = explode(",",$area);
+
+            $province = $area[0];
+            $city = $area[1];
+            $county = $area[2];
+
+            $data = array(
+                "address"=>$address,
+                 "sex"=>$sex,
+                 "title"=>$title,
+                 "real_name"=>$real_name,
+                 "province_code"=>$province,
+                "city_code"=>$city,
+                "county_code"=>$county,
+            );
+
+            $picClass = new UploadService();
+            if($pic){
+                $rs = $picClass->agent("pic");
+//                var_dump($rs);exit;
+            }
+
+            $this->agentService->editOne($this->uinfo['id'],$data);
+            exit("ok");
         }
 
         $this->assign("info",$this->uinfo);
