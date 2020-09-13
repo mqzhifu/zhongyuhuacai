@@ -49,6 +49,20 @@ class AgentCtrl extends BaseCtrl  {
         $this->setTitle('编辑个人资料');
         $this->setSubTitle('编辑个人资料');
 
+
+        if(_g("opt")){
+            $address = _g('address');
+            $address = _g('sex');
+            $address = _g('title');
+            $address = _g('real_name');
+
+
+            var_dump(111);exit;
+        }
+
+        $this->assign("info",$this->uinfo);
+        $this->assign("uinfo",json_encode($this->uinfo));
+
         $this->display("editInfo.html");
     }
 
