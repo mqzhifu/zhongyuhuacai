@@ -123,8 +123,8 @@ class BaseCtrl {
 
         $this->addJs('/agent/assets/libs/jquery.min.js');
         $this->addJs('/agent/assets/js/amazeui.min.js');
-        $this->addJs('/agent/assets/libs/city/LAreaData1.js');
-        $this->addJs('/agent/assets/libs/city/LAreaData2.js');
+//        $this->addJs('/agent/assets/libs/city/LAreaData1.js');
+//        $this->addJs('/agent/assets/libs/city/LAreaData2.js');
         $this->addJs('/agent/assets/libs/city/LArea.js');
 
     }

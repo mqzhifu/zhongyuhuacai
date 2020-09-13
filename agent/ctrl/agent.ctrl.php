@@ -45,7 +45,56 @@ class AgentCtrl extends BaseCtrl  {
 
     }
 
+    function printAreaData(){
+        set_time_limit(0);
+
+        $provinceDB = AreaProvinceModel::db()->getAll(" 1= 1 ",null,'  code,short_name ');
+        $data = array();
+        foreach ($provinceDB as $k=>$v){
+            echo $v['short_name']."<br/>";
+
+            $row = array("id"=>$v['code'],'name'=>$v['short_name'],'child'=>null);
+            $cityDB =  AreaCityModel::db()->getAll(" province_code = {$v['code']} ",null,'  code,short_name ');
+            $cityArr = null;
+            foreach ($cityDB as $k2=>$v2){
+                $cityRow = array("id"=>$v2['code'],'name'=>$v2['short_name'],'child'=>null);
+                $countyDB =  AreaCountyModel::db()->getAll(" city_code = {$v2['code']} ",null,'  code,short_name ');
+                $countyArr = null;
+//                foreach ($countyDB as $k3=>$v3){
+//                    $countyRow  = array("id"=>$v3['code'],'name'=>$v3['short_name']);
+//                    $countyArr[] = $countyRow;
+//                }
+                //======================处理4级=====上面3行注释直接打开就可以用了========
+                foreach ($countyDB as $k3=>$v3){
+                    $countyRow  = array("id"=>$v3['code'],'name'=>$v3['short_name'],'child'=>null);
+                    $townDB =  AreaTownModel::db()->getAll(" county_code = {$v3['code']} ",null,'  code,short_name ');
+                    $townArr = null;
+                    foreach ($townDB as $k4=>$v4){
+                        $townRow  = array("id"=>$v4['code'],'name'=>$v4['short_name']);
+                        $townArr[] = $townRow;
+                    }
+                    $countyRow['child'] = $townArr;
+                    $countyArr[] = $countyRow;
+                }
+                //======================处理4级========end
+                $cityRow['child'] = $countyArr;
+                $cityArr[] = $cityRow;
+            }
+
+            $row['child'] = $cityArr;
+            $data[] = $row;
+
+        }
+
+        echo json_encode($data);exit;
+    }
+
     function editUinfo(){
+
+        $this->addJs("/agent/assets/js/area_province.js");
+
+//        $this->printAreaData();
+
         $this->setTitle('编辑个人资料');
         $this->setSubTitle('编辑个人资料');
 
