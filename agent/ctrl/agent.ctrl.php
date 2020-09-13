@@ -60,22 +60,22 @@ class AgentCtrl extends BaseCtrl  {
                 $cityRow = array("id"=>$v2['code'],'name'=>$v2['short_name'],'child'=>null);
                 $countyDB =  AreaCountyModel::db()->getAll(" city_code = {$v2['code']} ",null,'  code,short_name ');
                 $countyArr = null;
-//                foreach ($countyDB as $k3=>$v3){
-//                    $countyRow  = array("id"=>$v3['code'],'name'=>$v3['short_name']);
-//                    $countyArr[] = $countyRow;
-//                }
-                //======================处理4级=====上面3行注释直接打开就可以用了========
                 foreach ($countyDB as $k3=>$v3){
-                    $countyRow  = array("id"=>$v3['code'],'name'=>$v3['short_name'],'child'=>null);
-                    $townDB =  AreaTownModel::db()->getAll(" county_code = {$v3['code']} ",null,'  code,short_name ');
-                    $townArr = null;
-                    foreach ($townDB as $k4=>$v4){
-                        $townRow  = array("id"=>$v4['code'],'name'=>$v4['short_name']);
-                        $townArr[] = $townRow;
-                    }
-                    $countyRow['child'] = $townArr;
+                    $countyRow  = array("id"=>$v3['code'],'name'=>$v3['short_name']);
                     $countyArr[] = $countyRow;
                 }
+                //======================处理4级=====上面3行注释直接打开就可以用了========
+//                foreach ($countyDB as $k3=>$v3){
+//                    $countyRow  = array("id"=>$v3['code'],'name'=>$v3['short_name'],'child'=>null);
+//                    $townDB =  AreaTownModel::db()->getAll(" county_code = {$v3['code']} ",null,'  code,short_name ');
+//                    $townArr = null;
+//                    foreach ($townDB as $k4=>$v4){
+//                        $townRow  = array("id"=>$v4['code'],'name'=>$v4['short_name']);
+//                        $townArr[] = $townRow;
+//                    }
+//                    $countyRow['child'] = $townArr;
+//                    $countyArr[] = $countyRow;
+//                }
                 //======================处理4级========end
                 $cityRow['child'] = $countyArr;
                 $cityArr[] = $cityRow;
@@ -84,6 +84,7 @@ class AgentCtrl extends BaseCtrl  {
             $row['child'] = $cityArr;
             $data[] = $row;
 
+//            var_dump($data);exit;
         }
 
         echo json_encode($data);exit;
@@ -106,6 +107,7 @@ class AgentCtrl extends BaseCtrl  {
             $address = _g('real_name');
 
 
+            var_dump($_REQUEST);exit;
             var_dump(111);exit;
         }
 

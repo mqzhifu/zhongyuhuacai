@@ -56,7 +56,7 @@
                     placeholder="省/市/区县/镇"
                     value=""
                 />
-                <input id="cityVal" type="hidden" value="" />
+                <input id="cityVal" type="hidden" name="area" />
                 <img class="imgGo" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go.png" alt="" />
             </div>
             <div class="group">
@@ -99,7 +99,7 @@
             type: 1, //数据源类型
             data: LAreaData, //数据源
         });
-        area1.value = [1, 13, 3] //控制初始位置，注意：该方法并不会影响到input的value
+        // area1.value = [1, 13, 3] //控制初始位置，注意：该方法并不会影响到input的value
         // var area2 = new LArea()
         // area2.init({
         //     trigger: '#demo2',
