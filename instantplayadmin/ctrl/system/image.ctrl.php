@@ -67,7 +67,6 @@ class ImageCtrl extends BaseCtrl{
 
                 $empty = "";
                 if($num <= 0 ){
-
                     $empty = ' , "icon" : "fa fa-folder icon-state-danger"  ';
                 }
 

@@ -1,15 +1,17 @@
 <?php
 class DbCtrl extends BaseCtrl{
-
+    private $_db_base_path_linux = "/home/www/zhongyuhuacai_doc";
+    private $_db_base_path_win = "D:\www\zhongyuhuacai_doc";
     function index(){
 
 //        <script src="../../assets/global/plugins/jstree/dist/jstree.min.js"></script>
 //        <link rel="stylesheet" type="text/css" href="../../assets/global/plugins/jstree/dist/themes/default/style.min.css"/>
 //        <script src="../../assets/admin/pages/scripts/ui-tree.js"></script>
 
-        $dir = BASE_DIR .DS ."doc";
         if(get_os() =="WIN"){
-            $dir = "D:\www\zhongyuhuacai_doc";
+            $dir = $this->_db_base_path_win;
+        }else{
+            $dir = $this->_db_base_path_linux;
         }
         $dir = my_dir($dir);
 
@@ -36,6 +38,8 @@ class DbCtrl extends BaseCtrl{
 
     }
 
+
+
     function foreachDir($dir){
 
         $dirTreeHtml = "";
@@ -43,6 +47,15 @@ class DbCtrl extends BaseCtrl{
             if($k == '.git'){
                 continue;
             }
+
+           if(is_string($v)){
+               $fileExt = explode(".",$v);
+               if($fileExt[1] != "sql"){
+                   continue;
+               }
+           }
+
+
             if(is_array($v)){
                 $dirTreeHtml .= '<li data-jstree=\'{ "opened" : true }\'>'.$k.'<ul>' . $this->foreachDir($v) ."</ul></li>";
             }else{
