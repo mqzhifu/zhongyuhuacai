@@ -105,6 +105,9 @@
                 // alert(backData.code);
                 if(backData.code != 200){
                     toastFail(backData.msg);
+                }else{
+                    toastOk("登陆成功");
+                    location.href="/";
                 }
             },
             error:function(){

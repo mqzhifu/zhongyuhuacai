@@ -42,42 +42,45 @@ class AgentCtrl extends BaseCtrl  {
             $invite_agent_code = _g("invite_agent_code");
             $fee_percent = _g('fee_percent');
             $sub_fee_percent = _g('sub_fee_percent');
-
+            $type = _g("type");
             $mobile = _g("mobile");
             $smsCode  = _g("sms_code");
-//            $pic = _g("pic");
+
+
+            if(!$smsCode){
+                out_ajax(8389);
+            }
+
+            $smsCode = (int)$smsCode;
+            if(!$smsCode){
+                out_ajax(8387);
+            }
+
+            if(strlen($smsCode) != 6){
+                out_ajax(8388);
+            }
+
+            $VerifierCodeLib = new VerifierCodeLib();
+            $VerifierCodeLib->authCode(VerifiercodeModel::TYPE_SMS,$mobile,$smsCode,10);
+
+            $pic = _g("pic");
 //            $town_code = _g("town_code");
 
-            if(!$mobile){
-                exit("mobile is null");
-            }
-
-            $type = _g("type");
-            if(!$type){
-                exit("type is null");
-            }
-
-            if(!$address){
-                exit("address is null");
-            }
-
-            if(!$sex){
-                exit("sex is null");
-            }
-
-            if(!$title){
-                exit("title is null");
-            }
-
-            if(!$real_name){
-                exit("real_name is null");
-            }
+//            if(!isset($_FILES['pic'])){
+//                out_ajax(8018);
+//            }
+//            $picClass = new UploadService();
+//            if(!isset($_FILES['pic'])){
+//                $upRs  = $picClass->agent("pic");
+//                if($upRs['code']!=200){
+//                    out_ajax($upRs['code']);
+//                }
+//                $pic = $upRs['msg'];
+//            }
 
             if(!$area){
-                exit("area is null");
+                out_ajax(8395);
             }
-
-
             $area = explode(",",$area);
 
             $province = $area[0];
@@ -92,18 +95,17 @@ class AgentCtrl extends BaseCtrl  {
                 "province_code"=>$province,
                 "city_code"=>$city,
                 "county_code"=>$county,
+                "town_code"=>"",
                 "mobile"=>$mobile,
                 'fee_percent'=>$fee_percent,
                 "sub_fee_percent"=>$sub_fee_percent,
+                'invite_agent_code'=>$invite_agent_code,
+                'pic'=>$pic,
+//                "pic"=>$upRs['msg'],
             );
 
-//            $picClass = new UploadService();
-//            if($pic){
-//                $rs = $picClass->agent("pic");
-//            }
-
-            $rs = $this->agentService->apply($this->uid,$type,$invite_agent_code,$data);
-            var_dump($rs);exit;
+            $rs = $this->agentService->apply($this->uinfo['id'],$type , $data);
+            return out_pc($rs['code'],$rs['msg']);
         }
 
         $this->setTitle('申请成为代理');

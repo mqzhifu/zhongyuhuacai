@@ -94,9 +94,10 @@ class AgentService{
         return $list;
     }
     //申请成为一个代理
-    function apply($uid,$type,$invite_agent_code = 0,$data){
-        if(!$uid){
-            return out_pc(8002);
+    //$aid:当前登陆agent端，发起 邀请成为代码的 人
+    function apply($aid,$type,$data){
+        if(!$aid){
+            return out_pc(8390);
         }
 
         if(!$type){
@@ -106,20 +107,55 @@ class AgentService{
         if(!in_array($type,array_flip(WithdrawMoneyService::TYPE_DESC)) ){
             return out_pc(8369);
         }
-        //校验一个 地址信息
-        $addressService = new UserAddressService();
-        $checkAddrRs = $addressService->checkArea($data);
-        if($checkAddrRs['code'] != 200){
-            return out_pc($checkAddrRs['code'],$checkAddrRs['msg']);
+        //验证
+        if(!arrKeyIssetAndExist($data,'address')){
+            return out_pc(8391);
+        }
+        //验证
+        if(!arrKeyIssetAndExist($data,'sex')){
+            return out_pc(8392);
+        }
+        if(!in_array($data['sex'],array_flip(UserModel::getSexDesc())) ){
+            return out_pc(8401);
         }
 
+        //验证
+        if(!arrKeyIssetAndExist($data,'title')){
+            return out_pc(8393);
+        }
+        //验证
+        if(!arrKeyIssetAndExist($data,'real_name')){
+            return out_pc(8394);
+        }
+        //验证 二级代理佣金
+        if(!arrKeyIssetAndExist($data,'sub_fee_percent')){
+            return out_pc(8396);
+        }
+        $data['sub_fee_percent'] = (int)$data['sub_fee_percent'];
+        if(!$data['sub_fee_percent']){
+            return out_pc(8396);
+        }
+        if( $data['sub_fee_percent'] <= 0 ||  $data['sub_fee_percent'] >= 50){
+            return out_pc(8396);
+        }
+        //验证手机
         if(!arrKeyIssetAndExist($data,'mobile')){
             return out_pc(8000);
+        }
+
+        if(!FilterLib::preg($data['mobile'],'phone') ){
+            out_ajax(8003);
         }
 
         $exist = $this->getRowByMobile($data['mobile']);
         if($exist){
             return out_pc(8276);
+        }
+        //校验一个 地址信息
+        $addressService = new UserAddressService();
+        $checkAddrRs = $addressService->checkArea($data);
+        if($checkAddrRs['code'] != 200){
+            return out_pc($checkAddrRs['code'],$checkAddrRs['msg']);
         }
 
         $addData = array(
@@ -133,7 +169,7 @@ class AgentService{
             'mobile'=>$data['mobile'],
             'title'=>$data['title'],
 
-            'uid'=>$uid,
+            'aid'=>$aid,
 
             'id_card_num'=>"",
             'real_name'=>"",
@@ -141,18 +177,28 @@ class AgentService{
             'status'=>AgentModel::STATUS_AUDITING,
             'sex'=>$data['sex'],
             'a_time'=>time(),
-            'pic'=>"",
+            'pic'=>$data['pic'],
         );
         //
         if($type == WithdrawMoneyService::TYPE_ONE){
+            if(!arrKeyIssetAndExist($data,'fee_percent')){
+                return out_pc(8397);
+            }
+            $data['fee_percent'] = (int)$data['fee_percent'];
+            if(!$data['fee_percent']){
+                return out_pc(8399);
+            }
+            if( $data['fee_percent'] <= 0 ||  $data['fee_percent'] >= 50){
+                return out_pc(8400);
+            }
 
         }else{
             //二级代理，必须得填写一级代理的邀请码
-            if(!$invite_agent_code){
+            if(!$data['invite_agent_code']){
                 return out_pc(8370);
             }
 
-            $agent = AgentModel::db()->getRow(" invite_code = '$invite_agent_code' ");
+            $agent = AgentModel::db()->getRow(" invite_code = '{$data['invite_agent_code']}' ");
             if(!$agent){
                 return out_pc(8371);
             }

@@ -8,10 +8,10 @@
         <meta name="renderer" content="webkit" />
         <!-- No Baidu Siteapp-->
         <meta http-equiv="Cache-Control" content="no-siteapp" />
-        <link rel="icon" type="image/png" href="assets/i/favicon.png" />
+        <link rel="icon" type="image/png" href="{CONST|H_STATIC_URL}/favicon.png" />
         <!-- Add to homescreen for Chrome on Android -->
         <meta name="mobile-web-app-capable" content="yes" />
-        <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png" />
+        <link rel="icon" sizes="192x192" href="{CONST|H_STATIC_URL}/app_icon.png" />
         <!-- Add to homescreen for Safari on iOS -->
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -26,17 +26,16 @@
     <!--aaa-->
 
     <body>
-    <header data-am-widget="header" class="am-header am-header-default">
+    <header data-am-widget="header" class="am-header am-header-default" id="header-top">
         <div class="am-header-left am-header-nav">
-            <a href="#left-link"
-            ><img src="{CONST|H_STATIC_URL}/agent/assets/images/header/icon-back.png" alt="" srcset=""
-            /></a>
+            <a href="#" onclick="backStep()">
+                <img src="{CONST|H_STATIC_URL}/agent/assets/images/header/icon-back.png" alt="" srcset=""/></a>
         </div>
 
-        <h1 class="am-header-title">{$this->_subTitle}</h1>
+        <h1 class="am-header-title" onclick="go_index();">{$this->_subTitle}</h1>
 
         <div class="am-header-right am-header-nav">
-            <a href="#right-link">
+            <a href="#" onclick="close_header_top()">
                 <img src="{CONST|H_STATIC_URL}/agent/assets/images/header/icon-close.png" alt="" srcset="" />
             </a>
         </div>
@@ -57,7 +56,7 @@
     <div class="am-modal am-modal-alert" tabindex="-1" id="my-success">
         <div class="am-modal-dialog">
             <div class="am-modal-hd">
-                <img src="./assets/images/success.png" alt="" />
+                <img src="{CONST|H_STATIC_URL}/agent/assets/images/success.png" alt="" />
                 <h4>操作成功</h4>
             </div>
             <div class="am-modal-bd" id="ok_content">#content#</div>
@@ -76,6 +75,29 @@
         function toastOk(content){
             $("#ok_content").html(content);
             $('#my-success').modal();
+        }
+
+        function backStep(){
+            //返回上一步，不刷新
+            // window.history.go(-1);
+            //history.back();
+            //返回上一步，并刷新
+            self.location=document.referrer;
+        }
+
+        function forwardStep(){
+            // alert(33);
+             // window.history.forward();
+            window.history.forward();
+            // window.history.go(1);
+        }
+
+        function close_header_top(){
+            $("#header-top").css("display",'none');
+        }
+
+        function go_index(){
+            location.href="/";
         }
 
     </script>

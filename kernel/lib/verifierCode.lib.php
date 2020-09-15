@@ -166,6 +166,7 @@ class VerifierCodeLib{
 
     function authCode($type,$addr,$code,$ruleId){
         if($code == 123321){//用于测试，万能验证码
+            LogLib::inc()->debug(" sms code test pass , 123321:$type , $addr , $code , $ruleId ");
             return out_pc(200);
         }
         if(!$type){
@@ -178,7 +179,6 @@ class VerifierCodeLib{
 
         if(!$ruleId){
             return out_pc(8005);
-
         }
 
         if(!$addr){

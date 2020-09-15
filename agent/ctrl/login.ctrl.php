@@ -37,7 +37,16 @@ class LoginCtrl extends BaseCtrl  {
             }
 
             if(!$smsCode){
-                out_ajax(8002);
+                out_ajax(8389);
+            }
+
+            $smsCode = (int)$smsCode;
+            if(!$smsCode){
+                out_ajax(8387);
+            }
+
+            if(strlen($smsCode) != 6){
+                out_ajax(8388);
             }
 
             $VerifierCodeClass = new VerifierCodeLib();
@@ -52,7 +61,7 @@ class LoginCtrl extends BaseCtrl  {
             }
 
             $this->_sess->setValue("uinfo",$agentUser);
-            jump("/");
+            out_ajax(200);
         }
 
 //        $this->assign("payTypeOptions", OrderModel::getPayTypeOptions());

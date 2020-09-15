@@ -5,7 +5,7 @@
     </div>
     <!-- //End  sex-->
 
-    <form action="">
+    <form action="" id="myForm" method="post" enctype="multipart/form-data">
         <input  type="hidden" id="type" name="type" />
         <div class="baseForm">
             <div class="panel">
@@ -80,6 +80,7 @@
                         type="text"
                         minlength="3"
                         placeholder="请选择"
+                        name="address"
                     />
                 </div>
             </div>
@@ -113,12 +114,12 @@
                     <label>佣金比例</label>
                     <div class="ipt"></div>
                 </div>
-                <div class="group">
-                    <label>一级比例</label>
+                <div class="group" id="fee_percent">
+                    <label>一级</label>
                     <input type="text" class="ipt" placeholder="请输入" required name="fee_percent" />
                 </div>
                 <div class="group" id="sub_fee_percent">
-                    <label>二级比例</label>
+                    <label>二级</label>
                     <input type="text" class="ipt" placeholder="请输入" required name="sub_fee_percent" />
                 </div>
             </div>
@@ -130,7 +131,7 @@
                 </div>
             </div>
 
-            <input type="submit" class="iptBtn" value="提交" />
+            <input type="" class="iptBtn" value="提交" onclick="submitData();"/>
         </div>
     </form>
 </div>
@@ -198,17 +199,43 @@
             $("#roleTwo").removeClass("selected");
             $("#type").val(1);
             $("#invite_agent_code").css("display",'none');
-            $("#sub_fee_percent").css("display",'');
 
 
+            $("#fee_percent").css("display",'');
         }else{
             $("#roleTwo").addClass("selected");
             $("#roleOne").removeClass("selected");
             $("#type").val(1);
             $("#invite_agent_code").css("display",'');
-            $("#sub_fee_percent").css("display",'none');
+
+            $("#fee_percent").css("display",'none');
         }
     }
+
+
+    function submitData(){
+        $.ajax({
+            url:'/agent/apply/opt=1',
+            data:$('#myForm').serialize(),                 //将表单数据序列化，格式为name=value
+            type:'POST',
+            dataType:'json',
+            success:function(data){
+                var backData = eval( data);
+                // alert(backData.code);
+                if(backData.code != 200){
+                    toastFail(backData.msg);
+                }else{
+                    toastOk("添加成功");
+                    // location.href="/";
+                }
+            },
+            error:function(){
+                console.log("提交ajax函数异常");
+            },
+
+        });
+    }
+
     //默认选中一级
     selRole(1);
 

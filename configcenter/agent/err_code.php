@@ -76,7 +76,7 @@ return array(
 //    8015=>'addr为空',
 //    8016=>'userinfo为空',//用户于3方登陆、修改用户个人信息
 //    8017=>'上传图片 post input name 为空',
-//    8018=>'上传图片 内容 为空',
+    8018=>'上传图片 内容 为空',
 //    8019=>'所有参数均为空',
 //    8020=>'$configId为空',
 //    8022=>'srcUid 为空',
@@ -211,4 +211,22 @@ return array(
     8385=>"退款记录不存在",
 
     8386=>"手机号/密码错误",
+    //===========================================
+    8387=>"短信验证码只能为数字",
+    8388=>"短信验证码为6位",
+    8389=>"短信验证码为空",
+    8390=>"当前登陆agent端，发起 邀请成为代码的 为空",
+    8391=>"address is null",
+    8392=>"sex is null",
+    8393=>"title is null",
+    8394=>"real_name is null",
+    8395=>"area is null",
+    8396=>"sub_fee_percent is null",
+    8397=>"fee_percent is null",
+    8398=>"sub_fee_percent is null ,not int",
+    8399=>"sub_fee_percent >=0  and <= 50",
+    8399=>"fee_percent is null ,not int",
+    8400=>"fee_percent >=0  and <= 50",
+    8401=>"sex only 1 or 2",
+
 );
