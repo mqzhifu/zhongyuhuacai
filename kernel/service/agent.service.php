@@ -320,56 +320,153 @@ class AgentService{
         return $fee;
     }
     function unbind($aid,$uid){
-        return AgentModel::db()->upById($aid,array("uid"=>""));
-    }
-    //普通用户绑定一个代理
-    function userBindAgent($uid,$agentMobile,$mobileCode){
+        if(!$aid){
+            return out_pc(8403);
+        }
+
         if(!$uid){
-
-        }
-
-        if(!$agentMobile){
-
-        }
-
-        if(!$mobileCode){
-
+            return out_pc(8402);
         }
 
         $user = UserModel::db()->getById($uid);
         if(!$user){
-
+            out_ajax(1000);
         }
 
-        $hasBind = $this->getOneByUid($uid);
-        if($hasBind){
-
-        }
-
-        $agent = AgentModel::db()->getRow(" mobile = '$agentMobile'");
+        $agent = AgentModel::db()->getById($aid);
         if(!$agent){
-
+            out_ajax(1040);
         }
 
-        if($agent['uid']){
-
+        if($agent['uid'] != $uid){
+            out_ajax(8406);
         }
+
+        $agent['uid'] = '';
+        $sess = new SessionLib();
+        $sess->setValue('uinfo',$agent);
+
+        $rs =  AgentModel::db()->upById($aid,array("uid"=>""));
+        return out_pc(200);
+    }
+    //普通用户绑定一个代理
+    function userBindAgent($uid,$aid,$userMobile,$smsCode){
+        if(!$uid){
+            return out_pc(8402);
+        }
+
+        if(!$aid){
+            return out_pc(8403);
+        }
+
+        if(!$userMobile){
+            out_ajax(8000);
+        }
+
+        if(!FilterLib::preg($userMobile,'phone')){
+            out_ajax(8003);
+        }
+
+        if(!$smsCode){
+            out_ajax(8389);
+        }
+
+        $smsCode = (int)$smsCode;
+        if(!$smsCode){
+            out_ajax(8387);
+        }
+
+        if(strlen($smsCode) != 6){
+            out_ajax(8388);
+        }
+
 
         $lib = new VerifierCodeLib();
-        $rs = $lib->authCode(1,$agentMobile,$mobileCode,9);
+        $rs = $lib->authCode(VerifiercodeModel::TYPE_SMS,$userMobile,$smsCode,2);
         if($rs['code'] != 200){
             return out_pc($rs['code'],$rs['msg']);
         }
 
+
+        $user = UserModel::db()->getById($uid);
+        if(!$user){
+            out_ajax(1000);
+        }
+
+        if($user['mobile'] != $userMobile){
+            out_ajax(8404);
+        }
+
+        $agent = AgentModel::db()->getById($aid);
+        if(!$agent){
+            out_ajax(1040);
+        }
+
+        if($agent['uid']){
+            out_ajax(8405);
+        }
+
         $data = array("uid"=>$uid,);
-        $upRs = AgentModel::db()->upById($agent['id'],$data);
+        $upRs = AgentModel::db()->upById($aid,$data);
+
+        $agent['uid'] = $uid;
+        $sess = new SessionLib();
+        $sess->setValue('uinfo',$agent);
+
+//        UserModel::db()->upById($id,array());
 
         return out_pc(200,$upRs);
 
     }
     //编辑信息
     function editOne($aid,$data){
-        return AgentModel::db()->upById($aid,$data);
+        if(!$aid){
+            return out_pc(8390);
+        }
+
+        //验证
+        if(!arrKeyIssetAndExist($data,'address')){
+            return out_pc(8391);
+        }
+        //验证
+        if(!arrKeyIssetAndExist($data,'sex')){
+            return out_pc(8392);
+        }
+        if(!in_array($data['sex'],array_flip(UserModel::getSexDesc())) ){
+            return out_pc(8401);
+        }
+        //验证
+        if(!arrKeyIssetAndExist($data,'title')){
+            return out_pc(8393);
+        }
+        //验证
+        if(!arrKeyIssetAndExist($data,'real_name')){
+            return out_pc(8394);
+        }
+        $addressService = new UserAddressService();
+        $checkAddrRs = $addressService->checkArea($data);
+        if($checkAddrRs['code'] != 200){
+            return out_pc($checkAddrRs['code'],$checkAddrRs['msg']);
+        }
+
+        $data = array(
+            'province_code'=>$data['province_code'],
+            'city_code'=>$data['city_code'],
+            'county_code'=>$data['county_code'],
+//            'towns_code'=>$data['town_code'],
+//            'villages'=>$data['address'],
+            'address'=>$data['address'],
+
+            'title'=>$data['title'],
+            'real_name'=>"",
+            'sex'=>$data['sex'],
+            'a_time'=>time(),
+//            'pic'=>$data['pic'],
+        );
+
+
+        $rs =  AgentModel::db()->upById($aid,$data);
+        return out_pc(200,$rs);
     }
 
 

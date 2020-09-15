@@ -297,6 +297,22 @@ class BaseCtrl {
 //            return false;
 //        }
 
+
+        if(arrKeyIssetAndExist($uinfo,'province_code')){
+            $province = AreaProvinceModel::getNameByCode($uinfo['province_code']);
+            $uinfo['province'] = $province;
+        }
+
+        if(arrKeyIssetAndExist($uinfo,'city_code')){
+            $city = AreaCityModel::getNameByCode($uinfo['city_code']);
+            $uinfo['city'] =  $city;
+        }
+
+        if(arrKeyIssetAndExist($uinfo,'county_code')){
+            $county = AreaCountyModel::getNameByCode($uinfo['county_code']);
+            $uinfo['county'] =  $county;
+        }
+
         $uinfo['avatar_url'] = get_agent_url($uinfo['avatar']);
 //        var_dump($uinfo['avatar_url'] );exit;
         $this->uinfo = $uinfo;

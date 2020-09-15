@@ -13,8 +13,6 @@ class WithdrawCtrl extends BaseCtrl{
             exit("orderIds ids is null");
         }
 
-
-
         $orderList = OrderModel::db()->getByIds($orderIds);
         $totalPrice =0;
         foreach ($orderList as $k=>$v){
@@ -63,7 +61,10 @@ class WithdrawCtrl extends BaseCtrl{
             var_dump($id);exit;
         }
 
-        $this->assign("totalPrice",$totalPrice);
+
+
+
+        $this->assign("totalPrice",fenToYuan($totalPrice));
         $this->assign("orderIds",$orderIds);
         $this->display("apply.withdraw.html");
     }
@@ -85,7 +86,7 @@ class WithdrawCtrl extends BaseCtrl{
         $info['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$info['status']];
         $info['u_date'] = get_default_date($info['u_time']);
         $info['a_date'] = get_default_date($info['a_time']);
-
+        $info['price'] = fenToYuan($info['price']);
         $this->assign("info",$info);
 
 
@@ -111,7 +112,13 @@ class WithdrawCtrl extends BaseCtrl{
 
     function orderList(){
         $this->setTitle('用户订单列表');
+        $this->setSubTitle('用户订单列表');
 
+
+        $setType = _g("setType");
+        if(!$setType){
+            $setType = 1;
+        }
         $orderAllList = $this->agentService->getAllOrderList($this->uinfo['id']);
         $orderList = null;
         if($orderAllList){
@@ -126,6 +133,16 @@ class WithdrawCtrl extends BaseCtrl{
             $finishOrder = null;
             foreach ($orderAllList as $k=>$v){
                 $v['a_date'] = get_default_date($v['a_time']);
+                $pids = explode(",",$v['pids']);
+                $productNames = "";
+                foreach ($pids as $k2=>$v2){
+                    $product = ProductModel::db()->getById($v2);
+                    if($product){
+                        $productNames .= $product['name']."<br/>";
+                    }
+                }
+                $v['productNames'] = $productNames;
+                $v['total_price'] = fenToYuan( $v['total_price']);
                 if( in_array($v['status'],$noPay) ){
                     $noPayOrder[] = $v;
                 }elseif($v == in_array($v['status'],$payed) ){
@@ -144,8 +161,10 @@ class WithdrawCtrl extends BaseCtrl{
 //        var_dump($payedOrder);exit;
 //        var_dump($orderList);exit;
 
-        $this->assign("orderList",json_encode($orderList));
 
+        $this->assign("setType",$setType);
+
+        $this->assign("orderList",json_encode($orderList));
         $this->display("user.order.list.html");
     }
 }

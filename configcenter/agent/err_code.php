@@ -50,6 +50,9 @@ return array(
     1037=>"share_uid is not agent",
     1038=>"address is is not in db",
     1039=>"agentUid not in db",
+    //===================
+    1040=>"aid not in db",
+
     5001=>'此接口必须为登陆状态',
 //
     6003=>'用户名(手机、邮箱)已被已注册',
@@ -228,5 +231,9 @@ return array(
     8399=>"fee_percent is null ,not int",
     8400=>"fee_percent >=0  and <= 50",
     8401=>"sex only 1 or 2",
-
+    8402=>"uid is null",
+    8403=>"aid is null",
+    8404=>"uid与您提供的手机号不匹配",
+    8405=>"该用户已经绑定过代理了...",
+    8406=>"agentId中的UID 与传参UID不一致 ",
 );

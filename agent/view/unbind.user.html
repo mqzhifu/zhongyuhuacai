@@ -8,25 +8,44 @@
         <form action="">
             <div class="group">
                 <label>绑定ID</label>
-                <div class="ipt">1000200</div>
+                <div class="ipt">{$user['id']}</div>
             </div>
             <div class="group">
                 <label>绑定昵称</label>
-                <div class="ipt">憩息</div>
+                <div class="ipt">{$user['nickname']}</div>
             </div>
 
             <div class="btns">
                 <span class="btnCancel">取消</span>
-                <span class="btnbind" onclick="goto()">解除绑定</span>
+                <span class="btnbind" onclick="submitData()">解除绑定</span>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function goto(){
-        location.href="/agent/unbindUser/opt=1";
+
+    function submitData(){
+        $.ajax({
+            url:'/agent/apply/opt=1',
+            type:'POST',
+            success:function(data){
+                var backData = eval( data);
+                // alert(backData.code);
+                if(backData.code != 200){
+                    toastFail(backData.msg);
+                }else{
+                    toastOk("成功");
+                    location.href="/";
+                }
+            },
+            error:function(){
+                console.log("提交ajax函数异常");
+            },
+
+        });
     }
+
 </script>
 
 <!-- //End -->

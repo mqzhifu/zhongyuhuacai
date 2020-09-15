@@ -10,17 +10,19 @@
         </div>
         <div class="tool">
             <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/base-edit.png" onclick="clickEditUinfo()" alt="" />
+            {if $uinfo['uid']}
             <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/base-unbind.png" onclick="clickUnbind()" alt="" />
+            {/if}
         </div>
     </div>
     <!-- //End base-->
 
     <div class="infos">
-        <div class="info">
+        <div class="info" onclick="gotoOrderList(2)">
             <p>¥{$allowWithdrawMoneyTotalNum}</p>
             <p>可提现金佣金</p>
         </div>
-        <div class="info">
+        <div class="info" onclick="gotoOrderList(1)">
             <p>{$allOrderCnt}</p>
             <p>成功订单数</p>
         </div>
@@ -58,17 +60,19 @@
             </a>
         </div>
         <div class="item">
-            <a href="/withdraw/apply/">
+            <a href="/withdraw/orderList/setType=2">
             <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools3.png" alt="" />
             <p>申请提现</p>
             </a>
         </div>
-        <div class="item">
-            <a href="/agent/bindUser/">
-            <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
-            <p>绑定用户</p>
-            </a>
+        {if !$uinfo['uid']}
+            <div class="item">
+                <a href="/agent/bindUser/">
+                <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
+                <p>绑定用户</p>
+                </a>
         </div>
+        {/if}
 
         <div class="item">
             <a href="/agent/apply/">
@@ -93,6 +97,12 @@
     function gotoLeader(){
         location.href="/agent/mysub/";
     }
+
+    function gotoOrderList(type){
+        location.href="/withdraw/orderList/setType="+type;
+    }
+
+
 
 
 

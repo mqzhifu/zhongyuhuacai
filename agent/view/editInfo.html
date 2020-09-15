@@ -40,7 +40,7 @@
             </div>
             <div class="group">
                 <label>店铺图片</label>
-                <div class="ipt"><img src="{$info['avatar_url']}" /></div>
+                <div class="ipt"><img width="80" height="80" src="{$info['avatar_url']}" /></div>
                 <div class="file">
                     <span>替换图片</span>
                     <input class="iptFile" type="file" name="pic" />
@@ -53,10 +53,10 @@
                     id="city"
                     type="text"
                     readonly=""
-                    placeholder="省/市/区县/镇"
+                    placeholder="{$placeholder}"
                     value=""
                 />
-                <input id="cityVal" type="hidden" name="area" />
+                <input id="cityVal" type="hidden" name="area" value="{$areaStr}" />
                 <img class="imgGo" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go.png" alt="" />
             </div>
             <div class="group">
@@ -99,7 +99,13 @@
             type: 1, //数据源类型
             data: LAreaData, //数据源
         });
-        // area1.value = [1, 13, 3] //控制初始位置，注意：该方法并不会影响到input的value
+        // alert(info.province_code ,info.city_code, info.county_code );
+        // console.log(info.province_code ,info.city_code, info.county_code);
+        //控制初始位置，注意：该方法并不会影响到input的value
+        // if(info.province_code && info.city_code && info.county_code){
+        //     area1.value = [info.province_code, info.city_code, info.county_code];
+        // }
+
         // var area2 = new LArea()
         // area2.init({
         //     trigger: '#demo2',

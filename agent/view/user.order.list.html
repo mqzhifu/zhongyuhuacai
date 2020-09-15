@@ -60,6 +60,9 @@
                         itemHtml = itemHtml.replace("#a_date#",orderList[type][i]['a_date']);
                         itemHtml = itemHtml.replace("#uid#",orderList[type][i]['uid']);
                         itemHtml = itemHtml.replace("#price#",orderList[type][i]['total_price']);
+                        itemHtml = itemHtml.replace("#goods_name#",orderList[type][i]['productNames']);
+
+
                         // itemHtml = itemHtml.replace("#a_date#",orderList[type][i]['a_date']);
 
                         selAllFlag = 0;
@@ -139,7 +142,7 @@
         location.href="/withdraw/apply/orderIds="+selOrderIds;
     }
 
-    sel_tab(2);
+    sel_tab({$setType});
 
 </script>
 

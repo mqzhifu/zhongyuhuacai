@@ -176,27 +176,30 @@ class AgentCtrl extends BaseCtrl  {
             $real_name = _g('real_name');
             $area = _g('area');
             $pic = _g("pic");
-            if(!$address){
-                exit("address is null");
-            }
+//            if(!$address){
+//                exit("address is null");
+//            }
+//
+//            if(!$sex){
+//                exit("sex is null");
+//            }
+//
+//            if(!$title){
+//                exit("title is null");
+//            }
+//
+//            if(!$real_name){
+//                exit("real_name is null");
+//            }
+//
+//            if(!$area){
+//                exit("area is null");
+//            }
 
-            if(!$sex){
-                exit("sex is null");
-            }
-
-            if(!$title){
-                exit("title is null");
-            }
-
-            if(!$real_name){
-                exit("real_name is null");
-            }
 
             if(!$area){
-                exit("area is null");
+                out_ajax(8395);
             }
-
-
             $area = explode(",",$area);
 
             $province = $area[0];
@@ -213,15 +216,25 @@ class AgentCtrl extends BaseCtrl  {
                 "county_code"=>$county,
             );
 
-            $picClass = new UploadService();
-            if($pic){
-                $rs = $picClass->agent("pic");
-//                var_dump($rs);exit;
-            }
+//            $picClass = new UploadService();
+//            if($pic){
+//                $rs = $picClass->agent("pic");
+//            }
 
-            $this->agentService->editOne($this->uinfo['id'],$data);
-            exit("ok");
+            $rs = $this->agentService->editOne($this->uinfo['id'],$data);
+            out_ajax($rs['code'],$rs['msg']);
         }
+
+        $areaStr = "";
+        $placeholder = "省/市/县";
+        if($this->uinfo['province_code'] && $this->uinfo['city_code'] && $this->uinfo['county_code']){
+            $areaStr = $this->uinfo['province_code'] .",". $this->uinfo['city_code']  .",". $this->uinfo['county_code'];
+            $placeholder = $this->uinfo['province'] ."/". $this->uinfo['city']  ."/". $this->uinfo['county'];
+        }
+
+
+        $this->assign("placeholder",$placeholder);
+        $this->assign("areaStr",$areaStr);
 
         $this->assign("info",$this->uinfo);
         $this->assign("uinfo",json_encode($this->uinfo));
@@ -242,9 +255,9 @@ class AgentCtrl extends BaseCtrl  {
             $mobile = _g("mobile");
             $smsCode = _g("smsCode");
 
-            $this->agentService->userBindAgent($uid,$mobile,$smsCode);
+            $rs = $this->agentService->userBindAgent($uid,$this->uinfo['id'],$mobile,$smsCode);
 
-            var_dump(2134234234);exit;
+            out_ajax($rs['code'],$rs['msg']);
         }
 
 
@@ -262,12 +275,15 @@ class AgentCtrl extends BaseCtrl  {
 
         if(_g("opt")){
             $rs = $this->agentService->unbind($this->uinfo['id'],$this->uinfo['uid']);
-            $uinfo = $this->uinfo;
-            $uinfo['uid'] = 0;
-            $this->_sess->setValue("uinfo",$uinfo);
-            var_dump($rs);exit;
+//            $uinfo = $this->uinfo;
+//            $uinfo['uid'] = 0;
+//            $this->_sess->setValue("uinfo",$uinfo);
+            out_ajax($rs['code'],$rs['msg']);
         }
 
+        $user = UserModel::db()->getById($this->uinfo['uid']);
+
+        $this->assign("user",$user);
 
         $this->display("unbind.user.html");
     }
