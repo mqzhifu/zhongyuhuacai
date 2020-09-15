@@ -1,0 +1,89 @@
+{include layout/left.html}
+	<!-- BEGIN CONTENT -->
+	<div class="page-content-wrapper">
+		<div class="page-content">
+			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+			<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+							<h4 class="modal-title">Modal title</h4>
+						</div>
+						<div class="modal-body">
+							 Widget settings form goes here
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn blue">Save changes</button>
+							<button type="button" class="btn default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+
+			<br>
+			<!-- BEGIN PAGE CONTENT-->
+			<div class="row">
+				<div class="col-md-12 news-page">
+					<h1>Role setting</h1>
+					
+					<div class="row">
+
+						<div class="col-md-5" style="padding-bottom: 20px">
+							<div style="height:30px; padding-left: 5px;padding-right: 15px; display: inline-block;">
+								<select id="role_select" class="form-control form-filter input-sm" >
+		                            <option value="">请选择</option>
+		                            {foreach ($roles as  $role)  }
+		                            <option value="{$role['id']}" {if $select_id==$role['id']}selected{/if}>{$role['name']}</option>
+		                            {/foreach}
+		                        </select>
+							</div>
+							<button id='role_search' class="btn btn-sm blue filter-cancel"><i class="fa fa-check"></i> 查询</button>
+							<button id='role_search' class="btn btn-sm yellow filter-cancel" style="float: right"><i class="fa fa-plus"></i> 新角色</button>
+						</div>
+					</div>
+
+
+                    	
+
+				</div>
+			</div>
+			<!-- END PAGE CONTENT-->
+		</div>
+	</div>
+	<!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+</body>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+
+
+		$("#role_search").click(function(){
+			role_id = $("#role_select").find("option:selected").val();
+			if (role_id == '') {
+				alert("请选择角色");return;
+			}
+			location.href="/power/user/power/search/id="+role_id;
+
+		});
+
+		
+	});
+
+	function removeByValue(arr, val) {
+	    for (var i = 0; i < arr.length; i++) {
+	        if (arr[i] == val) {
+	            arr.splice(i, 1);
+	            break;
+	        }
+	    }
+	}   
+
+</script>
+<!-- END BODY -->
+</html>

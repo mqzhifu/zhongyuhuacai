@@ -55,6 +55,10 @@ class ImageCtrl extends BaseCtrl{
 
         $dirTreeHtml = "";
         foreach ($dir as $k=>$v){
+            if($k == 'wx_little_share_qrcode'){//这个图片是按照   产品ID做为文件夹，然后下面放图片，不兼容
+                continue;
+            }
+
             if(is_array($v)){
                 $num = count($v);
                 foreach ($v as $k2=>$v2){

@@ -6,38 +6,17 @@ class VerifiercodeCtrl extends BaseCtrl{
         if(_g("getlist")){
             $this->getList();
         }
+
+        $statusOption = VerifiercodeModel::getStatusOption();
+        $typeOption = VerifiercodeModel::getTypeOption();
+
+        $this->assign("typeOption",$typeOption);
+        $this->assign("statusOption",$statusOption);
         $this->display("/system/verifiercode_list.html");
     }
 
 
     function getList(){
-        $this->getData();
-    }
-
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
-
-    function getData(){
         $records = array();
         $records["data"] = array();
         $sEcho = intval($_REQUEST['draw']);
@@ -45,7 +24,6 @@ class VerifiercodeCtrl extends BaseCtrl{
         $where = $this->getDataListTableWhere();
 
         $cnt = VerifiercodeModel::db()->getCount($where);
-
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
             $order_sort = _g("order");
@@ -107,6 +85,29 @@ class VerifiercodeCtrl extends BaseCtrl{
         echo json_encode($records);
         exit;
     }
+
+    function getWhere(){
+        $where = " 1 ";
+        if($mobile = _g("mobile"))
+            $where .= " and mobile = '$mobile'";
+
+        if($message = _g("message"))
+            $where .= " and mobile like '%$message%'";
+
+        if($from = _g("from")){
+            $from .= ":00";
+            $where .= " and add_time >= '".strtotime($from)."'";
+        }
+
+        if($to = _g("to")){
+            $to .= ":59";
+            $where .= " and add_time <= '".strtotime($to)."'";
+        }
+
+
+        return $where;
+    }
+
 
     function getDataListTableWhere(){
         $where = 1;

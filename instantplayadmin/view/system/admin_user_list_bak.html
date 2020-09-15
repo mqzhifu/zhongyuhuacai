@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="portlet light">
                         <div class="portlet-title">
-                            <div class="actions">
+                            <!-- <div class="actions">
                                 <div class="btn-group">
                                     <a class="btn btn-default btn-circle" href="javascript:;" data-toggle="dropdown">
                                         <i class="fa fa-share"></i> 导出 <i class="fa fa-angle-down"></i>
@@ -37,7 +37,7 @@
 
                                     </ul>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="portlet-body">
                             <div class="table-container">
@@ -61,31 +61,19 @@
                                             ID
                                         </th>
                                         <th width="5%">
-                                            验证码
+                                            用户名
                                         </th>
-                                        <th width="10%">
-                                            状态
-                                        </th>
-                                        <th width="10%">
-                                            类型
-                                        </th>
-
-
                                         <th width="5%">
-                                            uid
+                                            昵称
+                                        </th>
+                                        <th width="5%">
+                                            角色
                                         </th>
 
-
-                                        <th width="5%">
-                                            失效时间
                                         </th>
 
                                         <th width="5%">
-                                            规则ID
-                                        </th>
-
-                                        <th width="5%">
-                                            添加时间
+                                            a_time
                                         </th>
 
                                         <th width="5%">
@@ -98,28 +86,11 @@
                                         <td>
 
                                         </td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="uid" >
                                         </td>
-                                        <td>
-
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="status">
-                                                <option value="">选择</option>
-                                               {$statusOption}
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="type">
-                                                <option value="">选择</option>
-                                                {$typeOption}
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                        </td>
-
-                                        <td></td>
-                                        <td></td>
 
                                         <td>
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -205,7 +176,7 @@
                     ],
                     "pageLength": 10, // default record count per page
                     "ajax": {
-                        "url": "/system/no/verifiercode/getlist/" // ajax sourcedelBat
+                        "url": "/systemAdminUser/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,

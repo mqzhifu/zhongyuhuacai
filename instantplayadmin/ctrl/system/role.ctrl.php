@@ -185,5 +185,11 @@ class RoleCtrl extends BaseCtrl{
         return $where;
     }
 
+    function add(){
+        $this->assign('menus', MenuModel::getMenu());
+
+        $this->display("/system/role_add.html");
+    }
+
 
 }

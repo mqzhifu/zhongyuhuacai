@@ -44,7 +44,7 @@ class AreaCtrl extends BaseCtrl{
 
         $where = $this->getDataListTableWhere();
 
-        $cnt = AreaModel::db()->getCount($where);
+        $cnt = AreaProvinceModel::db()->getCount($where);
 
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
@@ -78,18 +78,17 @@ class AreaCtrl extends BaseCtrl{
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            $data = AreaModel::db()->getAll($where .  $order. " limit $iDisplayStart , $end ");
+            $data = AreaProvinceModel::db()->getAll($where .  $order. " limit $iDisplayStart , $end ");
 
             foreach($data as $k=>$v){
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['pid'],
+                    $v['code'],
                     $v['name'],
-                    $v['deep'],
+                    $v['lng']."<br/>".$v['lat'],
                     $v['pinyin'],
-                    $v['ext_id'],
-                    $v['ext_name'],
+                    $v['first_letter'],
                     "",
                 );
 
