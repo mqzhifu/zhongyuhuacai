@@ -16,7 +16,7 @@ class AdminUserCtrl extends BaseCtrl
         $this->display("/system/admin_add.html");
     }
 
-    function newAdminSave()
+    function addSave()
     {
         $uname = _g("uname");
         $nickname = _g("nickname");
@@ -104,7 +104,7 @@ class AdminUserCtrl extends BaseCtrl
                     $v['nickname'],
                     $roleNames[$v['role_id']],
                     get_default_date($v['a_time']),
-                    '<a href="/power/no/account/editInfo/id='.$v['id'].'" class="btn btn-xs default green" data-id="'.$v['id'].'" target=""><i class="fa fa-file-text"></i>修改</a>',
+                    '<a href="/system/no/adminUser/editInfo/id='.$v['id'].'" class="btn btn-xs default green" data-id="'.$v['id'].'" target=""><i class="fa fa-file-text"></i>修改</a>',
                 );
 
                 $records["data"][] = $row;
@@ -211,7 +211,7 @@ class AdminUserCtrl extends BaseCtrl
         $this->assign('roleName', $roleName);
         $this->assign('roles', $roles);
         $this->assign('userInfo', $userInfo);
-        $this->display('power/admin_edit.html');
+        $this->display('system/admin_edit.html');
     }
 
     /**
