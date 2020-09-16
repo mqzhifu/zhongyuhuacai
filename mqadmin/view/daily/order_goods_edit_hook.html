@@ -1,0 +1,93 @@
+<script>
+
+    jQuery(document).ready(function() {
+
+        $('.demo-loading-btn').click(function () {
+                var btn = $(this);
+                btn.button('loading');
+                setTimeout(function () {
+                    btn.button('reset');
+                }, 1000);
+
+            var ac = btn.attr("ac");
+            var id = $("#id").val();
+            if(ac == 'deny' || ac == 'send'){
+                var t = "发货信息";
+                if(ac == 'deny'){
+                    t = "拒绝理由";
+                }
+                bootbox.prompt({
+                    title:t,
+                    // inputType: 'textarea',
+                    buttons: {
+                        cancel: {
+                            label: '<i class="fa fa-times"></i> 取消'
+                        },
+                        confirm: {
+                            label: '<i class="fa fa-check"></i> 提交'
+                        }
+                    },
+                    callback:
+                        function(result) {
+                            if (result === null) {
+                                // alert("Prompt dismissed");
+                            } else {
+                                if(result == ""){
+                                    if(!$(this).find('input').next().hasClass('text-danger')){
+                                        $(this).find('input').after("<span class='text-danger'>请输入名称</span>");
+                                    }
+
+                                    return false;
+                                }
+
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: "?opt="+ac+"&memo="+result,
+                                    // data: {username:$("#username").val(), content:$("#content").val()},
+                                    dataType: "json",
+                                    success: function(data){
+                                        if(data.code == 200){
+                                            alert("修改成功");
+                                            location.reload();
+                                        }else{
+                                            alert("出错"+data.msg);
+                                        }
+                                    }
+                                });
+
+
+                                // alert("Hi <b>"+result+"</b>");
+                            }
+                        }
+
+                });
+            }else if(ac == 'ok'){
+                $.ajax({
+                    type: "GET",
+                    url: "?opt="+ac,
+                    // data: {username:$("#username").val(), content:$("#content").val()},
+                    dataType: "json",
+                    success: function(data){
+                        if(data.code == 200){
+                            alert("修改成功");
+                            location.reload();
+                        }else{
+                            alert("出错"+data.msg);
+                        }
+                    }
+                });
+            }
+
+
+
+        });
+
+
+
+    });
+
+
+
+
+</script>

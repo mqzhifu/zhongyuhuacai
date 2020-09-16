@@ -332,7 +332,7 @@ class UserService{
 
     //手机 邮箱  用户名 登陆
     //$isNoPs:不需要验证密码，短信已经验证过了
-    function selfLogin($name,$ps,$type = 0,$smsCode=0){
+    function selfLogin($name,$ps = "" ,$type = 0,$smsCode=0){
         if(!$name){
             return out_pc(8009);
         }
@@ -344,8 +344,8 @@ class UserService{
             return out_pc(8103);
         }
 
-
-        if( $this->getTypeMethod($type) == UserModel::$_type_cellphone){
+        //$this->getTypeMethod($type)
+        if($type == UserModel::$_type_cellphone){
             if(!$smsCode){//手机登陆必须得有  手机短信验证码
                 return out_pc(8014);
             }
@@ -366,24 +366,26 @@ class UserService{
                 return out_pc($VerifierCode['code'],$VerifierCode['msg']);
             }
 
-            $where = " cellphone = '$name' ";
+            $where = " mobile = '$name' ";
         }elseif($type == UserModel::$_type_email) {
             $rs = FilterLib::regex($name, 'email');
             if (!$rs) {
                 return out_pc(8101);
             }
             $where = " email = '$name' ";
-        }elseif($type == UserModel::$_type_cellphone_ps || $type == UserModel::$_type_pc_cellphone_ps){
-            if(!$ps){
-                return out_pc(8010);
-            }
-            if(!FilterLib::regex($ps,'md5')){
-                return out_pc(8102);
-            }
-
-            //手机号+密码登陆
-            $where = " cellphone = '$name' ";
-        }else{
+        }
+//        elseif($type == UserModel::$_type_cellphone_ps || $type == UserModel::$_type_pc_cellphone_ps){
+//            if(!$ps){
+//                return out_pc(8010);
+//            }
+//            if(!FilterLib::regex($ps,'md5')){
+//                return out_pc(8102);
+//            }
+//
+//            //手机号+密码登陆
+//            $where = " cellphone = '$name' ";
+//        }
+        else{
             if(!$ps){
                 return out_pc(8010);
             }
@@ -394,10 +396,8 @@ class UserService{
 
             $where = " name = '$name' ";
         }
-
 //        var_dump($where);
         $user = UserModel::db()->getRow($where);
-//        var_dump($user);
         if(!$user){
             return out_pc(1006);
         }

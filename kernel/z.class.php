@@ -198,9 +198,8 @@ class Z{
 //	    return $arr[$COUNTRY];
 //    }
 
-    static function outError($code,$replace){
+    static function outError($code,$replace = array()){
         ThrowErr::unknow(KERNEL_NAME,$code,$replace);
-        exit;
     }
 
     static function getEnv(){

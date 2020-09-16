@@ -1,0 +1,154 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>添加反馈
+                            </div>
+                            <div class="actions">
+                                <a href="{$this->_backListUrl}" class="btn btn-default btn-sm">
+                                    <i class="fa fa-arrow-left"></i> 返回列表 </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="{$this->_addPostUrl}" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
+
+                                <div class="form-body">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">状态 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <select name="type" class="form-control">
+                                                    <option value="">请选择</option>
+                                                    {$statusOptions}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group last">
+                                        <label class="control-label col-md-3">图片</label>
+                                        <div class="col-md-9">
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                                    <img src="{CONST|H_STATIC_URL}/noimg.png" alt=""/>
+                                                </div>
+                                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;">
+                                                </div>
+                                                <div>
+													<span class="btn default btn-file">
+													<span class="fileinput-new">
+													选择图片</span>
+													<span class="fileinput-exists">
+													更改 </span>
+													<input type="file" name="pic">
+													</span>
+                                                    <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput">
+                                                        移除 </a>
+                                                </div>
+                                            </div>
+                                            <!--<div class="clearfix margin-top-10">-->
+                                            <!--<span class="label label-danger">-->
+                                            <!--NOTE! </span>-->
+                                            <!--Image preview only works in IE10+, FF3.6+, Safari6.0+, Chrome6.0+ and Opera11.1+. In older browsers the filename is shown instead.-->
+                                            <!--</div>-->
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">uid  <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="uid"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">手机号 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="mobile"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">标题 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="title"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">内容 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <input type="text" name="content"  class="form-control" value="" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
+                                </div>
+
+
+
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn green sub_click">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                        <!-- END VALIDATION STATES-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

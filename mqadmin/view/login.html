@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<script src="{CONST|H_STATIC_URL}/assets/global/plugins/jquery.min.js" type="text/javascript" ></script>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8"/>
+    <title>助手</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+
+
+    {$css}
+
+    <!-- END THEME STYLES -->
+    <link rel="shortcut icon" href="favicon.ico"/>
+</head>
+<!-- END HEAD -->
+<!-- BEGIN BODY -->
+<body class="page-md login">
+<!-- BEGIN LOGO -->
+<div class="logo">
+    <a href="index.html">
+        <!--<img src="/www/assets/admin/layout4/img/logo-big.png" alt=""/>-->
+    </a>
+</div>
+<!-- END LOGO -->
+<!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+<div class="menu-toggler sidebar-toggler">
+</div>
+<!-- END SIDEBAR TOGGLER BUTTON -->
+<!-- BEGIN LOGIN -->
+<div class="content">
+    <!-- BEGIN LOGIN FORM -->
+    <form class="login-form" action="" method="post">
+        <input type="hidden" name="opt" value="1" />
+        <h3 class="form-title">Login to your account</h3>
+        <div class="alert alert-danger display-hide">
+            <button class="close" data-close="alert"></button>
+			<span>
+			用户名密码错误. </span>
+        </div>
+        <div class="form-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">Username</label>
+            <div class="input-icon">
+                <i class="fa fa-user"></i>
+                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" id="username" placeholder="Username" name="username"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Password</label>
+            <div class="input-icon">
+                <i class="fa fa-lock"></i>
+                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" id="password" name="password"/>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">verify</label>
+            <div class="input-group" style=" display: block; height: 35px;">
+
+                <div class="input-icon" style="position: relative">
+                    <i class="fa fa-sign-in" style="position: absolute; left: 0;"></i>
+                    <img src="?ac=verifyImg" style=" z-index:999;width: 130px;height: 35px;position: absolute;right: 0;top: 0;" />
+                    <!--http://178.k.com/www/assets/admin/layout/img/photo3.jpg-->
+                    <input class="form-control placeholder-no-fix regverify" type="text" autocomplete="off" placeholder="verify" name="verify" id="verify" />
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-actions">
+            <!--<label class="checkbox">-->
+                <!--<input type="checkbox" name="remember" value="1"/> Remember me </label>-->
+            <button type="submit" class="btn blue pull-right">
+                Login <i class="m-icon-swapright m-icon-white"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+{$js}
+
+<script>
+    jQuery(document).ready(function() {
+        Metronic.init(); // init metronic core components
+        Layout.init(); // init current layout
+        Login.init();
+        Demo.init();
+        // init background slide images
+        $.backstretch([
+                    "{CONST|H_STATIC_URL}/assets/admin/pages/media/bg/1.jpg",
+                    "{CONST|H_STATIC_URL}/assets/admin/pages/media/bg/2.jpg",
+                    "{CONST|H_STATIC_URL}/assets/admin/pages/media/bg/3.jpg",
+                    "{CONST|H_STATIC_URL}/assets/admin/pages/media/bg/4.jpg"
+                ], {
+                    fade: 1000,
+                    duration: 8000
+                }
+        );
+    });
+</script>
+<!-- END JAVASCRIPTS -->
+</body>
+<!-- END BODY -->
+</html>
+
