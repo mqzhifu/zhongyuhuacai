@@ -1,6 +1,6 @@
 <?php
-class ExchangeQueueAlarmModel {
-	static $_table = 'exchange_queue_alarm';
+class QueueAlarmModel {
+	static $_table = 'queue_alarm';
 	static $_pk = 'id';
 	static $_db = null;
     static $_db_key = "instantplay";

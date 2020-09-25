@@ -17,4 +17,14 @@ class AuditConfitModel {
 	public static function __callStatic($func, $arguments){
 		return call_user_func_array(array(self::db(),$func), $arguments);
 	}
+
+    static function getOption(){
+        $list = self::db()->getAll(1);
+        $str = "";
+        foreach($list as $k=>$v){
+            $str.= "<option value='{$v['id']}'>{$v['name']}</option>";
+        }
+
+        return $str;
+    }
 }

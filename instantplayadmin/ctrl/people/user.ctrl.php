@@ -5,6 +5,12 @@ class UserCtrl extends BaseCtrl{
             $this->getList();
         }
 
+
+
+
+
+        $this->assign("areaProvinceModelOptionsHtml", AreaProvinceModel::getSelectOptionsHtml());
+
         $this->assign("typeOptions",UserModel::getTypeOptions());
         $this->assign("sexOptions", UserModel::getSexOptions());
         $this->assign("innerTypeOptions", UserModel::getInnerTypeOptions());
@@ -95,8 +101,8 @@ class UserCtrl extends BaseCtrl{
                     UserModel::getTypeDescByKey($v['type']),
                     $v['wx_open_id'],
                     $v['consume_total'],
-                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
-                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
+                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
+//                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );
 
@@ -116,14 +122,11 @@ class UserCtrl extends BaseCtrl{
     function add(){
 
         if(_g('opt')){
-            $this->ok("成功");
             $data =array(
                 'uname'=> _g('uname'),
                 'realname'=> _g('realname'),
                 'nickname'=> _g('nickname'),
-                'mobile'=> _g('mobile'),
                 'sex'=> _g('sex'),
-                'email'=> _g('email'),
                 'birthday'=> strtotime( _g('birthday')),
                 'status'=>UserModel::STATUS_NORMAL,
                 'inner_type'=>UserModel::INNER_TYPE_HUMAN,
@@ -140,6 +143,20 @@ class UserCtrl extends BaseCtrl{
                 $data['a_time'] = strtotime( _g("a_time"));
             }
 
+            $mobile =  _g('mobile');
+            $email = _g('email');
+
+            if(!FilterLib::regex($mobile,"phone")){
+                $this->notice("手机号格式错误 ");
+            }
+
+//            if(!FilterLib::regex($mobile,"email")){
+//                $this->notice("邮箱格式错误 ");
+//            }
+
+            $data['mobile'] = $mobile ;
+            $data['email'] = $email ;
+
             $uploadService = new UploadService();
             $uploadRs = $uploadService->avatar('pic');
             if($uploadRs['code'] != 200){
@@ -151,7 +168,7 @@ class UserCtrl extends BaseCtrl{
 
             $newId = UserModel::db()->add($data);
 
-            $this->ok("成功");
+            $this->ok("成功-$newId");
 
         }
 
@@ -233,6 +250,13 @@ class UserCtrl extends BaseCtrl{
 
         $consume_total = _g('consume_total');
         $order_num = _g('order_num');
+        $province = _g('province');
+        $inner_type = _g('inner_type');
+
+
+
+        if($inner_type)
+            $where .=" and inner_type = '$inner_type' ";
 
         if($consume_total)
             $where .=" and consume_total = '$consume_total' ";
@@ -262,6 +286,9 @@ class UserCtrl extends BaseCtrl{
         if($type)
             $where .=" and mobile = '$type' ";
 
+        if($province){
+            $where .=" and province_code = '$province' ";
+        }
 
 //        if($from = _g("from")){
 //            $from .= ":00";
@@ -286,6 +313,7 @@ class UserCtrl extends BaseCtrl{
 
         if($birthday_to)
             $where .=" and birthday <=  $birthday_to";
+
 
         return $where;
     }

@@ -11,9 +11,41 @@ class ExchangeBindQueueCtrl extends BaseCtrl
 
     function add()
     {
-        $roles = RolesModel::db()->getAll();
-        $this->assign('roles', $roles);
-        $this->display("/system/admin_add.html");
+        if(_g("opt")){
+
+            $exchange_id = _g("exchange_id");
+            $queue_id = _g("queue_id");
+            $routing_key = _g("routing_key");
+            $arguments = _g("arguments");
+
+
+            $data = array(
+                'exchange_id'=>$exchange_id ,
+                'queue_id'=>$queue_id ,
+                'routing_key'=>$routing_key ,
+                'arguments'=>$arguments ,
+                'a_time'=>time(),
+                'admin_id'=>$this->_adminid,
+            );
+
+            ExchangeBindQueueModel::db()->add($data);
+            $this->ok("成功");
+        }
+
+
+        $queueOption = QueueModel::getOption();
+        $topicOption = TopicModel::getOption();
+
+        $this->assign("queueOption",$queueOption);
+        $this->assign("topicOption",$topicOption);
+
+
+
+        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+
+        $this->addHookJS("/check/exchang_bind_queue_add_hook.html");
+        $this->display("/check/exchang_bind_queue_add.html");
     }
 
     function addSave()
@@ -97,16 +129,17 @@ class ExchangeBindQueueCtrl extends BaseCtrl
 //            }
 
             foreach($data as $k=>$v){
+                $topicName = TopicModel::getFieldById($v['exchange_id'],'name');
+                $queueName = TopicModel::getFieldById($v['queue_id'],'name');
+                $adminName = AdminUserModel::getFieldById($v['admin_id'],'uname');
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['exchange_id'],
-                    $v['queue_id'],
-                    $v['status'],
+                    $topicName,
+                    $queueName,
                     $v['routing_key'],
                     $v['arguments'],
-                    $v['admin_id'],
-//                    $roleNames[$v['role_id']],
+                    $adminName,
                     get_default_date($v['a_time']),
                     '<a href="/system/no/adminUser/editInfo/id='.$v['id'].'" class="btn btn-xs default green" data-id="'.$v['id'].'" target=""><i class="fa fa-file-text"></i>修改</a>',
                 );

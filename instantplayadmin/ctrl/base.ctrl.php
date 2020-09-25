@@ -8,7 +8,7 @@ class BaseCtrl{
     public $_assign = array();
     public $_adminid = "";
     public $_request = null;
-
+    public $website_title = "";
 
     public $userService = null;
 
@@ -57,6 +57,11 @@ class BaseCtrl{
         ConfigCenter::get(APP_NAME,"err_code");
         ConfigCenter::get(APP_NAME,"rediskey");
         ConfigCenter::get(APP_NAME,"img");
+        ConfigCenter::get(APP_NAME,"main");
+
+
+        $website_title = ConfigCenter::get(APP_NAME,"main")['website_title'];
+        $this->website_title = $website_title;
 
         if ($this->_adminid) {
             $role_id = AdminUserModel::db()->getRowById($this->_adminid)['role_id'];
@@ -84,16 +89,6 @@ class BaseCtrl{
 //        $this->imSevice = new ImService();
 //        $this->advertiseService = new AdvertiseService();
 //        $this->systemService = new SystemService();
-//        $GLOBALS['jsonindex'] = [];
-//        if(file_exists(APP_CONFIG."index.json")){
-//            $jsonindex = file_get_contents(APP_CONFIG."index.json");
-//            $GLOBALS['jsonindex'] = json_decode($jsonindex,true);
-//        }
-//        if(PCK_AREA == 'en'){
-//            $this->assign("foreign", true);
-//        }
-
-
     }
 
     function getStaticBaseUrl($locate='instantplayadmin'){

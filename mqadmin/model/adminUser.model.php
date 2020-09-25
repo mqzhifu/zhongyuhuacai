@@ -37,17 +37,21 @@ class AdminUserModel {
         return $str;
     }
 
-    static function getFieldById($adminUid,$field){
+    static function getFieldById($adminUid,$field,$defaultStr = '--'){
 	    if(!$adminUid){
-            return "--";
+            return $defaultStr;
         }
         $user = self::db()->getById($adminUid);
+	    if(!$user){
+	        return $defaultStr;
+        }
+
         if($user[$field]){
             return $user[$field];
         }
 
-        return "默认昵称";
+        return $defaultStr;
 
     }
-	
+
 }

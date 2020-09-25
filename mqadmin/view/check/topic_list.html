@@ -19,7 +19,7 @@
                                 <div class="table-actions-wrapper">
 									<span>
 									</span>
-                                    <a href="/system/no/adminUser/add/" class="btn btn-sm yellow" target="_blank"><i class="fa fa-plus"></i> 添加</a>
+                                    <a href="/check/no/topic/add/" class="btn btn-sm yellow" target="_blank"><i class="fa fa-plus"></i> 添加</a>
                                     <!--<button type="button" class="btn btn-sm btn-warning" onclick="all_del();">全删除</button>-->
                                 </div>
                                 <table class="table table-striped table-bordered table-hover" id="datatable_products">
@@ -32,21 +32,26 @@
                                             ID
                                         </th>
                                         <th width="5%">
-                                            name
-                                        </th>
-                                        <th width="5%">
-                                            type
-                                        </th>
-                                        <th width="5%">
-                                            x-delayed-type
+                                            名称
                                         </th>
 
-                                        <th width="5%">
-                                            admin_id
+                                        <th width="15%">
+                                            描述
                                         </th>
 
-                                        <th width="5%">
-                                            a_time
+                                        <th width="10%">
+                                            分发类型
+                                        </th>
+                                        <th width="10%">
+                                            延迟-分发类型
+                                        </th>
+
+                                        <th width="10%">
+                                            员工名
+                                        </th>
+
+                                        <th width="20%">
+                                            添加时间
                                         </th>
 
                                         <th width="5%">
@@ -62,15 +67,28 @@
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="nickname" >
                                         </td>
-                                        <td></td>
+
                                         <td>
-                                            <select name="role_id" class="form-control form-filter input-sm">
+                                            <select name="type" class="form-control form-filter input-sm">
                                                 <option value="">请选择</option>
-                                                {foreach ($roles as  $r)  }
-                                                <option value="{$r['id']}">{$r['name']}</option>
-                                                {/foreach}
+
+                                                {$getTypeOptions}
                                             </select>
                                         </td>
+
+
+                                        <td>
+                                            <select name="x-delayed-type" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$getTypeOptions}
+                                            </select>
+                                        </td>
+
+                                        <td>
+
+                                        </td>
+
+
                                         <td>
                                             <div class="input-group date form_datetime margin-bottom-5">
                                                 <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
@@ -155,7 +173,7 @@
                     ],
                     "pageLength": 10, // default record count per page
                     "ajax": {
-                        "url": "/check/no/workOrder/getlist/" // ajax sourcedelBat
+                        "url": "/check/no/topic/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,

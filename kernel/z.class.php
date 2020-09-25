@@ -291,7 +291,7 @@ class Z{
 	    }
     }
 }
-
+//配置中心
 class ConfigCenter{
     static $_dir =BASE_DIR ."/configcenter";
     static $_configPool = null;

@@ -129,7 +129,7 @@
 			if (role_id == '') {
 				alert("请选择角色");return;
 			}
-			location.href="/power/user/power/search/id="+role_id;
+			location.href="/system/no/power/search/id="+role_id;
 
 		});
 
@@ -141,7 +141,7 @@
 				role_id = $("#role_select").find("option:selected").val();
                 $.ajax({
                     type: "POST",
-                    url: "/power/user/power/save/",
+                    url: "/system/no/power/save/",
                     data: {
                         ids:ids,
                         role_id:role_id

@@ -6,14 +6,36 @@ class WorkOrderCtrl extends BaseCtrl
         $roles = RolesModel::db()->getAll();
         $this->assign('roles', $roles);
 
+        $statusOptions = WorkOrderModel::getStatusOptions();
+        $this->assign('statusOptions', $statusOptions);
+
         $this->display("check/work_order_list.html");
     }
 
-    function add()
-    {
-        $roles = RolesModel::db()->getAll();
-        $this->assign('roles', $roles);
-        $this->display("/system/admin_add.html");
+    function add(){
+        if(_g("opt")){
+
+            $gidsNums =_g("gidsNums");
+            $couponId = _g("couponId");
+            $memo = _g("memo");
+            $uid = _g("uid");
+            $share_uid = _g("share_uid");
+            $userSelAddressId = _g("userSelAddressId");
+
+            $order = $this->orderService->doing($uid,$gidsNums,$couponId,$memo,$share_uid,$userSelAddressId);
+            $this->ok("成功");
+        }
+
+        $AuditConfigOption = AuditConfitModel::getOption();
+
+
+        $this->assign("auditConfigOption",$AuditConfigOption);
+
+        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+
+        $this->addHookJS("/check/work_order_add_hook.html");
+        $this->display("/check/work_order_add.html");
     }
 
     function addSave()
@@ -95,6 +117,8 @@ class WorkOrderCtrl extends BaseCtrl
             foreach ($roles as $role) {
                 $roleNames[$role['id']] = $role['name'];
             }
+
+
 
             foreach($data as $k=>$v){
                 $row = array(

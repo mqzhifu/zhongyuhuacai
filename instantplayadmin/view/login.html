@@ -9,7 +9,7 @@
 <!-- BEGIN HEAD -->
 <head>
     <meta charset="utf-8"/>
-    <title>助手</title>
+    <title>{$this->website_title}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
@@ -42,7 +42,7 @@
     <!-- BEGIN LOGIN FORM -->
     <form class="login-form" action="" method="post">
         <input type="hidden" name="opt" value="1" />
-        <h3 class="form-title">Login to your account</h3>
+        <h3 class="form-title">登陆您的账户</h3>
         <div class="alert alert-danger display-hide">
             <button class="close" data-close="alert"></button>
 			<span>
@@ -53,14 +53,14 @@
             <label class="control-label visible-ie8 visible-ie9">Username</label>
             <div class="input-icon">
                 <i class="fa fa-user"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" id="username" placeholder="Username" name="username"/>
+                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" id="username" placeholder="用户名" name="username"/>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label visible-ie8 visible-ie9">Password</label>
             <div class="input-icon">
                 <i class="fa fa-lock"></i>
-                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" id="password" name="password"/>
+                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="密码" id="password" name="password"/>
             </div>
         </div>
 
@@ -73,7 +73,7 @@
                     <i class="fa fa-sign-in" style="position: absolute; left: 0;"></i>
                     <img src="?ac=verifyImg" style=" z-index:999;width: 130px;height: 35px;position: absolute;right: 0;top: 0;" />
                     <!--http://178.k.com/www/assets/admin/layout/img/photo3.jpg-->
-                    <input class="form-control placeholder-no-fix regverify" type="text" autocomplete="off" placeholder="verify" name="verify" id="verify" />
+                    <input class="form-control placeholder-no-fix regverify" type="text" autocomplete="off" placeholder="验证码" name="verify" id="verify" />
                 </div>
 
             </div>

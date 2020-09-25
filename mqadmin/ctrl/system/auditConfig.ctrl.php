@@ -3,10 +3,10 @@ class AuditConfigCtrl extends BaseCtrl
 {
     function index()
     {
-        $roles = RolesModel::db()->getAll();
-        $this->assign('roles', $roles);
+//        $roles = RolesModel::db()->getAll();
+//        $this->assign('roles', $roles);
 
-        $this->display("check/work_order_list.html");
+        $this->display("system/audit_config_list.html");
     }
 
     function add()
@@ -16,37 +16,6 @@ class AuditConfigCtrl extends BaseCtrl
         $this->display("/system/admin_add.html");
     }
 
-    function addSave()
-    {
-        $uname = _g("uname");
-        $nickname = _g("nickname");
-        $ps = _g("ps");
-        $role_id = _g("role_id");
-
-        if (!$uname || !$nickname || !$ps || !$role_id) {
-            exit(0);
-        }
-
-        if (AdminUserModel::db()->getRow("uname = '$uname'")) {
-            exit(0);
-        }
-        $ps = md5($ps);
-        $data = [
-            'uname'=>$uname,
-            'nickname'=>$nickname,
-            'ps'=>$ps,
-            'role_id'=>$role_id,
-            'a_time'=>time()
-        ];
-
-        if (AdminUserModel::db()->add($data)) {
-            echo(200);
-            exit;
-        }
-        exit(0);
-    }
-
-
     function getList()
     {
         $records = array();
@@ -55,7 +24,7 @@ class AuditConfigCtrl extends BaseCtrl
 
         $where = $this->getWhere();
 
-        $cnt = WorkOrderModel::db()->getCount($where);
+        $cnt = AuditConfitModel::db()->getCount($where);
 
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
@@ -89,7 +58,7 @@ class AuditConfigCtrl extends BaseCtrl
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            $data = WorkOrderModel::db()->getAll($where . $order. " limit $iDisplayStart,$iDisplayLength ");
+            $data = AuditConfitModel::db()->getAll($where . $order. " limit $iDisplayStart,$iDisplayLength ");
             $roles = RolesModel::db()->getAll();
             $roleNames = [];
             foreach ($roles as $role) {
@@ -101,8 +70,7 @@ class AuditConfigCtrl extends BaseCtrl
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['name'],
-                    $v['audit_id'],
-                    $v['status'],
+                    $v['role_ids'],
                     $v['admin_id'],
 //                    $roleNames[$v['role_id']],
                     get_default_date($v['a_time']),

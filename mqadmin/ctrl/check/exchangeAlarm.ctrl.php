@@ -1,51 +1,53 @@
 <?php
-class ExchangeQueueAlarmCtrl extends BaseCtrl
+class ExchangeAlarmCtrl extends BaseCtrl
 {
     function index()
     {
-        $roles = ExchangeBindQueueModel::db()->getAll();
-        $this->assign('roles', $roles);
+        $getOption = TopicModel::getOption();
+        $this->assign('getOption', $getOption);
 
-        $this->display("check/exchange_queue_alarm_list.html");
+        $this->display("check/exchange_alarm_list.html");
     }
 
-    function add()
-    {
-        $roles = RolesModel::db()->getAll();
-        $this->assign('roles', $roles);
-        $this->display("/system/admin_add.html");
+    function add(){
+        if(_g("opt")){
+
+            $exchange_id =_g("exchange_id");
+            $bind = _g("bind");
+            $unbind = _g("unbind");
+            $del = _g("del");
+
+
+            $data = array(
+                'exchange_id'=>$exchange_id,
+                'bind'=>$bind,
+                'unbind'=>$unbind,
+                'del'=>$del,
+                'a_time'=>time(),
+                'admin_id'=>$this->_adminid,
+            );
+            ExchangeAlarmModel::db()->add($data);
+            $this->ok("成功");
+        }
+
+//        $AuditConfigOption = AuditConfitModel::getOption();
+//        $this->assign("auditConfigOption",$AuditConfigOption);
+
+        $getOption = TopicModel::getOption();
+        $this->assign('getOption', $getOption);
+
+        $getTypeOptions = TopicModel::getTypeOptions();
+        $getNormalTypeOptions = TopicModel::getNormalTypeOptions();
+
+        $this->assign("getNormalTypeOptions",$getNormalTypeOptions);
+        $this->assign("getTypeOptions",$getTypeOptions);
+
+        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+
+        $this->addHookJS("/check/exchange_alarm_add_hook.html");
+        $this->display("/check/exchange_alarm_add.html");
     }
-
-    function addSave()
-    {
-        $uname = _g("uname");
-        $nickname = _g("nickname");
-        $ps = _g("ps");
-        $role_id = _g("role_id");
-
-        if (!$uname || !$nickname || !$ps || !$role_id) {
-            exit(0);
-        }
-
-        if (AdminUserModel::db()->getRow("uname = '$uname'")) {
-            exit(0);
-        }
-        $ps = md5($ps);
-        $data = [
-            'uname'=>$uname,
-            'nickname'=>$nickname,
-            'ps'=>$ps,
-            'role_id'=>$role_id,
-            'a_time'=>time()
-        ];
-
-        if (AdminUserModel::db()->add($data)) {
-            echo(200);
-            exit;
-        }
-        exit(0);
-    }
-
 
     function getList()
     {
@@ -55,7 +57,7 @@ class ExchangeQueueAlarmCtrl extends BaseCtrl
 
         $where = $this->getWhere();
 
-        $cnt = ExchangeQueueAlarmModel::db()->getCount($where);
+        $cnt = ExchangeAlarmModel::db()->getCount($where);
 
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
@@ -89,7 +91,7 @@ class ExchangeQueueAlarmCtrl extends BaseCtrl
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            $data = ExchangeQueueAlarmModel::db()->getAll($where . $order. " limit $iDisplayStart,$iDisplayLength ");
+            $data = ExchangeAlarmModel::db()->getAll($where . $order. " limit $iDisplayStart,$iDisplayLength ");
 //            $roles = RolesModel::db()->getAll();
 //            $roleNames = [];
 //            foreach ($roles as $role) {
@@ -97,16 +99,16 @@ class ExchangeQueueAlarmCtrl extends BaseCtrl
 //            }
 
             foreach($data as $k=>$v){
+                $adminName = AdminUserModel::getFieldById($v['admin_id'],'uname');
+                $exchangeName = TopicModel::getFieldById($v['exchange_id'],"name");
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['exchange_id'],
-                    $v['queue_id'],
-                    $v['msg_ready_num'],
-                    $v['queue_del'],
-                    $v['unbind_queue'],
-                    $v['new_bind'],
-                    $v['exchange_del'],
+                    $exchangeName,
+                    $v['unbind'],
+                    $v['bind'],
+                    $v['del'],
+                    $adminName,
 //                    $roleNames[$v['role_id']],
                     get_default_date($v['a_time']),
                     '<a href="/system/no/adminUser/editInfo/id='.$v['id'].'" class="btn btn-xs default green" data-id="'.$v['id'].'" target=""><i class="fa fa-file-text"></i>修改</a>',

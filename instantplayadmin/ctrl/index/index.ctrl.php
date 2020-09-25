@@ -4,6 +4,25 @@ class indexCtrl extends BaseCtrl{
     function index(){
         $this->setTitle('test');
 
+
+        $yesterday = get_yesterday();
+        $yesterdayTime = dayStartEndUnixtime($yesterday);
+        $userYesterdayRegCnt = UserModel::db()->getCount("a_time >=  {$yesterdayTime['s_time']} and a_time <= {$yesterdayTime['e_time']}");
+
+        $this->assign("userYesterdayRegCnt",$userYesterdayRegCnt);
+
+
+        $yesterdayOrderTotalDb = OrderModel::db()->getRow("a_time >=  {$yesterdayTime['s_time']} and a_time <= {$yesterdayTime['e_time']}",null, " sum(total_price) as total");
+        $yesterdayOrderTotal = 0;
+        if($yesterdayOrderTotalDb['total']){
+            $yesterdayOrderTotal = $yesterdayOrderTotalDb['total'];
+        }
+        $yesterdayOrderCnt = OrderModel::db()->getCount("a_time >=  {$yesterdayTime['s_time']} and a_time <= {$yesterdayTime['e_time']}");
+
+
+        $this->assign("yesterdayOrderTotal",$yesterdayOrderTotal);
+        $this->assign("yesterdayOrderCnt",$yesterdayOrderCnt);
+
         $this->addHookJS("/index/index_hook.html");
         $this->display("/index/index.html");
 

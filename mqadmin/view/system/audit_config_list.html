@@ -13,28 +13,13 @@
                 <div class="col-md-12">
                     <div class="portlet light">
                         <div class="portlet-title">
-                            <div class="actions">
-                                <div class="btn-group">
-                                    <a href="{$this->_addUrl}">
-                                        <button class="btn green">
-                                            添加 <i class="fa fa-plus"></i>
-                                        </button>
-                                    </a>
-
-                                </div>
-
-                            </div>
                         </div>
                         <div class="portlet-body">
                             <div class="table-container">
                                 <div class="table-actions-wrapper">
 									<span>
 									</span>
-                                    <select class="table-group-action-input form-control input-inline input-small input-sm">
-                                        <option value="">选择</option>
-                                        <!--<option value="delete">批量删除</option>-->
-                                    </select>
-                                    <!--<button class="btn btn-sm yellow table-group-action-submit"><i class="fa fa-check"></i> 提交</button>-->
+                                    <a href="/check/no/exchangeAlarm/add/" class="btn btn-sm yellow" target="_blank"><i class="fa fa-plus"></i> 添加</a>
                                     <!--<button type="button" class="btn btn-sm btn-warning" onclick="all_del();">全删除</button>-->
                                 </div>
                                 <table class="table table-striped table-bordered table-hover" id="datatable_products">
@@ -47,52 +32,19 @@
                                             ID
                                         </th>
                                         <th width="5%">
-                                            用户名
-                                        </th>
-                                        <th width="5%">
-                                            昵称
-                                        </th>
-                                        <th width="5%">
-                                            居住地
-                                        </th>
-                                        <th width="5%">
-                                            性别
+                                            name
                                         </th>
 
                                         <th width="5%">
-                                            订单数
+                                            role_ids
                                         </th>
 
                                         <th width="5%">
-                                            手机号
+                                            员工名
                                         </th>
 
                                         <th width="5%">
-                                            类型
-                                        </th>
-
-                                        <th width="10%">
-                                            生日
-                                        </th>
-
-                                        <th width="10%">
-                                            注册时间
-                                        </th>
-
-                                        <th width="5%">
-                                            头像
-                                        </th>
-
-                                        <th width="5%">
-                                            注册类型
-                                        </th>
-
-                                        <th width="5%">
-                                            三方UID
-                                        </th>
-
-                                        <th width="5%">
-                                            消费总金额
+                                            添加时间
                                         </th>
 
                                         <th width="5%">
@@ -100,77 +52,20 @@
                                         </th>
                                     </tr>
                                     <tr role="row" class="filter">
-                                        <td>
-                                        </td>
-
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="id" >
-                                        </td>
+                                        <td></td>
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="uname" >
                                         </td>
                                         <td>
-
                                             <input type="text" class="form-control form-filter input-sm" name="nickname" >
                                         </td>
+                                        <td></td>
                                         <td>
-
-                                            <select name="province" class="form-control form-filter input-sm">
-
-                                                <option value="">选择</option>
-                                                {$areaProvinceModelOptionsHtml}
-
-                                            </select>
-
-
-
-                                        </td>
-                                        <td>
-                                            <select name="sex" class="form-control form-filter input-sm">
-
-                                                <option value="">选择</option>
-                                                {$sexOptions}
-
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="order_num" >
-                                        </td>
-
-
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="mobile" >
-                                        </td>
-
-                                        <td>
-                                            <select name="inner_type" class="form-control form-filter input-sm">
-
-                                                <option value="">选择</option>
-                                                {$innerTypeOptions}
-
+                                            <select name="role_id" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
                                             </select>
                                         </td>
                                         <td>
-
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="birthday_from" id="birthday_from" placeholder="From">
-                                                <span class="input-group-btn">
-                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
-
-
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="birthday_to" id="birthday_to" placeholder="to">
-                                                <span class="input-group-btn">
-                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
-
-                                        </td>
-                                        <td>
-
                                             <div class="input-group date form_datetime margin-bottom-5">
                                                 <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
                                                 <span class="input-group-btn">
@@ -187,22 +82,8 @@
                                                     <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
                                                 </span>
                                             </div>
-
                                         </td>
-                                        <td></td>
-                                        <td>
 
-                                            <select name="type" class="form-control form-filter input-sm" >
-                                                <option value="">选择</option>
-                                                {$typeOptions}
-
-                                            </select>
-
-                                        </td>
-                                        <td></td>
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="consume_total" >
-                                        </td>
 
 
                                         <td>
@@ -268,13 +149,13 @@
                         [10, 20, 50, 100, 150 , 999999],
                         [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
                     ],
-                    "pageLength": 20, // default record count per page
+                    "pageLength": 10, // default record count per page
                     "ajax": {
-                        "url": "/people/no/user/getlist/" // ajax sourcedelBat
+                        "url": "/system/no/auditConfig/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0,2,3,7,11,12,13]
+                        'aTargets' : [ 0,2,3]
                     }],
                     "order": [
                         [1, "desc"]
@@ -358,7 +239,7 @@
             if(result == true){
                 $.ajax({
                     type: 'GET',
-                    url: "/people/no/user/delOne/uid="+id ,
+                    url: "/user/delOne/uid="+id ,
                     dataType: 'json',
                     success: function(data){
                         location.reload();
@@ -367,6 +248,9 @@
                 });
             }
         });
+
+
+
     });
 
     if (!jQuery().datetimepicker) {
@@ -375,10 +259,11 @@
 
     $(".form_datetime").datetimepicker({
         isRTL: Metronic.isRTL(),
-        format: "yyyy-mm-dd hh:ii",
+        minView: "month",
+        format: "yyyy-mm-dd",
         autoclose: true,
         todayBtn: true,
-        startDate: "2013-02-14 10:00",
+        startDate: "2013-02-14",
         pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
         minuteStep: 10
     });

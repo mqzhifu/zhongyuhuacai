@@ -1,44 +1,41 @@
 <?php
-class TopicCtrl extends BaseCtrl
+class QueueAlarmCtrl extends BaseCtrl
 {
     function index()
     {
-//        $roles = RolesModel::db()->getAll();
-//        $this->assign('roles', $roles);
+        $roles = QueueAlarmModel::db()->getAll();
+        $this->assign('roles', $roles);
 
-        $getTypeOptions = TopicModel::getTypeOptions();
-        $getNormalTypeOptions = TopicModel::getNormalTypeOptions();
-
-        $this->assign("getNormalTypeOptions",$getNormalTypeOptions);
-        $this->assign("getTypeOptions",$getTypeOptions);
-
-        $this->display("check/topic_list.html");
+        $this->display("check/queue_alarm_list.html");
     }
 
     function add(){
         if(_g("opt")){
 
-            $name =_g("name");
-            $memo = _g("memo");
-            $type = _g("type");
-            $x_delayed_type = _g("x-delayed-type");
+            $queue_id =_g("queue_id");
+            $msg_ready_num = _g("msg_ready_num");
+            $del = _g("del");
 
 
             $data = array(
-                'name'=>$name,
-                'memo'=>$memo,
-                'type'=>$type,
-                'x-delayed-type'=>$x_delayed_type,
+                'queue_id'=>$queue_id,
+                'msg_ready_num'=>$msg_ready_num,
+                'del'=>$del,
                 'a_time'=>time(),
                 'admin_id'=>$this->_adminid,
             );
-
-           TopicModel::db()->add($data);
+            QueueAlarmModel::db()->add($data);
             $this->ok("成功");
         }
 
 //        $AuditConfigOption = AuditConfitModel::getOption();
 //        $this->assign("auditConfigOption",$AuditConfigOption);
+
+        $getQueueOption = QueueModel::getOption();
+        $this->assign('getQueueOption', $getQueueOption);
+
+        $getOption = TopicModel::getOption();
+        $this->assign('getOption', $getOption);
 
         $getTypeOptions = TopicModel::getTypeOptions();
         $getNormalTypeOptions = TopicModel::getNormalTypeOptions();
@@ -49,11 +46,9 @@ class TopicCtrl extends BaseCtrl
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/check/topic_add_hook.html");
-        $this->display("/check/topic_add.html");
+        $this->addHookJS("/check/queue_alarm_add_hook.html");
+        $this->display("/check/queue_alarm_add.html");
     }
-
-
 
     function getList()
     {
@@ -63,7 +58,8 @@ class TopicCtrl extends BaseCtrl
 
         $where = $this->getWhere();
 
-        $cnt = TopicModel::db()->getCount($where);
+        $cnt = QueueAlarmModel::db()->getCount($where);
+
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
             $order_sort = _g("order");
@@ -96,7 +92,7 @@ class TopicCtrl extends BaseCtrl
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            $data = TopicModel::db()->getAll($where . $order. " limit $iDisplayStart,$iDisplayLength ");
+            $data = QueueAlarmModel::db()->getAll($where . $order. " limit $iDisplayStart,$iDisplayLength ");
 //            $roles = RolesModel::db()->getAll();
 //            $roleNames = [];
 //            foreach ($roles as $role) {
@@ -104,16 +100,15 @@ class TopicCtrl extends BaseCtrl
 //            }
 
             foreach($data as $k=>$v){
+                $queueName = TopicModel::getFieldById($v['queue_id'],'name');
                 $adminName = AdminUserModel::getFieldById($v['admin_id'],'uname');
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['name'],
-                    $v['memo'],
-                    $v['type'],
-                    $v['x-delayed-type'],
+                    $queueName,
+                    $v['msg_ready_num'],
+                    $v['del'],
                     $adminName,
-//                    $roleNames[$v['role_id']],
                     get_default_date($v['a_time']),
                     '<a href="/system/no/adminUser/editInfo/id='.$v['id'].'" class="btn btn-xs default green" data-id="'.$v['id'].'" target=""><i class="fa fa-file-text"></i>修改</a>',
                 );

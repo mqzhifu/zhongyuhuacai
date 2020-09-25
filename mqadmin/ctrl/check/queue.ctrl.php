@@ -9,43 +9,48 @@ class QueueCtrl extends BaseCtrl
         $this->display("check/queue_list.html");
     }
 
-    function add()
-    {
-        $roles = RolesModel::db()->getAll();
-        $this->assign('roles', $roles);
-        $this->display("/system/admin_add.html");
+    function add(){
+        if(_g("opt")){
+
+            $name =_g("name");
+            $memo = _g("memo");
+            $x_max_length = _g("x-max-length");
+            $x_message_ttl = _g("x-message-ttl");
+            $x_max_priority = _g("x-max-priority");
+            $x_dead_letter_exchange = _g("x-dead-letter-exchange");
+            $x_dead_letter_routing_key = _g("x-dead-letter-routing-key");
+
+
+            $data = array(
+                'name'=>$name , 'memo'=>$memo ,
+                'x-max-length'=>$x_max_length,
+                'x-message-ttl'=>$x_message_ttl,
+                'x-max-priority'=>$x_max_priority,
+                'x-dead-letter-exchange'=>$x_dead_letter_exchange,
+                'x-dead-letter-routing-key'=>$x_dead_letter_routing_key,
+                'a_time'=>time(),
+                'admin_id'=>$this->_adminid,
+            );
+
+            QueueModel::db()->add($data);
+            $this->ok("成功");
+        }
+
+//        $AuditConfigOption = AuditConfitModel::getOption();
+//        $this->assign("auditConfigOption",$AuditConfigOption);
+
+//        $getTypeOptions = TopicModel::getTypeOptions();
+//        $getNormalTypeOptions = TopicModel::getNormalTypeOptions();
+//
+//        $this->assign("getNormalTypeOptions",$getNormalTypeOptions);
+//        $this->assign("getTypeOptions",$getTypeOptions);
+
+        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+
+        $this->addHookJS("/check/queue_add_hook.html");
+        $this->display("/check/queue_add.html");
     }
-
-    function addSave()
-    {
-        $uname = _g("uname");
-        $nickname = _g("nickname");
-        $ps = _g("ps");
-        $role_id = _g("role_id");
-
-        if (!$uname || !$nickname || !$ps || !$role_id) {
-            exit(0);
-        }
-
-        if (AdminUserModel::db()->getRow("uname = '$uname'")) {
-            exit(0);
-        }
-        $ps = md5($ps);
-        $data = [
-            'uname'=>$uname,
-            'nickname'=>$nickname,
-            'ps'=>$ps,
-            'role_id'=>$role_id,
-            'a_time'=>time()
-        ];
-
-        if (AdminUserModel::db()->add($data)) {
-            echo(200);
-            exit;
-        }
-        exit(0);
-    }
-
 
     function getList()
     {
@@ -97,13 +102,15 @@ class QueueCtrl extends BaseCtrl
 //            }
 
             foreach($data as $k=>$v){
+                $adminName = AdminUserModel::getFieldById($v['admin_id'],'uname');
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['name'],
-                    $v['admin_id'],
+                    $v['memo'],
+                    $adminName,
                     $v['x-max-length'],
-                    $v['x-overflow'],
+//                    $v['x-overflow'],
                     $v['x-max-priority'],
                     $v['x-dead-letter-exchange'],
                     $v['x-dead-letter-routing-key'],

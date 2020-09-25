@@ -19,7 +19,7 @@
                                 <div class="table-actions-wrapper">
 									<span>
 									</span>
-                                    <a href="/system/no/adminUser/add/" class="btn btn-sm yellow" target="_blank"><i class="fa fa-plus"></i> 添加</a>
+                                    <a href="/check/no/workOrder/add/" class="btn btn-sm yellow" target="_blank"><i class="fa fa-plus"></i> 添加</a>
                                     <!--<button type="button" class="btn btn-sm btn-warning" onclick="all_del();">全删除</button>-->
                                 </div>
                                 <table class="table table-striped table-bordered table-hover" id="datatable_products">
@@ -38,7 +38,7 @@
                                             audit_id
                                         </th>
                                         <th width="5%">
-                                            status
+                                            状态
                                         </th>
 
                                         <th width="5%">
@@ -62,15 +62,18 @@
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="nickname" >
                                         </td>
-                                        <td></td>
+
                                         <td>
                                             <select name="role_id" class="form-control form-filter input-sm">
                                                 <option value="">请选择</option>
-                                                {foreach ($roles as  $r)  }
-                                                <option value="{$r['id']}">{$r['name']}</option>
-                                                {/foreach}
+
+                                                {$statusOptions}
+
                                             </select>
                                         </td>
+
+                                        <td></td>
+
                                         <td>
                                             <div class="input-group date form_datetime margin-bottom-5">
                                                 <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">

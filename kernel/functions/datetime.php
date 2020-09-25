@@ -176,6 +176,10 @@ function dayStartEndUnixtime($day = null){
     return array('s_time'=>$s_time,'e_time'=>$e_time);
 }
 
+function get_yesterday(){
+    return date("Y-m-d",strtotime("-1 day"));
+}
+
 //验证日期
 function valid_date($date)
 {

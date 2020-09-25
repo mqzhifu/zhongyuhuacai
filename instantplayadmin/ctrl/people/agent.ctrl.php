@@ -156,6 +156,9 @@ class AgentCtrl extends BaseCtrl{
             $limit = " limit $iDisplayStart,$end";
             $data = AgentModel::db()->getAll($where . $order . $limit);
 
+
+            $area = new Area
+
             foreach($data as $k=>$v){
 
 
