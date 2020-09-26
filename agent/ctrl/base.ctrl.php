@@ -33,6 +33,7 @@ class BaseCtrl {
     public $cartService = null;
     public $withdrawMoneyService = null;
     public $session = null;
+    public $shareService = null;
     function __construct($request)
     {
         LogLib::inc()->debug(['php_server', $_SERVER]);
@@ -64,6 +65,7 @@ class BaseCtrl {
         $this->goodsService = new GoodsService();
         $this->cartService = new CartService();
         $this->withdrawMoneyService = new WithdrawMoneyService();
+        $this->shareService = new ShareService();
 
         $this->_st = getAppSmarty();
         $this->_sess = new SessionLib();

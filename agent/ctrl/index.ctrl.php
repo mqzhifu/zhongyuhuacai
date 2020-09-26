@@ -19,7 +19,7 @@ class IndexCtrl extends BaseCtrl{
         $allowWithdrawMoneyTotal = $this->agentService->getFee($this->uinfo['id']);
         $allowWithdrawMoneyTotalNum = $allowWithdrawMoneyTotal['sub_fee'] + $allowWithdrawMoneyTotal['fee'];
         //分享产品次数
-        $shareProductCnt = $this->agentService->getShareProductCnt($this->uinfo['id']);
+        $shareProductCnt = $this->shareService->getShareCnt($this->uinfo['id']);
         //下级代理数
         $subAgentCnt = $this->agentService->getSubAgentCnt($this->uinfo['id']);
         //分享给用户后，用户下单数

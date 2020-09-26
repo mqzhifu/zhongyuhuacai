@@ -33,8 +33,9 @@ class ShareService{
         return out_pc(200,$newId);
     }
 
-    function getUserCnt($uid){
-        return UserLikedModel::db()->getCount(" uid = $uid");
+    //获取一个代理，分享产品数
+    function getShareCnt($aid){
+        return ShareModel::db()->getCount(" agent_id = $aid");
     }
 
 }
