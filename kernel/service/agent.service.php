@@ -300,10 +300,11 @@ class AgentService{
     }
     //获取一个代码已提过的钱
     function getHasFee($aid){
-        $totalDB = WithdrawModel::db()->getAll("agent_id = $aid and status = ".WithdrawMoneyService::WITHDRAW_STATUS_FINISH ,null ,  " sum(price) as total");
+        $totalDB = WithdrawModel::db()->getRow("agent_id = $aid and status = ".WithdrawMoneyService::WITHDRAW_STATUS_FINISH ,null ,  " sum(price) as total");
         $total = 0;
         if($totalDB){
             $total = $totalDB['total'];
+            $total = $total / 100;
         }
 
         return $total;
