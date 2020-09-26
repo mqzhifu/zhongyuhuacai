@@ -51,7 +51,7 @@ class AgentModel {
         $province = AreaProvinceModel::getNameByCode($agent['province_code']);
         $city = AreaCityModel::getNameByCode($agent['city_code']);
         $county = AreaCountyModel::getNameByCode($agent['county_code']);
-        $street = AreaTownModel::getNameByCode($agent['towns_code']);
+        $street = AreaTownModel::getNameByCode($agent['town_code']);
         $addrStr = $province . "-" .  $city  . "-" . $county  . "-" .$street . "-" .$agent['address'] ;
         return $addrStr;
     }

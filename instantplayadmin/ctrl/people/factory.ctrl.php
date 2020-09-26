@@ -34,7 +34,7 @@ class FactoryCtrl extends BaseCtrl{
 //                'province_id'=> _g('province'),
 //                'city_id'=> _g('city'),
 //                'county_id'=> _g('county'),
-//                'towns_id'=> _g('street'),
+//                'town_id'=> _g('street'),
 //                'villages'=> _g('villages'),
                 'a_time'=>time(),
             );

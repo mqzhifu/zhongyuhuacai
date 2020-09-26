@@ -475,7 +475,7 @@ class AgentService{
             'province_code'=>$data['province_code'],
             'city_code'=>$data['city_code'],
             'county_code'=>$data['county_code'],
-//            'towns_code'=>$data['town_code'],
+//            'town_code'=>$data['town_code'],
 //            'villages'=>$data['address'],
             'address'=>$data['address'],
 

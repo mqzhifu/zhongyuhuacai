@@ -280,7 +280,7 @@ class AgentCtrl extends BaseCtrl{
                 'province_code'=> _g('province'),
                 'city_code'=> _g('city'),
                 'county_code'=> _g('county'),
-                'towns_code'=> _g('town'),
+                'town_code'=> _g('town'),
                 'villages'=> _g('villages'),
                 'sub_fee_percent'=>_g("sub_fee_percent"),
                 'a_time'=>time(),

@@ -169,7 +169,7 @@ class AgentCtrl extends BaseCtrl{
                     AreaProvinceModel::db()->getOneByOneField('code',$v['province_code'])['short_name'],
                     AreaCityModel::db()->getOneByOneField('code',$v['city_code'])['short_name'],
                     AreaCountyModel::db()->getOneByOneField('code',$v['county_code'])['short_name'],
-                    AreaTownModel::db()->getOneByOneField('code',$v['towns_code'])['short_name'],
+                    AreaTownModel::db()->getOneByOneField('code',$v['town_code'])['short_name'],
                     $v['villages'],
                     UserModel::getSexDescByKey($v['type']),
                     '<img height="30" width="30" src="'.get_agent_url($v['pic']).'" />',
