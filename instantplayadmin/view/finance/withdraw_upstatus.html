@@ -158,7 +158,8 @@
                         // alert(1);
                         alert(ret.code);
                         if (ret.code == 200) {
-                            window.opener.location.reload();
+                            // window.opener.location.reload();
+                            document.location.reload();
                     //         bootbox.hideAll();
                     //
                     //         var UTbox = UTHING.bootbox({
@@ -177,6 +178,7 @@
                                 type: "alert",
                                 status: "error"
                             });
+                            document.location.reload();
                         }
                     }
                 });
