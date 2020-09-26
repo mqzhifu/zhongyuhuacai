@@ -205,8 +205,8 @@ class WithdrawCtrl extends BaseCtrl{
 
     function upstatus(){
         $aid = _g("id");
-        $agent = WithdrawModel::db()->getById($aid);
-        if(!$agent){
+        $withdraw = WithdrawModel::db()->getById($aid);
+        if(!$withdraw){
             exit(" id not in db.");
         }
         if(_g('opt')){
@@ -214,6 +214,30 @@ class WithdrawCtrl extends BaseCtrl{
             if(!$status){
                 out_ajax(7000);
             }
+
+            if(!in_array($status,WithdrawMoneyService::WITHDRAW_STATUS_DESC)){
+                out_ajax(7001);
+            }
+
+
+            $agent = AgentModel::db()->getById($withdraw['agent_id']);
+            //更新订单状态
+            $orderUpData = array();
+            if($status == WithdrawMoneyService::WITHDRAW_STATUS_OK){
+                $status = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_OK;
+            }elseif($status == WithdrawMoneyService::WITHDRAW_STATUS_REJECT){
+                $status = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_REJECT;
+            }
+            if($agent['type'] ==  AgentModel::ROLE_LEVEL_ONE){
+                $orderUpData['agent_one_withdraw'] = $status;
+            }elseif($agent['type'] ==  AgentModel::ROLE_LEVEL_TWO){
+                $orderUpData['agent_two_withdraw'] = $status;
+            }else{
+                exit("agent type is err.");
+            }
+
+            $orderService = new OrderService();
+            $orderService->upWithdrawStatus($withdraw['oids'],$orderUpData);
 
             $data = array('status'=>$status,'u_time'=>time(),'audit_admin_id'=>$this->_adminid,'audit_time'=>time());
             $memo = _g("memo");
@@ -228,15 +252,19 @@ class WithdrawCtrl extends BaseCtrl{
         $statusDesc = WithdrawMoneyService::WITHDRAW_STATUS_DESC;
         $statusDescRadioHtml = "";
         foreach ($statusDesc as $k=>$v) {
+            if($k == WithdrawMoneyService::WITHDRAW_STATUS_FINISH || $k == WithdrawMoneyService::WITHDRAW_STATUS_WAIT){
+                //这两种状态不放开，没必要 给后台管理员操作
+                continue;
+            }
             $statusDescRadioHtml .= "<input name='status' type='radio' value={$k} />".$v;
         }
+
+
 
         $data = array(
             'statusDescRadioHtml'=>$statusDescRadioHtml,
             "id"=>$aid,
         );
-//        $this->assign("agent",$agent);
-//        $this->assign("statusDescRadioHtml",$statusDescRadioHtml);
 
         $html = $this->_st->compile("/finance/withdraw_upstatus.html",$data);
         $html = file_get_contents($html);

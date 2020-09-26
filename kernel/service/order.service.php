@@ -912,8 +912,8 @@ class OrderService{
 
         return $list;
     }
-
-    function upWithdrawStatus($oid,$data){
-        return OrderModel::db()->upById($oid,$data);
+    //更新提现状态
+    function upWithdrawStatus($oids,$data){
+        return OrderModel::db()->update($data," id in ($oids) limit 1000 ");
     }
 }

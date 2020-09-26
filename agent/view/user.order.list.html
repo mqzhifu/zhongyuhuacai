@@ -111,15 +111,17 @@
 
 
     function selAll(){
-        var imgUrl = "{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png";
         if(!selAllFlag){
             imgUrl = "{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png";
+            selAllFlag = 1;
+        }else{
+            var imgUrl = "{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png";
+            selAllFlag = 0;
         }
 
         $("[name='selElement']").each(function(i,n){
             var obj = $(n);
             obj.attr("src",imgUrl);
-            selAllFlag = 1;
         });
     }
     //申请提现按钮

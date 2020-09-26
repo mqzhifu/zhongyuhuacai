@@ -14,6 +14,9 @@ class WithdrawCtrl extends BaseCtrl{
         }
 
         $orderList = OrderModel::db()->getByIds($orderIds);
+        //验证一下用户提交的订单是否，可以提现
+        $this->withdrawMoneyService->checkWithdrawMoneyStatus($orderIds);
+
         $totalPrice =0;
         foreach ($orderList as $k=>$v){
             $totalPrice += $v['total_price'];
@@ -27,14 +30,13 @@ class WithdrawCtrl extends BaseCtrl{
             $wx = _g("wx");
 
 
-
             $oids = explode(",",$orderIds);
             $upData = array();
             foreach ($oids as $k=>$v){
                 if($this->uinfo['type'] == AgentModel::ROLE_LEVEL_ONE){
-                    $upData['agent_one_withdraw'] = WithdrawMoneyService::WITHDRAW_STATUS_WAIT;
+                    $upData['agent_one_withdraw'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_APPLY;
                 }elseif($this->uinfo['type'] == AgentModel::ROLE_LEVEL_TWO){
-                    $upData['agent_two_withdraw'] = WithdrawMoneyService::WITHDRAW_STATUS_WAIT;
+                    $upData['agent_two_withdraw'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_APPLY;
                 }else{
                     exit("uinfo type err.");
                 }
@@ -60,9 +62,6 @@ class WithdrawCtrl extends BaseCtrl{
             $id = WithdrawModel::db()->add($data);
             var_dump($id);exit;
         }
-
-
-
 
         $this->assign("totalPrice",fenToYuan($totalPrice));
         $this->assign("orderIds",$orderIds);
@@ -138,7 +137,7 @@ class WithdrawCtrl extends BaseCtrl{
                 foreach ($pids as $k2=>$v2){
                     $product = ProductModel::db()->getById($v2);
                     if($product){
-                        $productNames .= $product['name']."<br/>";
+                        $productNames .= $product['title']."<br/>";
                     }
                 }
                 $v['productNames'] = $productNames;
