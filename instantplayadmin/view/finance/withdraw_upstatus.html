@@ -152,11 +152,13 @@
                     type: "post",
                     dataType: "json",
                     success: function (ret) {
-                        window.opener.location.reload();
+
+                        // window.opener.location.reload();
                     // }
                         // alert(1);
-                        // alert(ret);
-                    //     if (ret.error_code === 0) {
+                        alert(ret.code);
+                        if (ret.code == 200) {
+                            window.opener.location.reload();
                     //         bootbox.hideAll();
                     //
                     //         var UTbox = UTHING.bootbox({
@@ -169,13 +171,13 @@
                     //         setTimeout(function () {
                     //             bootbox.hideAll();
                     //         }, 1000);
-                    //     } else {
-                    //         var UTbox = UTHING.bootbox({
-                    //             message: ret.data.msg,
-                    //             type: "alert",
-                    //             status: "error"
-                    //         });
-                    //     }
+                        } else {
+                            var UTbox = UTHING.bootbox({
+                                message: ret.msg,
+                                type: "alert",
+                                status: "error"
+                            });
+                        }
                     }
                 });
             }

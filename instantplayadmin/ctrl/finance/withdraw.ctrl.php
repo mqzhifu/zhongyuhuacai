@@ -216,7 +216,7 @@ class WithdrawCtrl extends BaseCtrl{
             }
 
             if(!in_array($status,WithdrawMoneyService::WITHDRAW_STATUS_DESC)){
-                out_ajax(7001);
+                out_ajax(7001,"status is err ($status)");
             }
 
 
