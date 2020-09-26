@@ -59,7 +59,7 @@ class ShareCtrl extends BaseCtrl{
                 if($v['agent_id']){
                     $agent  = AgentModel::db()->getById($v['agent_id']);
                     if($agent){
-                        $agentName = $user['title'];
+                        $agentName = $agent['title'];
                     }
                 }
 
