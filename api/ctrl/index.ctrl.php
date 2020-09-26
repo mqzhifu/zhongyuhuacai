@@ -50,8 +50,8 @@ class IndexCtrl extends BaseCtrl  {
 
     function share($request){
         $pid = get_request_one($request,'pid',0);
-        $source =  get_request_one($request,'source',0);  //微信 - 用户直接分享
-        $goto_page_path =  get_request_one($request,'goto_page_path',0);
+        $source =  get_request_one($request,'source',"");  //微信 - 用户直接分享
+        $goto_page_path =  get_request_one($request,'goto_page_path',"");
 
 
         $data = array(
