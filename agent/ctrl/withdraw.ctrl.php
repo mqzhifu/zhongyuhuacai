@@ -148,7 +148,7 @@ class WithdrawCtrl extends BaseCtrl{
                 }elseif($this->uinfo['type'] == AgentModel::ROLE_LEVEL_ONE){
                     $withdrawStatus = $v['agent_one_withdraw'];
                 }
-                $v['withdraw_status'] = $withdrawStatus;
+                $v['withdraw_status_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$withdrawStatus];
                 $v['total_price'] = fenToYuan( $v['total_price']);
                 if( in_array($v['status'],$noPay) ){
                     $noPayOrder[] = $v;
