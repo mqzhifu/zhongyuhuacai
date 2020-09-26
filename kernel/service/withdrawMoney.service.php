@@ -46,13 +46,13 @@ class WithdrawMoneyService{
         return WithdrawModel::db()->getAll(" agent_id = $aid ");
     }
     //检查：申请提现的订单状态，是否可以提现
-    function checkWithdrawMoneyStatus($orderIds){
+    function checkWithdrawMoneyStatus($orderIds,$agent){
         $orderList = OrderModel::db()->getByIds($orderIds);
         foreach ($orderList as $k=>$order){
             $orderWithdrawStatus = 0;
-            if($this->uinfo['type'] == AgentModel::ROLE_LEVEL_ONE){
+            if($agent['type'] == AgentModel::ROLE_LEVEL_ONE){
                 $orderWithdrawStatus = $order['agent_one_withdraw'];
-            }elseif($this->uinfo['type'] == AgentModel::ROLE_LEVEL_TWO){
+            }elseif($agent['type'] == AgentModel::ROLE_LEVEL_TWO){
                 $orderWithdrawStatus = $order['agent_two_withdraw'];
             }
 

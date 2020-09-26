@@ -15,7 +15,7 @@ class WithdrawCtrl extends BaseCtrl{
 
         $orderList = OrderModel::db()->getByIds($orderIds);
         //验证一下用户提交的订单是否，可以提现
-        $this->withdrawMoneyService->checkWithdrawMoneyStatus($orderIds);
+        $this->withdrawMoneyService->checkWithdrawMoneyStatus($orderIds,$this->uinfo);
 
         $totalPrice =0;
         foreach ($orderList as $k=>$v){
