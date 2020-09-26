@@ -236,7 +236,7 @@ class WithdrawCtrl extends BaseCtrl{
             }
 
             $orderService = new OrderService();
-            $orderService->upWithdrawStatus($withdraw['oids'],$orderUpData);
+            $orderService->upWithdrawStatus($withdraw['orders_ids'],$orderUpData);
 
             $data = array('status'=>$status,'u_time'=>time(),'audit_admin_id'=>$this->_adminid,'audit_time'=>time());
             $memo = _g("memo");
