@@ -93,33 +93,6 @@ class WithdrawCtrl extends BaseCtrl{
     }
 
     function getList(){
-        $this->getData();
-    }
-
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
-
-    function getData(){
         $records = array();
         $records["data"] = array();
         $sEcho = intval($_REQUEST['draw']);
@@ -172,9 +145,9 @@ class WithdrawCtrl extends BaseCtrl{
                 }
 
                 $auditBnt = "";
-//                if($v['status'] == AgentService::STATUS_WAIT ){
+                if($v['status'] != WithdrawMoneyService::WITHDRAW_STATUS_FINISH ){
                     $auditBnt = '<button class="btn btn-xs default red upstatus margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 审核</button>';
-//                }
+                }
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
@@ -202,6 +175,29 @@ class WithdrawCtrl extends BaseCtrl{
         echo json_encode($records);
         exit;
     }
+
+    function getWhere(){
+        $where = " 1 ";
+        if($mobile = _g("mobile"))
+            $where .= " and mobile = '$mobile'";
+
+        if($message = _g("message"))
+            $where .= " and mobile like '%$message%'";
+
+        if($from = _g("from")){
+            $from .= ":00";
+            $where .= " and add_time >= '".strtotime($from)."'";
+        }
+
+        if($to = _g("to")){
+            $to .= ":59";
+            $where .= " and add_time <= '".strtotime($to)."'";
+        }
+
+
+        return $where;
+    }
+
 
     function upstatus(){
         $aid = _g("id");
