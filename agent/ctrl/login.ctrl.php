@@ -15,6 +15,11 @@ class LoginCtrl extends BaseCtrl  {
 //        $this->agent = $agent;
     }
 
+    function out(){
+        $this->_sess->none();
+        jump("/");
+    }
+
     function index(){
         $this->setTitle('登陆');
         $this->setSubTitle('登陆');
