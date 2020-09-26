@@ -20,7 +20,11 @@
     <div class="infos">
         <div class="info" onclick="gotoOrderList(2)">
             <p>¥{$allowWithdrawMoneyTotalNum}</p>
-            <p>可提现金佣金</p>
+            <p>可提佣金</p>
+        </div>
+        <div class="info" onclick="gotoOrderList(2)">
+            <p>¥{$allowWithdrawMoneyTotalNum}</p>
+            <p>已提佣金</p>
         </div>
         <div class="info" onclick="gotoOrderList(1)">
             <p>{$allOrderCnt}</p>
@@ -74,12 +78,24 @@
         </div>
         {/if}
 
+    </div>
+
+    <div class="tools">
+
         <div class="item">
             <a href="/agent/apply/">
                 <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
-                <p>申请代理</p>
+                <p>申请一级代理</p>
             </a>
         </div>
+
+        <div class="item">
+            <a href="/agent/apply/">
+                <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
+                <p>申请二级代理</p>
+            </a>
+        </div>
+
 
     </div>
 </div>
