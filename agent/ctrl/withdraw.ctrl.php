@@ -101,7 +101,7 @@ class WithdrawCtrl extends BaseCtrl{
         if($list){
             foreach ($list as $k=>$v){
                 $list[$k]['a_date'] = get_default_date($v['a_time']);
-                $list[$k]['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['type']];
+                $list[$k]['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['status']];
             }
         }
         $this->assign("list",$list);
