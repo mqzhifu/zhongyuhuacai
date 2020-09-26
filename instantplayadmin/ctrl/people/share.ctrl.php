@@ -55,21 +55,25 @@ class ShareCtrl extends BaseCtrl{
                     $username = $user['nickname'];
                 }
 
-//                $imgs = "";
-//                if($v['pic']){
-//                    $src = get_comment_url($v['pic']);
-//                    $imgs = "<image src='$src' width='50' height='50'  />";
-//                }
+                $agentName = "未知";
+                if($v['agent_id']){
+                    $agent  = AgentModel::db()->getById($v['agent_id']);
+                    if($agent){
+                        $agentName = $user['title'];
+                    }
+                }
+
+
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['uid'],
+                    $username,
                     $v['pid'],
                     $v['source'],
                     $v['goto_page_path'],
-                    $v['agent_id'],
-                    $v['type'],
+                    $agentName,
+//                    $v['type'],
                     get_default_date($v['a_time']),
                     '',
 //                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
