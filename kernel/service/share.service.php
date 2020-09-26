@@ -19,6 +19,7 @@ class ShareService{
             'uid'=>$uid,
             'a_time'=>time(),
             'agent_id'=>0,
+            'type'=>self::TYPE_FRIEND,
         );
 
         $agentService = new AgentService();
