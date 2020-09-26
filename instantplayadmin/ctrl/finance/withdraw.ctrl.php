@@ -256,7 +256,7 @@ class WithdrawCtrl extends BaseCtrl{
                 //这两种状态不放开，没必要 给后台管理员操作
                 continue;
             }
-            $statusDescRadioHtml .= "<input name='status' type='radio' value={$k} />".$v;
+            $statusDescRadioHtml .= "<label><input name='status' type='radio' value={$k} />".$v . "</label>";
         }
 
 
