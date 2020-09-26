@@ -61,13 +61,18 @@
                         itemHtml = itemHtml.replace("#uid#",orderList[type][i]['uid']);
                         itemHtml = itemHtml.replace("#price#",orderList[type][i]['total_price']);
                         itemHtml = itemHtml.replace("#goods_name#",orderList[type][i]['productNames']);
+                        itemHtml = itemHtml.replace("#withdraw_status#",orderList[type][i]['withdraw_status']);
 
 
                         // itemHtml = itemHtml.replace("#a_date#",orderList[type][i]['a_date']);
 
                         selAllFlag = 0;
                         if(type == 2){
-                            var imgHtml = '<img name="selElement" class="go" id="'+orderList[type][i]['id']+'" onclick="selItem(this);"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />';
+                            if(orderList[type][i]['withdraw_status'] != 1){
+                                var imgHtml = "";
+                            }else{
+                                var imgHtml = '<img name="selElement" class="go" id="'+orderList[type][i]['id']+'" onclick="selItem(this);"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />';
+                            }
                             itemHtml = itemHtml.replace("#img#",imgHtml);
                             $("#showBnt").css('display',"");
                         }else{
@@ -104,6 +109,7 @@
                     '¥#price# #img#'+
                 '</div>'+
                 '<div class="timeDk">下单时间：#a_date#</div>'+
+                '<div class="timeDk">提现状态：#withdraw_status#</div>'+
                 '<div class="status"><span>用户ID：#uid#</span></div>'+
             '</div>';
         return html;

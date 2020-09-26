@@ -141,6 +141,14 @@ class WithdrawCtrl extends BaseCtrl{
                     }
                 }
                 $v['productNames'] = $productNames;
+
+                $withdrawStatus = 0;
+                if($this->uinfo['type'] == AgentModel::ROLE_LEVEL_TWO){
+                    $withdrawStatus = $v['agent_two_withdraw'];
+                }elseif($this->uinfo['type'] == AgentModel::ROLE_LEVEL_ONE){
+                    $withdrawStatus = $v['agent_one_withdraw'];
+                }
+                $v['withdraw_status'] = $withdrawStatus;
                 $v['total_price'] = fenToYuan( $v['total_price']);
                 if( in_array($v['status'],$noPay) ){
                     $noPayOrder[] = $v;
