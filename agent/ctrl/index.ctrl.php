@@ -15,9 +15,12 @@ class IndexCtrl extends BaseCtrl{
             $bindUserInfo = "无";
         }
 
-        //提现金额 = 分享出去用户已支付的订单金额 * 佣金  + 二级代理的提成
+        //提现金额 = 分享用户已支付的订单金额(未提现过的) * 佣金  + 二级代理的提成
         $allowWithdrawMoneyTotal = $this->agentService->getFee($this->uinfo['id']);
         $allowWithdrawMoneyTotalNum = $allowWithdrawMoneyTotal['sub_fee'] + $allowWithdrawMoneyTotal['fee'];
+        //已提金额
+        $hasFee = $this->agentService->getHasFee($this->uinfo['id']);
+
         //分享产品次数
         $shareProductCnt = $this->shareService->getShareCnt($this->uinfo['id']);
         //下级代理数
@@ -33,6 +36,7 @@ class IndexCtrl extends BaseCtrl{
             $myLeader = "无";
         }
 
+        $this->assign("hasFee",$hasFee);
         $this->assign("bindUserInfo",$bindUserInfo);
         $this->assign("uinfo",$this->uinfo);
 

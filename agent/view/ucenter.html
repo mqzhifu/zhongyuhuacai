@@ -6,7 +6,7 @@
             <p>姓名：{$uinfo['real_name']}</p>
             <p>绑定UID：{$bindUserInfo}</p>
             <p>代理级别：{$uinfo['type']}</p>
-            <p>我的邀请码：{$uinfo['invite_code']}</p>
+            <p>邀请码：{$uinfo['invite_code']}</p>
         </div>
         <div class="tool">
             <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/base-edit.png" onclick="clickEditUinfo()" alt="" />
@@ -23,7 +23,7 @@
             <p>可提佣金</p>
         </div>
         <div class="info" onclick="gotoOrderList(2)">
-            <p>¥{$allowWithdrawMoneyTotalNum}</p>
+            <p>¥{$hasFee}</p>
             <p>已提佣金</p>
         </div>
         <div class="info" onclick="gotoOrderList(1)">

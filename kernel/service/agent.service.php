@@ -278,7 +278,7 @@ class AgentService{
             $subOrderList = $this->getAgentSubOrderList($aid,2);
         }
         //再获取当前代理，直接分享成功的订单
-        $orderList = $this->orderService->getListByAgentId($aid,OrderModel::STATUS_FINISH,0,WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT);
+        $orderList = $this->orderService->getListByAgentId($aid,OrderModel::STATUS_PAYED,WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT,WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT);
         if($subOrderList && $orderList){
             $orderList = array_merge($orderList,$subOrderList);
         }
@@ -298,6 +298,16 @@ class AgentService{
         }
         return $orderList;
     }
+    //获取一个代码已提过的钱
+    function getHasFee($aid){
+        $totalDB = WithdrawModel::db()->getAll("agent_id = $aid and status = ".WithdrawMoneyService::WITHDRAW_STATUS_FINISH ,null ,  " sum(price) as total");
+        $total = 0;
+        if($totalDB){
+            $total = $totalDB['total'];
+        }
+
+        return $total;
+    }
 
     //获取，一个代理，可提现余额（包括可能该代理还有子级代理）
     function getFee($aid){
@@ -311,11 +321,11 @@ class AgentService{
         $subFee = 0;
         foreach ($orderList as $k=>$v){
             if($v['agent_id'] == $aid){
-                $fee += $v['total_price'] * (  $agent['fee_percent'] / 100);
+                $fee += $v['total_price'] / 100 * (  $agent['fee_percent'] / 100);
             }else{
                 //这是二级代理完成的订单，上级也可以获取到一些奖励
-                $fee += $v['total_price'] * (  $agent['sub_fee_percent'] / 100);
-                $subFee += $v['total_price'] * (  $agent['sub_fee_percent'] / 100);
+                $fee += $v['total_price'] / 100 * (  $agent['sub_fee_percent'] / 100);
+                $subFee += $v['total_price'] / 100 * (  $agent['sub_fee_percent'] / 100);
             }
         }
 
