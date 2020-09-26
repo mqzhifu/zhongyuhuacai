@@ -28,25 +28,40 @@ class IndexCtrl extends BaseCtrl  {
         return $this->out($rs['code'],$rs['msg']);
     }
     function shareProduct($request){
-        $pid = $request['pid'];
-        $source = $request['source'];//微信 - 用户直接分享
+//        $pid = $request['pid'];
+//        $source = $request['source'];//微信 - 用户直接分享
+//
+//        $data = array(
+//            'uid'=>$this->uid,
+//            'pid'=>$pid,
+//            'a_time'=>time(),
+//            'source'=>$source,
+//            'agent_id'=>0,
+//        );
+//
+//        $agent = $this->agentService->getOneByUid($this->uid);
+//        if($agent){
+//            $data['agent_id'] = $agent['id'];
+//        }
+//
+//        $newId = ShareProductModel::db()->add($data);
+//        return $this->out(200,$newId);
+    }
+
+    function share($request){
+        $pid = get_request_one($request,'pid',0);
+        $source =  get_request_one($request,'source',0);  //微信 - 用户直接分享
+        $goto_page_path =  get_request_one($request,'goto_page_path',0);
+
 
         $data = array(
-            'uid'=>$this->uid,
-            'pid'=>$pid,
-            'a_time'=>time(),
-            'source'=>$source,
-            'agent_id'=>0,
+            'pid'=>$pid,'source'=>$source,'goto_page_path'=>$goto_page_path,
         );
 
-        $agent = $this->agentService->getOneByUid($this->uid);
-        if($agent){
-            $data['agent_id'] = $agent['id'];
-        }
-
-        $newId = ShareProductModel::db()->add($data);
-        return $this->out(200,$newId);
+        $rs = $this->shareService->add($this->uid,$data);
+        out_ajax(200,$rs['msg']);
     }
+
 
     function checkToken(){
         return $this->out(200,"ok");
