@@ -159,14 +159,14 @@
                         alert(ret.code);
                         if (ret.code == 200) {
                             // window.opener.location.reload();
+                            bootbox.hideAll();
+
+                            var UTbox = UTHING.bootbox({
+                                message: ret.data.msg,
+                                type: "alert",
+                                status: "success"
+                            });
                             document.location.reload();
-                    //         bootbox.hideAll();
-                    //
-                    //         var UTbox = UTHING.bootbox({
-                    //             message: ret.data.msg,
-                    //             type: "alert",
-                    //             status: "success"
-                    //         });
                     //
                     //         UT_Account_TableAjax.reload();
                     //         setTimeout(function () {
@@ -178,7 +178,7 @@
                                 type: "alert",
                                 status: "error"
                             });
-                            document.location.reload();
+                            // document.location.reload();
                         }
                     }
                 });

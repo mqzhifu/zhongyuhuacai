@@ -215,10 +215,9 @@ class WithdrawCtrl extends BaseCtrl{
                 out_ajax(7000);
             }
 
-            if(!in_array($status,WithdrawMoneyService::WITHDRAW_STATUS_DESC)){
+            if(!in_array($status,array_flip(WithdrawMoneyService::WITHDRAW_STATUS_DESC))){
                 out_ajax(7001,"status is err ($status)");
             }
-
 
             $agent = AgentModel::db()->getById($withdraw['agent_id']);
             //更新订单状态
