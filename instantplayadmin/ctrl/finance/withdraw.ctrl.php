@@ -264,6 +264,7 @@ class WithdrawCtrl extends BaseCtrl{
         $data = array(
             'statusDescRadioHtml'=>$statusDescRadioHtml,
             "id"=>$aid,
+            "info"=>$withdraw,
         );
 
         $html = $this->_st->compile("/finance/withdraw_upstatus.html",$data);
