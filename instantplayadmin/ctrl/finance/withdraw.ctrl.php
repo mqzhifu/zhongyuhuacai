@@ -222,15 +222,16 @@ class WithdrawCtrl extends BaseCtrl{
             $agent = AgentModel::db()->getById($withdraw['agent_id']);
             //更新订单状态
             $orderUpData = array();
+            $orderStatus = 0;
             if($status == WithdrawMoneyService::WITHDRAW_STATUS_OK){
-                $status = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_OK;
+                $orderStatus = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_OK;
             }elseif($status == WithdrawMoneyService::WITHDRAW_STATUS_REJECT){
-                $status = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_REJECT;
+                $orderStatus = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_REJECT;
             }
             if($agent['type'] ==  AgentModel::ROLE_LEVEL_ONE){
-                $orderUpData['agent_one_withdraw'] = $status;
+                $orderUpData['agent_one_withdraw'] = $orderStatus;
             }elseif($agent['type'] ==  AgentModel::ROLE_LEVEL_TWO){
-                $orderUpData['agent_two_withdraw'] = $status;
+                $orderUpData['agent_two_withdraw'] = $orderStatus;
             }else{
                 exit("agent type is err.");
             }
