@@ -12,6 +12,28 @@ class AgentService{
         self::STATUS_OK =>"已通过",
         self::STATUS_REJECT =>"驳回",
     ];
+    function getAreaStr($aid,$default = "",$explode = ','){
+        $agent = $this->getById($aid)['msg'];
+        $str = $agent['province_cn'] .$explode .  $agent['city_cn'] .$explode  .  $agent['county_cn'] .$explode  .  $agent['town_cn'];
+        return $str;
+    }
+
+    function getById($aid){
+        if(!$aid){
+            return out_pc(8372);
+        }
+
+        $agent = AgentModel::db()->getById($aid);
+        if(!$agent){
+            return out_pc(1040);
+        }
+
+        $addrService = new UserAddressService();
+        $agent = $addrService->formatRow($agent);
+
+        return out_pc(200,$agent);
+    }
+
 
     function __construct(){
         $this->orderService = new OrderService();
@@ -467,6 +489,22 @@ class AgentService{
 
         $rs =  AgentModel::db()->upById($aid,$data);
         return out_pc(200,$rs);
+    }
+
+    function getProvinceByCode($code){
+        return AreaProvinceModel::db()->getRow(" code = '$code'");
+    }
+
+    function getCityByCode($code){
+        return AreaCityModel::db()->getRow(" code = '$code'");
+    }
+
+    function getCountyByCode($code){
+        return AreaCountyModel::db()->getRow(" code = '$code'");
+    }
+
+    function getTownByCode($code){
+        return AreaTownModel::db()->getRow(" code = '$code'");
     }
 
 

@@ -8,11 +8,25 @@ class UserCollectCtrl extends BaseCtrl{
 //        $this->assign("typeOptions",UserModel::getTypeOptions());
 //        $this->assign("sexOptions", UserModel::getSexOptions());
 
-        $this->display("/people/user_collect_list.html");
+        $this->display("/people/user_liked_list.html");
     }
 
     function delOne(){
+        $id = _g("uid");
 
+        $where =" uid = $id limit 1000";
+
+        UserLogModel::db()->delete($where);
+        OrderModel::db()->delete($where);
+        MsgModel::db()->delete("from_uid = $id or to_uid = $id");
+        UserCollectionModel::db()->delete($where);
+        UserFeedbackModel::db()->delete($where);
+        UserProductLikedModel::db()->delete($where);
+        UserCommentModel::db()->delete($where);
+        VerifiercodeModel::db()->delete($where);
+
+
+        UserModel::db()->delById($id);
     }
 
     function getList(){
@@ -51,19 +65,13 @@ class UserCollectCtrl extends BaseCtrl{
             $limit = " limit $iDisplayStart,$end";
             $data = UserCollectionModel::db()->getAll($where . $order . $limit);
 
-
-
             foreach($data as $k=>$v){
-                $product = ProductModel::db()->getById($v['pid']);
-                $productName = $product['title'];
-                $user = UserModel::db()->getById($v['uid']);
-                $userName = $user['nickname'];
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $productName,
-//                    $v['gid'],
-                    $userName,
+                    $v['pid'],
+                    $v['gid'],
+                    $v['uid'],
                     get_default_date($v['a_time']),
                     ''
 //                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
@@ -92,8 +100,9 @@ class UserCollectCtrl extends BaseCtrl{
                 'a_time'=>time(),
             );
 
-            $newId = UserLikedModel::db()->add($data);
+            $newId = UserCollectionModel::db()->add($data);
             $this->ok($newId,"",$this->_backListUrl);
+
         }
 
         $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
@@ -112,33 +121,92 @@ class UserCollectCtrl extends BaseCtrl{
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/people/user_liked_add_hook.html");
+        $this->addHookJS("/people/user_collect_add_hook.html");
 //        $this->addHookJS("/layout/place.js.html");
 //        $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_liked_add.html");
+        $this->display("/people/user_collect_add.html");
+    }
+
+    function detail(){
+        $uid = _g("id");
+        $user = UserModel::db()->getById($uid);
+        $user['dt'] = get_default_date($user['a_time']);
+        $user['status_desc'] = UserModel::STATUS_DESC[$user['status']];
+
+
+        $user['avatar_url'] = get_avatar_url($user['avatar']);
+        $user['birthday_dt'] =  get_default_date($user['birthday']);
+        $user['type_desc'] = UserModel::getTypeDescByKey($user['type']);
+        $orders = OrderModel::getListByUid($uid);
+        $userLog = UserLogModel::getListByUid($uid);
+
+        $this->assign("user",$user);
+        $this->assign("orders",$orders);
+        $this->assign("userLog",$userLog);
+
+        $this->display("/people/user_detail.html");
     }
 
     function getDataListTableWhere(){
         $where = 1;
 
         $id = _g("id");
-        $product_name = _g("product_name");
-        $username = _g('username');
+        $uname = _g("uname");
+        $nickname = _g('nickname');
+        $sex = _g('sex');
+        $mobile = _g('mobile');
+
+        $email = _g("email");
+        $type = _g("type");
+
+        $birthday_from = _g('birthday_from');
+        $birthday_to = _g('birthday_to');
+
         $from = _g('from');
         $to = _g('to');
 
-        $productService = new ProductService();
-        if($product_name){
-            $where .= $productService->searchUidsByKeywordUseDbWhere($username);
-        }
+        $consume_total = _g('consume_total');
+        $order_num = _g('order_num');
 
-        $userService =  new UserService();
-        if($username){
-            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
-        }
+        if($consume_total)
+            $where .=" and consume_total = '$consume_total' ";
+
+        if($order_num)
+            $where .=" and order_num = '$order_num' ";
+
 
         if($id)
             $where .=" and id = '$id' ";
+
+        if($uname)
+            $where .=" and uname like '%$uname%' ";
+
+        if($nickname)
+            $where .=" and nickname like '%$nickname%' ";
+
+        if($sex)
+            $where .=" and sex =$sex ";
+
+        if($mobile)
+            $where .=" and mobile = '$mobile' ";
+
+        if($email)
+            $where .=" and recommend ='$email' ";
+
+        if($type)
+            $where .=" and mobile = '$type' ";
+
+
+//        if($from = _g("from")){
+//            $from .= ":00";
+//            $where .= " and add_time >= '".strtotime($from)."'";
+//        }
+//
+//        if($to = _g("to")){
+//            $to .= ":59";
+//            $where .= " and add_time <= '".strtotime($to)."'";
+//        }
+
 
         if($from){
             $where .=" and a_time >=  ".strtotime($from);
@@ -146,6 +214,12 @@ class UserCollectCtrl extends BaseCtrl{
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
+
+        if($birthday_from)
+            $where .=" and birthday >=  $birthday_from";
+
+        if($birthday_to)
+            $where .=" and birthday <=  $birthday_to";
 
         return $where;
     }

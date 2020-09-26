@@ -1216,5 +1216,24 @@ class UserService{
 
         return $data;
     }
+    //后台，要根据 一个名字，来搜索用户，并返回id值，合并列表
+    function searchUidsByKeywordUseDbWhere($keyword){
+        $where = "";
+
+        $userWhere = " uname like '%$keyword%' or nickname like '%$keyword%' or realname like '%$keyword%' ";
+        $userList = UserModel::db()->getAll($userWhere,null, " id ");
+        if(!$userList){
+            $where .= " and 0";
+        }else{
+            $uids = "";
+            foreach ($userList as $k=>$v){
+                $uids .= $v['id'] . " ,";
+            }
+            $uids = substr($uids,0,strlen($uids)-1);
+            $where .= " and uid in ( $uids ) ";
+        }
+
+        return $where;
+    }
 
 }

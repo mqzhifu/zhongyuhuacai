@@ -6,6 +6,10 @@ class WithdrawCtrl extends BaseCtrl{
         if(_g("getlist")){
             $this->getList();
         }
+
+        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+
         $this->display("/finance/withdraw_list.html");
     }
 
@@ -161,18 +165,30 @@ class WithdrawCtrl extends BaseCtrl{
             $data = WithdrawModel::db()->getAll($where . $order);
 
             foreach($data as $k=>$v){
+                $user  = AgentModel::db()->getById($v['agent_id']);
+                $username = "未知";
+                if($user){
+                    $username = $user['title'];
+                }
+
+                $auditBnt = "";
+//                if($v['status'] == AgentService::STATUS_WAIT ){
+                    $auditBnt = '<button class="btn btn-xs default red upstatus margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 审核</button>';
+//                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['uid'],
+                    $username,
                     $v['price'],
                     $v['orders_ids'],
                     get_default_date($v['a_time']),
-                    $v['status'],
+                    WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['status']],
                     $v['memo'],
-                    $v['type'],
+                    WithdrawMoneyService::TYPE_DESC[$v['type']],
                     get_default_date($v['u_time']),
-                    "",
+                    '<a target="_blank" href="/finance/no/withdraw/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
+                    $auditBnt,
                 );
 
                 $records["data"][] = $row;
@@ -185,6 +201,46 @@ class WithdrawCtrl extends BaseCtrl{
 
         echo json_encode($records);
         exit;
+    }
+
+    function upstatus(){
+        $aid = _g("id");
+        $agent = WithdrawModel::db()->getById($aid);
+        if(!$agent){
+            exit(" id not in db.");
+        }
+        if(_g('opt')){
+            $status = _g("status");
+            if(!$status){
+                out_ajax(7000);
+            }
+
+            $data = array('status'=>$status,'u_time'=>time(),'audit_admin_id'=>$this->_adminid,'audit_time'=>time());
+            $memo = _g("memo");
+            if($memo){
+                $data['memo'] = $memo;
+            }
+
+            $rs = WithdrawModel::db()->upById($aid,$data);
+
+            out_ajax(200,$rs);
+        }
+        $statusDesc = WithdrawMoneyService::WITHDRAW_STATUS_DESC;
+        $statusDescRadioHtml = "";
+        foreach ($statusDesc as $k=>$v) {
+            $statusDescRadioHtml .= "<input name='status' type='radio' value={$k} />".$v;
+        }
+
+        $data = array(
+            'statusDescRadioHtml'=>$statusDescRadioHtml,
+            "id"=>$aid,
+        );
+//        $this->assign("agent",$agent);
+//        $this->assign("statusDescRadioHtml",$statusDescRadioHtml);
+
+        $html = $this->_st->compile("/finance/withdraw_upstatus.html",$data);
+        $html = file_get_contents($html);
+        echo_json($html);
     }
 
     function getDataListTableWhere(){

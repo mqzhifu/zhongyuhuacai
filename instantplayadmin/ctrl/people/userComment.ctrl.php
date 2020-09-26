@@ -49,16 +49,26 @@ class UserCommentCtrl extends BaseCtrl{
             foreach($data as $k=>$v){
 //                $avatar = get_avatar_url($v['avatar']);
 //                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
+                $user  = UserModel::db()->getById($v['uid']);
+                $username = "未知";
+                if($user){
+                    $username = $user['nickname'];
+                }
+
+                $imgs = "";
+                if($v['pic']){
+                    $src = get_comment_url($v['pic']);
+                    $imgs = "<image src='$src' width='50' height='50'  />";
+                }
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['pic'],
-                    $v['uid'],
+                    $imgs,
+                    $username,
                     $v['title'],
                     $v['content'],
-                    $v['pid'],
-                    $v['gid'],
+                    $v['oid'],
                     get_default_date($v['a_time']),
                     '',
 //                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
@@ -135,62 +145,32 @@ class UserCommentCtrl extends BaseCtrl{
         $where = 1;
 
         $id = _g("id");
-        $uname = _g("uname");
-        $nickname = _g('nickname');
-        $sex = _g('sex');
-        $mobile = _g('mobile');
-
-        $email = _g("email");
-        $type = _g("type");
-
-        $birthday_from = _g('birthday_from');
-        $birthday_to = _g('birthday_to');
-
+        $username = _g("username");
+        $title = _g('title');
+        $content = _g('content');
+        $oid = _g('oid');
+//        $email = _g("email");
+//        $type = _g("type");
         $from = _g('from');
         $to = _g('to');
 
-        $consume_total = _g('consume_total');
-        $order_num = _g('order_num');
+        $userService =  new UserService();
+        if($username){
+            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
+        }
 
-        if($consume_total)
-            $where .=" and consume_total = '$consume_total' ";
-
-        if($order_num)
-            $where .=" and order_num = '$order_num' ";
+        if($title)
+            $where .=" and title like '%$title%' ";
 
 
         if($id)
             $where .=" and id = '$id' ";
 
-        if($uname)
-            $where .=" and uname like '%$uname%' ";
+        if($content)
+            $where .=" and content like '%$content%' ";
 
-        if($nickname)
-            $where .=" and nickname like '%$nickname%' ";
-
-        if($sex)
-            $where .=" and sex =$sex ";
-
-        if($mobile)
-            $where .=" and mobile = '$mobile' ";
-
-        if($email)
-            $where .=" and recommend ='$email' ";
-
-        if($type)
-            $where .=" and mobile = '$type' ";
-
-
-//        if($from = _g("from")){
-//            $from .= ":00";
-//            $where .= " and add_time >= '".strtotime($from)."'";
-//        }
-//
-//        if($to = _g("to")){
-//            $to .= ":59";
-//            $where .= " and add_time <= '".strtotime($to)."'";
-//        }
-
+        if($oid)
+            $where .=" and oid =  $oid ";
 
         if($from){
             $where .=" and a_time >=  ".strtotime($from);
@@ -198,12 +178,6 @@ class UserCommentCtrl extends BaseCtrl{
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
-
-        if($birthday_from)
-            $where .=" and birthday >=  $birthday_from";
-
-        if($birthday_to)
-            $where .=" and birthday <=  $birthday_to";
 
         return $where;
     }

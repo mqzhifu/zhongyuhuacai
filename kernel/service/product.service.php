@@ -707,5 +707,25 @@ class ProductService
         return GoodsModel::db()->upById($gid,$data);
     }
 
+    //后台，要根据 一个名字，来搜索用户，并返回id值，合并列表
+    function searchUidsByKeywordUseDbWhere($keyword){
+        $where = "";
+
+        $productWhere = " title like '%$keyword%' or subtitle like '%$keyword%' or `desc` like '%$keyword%' ";
+        $productList = ProductModel::db()->getAll($productWhere,null, " id ");
+        if(!$productList){
+            $where .= " and 0";
+        }else{
+            $pids = "";
+            foreach ($productList as $k=>$v){
+                $pids .= $v['id'] . " ,";
+            }
+            $pids = substr($pids,0,strlen($pids)-1);
+            $where .= " and pid in ( $pids ) ";
+        }
+
+        return $where;
+    }
+
 
 }

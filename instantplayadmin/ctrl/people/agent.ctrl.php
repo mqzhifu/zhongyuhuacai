@@ -90,6 +90,19 @@ class AgentCtrl extends BaseCtrl{
             }
         }
 
+        $auditAdminName = "";
+        $auditTime = "";
+        if($agent['audit_admin_id']){
+            $auditAdmin = AdminUserModel::db()->getById($agent['audit_admin_id']);
+            $auditAdminName = $auditAdmin['uname'];
+        }
+
+        $auditTime =    get_default_date($agent['audit_time']);
+
+
+        $this->assign("auditAdminName",$auditAdminName);
+        $this->assign("auditTime",$auditTime);
+
         $this->assign("SubAgentList",$SubAgentList);
         $this->assign("subAgentCnt",$subAgentCnt);
 
@@ -157,11 +170,21 @@ class AgentCtrl extends BaseCtrl{
             $data = AgentModel::db()->getAll($where . $order . $limit);
 
 
-            $area = new Area
+            $agentService = new AgentService();
+
+
 
             foreach($data as $k=>$v){
-
-
+                $addressStr = $agentService->getAreaStr($v['id']);
+                $subAgent = $agentService->getSubAgentList($v['id']);
+                $subAgentNum = 0;
+                if($subAgent){
+                    $subAgentNum = count($subAgent);
+                }
+                $auditBnt = "";
+                if($v['status'] == AgentService::STATUS_WAIT ){
+                    $auditBnt = '<button class="btn btn-xs default red upstatus margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 审核</button>';
+                }
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -169,19 +192,23 @@ class AgentCtrl extends BaseCtrl{
                     $v['real_name'],
 
                     AgentModel::STATUS[$v['status']],
-                    AreaProvinceModel::db()->getOneByOneField('code',$v['province_code'])['short_name'],
-                    AreaCityModel::db()->getOneByOneField('code',$v['city_code'])['short_name'],
-                    AreaCountyModel::db()->getOneByOneField('code',$v['county_code'])['short_name'],
-                    AreaTownModel::db()->getOneByOneField('code',$v['towns_code'])['short_name'],
-                    $v['villages'],
-                    UserModel::getSexDescByKey($v['type']),
+//                    AreaProvinceModel::db()->getOneByOneField('code',$v['province_code'])['short_name'],
+//                    AreaCityModel::db()->getOneByOneField('code',$v['city_code'])['short_name'],
+//                    AreaCountyModel::db()->getOneByOneField('code',$v['county_code'])['short_name'],
+//                    AreaTownModel::db()->getOneByOneField('code',$v['towns_code'])['short_name'],
+                    $addressStr,
+                    $v['address'],
+                    UserModel::getSexDescByKey($v['sex']),
                     '<img height="30" width="30" src="'.get_agent_url($v['pic']).'" />',
                     $v['mobile'],
                     $v['fee_percent'],
                     get_default_date($v['a_time']),
+                    $v['uid'],
+                    $v['invite_code'],
+                    $subAgentNum,
                     '<a target="_blank" href="/people/no/agent/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
-                    '<button class="btn btn-xs default red upstatus margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 审核</button>'. "&nbsp;".
-                    '<a href="" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
+                    $auditBnt . "&nbsp;"
+//                    '<a href="" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );
 
@@ -201,12 +228,24 @@ class AgentCtrl extends BaseCtrl{
     function upstatus(){
         $aid = _g("id");
         $agent = AgentModel::db()->getById($aid);
-
+        if(!$agent){
+            exit(" aid not in db.");
+        }
         if(_g('opt')){
+            $status = _g("status");
+            if(!$status){
+                out_ajax(7000);
+            }
 
+            $data = array('status'=>$status,'u_time'=>time(),'audit_admin_id'=>$this->_adminid,'audit_time'=>time());
+            $memo = _g("memo");
+            if($memo){
+                $data['memo'] = $memo;
+            }
 
-            var_dump($_REQUEST);exit;
-            exit;
+            $rs = AgentModel::db()->upById($aid,$data);
+
+            out_ajax(200,$rs);
         }
         $statusDesc = AgentModel::STATUS;
         $statusDescRadioHtml = "";
@@ -216,6 +255,7 @@ class AgentCtrl extends BaseCtrl{
 
         $data = array(
             'statusDescRadioHtml'=>$statusDescRadioHtml,
+            "id"=>$aid,
         );
 //        $this->assign("agent",$agent);
 //        $this->assign("statusDescRadioHtml",$statusDescRadioHtml);
@@ -316,33 +356,37 @@ class AgentCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
-        $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
-
-        $from = _g("from");
-        $to = _g("to");
-
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
-
-
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
 
         $id = _g("id");
+        $title = _g('title');//店铺名称
+        $real_name = _g('');//真实姓名
+        $status = _g("status");
+        $address = _g('address');
+        $sex = _g("sex");
+        $mobile = _g('mobile');
+        $fee_percent = _g('fee_percent');
+        $from = _g("from");
+        $to = _g("to");
+        $user = _g('user');
+        $invite_code = _g('invite_code');
+
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($title)
+            $where .=" and title = '$title' ";
+
+        if($real_name)
+            $where .=" and real_name = '$real_name' ";
+
+        if($address)
+            $where .=" and address like '%$address%' ";
+
+        if($mobile)
+            $where .=" and mobile = '$mobile' ";
+
+        if($fee_percent)
+            $where .=" and fee_percent = '$fee_percent' ";
 
         if($sex)
             $where .=" and sex = '$sex' ";
@@ -350,20 +394,8 @@ class AgentCtrl extends BaseCtrl{
         if($status)
             $where .=" and status = '$status' ";
 
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
+        if($invite_code)
+            $where .=" and invite_code = '$invite_code' ";
 
         if($from)
             $where .=" and a_time >=  ".strtotime($from);
@@ -371,26 +403,11 @@ class AgentCtrl extends BaseCtrl{
         if($to)
             $where .=" and a_time <= ".strtotime($to);
 
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
+        $user = _g('user');
+        if($user){
+//            $user = UserModel::db()->get
+//            $where .=" and address like '%$address%' ";
+        }
 
         return $where;
     }

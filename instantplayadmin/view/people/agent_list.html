@@ -29,7 +29,7 @@
                                 <div class="table-actions-wrapper">
 									<span>
 									</span>
-                                    <select class="table-group-action-input form-control input-inline input-small input-sm">
+                                    <select class="table-group-action-input form-control form-filter input-inline input-small input-sm">
                                         <option value="">选择</option>
                                         <!--<option value="delete">批量删除</option>-->
                                     </select>
@@ -55,24 +55,12 @@
                                             状态
                                         </th>
 
-                                        <th width="5%">
-                                            省
+                                        <th width="15%">
+                                            省-市-县-乡镇
                                         </th>
 
                                         <th width="5%">
-                                            市
-                                        </th>
-
-                                        <th width="5%">
-                                            县
-                                        </th>
-
-                                        <th width="5%">
-                                            乡镇
-                                        </th>
-
-                                        <th width="5%">
-                                            村
+                                            详细地址
                                         </th>
 
                                         <th width="5%">
@@ -96,6 +84,18 @@
                                         </th>
 
                                         <th width="5%">
+                                            绑定用户
+                                        </th>
+
+                                        <th width="5%">
+                                            邀请码
+                                        </th>
+
+                                        <th width="5%">
+                                            下级数
+                                        </th>
+
+                                        <th width="5%">
                                             操作
                                         </th>
                                     </tr>
@@ -113,7 +113,8 @@
                                             <input type="text" class="form-control form-filter input-sm" name="realname" >
                                         </td>
                                         <td>
-                                           <select name="status">
+                                           <select name="status" class="table-group-action-input form-control form-filter input-inline input-small input-sm">
+                                               <option value="">请选择</option>
                                                {$statusSelectOptionHtml}
                                            </select>
                                         </td>
@@ -122,13 +123,12 @@
 
                                         </td>
 
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="address" >
+                                        </td>
                                         <td>
 
-                                            <select name="sex">
+                                            <select name="sex" class="table-group-action-input form-control form-filter input-inline input-small input-sm">
                                                 <option value="">请选择</option>
                                                 <option value="1">男</option>
                                                 <option value="2">女</option>
@@ -166,6 +166,17 @@
 
                                         </td>
 
+                                        <td>
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="user" >-->
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="invite_code" >
+                                        </td>
+
+                                        <td>
+
+                                        </td>
                                         <td>
                                             <div class="margin-bottom-5">
                                                 <button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> 搜索</button>
@@ -313,23 +324,23 @@
 
 <script>
 
-    $("#datatable_products").on("click",".delone",function(){
-        var id = $(this).attr("data-id");
-        bootbox.confirm("Are you sure?", function(result) {
-            if(result == true){
-                $.ajax({
-                    type: 'GET',
-                    url: "/people/no/agent/delOne/id="+id ,
-                    dataType: 'json',
-                    success: function(data){
-                        location.reload();
-                    }
-
-                });
-            }
-        });
-
-    });
+    // $("#datatable_products").on("click",".delone",function(){
+    //     var id = $(this).attr("data-id");
+    //     bootbox.confirm("Are you sure?", function(result) {
+    //         if(result == true){
+    //             $.ajax({
+    //                 type: 'GET',
+    //                 url: "/people/no/agent/delOne/id="+id ,
+    //                 dataType: 'json',
+    //                 success: function(data){
+    //                     location.reload();
+    //                 }
+    //
+    //             });
+    //         }
+    //     });
+    //
+    // });
 
 
     $("#datatable_products").on("click",".upstatus",function(){

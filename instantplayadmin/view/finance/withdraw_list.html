@@ -61,7 +61,7 @@
                                             ID
                                         </th>
                                         <th width="5%">
-                                            uid
+                                            代理名
                                         </th>
                                         <th width="10%">
                                             价格
@@ -302,6 +302,15 @@
 
 
 
+    });
+
+    $("#datatable_products").on("click",".upstatus",function(){
+        //alert($(this).attr("data-id"));
+        UTHING.ajax({
+            url:"/finance/no/withdraw/upstatus/",
+            data:{id:$(this).attr("data-id")},
+            title:"提现审批"
+        });
     });
 
     if (!jQuery().datetimepicker) {

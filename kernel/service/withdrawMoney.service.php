@@ -24,10 +24,12 @@ class WithdrawMoneyService{
     const WITHDRAW_STATUS_WAIT = 1;
     const WITHDRAW_STATUS_OK = 2;
     const WITHDRAW_STATUS_REJECT = 3;
+    const WITHDRAW_STATUS_FINISH = 4;
     const WITHDRAW_STATUS_DESC = [
         self::WITHDRAW_STATUS_WAIT =>"未处理",
-        self::WITHDRAW_STATUS_OK =>"已提现",
-        self::WITHDRAW_STATUS_REJECT =>"已驳回",
+        self::WITHDRAW_STATUS_OK =>"通过",
+        self::WITHDRAW_STATUS_REJECT =>"驳回",
+        self::WITHDRAW_STATUS_FINISH =>"已打款/完成",
 
     ];
 
