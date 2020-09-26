@@ -43,10 +43,7 @@
                             <div class="col-md-4">
                                 <div class="radio-list">
                                         {$statusDescRadioHtml}
-
                                 </div>
-
-
                             </div>
                         </div>
 
@@ -100,6 +97,9 @@
             ignore: "",
             rules: {
                 memo: {
+                    required: true
+                },
+                status: {
                     required: true
                 }
             },
