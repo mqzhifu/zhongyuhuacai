@@ -15,7 +15,7 @@ class LoginCtrl extends BaseCtrl  {
 //        $this->agent = $agent;
     }
 
-    function out(){
+    function logout(){
         $this->_sess->none();
         jump("/");
     }
