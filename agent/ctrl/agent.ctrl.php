@@ -31,6 +31,9 @@ class AgentCtrl extends BaseCtrl  {
 
         $this->addJs("/agent/assets/js/area_province.js");
 
+
+        $type = _g("type");
+        $this->assign("type",$type);
 //        $this->printAreaData();
 
         if(_g("opt")){
