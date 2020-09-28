@@ -50,19 +50,24 @@
                                             名称
                                         </th>
 
-                                        <th>
-                                            子集
-                                        </th>
 
-                                        <th>
+                                        <th  width="10%">
                                             图片
                                         </th>
 
-                                        <th>
-                                            显示首页
+                                        <th  width="10%">
+                                            首页icon
+                                        </th>
+
+                                        <th width="10%">
+                                            全部商品icon
                                         </th>
 
                                         <th width="20%">
+                                            子集
+                                        </th>
+
+                                        <th width="5%">
                                             操作
                                         </th>
                                     </tr>
@@ -77,11 +82,30 @@
                                             <input type="text" class="form-control form-filter input-sm" name="uid" >
                                         </td>
 
+                                        <td></td>
                                         <td>
+
+                                            <select name="is_show_search" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$showSearchOptionsHtml}
+                                            </select>
+
+
                                         </td>
 
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+
+                                            <select name="is_show_index" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$showIndexOptionsHtml}
+                                            </select>
+
+
+                                        </td>
+                                        <td>
+
+
+                                        </td>
 
                                         <td>
                                             <div class="margin-bottom-5">

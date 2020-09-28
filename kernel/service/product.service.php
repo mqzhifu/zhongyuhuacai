@@ -10,6 +10,19 @@ class ProductService
         3 => array('id' => 3, "name" => '销量3', 'field' => "user_buy_total"),
         4 => array('id' => 4, "name" => '价格4', 'field' => 'lowest_price'),
     );
+    const CATEGORY_SHOW_INDEX_TRUE = 1;
+    const CATEGORY_SHOW_INDEX_FALSE = 2;
+    const CATEGORY_SHOW_INDEX_DESC = array(
+        self::CATEGORY_SHOW_INDEX_TRUE=>"是",
+        self::CATEGORY_SHOW_INDEX_FALSE=>"否",
+    );
+    const CATEGORY_SHOW_SEARCH_TRUE = 1;
+    const CATEGORY_SHOW_SEARCH_FALSE = 2;
+    const CATEGORY_SHOW_SEARCH_DESC = array(
+        self::CATEGORY_SHOW_SEARCH_TRUE=>"是",
+        self::CATEGORY_SHOW_SEARCH_FALSE=>"否",
+    );
+
     //$includeGoods:是否包含该产品下的商品信息
     //upPvUv : 更新PV UV 值，必须uid 存在 才行
     function getOneDetail($id, $includeGoods = 1, $uid = 0, $upPvUv = 1 ,$filterNoStockGoods = 0)

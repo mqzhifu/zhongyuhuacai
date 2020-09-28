@@ -4,6 +4,20 @@ class CategoryCtrl extends BaseCtrl{
         if(_g("getlist")){
             $this->getList();
         }
+
+        $showIndexOptionsHtml = "";
+        foreach (ProductService::CATEGORY_SHOW_INDEX_DESC as $k=>$v){
+            $showIndexOptionsHtml .= "<option value={$k}>$v</option>";
+        }
+
+        $showSearchOptionsHtml = "";
+        foreach (ProductService::CATEGORY_SHOW_SEARCH_DESC as $k=>$v){
+            $showSearchOptionsHtml .= "<option value={$k}>$v</option>";
+        }
+
+        $this->assign("showIndexOptionsHtml",$showIndexOptionsHtml);
+        $this->assign("showSearchOptionsHtml",$showSearchOptionsHtml);
+
         $this->display("product/category_list.html");
     }
 
@@ -108,10 +122,10 @@ class CategoryCtrl extends BaseCtrl{
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['name'],
-                    $attr,
                     "<img width=20 height=20 src='".get_category_url($v['pic'])."' />",
-                    $v['is_show_index'],
-
+                    ProductService::CATEGORY_SHOW_INDEX_DESC[$v['is_show_index']],
+                    ProductService::CATEGORY_SHOW_SEARCH_DESC[$v['is_show_search']],
+                    $attr,
                     '<a href="/product/no/categoryAttr/add/cid='.$v['id'].'" class="btn yellow btn-xs margin-bottom-5"><i class="fa fa-edit"></i> 添加属性 </a>',
                 );
 
