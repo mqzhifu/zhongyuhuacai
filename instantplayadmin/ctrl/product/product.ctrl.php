@@ -291,11 +291,46 @@ class ProductCtrl extends BaseCtrl{
 
     function getWhere(){
         $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
 
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
+
+        $status = _g("status");
+        $title = _g("title");
+        $category_id = _g("category_id");
+        $pv_from = _g("pv_from");
+        $pv_to = _g("pv_to");
+        $uv_from = _g("uv_from");
+        $uv_to = _g("uv_to");
+        $sort = _g("sort");
+        $recommend = _g("recommend");
+
+        $id = _g("id");
+        if($id)
+            $where .=" and id = '$id' ";
+
+        if($status)
+            $where .= " and status = $status";
+
+        if($title)
+            $where .= " and content like '%$title%'";
+
+        if($category_id)
+            $where .= " and category_id = '$category_id'";
+
+        if($pv_from)
+            $where .= " and pv_from >= $pv_from";
+
+        if($pv_to )
+            $where .= " and pv_to <= $pv_to";
+
+
+        if( $uv_from  )
+            $where .= " and uv_from >= $uv_from";
+
+        if( $uv_to  )
+            $where .= " and uv_to <= $uv_to";
+
+        if($recommend)
+            $where .= " and recommend = '$recommend'";
 
         if($from = _g("from")){
             $from .= ":00";
@@ -306,7 +341,6 @@ class ProductCtrl extends BaseCtrl{
             $to .= ":59";
             $where .= " and add_time <= '".strtotime($to)."'";
         }
-
 
         return $where;
     }
