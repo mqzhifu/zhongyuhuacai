@@ -39,7 +39,7 @@ class UserCtrl extends BaseCtrl  {
 
         $user = $userRs['msg'];
 
-        $user['view_product_history_cnt'] = $this->productService->getUserViewProductCnt($this->uid);
+        $user['view_product_history_cnt'] = $this->productService->getUserViewProductTotalCnt($this->uid);
         $user['collect_cnt'] =      $this->collectService->getUserCnt($this->uid);
         $user['comment_cnt'] =      $this->commentService->getUserCnt($this->uid);
         $user['up_cnt'] =           $this->upService->getUserCnt($this->uid);
