@@ -176,6 +176,33 @@ class WithdrawCtrl extends BaseCtrl{
         exit;
     }
 
+    function detail(){
+        $aid = _g("id");
+        $info = WithdrawModel::db()->getById($aid);
+
+        //添加时间
+        $info['dt'] = get_default_date($info['a_time']);
+        //状态 描述
+        $info['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC [$info['status']];
+
+        $auditAdminName = "";
+        $auditTime = "";
+        if($info['audit_admin_id']){
+            $auditAdmin = AdminUserModel::db()->getById($info['audit_admin_id']);
+            $auditAdminName = $auditAdmin['uname'];
+        }
+
+        $auditTime =    get_default_date($info['audit_time']);
+
+
+        $this->assign("auditAdminName",$auditAdminName);
+        $this->assign("auditTime",$auditTime);
+
+        $this->assign("info",$info);
+
+        $this->display("/finance/withdraw_detail.html");
+    }
+
     function getWhere(){
         $where = " 1 ";
         if($mobile = _g("mobile"))
