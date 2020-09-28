@@ -64,7 +64,7 @@
                                             代理名
                                         </th>
                                         <th width="10%">
-                                            价格
+                                            金额
                                         </th>
                                         <th width="10%">
                                             订单号
@@ -87,7 +87,7 @@
                                             类型
                                         </th>
                                         <th width="5%">
-                                            更新时间
+                                            审批时间
                                         </th>
 
                                         <th width="5%">
@@ -98,25 +98,18 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="agent_name" >
                                         </td>
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="ctrlName" >
+                                            <input type="text" class="form-control form-filter input-sm" name="price" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="acName" >
-                                        </td>
 
-                                        <td>
                                         </td>
-
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
 
                                         <td>
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -130,6 +123,44 @@
 
                                             <div class="input-group date form_datetime margin-bottom-5">
                                                 <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+
+
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="status">
+                                                <option value="">选择</option>
+                                                {$statusOptions}
+                                            </select>
+
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="memo" >
+                                        </td>
+                                        <td>
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="type">
+                                                <option value="">选择</option>
+                                                {$levelOptions}
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="audit_time_from" id="audit_time_from" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="audit_time_to" id="audit_time_from_to" placeholder="to">
                                                 <span class="input-group-btn">
                                                     <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
                                                     <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>

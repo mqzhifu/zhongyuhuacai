@@ -84,13 +84,12 @@
                                             支付时间
                                         </th>
 
-                                        <th>
+                                        <th width="5%">
                                             数量
                                         </th>
 
-                                        <th>
+                                        <th width="5%">
                                             运费
-
                                         </th>
 
                                         <th width="5%">
@@ -101,56 +100,45 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="no" >
                                         </td>
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="ctrlName" >
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="ctrlName" >-->
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="acName" >
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="acName" >-->
                                         </td>
 
                                         <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="total_price" >
                                         </td>
 
 
                                         <td>
-                                            <select name="payType">
+                                            <select name="payType" class="form-control">
                                                 {$payTypeOptions}
                                             </select>
                                         </td>
 
                                         <td>
 
-                                            <select name="payType">
+                                            <select name="payType"  class="form-control">
                                                 {$statusOptions}
                                             </select>
 
                                         </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
                                         <td>
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
-
-
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="to">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
+                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="share_uid" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="address" >
                                         </td>
                                         <td>
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -170,15 +158,40 @@
                                                 </span>
                                             </div>
                                         </td>
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="pay_from" id="pay_from" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
 
-                                        <td></td>
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="pay_to" id="pay_to" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="num" >
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="haulage" >
+                                        </td>
+
                                         <td>
                                             <div class="margin-bottom-5">
                                                 <button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> 搜索</button>
                                             </div>
                                             <button class="btn btn-sm green filter-cancel"><i class="fa fa-times"></i> 重置</button>
                                         </td>
-                                        <td></td>
+
                                     </tr>
                                     </thead>
                                     <tbody>

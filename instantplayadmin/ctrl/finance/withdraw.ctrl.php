@@ -7,6 +7,20 @@ class WithdrawCtrl extends BaseCtrl{
             $this->getList();
         }
 
+        $statusOptions = "";
+        foreach ( WithdrawMoneyService::WITHDRAW_STATUS_DESC as $k=>$v){
+            $statusOptions .= "<option value'{$k}'>$v</option>";
+        }
+
+
+        $levelOptions = "";
+        foreach ( AgentModel::ROLE as $k=>$v){
+            $levelOptions .= "<option value'{$k}'>$v</option>";
+        }
+
+        $this->assign("levelOptions",$levelOptions);
+        $this->assign("statusOptions",$statusOptions);
+
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
@@ -149,6 +163,9 @@ class WithdrawCtrl extends BaseCtrl{
                     $auditBnt = '<button class="btn btn-xs default red upstatus margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 审核</button>';
                 }
 
+
+
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -159,7 +176,7 @@ class WithdrawCtrl extends BaseCtrl{
                     WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['status']],
                     $v['memo'],
                     WithdrawMoneyService::TYPE_DESC[$v['type']],
-                    get_default_date($v['u_time']),
+                    get_default_date($v['audit_time']),
                     '<a target="_blank" href="/finance/no/withdraw/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
                     $auditBnt,
                 );
@@ -202,29 +219,6 @@ class WithdrawCtrl extends BaseCtrl{
 
         $this->display("/finance/withdraw_detail.html");
     }
-
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
 
     function upstatus(){
         $aid = _g("id");
@@ -297,43 +291,66 @@ class WithdrawCtrl extends BaseCtrl{
     }
 
     function getDataListTableWhere(){
-        $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
-        $status = _g("status");
-
-        $nickname = _g('name');
+//        $openid = _g("openid");
+//        $nickname = _g('name');
 //        $nickname_byoid = _g('nickname_byoid');
 //        $content = _g('content');
 //        $is_online = _g('is_online');
 //        $uname = _g('uname');
-
-        $from = _g("from");
-        $to = _g("to");
-
 //        $trigger_time_from = _g("trigger_time_from");
 //        $trigger_time_to = _g("trigger_time_to");
-
-
 //        $uptime_from = _g("uptime_from");
 //        $uptime_to = _g("uptime_to");
 
-
+        $from = _g("from");
+        $to = _g("to");
+        $where = 1;
+        $type = _g("type");
+        $status = _g("status");
         $id = _g("id");
+        $agentName = _g("agent_name");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
-
-        if($sex)
-            $where .=" and sex = '$sex' ";
+        if($type)
+            $where .=" and type = '$type' ";
 
         if($status)
             $where .=" and status = '$status' ";
 
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
+
+        if($from)
+            $where .=" and a_time >=  ".strtotime($from);
+
+        if($to)
+            $where .=" and a_time <= ".strtotime($to);
+
+        if($audit_time_from = _g("audit_time_from")){
+            $audit_time_from .= ":00";
+            $where .= " and audit_time >= '".strtotime($audit_time_from)."'";
+        }
+
+        if($audit_time_to = _g("audit_time_to")){
+            $audit_time_to .= ":59";
+            $where .= " and audit_time <= '".strtotime($audit_time_to)."'";
+        }
+
+
+        $AgentService = new AgentService();
+        if($agentName){
+            $where .= $AgentService->searchUidsByKeywordUseDbWhere($agentName);
+        }
+
+//        $userService =  new UserService();
+//        if($username){
+//            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
+//        }
+
+//
+//        if($sex)
+//            $where .=" and sex = '$sex' ";
+//        if($nickname)
+//            $where .=" and nickname = '$nickname' ";
 
 //        if($nickname_byoid){
 //            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
@@ -347,32 +364,6 @@ class WithdrawCtrl extends BaseCtrl{
 //        if($content)
 //            $where .= " and content like '%$content%'";
 
-        if($from)
-            $where .=" and a_time >=  ".strtotime($from);
-
-        if($to)
-            $where .=" and a_time <= ".strtotime($to);
-
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
 
         return $where;
     }

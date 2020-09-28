@@ -17,6 +17,10 @@ class OrderCtrl extends BaseCtrl{
         $this->assign("statusOptions", OrderModel::getStatusOptions());
         $this->assign("payTypeOptions", OrderModel::getPayTypeOptions());
 
+
+        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+
         $this->display("/finance/order_list.html");
     }
     //退款
@@ -119,6 +123,7 @@ class OrderCtrl extends BaseCtrl{
             'shipTypeDescHtml'=>$shipTypeDescHtml,
             'id'=>$id,
         );
+
 
         $html = $this->_st->compile("/finance/order_edit_ship.html",$data);
         $html = file_get_contents($html);
@@ -379,54 +384,59 @@ class OrderCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
+
+
+        $no = _g("no");
+        $total_price = _g("total_price");
+        $payType = _g('payType');
         $status = _g("status");
 
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
+
+        $uid = _g('uid');
+        $share_uid = _g('share_uid');
+        $address = _g('address');
 
         $from = _g("from");
         $to = _g("to");
 
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
+        $pay_from = _g("pay_from");
+        $pay_to = _g("pay_to");
 
 
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
+        $num = _g("num");
+        $haulage = _g("haulage");
 
 
         $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($no)
+            $where .=" and no = '$no' ";
 
-        if($sex)
-            $where .=" and sex = '$sex' ";
+        if($total_price)
+            $where .=" and total_price = '$total_price' ";
 
         if($status)
             $where .=" and status = '$status' ";
 
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
+        if($payType)
+            $where .=" and payType = '$payType' ";
 
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
+        if($uid)
+            $where .=" and uid = '$uid' ";
 
-//        if($content)
-//            $where .= " and content like '%$content%'";
+        if($share_uid)
+            $where .=" and share_uid = '$share_uid' ";
+
+        if($address)
+            $where .=" and address like '%$address%' ";
+
+        if($num)
+            $where .=" and num = '$num' ";
+
+        if($haulage)
+            $where .=" and haulage = '$haulage' ";
 
         if($from)
             $where .=" and a_time >=  ".strtotime($from);
@@ -434,26 +444,11 @@ class OrderCtrl extends BaseCtrl{
         if($to)
             $where .=" and a_time <= ".strtotime($to);
 
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
+        if($pay_from)
+            $where .=" and a_time >=  ".strtotime($from);
 
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
+        if($pay_to)
+            $where .=" and a_time <= ".strtotime($to);
 
         return $where;
     }
