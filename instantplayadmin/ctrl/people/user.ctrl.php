@@ -190,7 +190,13 @@ class UserCtrl extends BaseCtrl{
 
     function detail(){
         $uid = _g("id");
+        if(!$uid){
+            exit("uid null");
+        }
         $user = UserModel::db()->getById($uid);
+        if(!$user){
+            exit("uid not in db");
+        }
         $user['dt'] = get_default_date($user['a_time']);
         $user['status_desc'] = UserModel::STATUS_DESC[$user['status']];
         $user['avatar_url'] = get_avatar_url($user['avatar']);
@@ -238,6 +244,21 @@ class UserCtrl extends BaseCtrl{
 
         $this->assign("ordersPayConsumeTotalPrice",$ordersPayConsumeTotalPrice);
         $this->assign("ordersPayTotalNum",$ordersPayTotalNum);
+
+
+        $UpService = new UpService();
+        $upTotal = $UpService->getUserCnt($user['id']);
+
+        $CollectService = new CollectService();
+        $collectTotal = $CollectService->getUserCnt($user['id']);
+
+        $CommentService = new CommentService();
+        $commentTotal = $CommentService->getUserCnt($user['id']);
+
+        $this->assign("upTotal",$upTotal);
+        $this->assign("collectTotal",$collectTotal);
+        $this->assign("commentTotal",$commentTotal);
+
 
         $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
         $user['last_active_record_dt'] = $lastActiveRecord;

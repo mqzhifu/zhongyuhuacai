@@ -54,7 +54,7 @@
                                             <!--<span class="hidden-480">| Dec 27, 2013 7:16:25 </span>-->
                                         </div>
                                         <div class="actions">
-                                            <a href="javascript:;" class="btn default yellow-stripe">
+                                            <a href="{$this->_backListUrl}" class="btn default yellow-stripe">
                                                 <i class="fa fa-angle-left"></i>
                                                 <span class="hidden-480">
 								Back </span>
@@ -257,6 +257,37 @@
                                                                             {$user['last_active_record_dt']}
                                                                         </div>
                                                                     </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            点赞数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$upTotal}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            收藏数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$collectTotal}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            评论数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$commentTotal}
+                                                                        </div>
+                                                                    </div>
+
 
                                                                 </div>
                                                             </div>
