@@ -233,7 +233,7 @@
                                                                     </div>
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            已侍总订单数:
+                                                                            已付款总订单数:
                                                                         </div>
                                                                         <div class="col-md-7 value">
                                                                             {$ordersPayTotalNum}
@@ -276,10 +276,10 @@
                                                                     id
                                                                 </th>
                                                                 <th width="15%">
-                                                                    pids
+                                                                    产品ID
                                                                 </th>
                                                                 <th width="15%">
-                                                                    gids
+                                                                    商品ID
                                                                 </th>
                                                                 <th width="10%">
                                                                     总价
@@ -302,8 +302,8 @@
                                                                     <td>{$v['id']}</td>
                                                                     <td>{$v['pids']}</td>
                                                                     <td>{$v['gids']}</td>
-                                                                    <td>{$v['total_price']}</td>
-                                                                    <td>{$v['status']}</td>
+                                                                    <td>{$v['total_yuan_price']}</td>
+                                                                    <td>{$v['status_desc']}</td>
                                                                     <td>{$v['dt']}</td>
 
                                                                 </tr>

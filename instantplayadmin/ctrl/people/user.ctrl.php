@@ -224,7 +224,9 @@ class UserCtrl extends BaseCtrl{
                     $ordersPayConsumeTotalPrice += $v['total_price'];
                 }
 
+                $orders[$k]['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
                 $orders[$k]['dt'] = get_default_date($v['a_time']);
+                $orders[$k]['total_yuan_price'] = fenToYuan( $v['total_price']);
             }
         }
 
