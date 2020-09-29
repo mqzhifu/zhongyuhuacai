@@ -217,7 +217,7 @@ class UserCtrl extends BaseCtrl{
             $ordersTotalNum = count($orders);
             foreach ($orders as $k=>$v){
                 $ordersConsumeTotalPrice += $v['total_price'];
-                $ordersConsumeTotalPrice = yuanToFen($ordersConsumeTotalPrice);
+                $ordersConsumeTotalPrice = fenToYuan($ordersConsumeTotalPrice);
 
                 if(in_array($v['status'],$payArrStatus)){
                     $ordersPayTotalNum++;
@@ -227,6 +227,8 @@ class UserCtrl extends BaseCtrl{
                 $orders[$k]['dt'] = get_default_date($v['a_time']);
             }
         }
+
+        $ordersPayConsumeTotalPrice = fenToYuan($ordersPayConsumeTotalPrice);
 
         $this->assign("ordersTotal",$ordersTotalNum);
         $this->assign("ordersConsumeTotalPrice",$ordersConsumeTotalPrice);
