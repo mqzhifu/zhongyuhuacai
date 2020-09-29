@@ -256,7 +256,7 @@ class UserCtrl extends BaseCtrl{
         $commentTotal = $CommentService->getUserCnt($user['id']);
 
         $productService = new ProductService();
-        $viewProductTotalCnt = $productService->getUserViewProductTotalCnt($user['uid']);
+        $viewProductTotalCnt = $productService->getUserViewProductTotalCnt($user['id']);
 
         $this->assign("upTotal",$upTotal);
         $this->assign("collectTotal",$collectTotal);
