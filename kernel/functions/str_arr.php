@@ -67,6 +67,9 @@ function yuanToFen($price,$isRound = 1){
 }
 
 function fenToYuan($price,$isRound = 1){
+    if(!$price || $price == '0'){
+        return 0;
+    }
     $price = $price / 100 ;
     if($isRound){
         $price = round($price,2);

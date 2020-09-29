@@ -279,8 +279,8 @@ class OrderService{
         }
 
 
-        $data = array("order_num"=>array(1),'consume_total'=>array($totalPrice));
-        UserModel::db()->upById($uid,$data);
+//        $data = array("order_num"=>array(1),'consume_total'=>array($totalPrice));
+//        UserModel::db()->upById($uid,$data);
 
         return out_pc(200,$newId);
 

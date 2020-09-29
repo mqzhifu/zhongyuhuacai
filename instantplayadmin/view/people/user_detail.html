@@ -211,7 +211,7 @@
                                                                             总消费金额:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$user['consume_total']}
+                                                                            {$ordersConsumeTotalPrice}
                                                                         </div>
                                                                     </div>
                                                                     <div class="row static-info">
@@ -219,9 +219,28 @@
                                                                             总订单数:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$user['order_num']}
+                                                                            {$ordersTotal}
                                                                         </div>
                                                                     </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            已付款总消费金额:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$ordersPayConsumeTotalPrice}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            已侍总订单数:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$ordersPayTotalNum}
+                                                                        </div>
+                                                                    </div>
+
+
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
                                                                             总活跃天数:

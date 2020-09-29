@@ -54,16 +54,6 @@ class ImgResizeCtrl extends BaseCtrl{
         $from = _g('from');
         $to = _g('to');
 
-        $consume_total = _g('consume_total');
-        $order_num = _g('order_num');
-
-        if($consume_total)
-            $where .=" and consume_total = '$consume_total' ";
-
-        if($order_num)
-            $where .=" and order_num = '$order_num' ";
-
-
         if($id)
             $where .=" and id = '$id' ";
 
@@ -192,105 +182,6 @@ class ImgResizeCtrl extends BaseCtrl{
             }
         }
         return $dirTreeHtml;
-    }
-
-    function delOne(){
-        $id = _g("uid");
-
-        $where =" uid = $id limit 1000";
-
-//        UserLogModel::db()->delete($where);
-//        OrderModel::db()->delete($where);
-//        MsgModel::db()->delete("from_uid = $id or to_uid = $id");
-//        UserCollectionModel::db()->delete($where);
-//        UserFeedbackModel::db()->delete($where);
-//        UserProductLikedModel::db()->delete($where);
-//        UserCommentModel::db()->delete($where);
-//        VerifiercodeModel::db()->delete($where);
-//
-//
-//        UserModel::db()->delById($id);
-    }
-
-    function getList(){
-        //初始化返回数据格式
-        $records = array('data'=>[],'draw'=>$_REQUEST['draw']);
-        //获取搜索条件
-        $where = $this->getDataListTableWhere();
-        //计算 总数据数 DB中总记录数
-        $iTotalRecords = UserModel::db()->getCount($where);
-        if ($iTotalRecords){
-            //按照某个字段 排序
-            $order_sort = _g("order");
-            $order_column = $order_sort[0]['column'] ?: 0;
-            $order_dir = $order_sort[0]['dir'] ?: "desc";
-
-            $sort = array(
-                'id',
-                'id',
-                'uname',
-                'nickname',
-                'sex',
-                'order_num',
-                'mobile',
-                'email',
-                'birthday',
-                'a_time',
-                'type',
-                'consume_total',
-            );
-            $order = " order by ". $sort[$order_column]." ".$order_dir;
-
-            $iDisplayLength = intval($_REQUEST['length']);//每页多少条记录
-            if(999999 == $iDisplayLength){
-                $iDisplayLength = $iTotalRecords;
-            }else{
-                $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
-            }
-
-            $iDisplayStart = intval($_REQUEST['start']);//limit 起始
-            $end = $iDisplayStart + $iDisplayLength;
-            $end = $end > $iTotalRecords ? $iTotalRecords : $end;
-
-            $limit = " limit $iDisplayStart,$end";
-            $data = UserModel::db()->getAll($where . $order . $limit);
-
-
-
-            foreach($data as $k=>$v){
-                $avatar = get_avatar_url($v['avatar']);
-                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
-
-                $row = array(
-                    '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
-                    $v['id'],
-                    $v['uname'],
-                    $v['nickname'],
-                    $userLiveplaceDesc,
-                    UserModel::getSexDescByKey($v['sex']),
-                    $v['order_num'],
-                    $v['mobile'],
-                    $v['email'],
-                    get_default_date($v['birthday']),
-                    get_default_date($v['a_time']),
-                    '<img height="30" width="30" src="'.$avatar.'" />',
-                    UserModel::getTypeDescByKey($v['type']),
-                    $v['wx_open_id'],
-                    $v['consume_total'],
-                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
-                    '<a href="" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
-//                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
-                );
-
-                $records["data"][] = $row;
-            }
-        }
-
-        $records["recordsTotal"] = $iTotalRecords;
-        $records["recordsFiltered"] = $iTotalRecords;
-
-        echo json_encode($records);
-        exit;
     }
 
 }

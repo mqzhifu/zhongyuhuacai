@@ -49,13 +49,11 @@ class UserCtrl extends BaseCtrl{
                 'uname',
                 'nickname',
                 'sex',
-                'order_num',
                 'mobile',
                 'email',
                 'birthday',
                 'a_time',
                 'type',
-                'consume_total',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -86,7 +84,6 @@ class UserCtrl extends BaseCtrl{
                     $v['nickname'],
                     $userLiveplaceDesc,
                     UserModel::getSexDescByKey($v['sex']),
-                    $v['order_num'],
                     $v['mobile'],
                     UserModel::INNER_TYPE_DESC[ $v['inner_type']],
                     get_default_date($v['birthday']),
@@ -94,7 +91,6 @@ class UserCtrl extends BaseCtrl{
                     '<img height="30" width="30" src="'.$avatar.'" />',
                     UserModel::getTypeDescByKey($v['type']),
                     $v['wx_open_id'],
-                    $v['consume_total'],
                     '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
                     '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
@@ -230,16 +226,6 @@ class UserCtrl extends BaseCtrl{
 
         $from = _g('from');
         $to = _g('to');
-
-        $consume_total = _g('consume_total');
-        $order_num = _g('order_num');
-
-        if($consume_total)
-            $where .=" and consume_total = '$consume_total' ";
-
-        if($order_num)
-            $where .=" and order_num = '$order_num' ";
-
 
         if($id)
             $where .=" and id = '$id' ";

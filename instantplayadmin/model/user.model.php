@@ -215,10 +215,6 @@ class UserModel {
         return self::db()->getAllBySQL($sql);
     }
 
-//    static function upTotal($uid,$orderPrice){
-//        $data = array('consume_total'=>array($orderPrice) ,'order_num'=>array(1));
-//        return self::db()->upById($uid,$data);
-//    }
     //获取一个用户的 所在地信息
     static function getLivePlaceDesc($uid,$default = '--'){
         $user = self::db()->getById($uid);

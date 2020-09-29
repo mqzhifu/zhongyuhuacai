@@ -59,9 +59,9 @@
                                             性别
                                         </th>
 
-                                        <th width="5%">
-                                            订单数
-                                        </th>
+                                        <!--<th width="5%">-->
+                                            <!--订单数-->
+                                        <!--</th>-->
 
                                         <th width="5%">
                                             手机号
@@ -87,13 +87,9 @@
                                             注册类型
                                         </th>
 
-                                        <th width="5%">
-                                            三方UID
-                                        </th>
-
-                                        <th width="5%">
-                                            消费总金额
-                                        </th>
+                                        <!--<th width="5%">-->
+                                            <!--消费总金额-->
+                                        <!--</th>-->
 
                                         <th width="5%">
                                             操作
@@ -134,9 +130,10 @@
                                             </select>
                                         </td>
 
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="order_num" >
-                                        </td>
+                                        <!--<td>-->
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="order_num_from" placeholder="from">-->
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="order_num_to" placeholder="to">-->
+                                        <!--</td>-->
 
 
                                         <td>
@@ -195,14 +192,13 @@
                                             <select name="type" class="form-control form-filter input-sm" >
                                                 <option value="">选择</option>
                                                 {$typeOptions}
-
                                             </select>
 
                                         </td>
-                                        <td></td>
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="consume_total" >
-                                        </td>
+                                        <!--<td>-->
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="consume_total_from" placeholder="from">-->
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="consume_total_to" placeholder="from">-->
+                                        <!--</td>-->
 
 
                                         <td>
@@ -274,7 +270,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0,2,3,7,11,12,13]
+                        'aTargets' : [ 0,2,3,7,11,12]
                     }],
                     "order": [
                         [1, "desc"]

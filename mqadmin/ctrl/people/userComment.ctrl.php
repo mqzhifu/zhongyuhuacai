@@ -149,16 +149,6 @@ class UserCommentCtrl extends BaseCtrl{
         $from = _g('from');
         $to = _g('to');
 
-        $consume_total = _g('consume_total');
-        $order_num = _g('order_num');
-
-        if($consume_total)
-            $where .=" and consume_total = '$consume_total' ";
-
-        if($order_num)
-            $where .=" and order_num = '$order_num' ";
-
-
         if($id)
             $where .=" and id = '$id' ";
 

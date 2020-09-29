@@ -5,10 +5,6 @@ class UserCtrl extends BaseCtrl{
             $this->getList();
         }
 
-
-
-
-
         $this->assign("areaProvinceModelOptionsHtml", AreaProvinceModel::getSelectOptionsHtml());
 
         $this->assign("typeOptions",UserModel::getTypeOptions());
@@ -55,13 +51,11 @@ class UserCtrl extends BaseCtrl{
                 'uname',
                 'nickname',
                 'sex',
-                'order_num',
                 'mobile',
                 'email',
                 'birthday',
                 'a_time',
                 'type',
-                'consume_total',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -92,15 +86,15 @@ class UserCtrl extends BaseCtrl{
                     $v['nickname'],
                     $userLiveplaceDesc,
                     UserModel::getSexDescByKey($v['sex']),
-                    $v['order_num'],
+//                    $v['order_num'],
                     $v['mobile'],
                     UserModel::INNER_TYPE_DESC[ $v['inner_type']],
                     get_default_date($v['birthday']),
                     get_default_date($v['a_time']),
                     '<img height="30" width="30" src="'.$avatar.'" />',
                     UserModel::getTypeDescByKey($v['type']),
-                    $v['wx_open_id'],
-                    $v['consume_total'],
+//                    $v['wx_open_id'],
+//                    fenToYuan($v['consume_total']),
                     '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
 //                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
@@ -199,8 +193,6 @@ class UserCtrl extends BaseCtrl{
         $user = UserModel::db()->getById($uid);
         $user['dt'] = get_default_date($user['a_time']);
         $user['status_desc'] = UserModel::STATUS_DESC[$user['status']];
-
-
         $user['avatar_url'] = get_avatar_url($user['avatar']);
         $user['birthday_dt'] =  get_default_date($user['birthday']);
         $user['type_desc'] = UserModel::getTypeDescByKey($user['type']);
@@ -213,11 +205,35 @@ class UserCtrl extends BaseCtrl{
             }
         }
 
+
+        $ordersConsumeTotalPrice = 0;
+        $ordersTotalNum = 0;
+
+        $ordersPayConsumeTotalPrice = 0;
+        $ordersPayTotalNum = 0;
+
         if($orders){
+            $payArrStatus = array(OrderModel::STATUS_PAYED ,OrderModel::STATUS_TRANSPORT,OrderModel::STATUS_SIGN_IN ,OrderModel::STATUS_FINISH ,OrderModel::STATUS_REFUND_REJECT);
+            $ordersTotalNum = count($orders);
             foreach ($orders as $k=>$v){
+                $ordersConsumeTotalPrice += $v['total_price'];
+                $ordersConsumeTotalPrice = yuanToFen($ordersConsumeTotalPrice);
+
+                if(in_array($v['status'],$payArrStatus)){
+                    $ordersPayTotalNum++;
+                    $ordersPayConsumeTotalPrice += $v['total_price'];
+                }
+
                 $orders[$k]['dt'] = get_default_date($v['a_time']);
             }
         }
+
+        $this->assign("ordersTotal",$ordersTotalNum);
+        $this->assign("ordersConsumeTotalPrice",$ordersConsumeTotalPrice);
+
+
+        $this->assign("ordersPayConsumeTotalPrice",$ordersPayConsumeTotalPrice);
+        $this->assign("ordersPayTotalNum",$ordersPayTotalNum);
 
         $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
         $user['last_active_record_dt'] = $lastActiveRecord;
@@ -248,8 +264,10 @@ class UserCtrl extends BaseCtrl{
         $from = _g('from');
         $to = _g('to');
 
-        $consume_total = _g('consume_total');
-        $order_num = _g('order_num');
+//        $consume_total_from = _g('consume_total_from');
+//        $consume_total_to = _g('consume_total_to');
+//        $order_num_from = _g('order_num_from');
+//        $order_num_to = _g('order_num_to');
         $province = _g('province');
         $inner_type = _g('inner_type');
 
@@ -258,12 +276,21 @@ class UserCtrl extends BaseCtrl{
         if($inner_type)
             $where .=" and inner_type = '$inner_type' ";
 
-        if($consume_total)
-            $where .=" and consume_total = '$consume_total' ";
-
-        if($order_num)
-            $where .=" and order_num = '$order_num' ";
-
+//        if($consume_total_from){
+//            $where .=" and consume_total >= '$consume_total_from' ";
+//        }
+//
+//        if($consume_total_to){
+//            $where .=" and consume_total <= '$consume_total_to' ";
+//        }
+//
+//        if($order_num_from){
+//            $where .=" and order_num >= '$order_num_from' ";
+//        }
+//
+//        if($order_num_to){
+//            $where .=" and order_num <= '$order_num_to' ";
+//        }
 
         if($id)
             $where .=" and id = '$id' ";
@@ -290,30 +317,27 @@ class UserCtrl extends BaseCtrl{
             $where .=" and province_code = '$province' ";
         }
 
-//        if($from = _g("from")){
-//            $from .= ":00";
-//            $where .= " and add_time >= '".strtotime($from)."'";
-//        }
-//
-//        if($to = _g("to")){
-//            $to .= ":59";
-//            $where .= " and add_time <= '".strtotime($to)."'";
-//        }
-
-
         if($from){
-            $where .=" and a_time >=  ".strtotime($from);
+            $from .= ":00";
+            $where .=" and a_time >=  '".strtotime($from) . "'";
         }
 
-        if($to)
-            $where .=" and a_time <= ".strtotime($to);
+        if($to){
+            $to .= ":59";
+            $where .=" and a_time <= '".strtotime($to) . "'";
+        }
 
-        if($birthday_from)
-            $where .=" and birthday >=  $birthday_from";
 
-        if($birthday_to)
-            $where .=" and birthday <=  $birthday_to";
+        if($birthday_from){
+            $birthday_from .= ":00";
+            $where .=" and birthday >=  '".strtotime($birthday_from) . "'";
+        }
 
+
+        if($birthday_to){
+            $birthday_to .= ":59";
+            $where .=" and birthday <= '".strtotime($birthday_to)."'";
+        }
 
         return $where;
     }
