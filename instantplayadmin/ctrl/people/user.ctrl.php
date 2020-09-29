@@ -255,10 +255,13 @@ class UserCtrl extends BaseCtrl{
         $CommentService = new CommentService();
         $commentTotal = $CommentService->getUserCnt($user['id']);
 
+        $productService = new ProductService();
+        $viewProductTotalCnt = $productService->getUserViewProductTotalCnt($user['uid']);
+
         $this->assign("upTotal",$upTotal);
         $this->assign("collectTotal",$collectTotal);
         $this->assign("commentTotal",$commentTotal);
-
+        $this->assign("viewProductTotalCnt",$viewProductTotalCnt);
 
         $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
         $user['last_active_record_dt'] = $lastActiveRecord;
