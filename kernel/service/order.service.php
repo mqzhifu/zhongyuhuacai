@@ -882,14 +882,16 @@ class OrderService{
             "wait_pay"=>0,"wait_transport"=>0,"wait_signin"=>0,"wait_comment"=>0
         );
         foreach ($orderList as $k=>$v){
-            if($v['status'] == 1){//待付款
+            if($v['status'] == OrderModel::STATUS_WAIT_PAY){//待付款
                 $list['wait_pay'] = $v['cnt'];
-            }elseif($v['status'] == 2){//已付款，待发货
+            }elseif($v['status'] == OrderModel::STATUS_PAYED){//已付款，待发货
                 $list['wait_transport'] = $v['cnt'];
-            }elseif($v['status'] == 5){//已发货，待签收
+            }elseif($v['status'] == OrderModel::STATUS_TRANSPORT){//已发货，待签收
                 $list['wait_signin'] = $v['cnt'];
-            }elseif($v['status'] == 8){//完成，待评价
+            }elseif($v['status'] == OrderModel::STATUS_FINISH){//完成，待评价
                 $list['wait_comment'] = $v['cnt'];
+            }elseif($v['status'] == OrderModel::STATUS_REFUND){//完成，待评价
+                $list['wait_refund_audit'] = $v['cnt'];
             }
         }
         return out_pc(200,$list);
