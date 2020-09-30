@@ -435,22 +435,22 @@ class OrderService{
 
         $exist = OrderRefundModel::db()->getRow(" oid = $oid");
         if($exist){
-
+            return out_pc(8386);
         }
 
         $allowStatus = array(
             OrderModel::STATUS_WAIT_PAY,OrderModel::STATUS_SIGN_IN,OrderModel::STATUS_TRANSPORT
         );
-//        if(!in_array($orders['status'],$allowStatus)){
-//            return out_pc(8353);
-//        }
+        if(!in_array($orders['status'],$allowStatus)){
+            return out_pc(8353);
+        }
 
         if(!in_array($type,array_flip(self::REFUND_TYPE_DESC))){
-
+            return out_pc(8387);
         }
 
         if(!in_array($reason,array_flip(self::REFUND_REASON_DESC))){
-
+            return out_pc(8388);
         }
 
         $data = array(
@@ -464,11 +464,10 @@ class OrderService{
             'oid'=>$oid,
             'price'=>$orders['total_price'],
             "mobile"=>$mobile,
+            'lock_order_status'=>$orders['status'],
         );
 
-
         $orderRefundId = OrderRefundModel::db()->add($data);
-
         $rs = $this->upStatus($oid,OrderModel::STATUS_REFUND,array("refund_id"=>$orderRefundId));
         return out_pc(200,$orderRefundId);
     }
@@ -508,6 +507,7 @@ class OrderService{
             return out_pc(8385,$row);
         }
 
+        OrderService::refundCancelAndRollbackStatus($row['oid'],$row['lock_order_status']);
         $rs = OrderRefundModel::db()->delById($id);
 
         return out_pc(200,$rs);
@@ -570,6 +570,12 @@ class OrderService{
 
         $rs = $this->upStatus($id,OrderModel::STATUS_REFUND_FINISH);
         return out_pc(200,$rs);
+    }
+
+    function refundCancelAndRollbackStatus($oid,$status){
+        LogLib::inc()->debug(["refundCancelAndRollbackStatus",$oid,$status]);
+        $data = array('status'=>$status,'u_time'=>time());
+        return OrderModel::db()->upById($oid,$data);
     }
 
     function upStatus($oid,$status,$upData = []){
