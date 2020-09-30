@@ -58,10 +58,10 @@ class RefundCtrl extends BaseCtrl{
                 if($wxPayRefundBack['code'] != 200){
                     $this->notice("微信接口请求退款异常,".$wxPayRefundBack['msg']);
                 }
-                $service->upStatus($id,OrderModel::STATUS_REFUND_FINISH,array('refund_memo'=>$memo));
+                $service->upStatus($id,OrderModel::STATUS_REFUND_FINISH,array('refund_memo'=>$memo,'audit_time'=>time(),'audit_admin_id'=>$this->_adminid));
                 var_dump($wxPayRefundBack);exit;
             }else{
-                $service->upStatus($id,OrderModel::STATUS_REFUND_REJECT,array('refund_memo'=>$memo));
+                $service->upStatus($id,OrderModel::STATUS_REFUND_REJECT,array('refund_memo'=>$memo,'audit_time'=>time(),'audit_admin_id'=>$this->_adminid));
             }
 
             $this->ok("成功");

@@ -490,6 +490,8 @@ class OrderService{
             return out_pc(200,$row);
         }
         $row = $this->formatRefundRow($row);
+        $row['dt'] = get_default_date($row['a_time']);
+        $row['audit_dt'] = get_default_date($row['audit_time']);
         return out_pc(200,$row);
     }
 
