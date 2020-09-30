@@ -23,49 +23,6 @@ class OrderCtrl extends BaseCtrl{
 
         $this->display("/finance/order_list.html");
     }
-    //退款
-    function refund(){
-        $id = _g("id");
-        if(!$id)
-            $this->notice("id null");
-
-        $order = OrderModel::db()->getById($id);
-        if(!$order){
-            $this->notice("id not in db");
-        }
-
-//        if($order['status'] != OrderModel::STATUS_REFUND){
-//            $this->notice("只有 用户 申请退款 ，才能进此页面");
-//        }
-
-        if(_g("opt")) {
-            $status = _g("status");
-            $memo = _g("memo");
-            if (!$status)
-                $this->notice("status null");
-
-            $service = new OrderService();
-            $payService = new PayService();
-            if($status == 1){
-                $wxPayRefundBack = $payService->wxPayRefund($id);
-                if($wxPayRefundBack['code'] != 200){
-                    $this->notice("微信接口请求退款异常,".$wxPayRefundBack['msg']);
-                }
-                $service->upStatus($id,OrderModel::STATUS_REFUND_FINISH,array('refund_memo'=>$memo));
-                var_dump($wxPayRefundBack);exit;
-            }else{
-                $service->upStatus($id,OrderModel::STATUS_REFUND_REJECT,array('refund_memo'=>$memo));
-            }
-
-            $this->ok("成功");
-        }
-
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
-
-        $this->addHookJS("/finance/order_refund_hook.html");
-        $this->display("/finance/order_refund.html");
-    }
 
     function add(){
         if(_g("opt")){
@@ -202,10 +159,9 @@ class OrderCtrl extends BaseCtrl{
                 }
 
                 $refundBnt = "";
-                if($v['status'] == OrderModel::STATUS_REFUND){
-//                    $refundBnt = '<button class="btn btn-xs default green refund btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-link"></i>退款审批</button>';
-                    $refundBnt =  '<a href="/finance/no/order/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
-                }
+//                if($v['status'] == OrderModel::STATUS_REFUND){
+//                    $refundBnt =  '<a href="/finance/no/order/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
+//                }
 
 
                 $shareUserName = "";

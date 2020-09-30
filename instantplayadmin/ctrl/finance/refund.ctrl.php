@@ -36,14 +36,14 @@ class RefundCtrl extends BaseCtrl{
         if(!$id)
             $this->notice("id null");
 
-        $order = OrderModel::db()->getById($id);
-        if(!$order){
+        $info = OrderRefundModel::db()->getById($id);
+        if(!$info){
             $this->notice("id not in db");
         }
 
-//        if($order['status'] != OrderModel::STATUS_REFUND){
-//            $this->notice("只有 用户 申请退款 ，才能进此页面");
-//        }
+        if($info['status'] != OrderService::REFUND_STATS_APPLY){
+            $this->notice("只有 记录为 ：申请退款状态 ，才能进此页面");
+        }
 
         if(_g("opt")) {
             $status = _g("status");
@@ -53,17 +53,19 @@ class RefundCtrl extends BaseCtrl{
 
             $service = new OrderService();
             $payService = new PayService();
-            if($status == 1){
+//            $order = OrderModel::db()->getById($info['oid']);
+            if($status == 1){//通过
                 $wxPayRefundBack = $payService->wxPayRefund($id);
                 if($wxPayRefundBack['code'] != 200){
                     $this->notice("微信接口请求退款异常,".$wxPayRefundBack['msg']);
                 }
-                $service->upStatus($id,OrderModel::STATUS_REFUND_FINISH,array('refund_memo'=>$memo,'audit_time'=>time(),'audit_admin_id'=>$this->_adminid));
-                var_dump($wxPayRefundBack);exit;
-            }else{
-                $service->upStatus($id,OrderModel::STATUS_REFUND_REJECT,array('refund_memo'=>$memo,'audit_time'=>time(),'audit_admin_id'=>$this->_adminid));
+                //更新订单状态为  退款完成
+                $service->upStatus($info['oid'],OrderModel::STATUS_REFUND_FINISH,array('refund_memo'=>$memo));
+            }else{//拒绝
+                //回滚订单状态
+                $service->refundCancelAndRollbackStatus($info['oid'],$info['lock_order_status']);
             }
-
+            OrderRefundModel::db()->upById($id,array('memo'=>$memo,'audit_time'=>time(),'audit_admin_id'=>$this->_adminid,'status'=>$status));
             $this->ok("成功");
         }
 
@@ -224,6 +226,11 @@ class RefundCtrl extends BaseCtrl{
                     $img = "<img src='".get_refund_url( $v['pic'])."' width=50 height=50 />";
                 }
 
+                $refundBnt = "";
+                if($v['status'] == OrderService::REFUND_STATS_APPLY  ){
+                    $refundBnt =  '<a href="/finance/no/refund/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -242,7 +249,7 @@ class RefundCtrl extends BaseCtrl{
                     $img,
                     UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
                     get_default_date($v['a_time']),
-                    '',
+                    $refundBnt,
 //                    '<a target="_blank"  href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
 //                    '<a target="_blank"  href="/finance/no/order/edit/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 编辑 </a>';
                 );
