@@ -439,7 +439,7 @@ class OrderService{
         }
 
         $allowStatus = array(
-            OrderModel::STATUS_WAIT_PAY,OrderModel::STATUS_SIGN_IN,OrderModel::STATUS_TRANSPORT
+            OrderModel::STATUS_SIGN_IN,OrderModel::STATUS_TRANSPORT,OrderModel::STATUS_PAYED,
         );
         if(!in_array($orders['status'],$allowStatus)){
             return out_pc(8353);
