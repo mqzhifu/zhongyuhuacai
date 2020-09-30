@@ -219,6 +219,11 @@ class RefundCtrl extends BaseCtrl{
 //                    $shareUserName = UserModel::db()->getOneFieldValueById($v['share_uid'],'nickname',"--");
 //                }
 
+                $img = "";
+                if($v['pic']){
+                    $img = "<img src='".get_refund_url( $v['pic'])."' width=50 height=50 />";
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -234,7 +239,7 @@ class RefundCtrl extends BaseCtrl{
 //                    get_default_date($v['pay_time']),
                     $v['mobile'],
                    fenToYuan( $v['price']),
-                   "<img src='".get_refund_url( $v['pic'])."' width=50 height=50 />",
+                    $img,
                     UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
                     get_default_date($v['a_time']),
                     '',
