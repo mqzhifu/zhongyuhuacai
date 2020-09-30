@@ -59,6 +59,15 @@ function uidToOpenId(){
 
 }
 
+function constArrCoverOptionsHtml($constArr){
+    $html = "";
+    foreach ($constArr as $k=>$v){
+        $html .= "<option value='$k'>$v</option>";
+    }
+
+    return $html;
+}
+
 function yuanToFen($price,$isRound = 1){
     if($isRound){
         $price = round($price,2);
