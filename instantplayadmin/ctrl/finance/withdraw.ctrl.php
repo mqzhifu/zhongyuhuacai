@@ -170,7 +170,7 @@ class WithdrawCtrl extends BaseCtrl{
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $username,
-                    $v['price'],
+                   fenToYuan( $v['price']),
                     $v['orders_ids'],
                     get_default_date($v['a_time']),
                     WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['status']],
@@ -282,7 +282,7 @@ class WithdrawCtrl extends BaseCtrl{
             'statusDescRadioHtml'=>$statusDescRadioHtml,
             "id"=>$aid,
             "oids"=>$withdraw['orders_ids'],
-            "price"=>$withdraw['price'],
+            "price"=>fenToYuan($withdraw['price']),
         );
 
         $html = $this->_st->compile("/finance/withdraw_upstatus.html",$data);
