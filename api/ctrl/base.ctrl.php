@@ -34,7 +34,7 @@ class BaseCtrl {
 //        //实例化 用户 服务 控制器
 
         $this->initService();
-        $this->trace();
+        $this->tracing();
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){
@@ -82,8 +82,7 @@ class BaseCtrl {
 //        $this->taskService->addUserDailyTask($this->uid);
     }
 
-    function trace($localEndpoint = 'baseService',$remoteEndpoint = 'userService'){
-
+    function tracing($localEndpoint = 'baseService',$remoteEndpoint = 'userService'){
         TraceLib::getInc()->tracing($localEndpoint,$remoteEndpoint);
         exit;
     }

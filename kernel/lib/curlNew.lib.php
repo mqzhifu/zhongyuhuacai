@@ -125,7 +125,8 @@ class CurlNewLib{
         }
         //设置头信息
         if ($this->_requestHeader) {
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $this->_requestHeader);
+            $requestNormalHeader = $this->httpHeaderArrCoverNormal($this->_requestHeader);
+            curl_setopt($curl, CURLOPT_HTTPHEADER,$requestNormalHeader);
         }
         //连接超时
         if($this->_connectTimeout){
@@ -172,6 +173,15 @@ class CurlNewLib{
         curl_close($curl);
 
         return $this->responseBody;
+    }
+    //将头为arr 的转换为  : 分隔
+    function httpHeaderArrCoverNormal($header){
+        $rs = null;
+        foreach ($header as $k=>$v){
+            $rs[] = $k . ":" .$v;
+        }
+
+        return $rs;
     }
 
     function httpHeaderCoverArr($header){

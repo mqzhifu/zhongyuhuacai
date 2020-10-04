@@ -62,12 +62,12 @@ class TraceLib{
 //            return false;
 //        }
 
-        $ZipkinTraceHeader = $this->getZipkinTraceHeader($localEndpoint,$remoteEndpoint);
-        $data = array("a"=>2,'c'=>333);
-        CurlNewLib::getInc()->setRequestHeader($ZipkinTraceHeader);
+        $ZipkinTraceData = $this->getZipkinTraceHeader($localEndpoint,$remoteEndpoint);
+//        $data = array("a"=>2,'c'=>333);
+//        CurlNewLib::getInc()->setRequestHeader($ZipkinTraceData);
+        $data = $ZipkinTraceData;
         $host_uri = "http://127.0.0.1:9411/api/v2/spans";
         CurlNewLib::getInc()->post($host_uri,$data);
-
         $rs = CurlNewLib::getInc()->getResponse();
         var_dump($rs);
         exit;
