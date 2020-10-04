@@ -83,6 +83,7 @@ class BaseCtrl {
     }
 
     function trace($localEndpoint = 'baseService',$remoteEndpoint = 'userService'){
+
         TraceLib::getInc()->tracing($localEndpoint,$remoteEndpoint);
         exit;
     }

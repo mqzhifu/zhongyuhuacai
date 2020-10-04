@@ -58,17 +58,19 @@ class TraceLib{
     }
 
     function tracing($localEndpoint,$remoteEndpoint){
-        if(!$this->check()){
-            return false;
-        }
+//        if(!$this->check()){
+//            return false;
+//        }
+
         $ZipkinTraceHeader = $this->getZipkinTraceHeader($localEndpoint,$remoteEndpoint);
-        $curl = new CurlNewLib();
         $data = array("a"=>2,'c'=>333);
-//        $header = array("service_name"=>APP_NAME);
-//        $header = array_merge($header,$ZipkinTraceHeader);
-        $curl->setMHttpHeader($ZipkinTraceHeader);
-        $url = "http://127.0.0.1:9411/api/v2/spans";
-        $curl->post($url,$data);
+        CurlNewLib::getInc()->setRequestHeader($ZipkinTraceHeader);
+        $host_uri = "http://127.0.0.1:9411/api/v2/spans";
+        CurlNewLib::getInc()->post($host_uri,$data);
+
+        $rs = CurlNewLib::getInc()->getResponse();
+        var_dump($rs);
+        exit;
     }
 
     function getZipkinTraceHeader($localEndpoint,$remoteEndpoint){
