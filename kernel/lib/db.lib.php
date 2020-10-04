@@ -348,6 +348,7 @@ class DbLib{
             G('queryEndTime');
             $db_sql_cnt[] =  $sql.' [ RunTime:'.G('queryStartTime','queryEndTime',6).'s ]';
             LogLib::inc()->mysql([ $sql,' [ '.G('queryStartTime','queryEndTime',6).'s ]']);
+            LogLib::inc()->debug(["sql", $sql,' [ '.G('queryStartTime','queryEndTime',6).'s ]']);
 //        }
     }
     //验证数据库配置文件信息

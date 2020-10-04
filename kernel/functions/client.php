@@ -13,16 +13,15 @@ function get_client_info()
 }
 
 function get_web_client_data(){
-    // 这种情况，不太可能出现，可能是 后台脚本，也可能是爬虫
-//    if ( !isset($_SERVER['HTTP_HOST']) || empty($_SERVER['HTTP_HOST'])  ){
-//        return -1;
-//    }
-    //静态资源的请求，就没必要记录了
-//    if(STATIC_URL == $_SERVER['HTTP_HOST']){
-//        return -2;
-//    }
-
     $ip = get_client_ip();
+    //  后台脚本，也可能是爬虫
+    if ( !isset($_SERVER['HTTP_HOST']) || empty($_SERVER['HTTP_HOST'])  ){
+        return array("ip"=>$ip,"HTTP_HOST is empty");
+    }
+    //静态资源的请求，就没必要记录了
+    if(STATIC_URL == $_SERVER['HTTP_HOST']){
+        return array("ip"=>$ip,"HTTP_HOST is 'STATIC_URL'");
+    }
 
     $is_spider = 0;//是否为爬虫
     $os = "";//操作系统
@@ -109,7 +108,7 @@ function get_web_client_data(){
 //                $f_channel = $data[13];
 //            }
         }elseif($api_type == 2){//项目2 - 微信 小程序
-            LogLib::inc()->debug(["client data ori:",$_SERVER]);
+//            LogLib::inc()->debug(["client data ori:",$_SERVER]);
 
             if($data){
                 $data = explode(",",$data);
@@ -187,7 +186,7 @@ function get_web_client_data(){
         'wx_little_sdk_version'=>$wxLittleSdkVersion,
     );
 
-    LogLib::inc()->debug(['client info :',$info]);
+//    LogLib::inc()->debug(['client info :',$info]);
 
     return $info;
 

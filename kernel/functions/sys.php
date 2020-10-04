@@ -275,6 +275,7 @@ function out_ajax($code = 500,$msg = ""){
     }
 
     LogLib::inc()->debug("respone code:$code");
+    LogLib::inc()->response(["code",$code,'msg',$msg]);
     echo json_encode(array('code'=>$code,'msg'=>$msg));
     exit;
 }

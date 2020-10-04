@@ -52,14 +52,30 @@ class LogLib {
         $this->write($dir,$content);
     }
 
+    function get_br()
+    {
+        $os = $this->get_os();
+        $echoMsg = "";
+        if($os == "WIN"){
+            $echoMsg .= "\r\n";
+        }else{
+            $echoMsg .= "\n";
+        }
 
+        return $echoMsg;
+    }
+
+    function get_os(){
+        $os = strtoupper(substr(PHP_OS,0,3));
+        return $os;
+    }
 
     //根据时间，HASH分散存储
     //实际上用了seasLog扩展，基本没用了这个方法
     function write($dir,$content){
         $str = "";
         if(is_array($content)){
-            $str = json_encode($content);
+            $str = json_encode($content,JSON_UNESCAPED_UNICODE);
         }elseif(is_object($content)){
             $str = serialize($content);
         }else{
@@ -70,7 +86,7 @@ class LogLib {
             mkdir($dir, 0777, true);
         }
 
-        $br = get_br();
+        $br = $this->get_br();
         if($this->_hashType){
             if(1 == $this->_hashType){
                 $file = $dir .DS . date("YmdH");
@@ -87,11 +103,15 @@ class LogLib {
             $file = $dir;
         }
 
-
+        if(!class_exists("TraceLib")){//无法做到在，项目最最开始的地方即用此类，加个判断吧先
+            include_once KERNEL_DIR .DS ."lib/trace.lib.php";
+        }
+        $traceId =  TraceLib::getInc()->getTraceId();
+        $requestId =  TraceLib::getInc()->getRequestId();
 
         $file .= $this->_extName;
         $date = "[".date("Y-m-d H:i:s").']';
-        $content =$date. " [pid:".getmypid(). "]  ".$str.$br;
+        $content =$date. " [pid : ".getmypid(). " , traceId : $traceId , requestId : $requestId]  ".$str.$br;
 
         $fd = fopen($file,"a+");
         fwrite($fd,$content);

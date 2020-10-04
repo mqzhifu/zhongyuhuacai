@@ -17,7 +17,8 @@ class IndexCtrl extends BaseCtrl  {
 
 //        $this->checkDataAndFormat($data);
 
-        return $this->out(200,"ok");
+        out_ajax(200,"ok");
+//        return $this->out(200,"ok");
     }
 
     //根据用户输入的一段字符串，转换成相关的地址

@@ -2,6 +2,7 @@
 
 //初始分有为2个部分，1公共部分，专属部分
 //专属部分：1 WB端，2指令行端，3 API调用
+
 class Z{
 
     static function run(){
@@ -10,10 +11,11 @@ class Z{
     }
 
 	static function init(){
-        //包含项目配置文件信息 ENV
+        //包含项目配置文件信息  设置ENV
         include_once BASE_DIR ."/". APP_NAME."/env.php";
         //所有框架需要的 常量
         ConfigCenter::get("kernel","constant");
+        include_once KERNEL_DIR .DS ."lib/log.lib.php";
 
         ConfigCenter::get(KERNEL_NAME,"err_code");//kernel 错误码
         ConfigCenter::get(KERNEL_NAME,"app");//kernel 应用程序配置信息
@@ -27,13 +29,7 @@ class Z{
         Z::checkConst();
         Z::checkExt();
 
-
-        include_once FUNC_DIR.DS.'sys.php';//公共函数 - 系统
-		include_once FUNC_DIR.DS.'datetime.php';//公共函数 - 时间日期
-		include_once FUNC_DIR.DS.'path_file.php';//公共函数 -
-		include_once FUNC_DIR.DS.'str_arr.php';//公共函数 - 字符串
-        include_once FUNC_DIR.DS.'client.php';//公共函数 - 客户端信息
-        include_once FUNC_DIR.DS.'url.php';//公共函数 - 客户端信息
+        ConfigCenter::includeKernelFuncFiles();
 
         //框架开始执行时间-开始时间
 		$GLOBALS['start_time'] = microtime(TRUE);
@@ -49,6 +45,7 @@ class Z{
 			ini_set('display_errors', 0);
 			error_reporting(0);
 		}
+        LogLib::inc()->debug(["init class:","autoload","fatalShutdown","appError","throwCatch"]);
 		//类自动加载函数
 		spl_autoload_register('autoload');
 		//捕获-fatal脚本停止/脚本结束钩子 fatal error
@@ -59,6 +56,7 @@ class Z{
  		set_exception_handler(array('ExceptionFrameLib','throwCatch'));
 
 		//===========内存信息==================
+        LogLib::inc()->debug("init memory : ");
 		define('MEMORY_LIMIT_ON',function_exists('memory_get_usage'));
 		if(MEMORY_LIMIT_ON) $GLOBALS['start_use_mems'] = memory_get_usage();
 		$memorylimit = @ini_get('memory_limit');
@@ -72,9 +70,21 @@ class Z{
         ConfigCenter::getEnv(APP_NAME,"redis_".LANG);
 
         ConfigCenter::get(APP_NAME,"constant");
-        //初始化  traceId  requestId
-        TraceLib::getInc()->getRequestId(32);
-        TraceLib::getInc()->getTraceId(32);
+        //初始化 zipkin  traceId  requestId
+        LogLib::inc()->debug("init zipkin : ");
+        if(defined("OPEN_TRACE") && OPEN_TRACE){
+            ConfigCenter::getEnv(APP_NAME,"zipkin");
+            TraceLib::getInc()->setHost($GLOBALS[APP_NAME]['zipkin']['host']);
+            TraceLib::getInc()->setUri($GLOBALS[APP_NAME]['zipkin']['uri']);
+            TraceLib::getInc()->setPort($GLOBALS[APP_NAME]['zipkin']['port']);
+        }
+
+        LogLib::inc()->debug(["client_info",get_client_info()]);
+
+        LogLib::inc()->debug("kernel::Z init finish.");
+        //此处不用初始化了，框架最初调用LOGLIB 的时候，已经初始化过了
+//        TraceLib::getInc()->getRequestId(32);
+//        TraceLib::getInc()->getTraceId(32);
 	}
 	//指令行方式运行RUN_ENV
 	static function runConsoleApp(){
@@ -101,6 +111,7 @@ class Z{
     }
 	//web方式进行访问
 	static function runWebApp(){
+        LogLib::inc()->debug("kernel runWebApp start : ");
         self::checkWebConst();
 
         set_time_limit(TIME_LIMIT);
@@ -109,6 +120,7 @@ class Z{
 			if(ini_get('session.save_handler') != 'user')
 				ini_set('session.save_handler', 'user');
 		}else{
+            LogLib::inc()->debug(["init session_store_dir",APP_SESS_STORE_DIR]);
             session_save_path(APP_SESS_STORE_DIR);
             if(!file_exists(APP_SESS_STORE_DIR)) {
                 mkdir(APP_SESS_STORE_DIR, 0777, true);
@@ -127,16 +139,17 @@ class Z{
 //		//请求文件的名称
 //		define('SCRIPT_NAME',$script_file);
 		//初始化SESSION
+        LogLib::inc()->debug(["init session_start"]);
 		new SessionLib();
 		//初始化路由
         $router = new RouterLib();
 
         //获取redis 实例，并缓存到容器里.主要是给kernel 网关 过滤数据
         $redisConfig = ConfigCenter::getEnv(KERNEL_NAME,"redis_".LANG)['zhongyuhuacai'];
+        LogLib::inc()->debug(["init kernel redis",$redisConfig]);
         $kernelRedisObj = new RedisPHPLib($redisConfig);
+        LogLib::inc()->debug(["init kernel redisOptKey"]);
         RedisOptLib::init($kernelRedisObj);
-//        var_dump(RedisOptLib::getToken(1));exit;
-//        ContainerLib::set("kernelRedisObj",$kernelRedisObj);
 
         try{
             $rs = $router->check();
@@ -144,7 +157,6 @@ class Z{
                 $msg = $rs['code'] . "-".$rs['msg'];
                 ExceptionFrameLib::throwCatch($msg,'dispath');
             }
-
 
             $returnData = $router->action();
             if(OUT_TYPE == 'json'){
@@ -210,6 +222,7 @@ class Z{
     }
     //初始化的常量值，必埴项检查
 	static function checkConst(){
+        LogLib::inc()->debug(["checkConst"]);
         if (!defined('KERNEL_DIR'))
             self::outError(9118);
 
@@ -276,6 +289,7 @@ class Z{
     }
 
     static function checkExt(){
+        LogLib::inc()->debug(["checkExt"]);
 	    $arr = array('gd','mysqli','json','mbstring','openssl','redis','xml','zip','zlib','curl','dom','json','reflection','spl','pcre',
 //            'seaslog',
 //            'swoole',
@@ -298,7 +312,24 @@ class Z{
 class ConfigCenter{
     static $_dir =BASE_DIR ."/configcenter";
     static $_configPool = null;
+
+    static function checkDependClassImport(){
+        if(class_exists("LogLib")){//无法做到在，项目最最开始的地方即用此类，加个判断吧先
+            return 1;
+        }
+
+        return 0;
+    }
+
+    static function debugLog($appName ,$file,$func){
+        if(self::checkDependClassImport()){
+            LogLib::inc()->debug(["ConfigCenter->$func()",$appName,$file]);
+        }
+    }
+
     static function get($appName ,$file){
+        self::debugLog($appName ,$file,'get');
+
         if(isset(self::$_configPool[$appName][$file])  && self::$_configPool[$appName][$file] ){
             return self::$_configPool[$appName][$file];
         }
@@ -309,6 +340,8 @@ class ConfigCenter{
     }
 
     static function getEnv($appName ,$file){
+        self::debugLog($appName ,$file,"getEnv");
+
         if(isset(self::$_configPool[$appName][$file])  && self::$_configPool[$appName][$file] ){
             return self::$_configPool[$appName][$file];
         }
@@ -316,6 +349,20 @@ class ConfigCenter{
         self::$_configPool[$appName][$file] = include_once $dir;
         $GLOBALS[$appName][$file] = self::$_configPool[$appName][$file];
         return self::$_configPool[$appName][$file];
+    }
+    //$funcName 为空，代表引入全部
+    static function includeKernelFuncFiles($funcName = "all"){
+        self::debugLog("includeKernelFuncFiles","kernel" ,$funcName);
+        if(!$funcName || $funcName == "all"){
+            include_once FUNC_DIR.DS.'sys.php';//公共函数 - 系统
+            include_once FUNC_DIR.DS.'datetime.php';//公共函数 - 时间日期
+            include_once FUNC_DIR.DS.'path_file.php';//公共函数 -
+            include_once FUNC_DIR.DS.'str_arr.php';//公共函数 - 字符串
+            include_once FUNC_DIR.DS.'client.php';//公共函数 - 客户端信息
+            include_once FUNC_DIR.DS.'url.php';//公共函数 - 客户端信息
+        }else{
+            include_once FUNC_DIR.DS .$funcName;
+        }
     }
 }
 

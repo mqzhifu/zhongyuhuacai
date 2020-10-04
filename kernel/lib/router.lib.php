@@ -7,9 +7,9 @@ class RouterLib{
     public $ac = null;
     public $app = null;
     public $para = null;
-    public $requestId = 0;
+    public $requestId = "";
     public $ctrlFilePath = "";
-
+    public $traceId = "";
     public $clientHeader = null;
 
 	function __construct($frame = null){
@@ -182,12 +182,15 @@ class RouterLib{
 	}
 
 	function action(){
-        $rid = RedisOptLib::getRequestId();
-        $this->requestId = $rid;
-        $this->para['request_id'] = $rid;
+//        $rid = RedisOptLib::getRequestId();
+        //先不用redis生成ID
+        $this->requestId = TraceLib::getInc()->getRequestId();
+        $this->traceId = TraceLib::getInc()->getTraceId();
+        $this->para['request_id'] = TraceLib::getInc()->getRequestId();
+        $this->para['trace_id'] = TraceLib::getInc()->getTraceId();
 
-        $this->logRequest();
-
+        LogLib::inc()->access($this->para);
+        LogLib::inc()->debug(["router->action()","para",$this->para]);
 
         $ctrl = $this->ctrl .C_CLASS;
         $class = new $ctrl($this->para);
@@ -196,6 +199,9 @@ class RouterLib{
 //        $me = $reflection->getMethod($this->ac);
 //        //调用实际执行方法
 //        $rs = $me->invokeArgs($class,'aaa');
+
+
+
         $rs = call_user_func(array($class,$this->ac),$this->para);
         return $rs;
     }

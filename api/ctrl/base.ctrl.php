@@ -21,7 +21,8 @@ class BaseCtrl {
     public $shareService = null;
 
     function __construct($request){
-        LogLib::inc()->debug(['php_server',$_SERVER]);
+        $prefix = "BaseCtrl->__construct";
+        LogLib::inc()->debug([$prefix,$request]);
         $this->request = $request;
 //        $this->checkSign();
 
@@ -34,12 +35,14 @@ class BaseCtrl {
 //        //实例化 用户 服务 控制器
 
         $this->initService();
-        $this->tracing();
+//        $this->tracing();
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){
             out_ajax ($tokenRs['code'],$tokenRs['msg']);
         }
+
+        LogLib::inc()->debug(['uinfo', $this->uinfo]);
 
 //        if(arrKeyIssetAndExist($this->uinfo,'id')){
 //            if(RUN_ENV != 'WEBSOCKET'){
@@ -74,8 +77,8 @@ class BaseCtrl {
             'uid'=>$this->uid,
             'client_info'=>json_encode(get_client_info()),
             'ip_parser'=>json_encode($ipBaiduParserAddress,JSON_UNESCAPED_UNICODE),
-            'request_id'=>TraceLib::getInc()->getRequestId(),
-            'trace_id'=>TraceLib::getInc()->getTraceId(),
+            'request_id'=>$request['request_id'],
+            'trace_id'=>$request['trace_id'],
         );
         UserLogModel::db()->add($data);
 //        //每日 任务初始化
@@ -84,28 +87,27 @@ class BaseCtrl {
 
     function tracing($localEndpoint = 'baseService',$remoteEndpoint = 'userService'){
         TraceLib::getInc()->tracing($localEndpoint,$remoteEndpoint);
-        exit;
     }
 
-    function checkSign(){
-        $sign = _g('sign');
-        if(!$sign){
-            return $this->out(3000);
-        }
-
-        $checkSign = TokenLib::checkSign($request , $sign,$this->app['apiSecret']);
-        if(!$checkSign){
-            return $this->out(3001);
-        }
-
-    }
+//    function checkSign(){
+//        $sign = _g('sign');
+//        if(!$sign){
+//            return $this->out(3000);
+//        }
+//
+//        $checkSign = TokenLib::checkSign($request , $sign,$this->app['apiSecret']);
+//        if(!$checkSign){
+//            return $this->out(3001);
+//        }
+//
+//    }
 
     function initArea(){
         $ip = get_client_ip();
         $ipBaiduParserAddress = RedisOptLib::getBaiduIpParser($ip);
+        LogLib::inc()->debug(["initArea","ip",$ip,"getBaiduIpParser",$ipBaiduParserAddress]);
         if(!$ipBaiduParserAddress){
             $ipBaiduParserAddress = AreaLib::getByIp($ip);
-            LogLib::inc()->debug($ip);
             LogLib::inc()->debug($ipBaiduParserAddress);
             RedisOptLib::setBaiduIpParser($ip,$ipBaiduParserAddress);
         }
@@ -113,6 +115,8 @@ class BaseCtrl {
     }
 
     function initService(){
+        LogLib::inc()->debug(["init new service"]);
+
         $this->userService = new UserService();
         $this->systemService = new SystemService();
         $this->productService = new ProductService();
@@ -200,6 +204,7 @@ class BaseCtrl {
     }
     //判断登陆，初始化用户信息
     function initUserLoginInfoByToken(){
+        LogLib::inc()->debug(["initUserLoginInfoByToken"]);
 //        if(RUN_ENV == "WEB"){
             $token = _g('token');
             if(!$token)
@@ -212,6 +217,7 @@ class BaseCtrl {
 
             $this->uinfo = $rs['msg'];
             $this->uid =  $rs['msg']['id'];
+
 //        }
 //        elseif(RUN_ENV == "WEBSOCKET"){
 //            if($GLOBALS['uid_fd_table']->exist($this->clientFrame->fd)){

@@ -92,4 +92,5 @@ define('APP_SHELL_DIR', APP_DIR . DS . "shell");
 
 //链路追踪
 define("OPEN_TRACE",1);
+
 return 1;

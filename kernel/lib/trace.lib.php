@@ -1,9 +1,14 @@
 <?php
+//这行语句，是无法避免，在项目最最开始的时候，引用此文件
+include_once KERNEL_DIR .DS ."functions" . DS ."str_arr.php";
 class TraceLib{
     static $_inc = null;
-
     private $_traceId = "";
     private $_requestId = "";
+
+    private $_host = "";
+    private $_uri = "";
+    private $_port = "";
     static function getInc(){
         if(self::$_inc){
             return self::$_inc;
@@ -22,6 +27,23 @@ class TraceLib{
         }
     }
 
+    function setHost($host){
+        $this->_host = $host;
+    }
+
+    function setUri($uri){
+        $this->_uri = $uri;
+    }
+
+    function setPort($port){
+        $this->_port = $port;
+    }
+
+    function getUrl(){
+//        "http://127.0.0.1:9411/api/v2/spans";
+        return  "http://".$this->_host .":" .$this->_port . "" . $this->_uri;
+    }
+
     function createTraceId($bit){
         return get_rand_uniq_str($bit);
     }
@@ -31,7 +53,7 @@ class TraceLib{
     }
 
     function createSpanId(){
-        return get_rand_uniq_str(32);
+        return get_rand_uniq_str(14);
     }
 
     function getRequestId(){
@@ -58,22 +80,19 @@ class TraceLib{
     }
 
     function tracing($localEndpoint,$remoteEndpoint){
-//        if(!$this->check()){
-//            return false;
-//        }
+        if(!$this->check()){
+            return false;
+        }
 
-        $ZipkinTraceData = $this->getZipkinTraceHeader($localEndpoint,$remoteEndpoint);
-//        $data = array("a"=>2,'c'=>333);
-//        CurlNewLib::getInc()->setRequestHeader($ZipkinTraceData);
-        $data = $ZipkinTraceData;
-        $host_uri = "http://127.0.0.1:9411/api/v2/spans";
-        CurlNewLib::getInc()->post($host_uri,$data);
-        $rs = CurlNewLib::getInc()->getResponse();
-        var_dump($rs);
-        exit;
+        $zipKinTraceData = $this->getZipkinTraceData($localEndpoint,$remoteEndpoint);
+        $host_uri = $this->getUrl();
+        CurlNewLib::getInc()->post($host_uri,json_encode($zipKinTraceData));
+        CurlNewLib::getInc()->getResponse();
+//        var_dump($rs);
+//        exit;
     }
 
-    function getZipkinTraceHeader($localEndpoint,$remoteEndpoint){
+    function getZipkinTraceData($localEndpoint,$remoteEndpoint){
 //        $curl = new CurlNewLib();
 //        $headers = $curl->getHttpDiyHeaders();
 //
