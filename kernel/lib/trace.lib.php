@@ -22,8 +22,8 @@ class TraceLib{
         }
     }
 
-    function createTraceId(){
-        return get_rand_uniq_str();
+    function createTraceId($bit){
+        return get_rand_uniq_str($bit);
     }
 
     function createRequestId(){
@@ -31,7 +31,7 @@ class TraceLib{
     }
 
     function createSpanId(){
-        return get_rand_uniq_str();
+        return get_rand_uniq_str(32);
     }
 
     function getRequestId(){
@@ -43,7 +43,7 @@ class TraceLib{
         return $this->_requestId;
     }
 
-    public function getTraceId(){
+    public function getTraceId($bit = 32){
         if($this->_traceId){
             return $this->_traceId;
         }
@@ -51,7 +51,7 @@ class TraceLib{
         if (isset($_SERVER) && isset($_SERVER['HTTP_X_TRACE_ID'])) {
             $traceId = $_SERVER['HTTP_X_TRACE_ID'];
         } else{
-            $traceId = $this->createTraceId();
+            $traceId = $this->createTraceId($bit);
         }
         $this->_traceId = $traceId;
         return $this->_traceId;
@@ -90,7 +90,7 @@ class TraceLib{
 
         $spanId = $this->createSpanId();
         $traceId = $this->getTraceId();
-
+        var_dump($traceId);exit;
         $now = time();
         $s_time = $now . "000000";
         $data = array(

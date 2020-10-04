@@ -89,9 +89,35 @@ function fenToYuan($price,$isRound = 1){
 function get_order_rand_no(){
     return rand(100000,999999).date("YmdHis").rand(100000,999999);
 }
+//获取一个随便-唯一数
+//14 32 64
+function get_rand_uniq_str($bit = 14){
+    list($micro, $second) = explode(' ', microtime());
+    //秒是10位，毫秒是4位
+    $time = $second . "". round( $micro * 10000);
+    if(strlen($time) <14){
+        $d = 14 - strlen($time);
+        for($i = 0;$i<$d ;$i++){
+            $time .= "0";
+        }
+    }
 
-function get_rand_uniq_str(){
-    return uniqid(time());
+    if($bit == 32){
+        //还少18位
+        $rand = rand(10000000,99999999);
+        $m = substr(md5($rand),0,10) ;
+        $time .= "". $rand .  $m;
+    }
+
+    if($bit ==64){
+        //还少18位
+        $rand = rand(10000000,99999999);
+        $m = md5($rand);
+        $u = substr(uniqid(time()),0,12);
+        $time .= $rand . $m . $u;
+    }
+
+    return $time;
 }
 
 //uid 转换成一个特殊的字符，可以decode ，算是一层加密吧

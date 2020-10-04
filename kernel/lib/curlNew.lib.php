@@ -64,12 +64,13 @@ class CurlNewLib{
     public function setConnectTimeout($second){
         $this->_connectTimeout = $second;
     }
-    public function post($host_uri = '',array $data = []){
+    //data : 可以是数组  也可以是  json字符串
+    public function post($host_uri = '',$data = ""){
         $this->requestType = 'POST';
         return $this->send($host_uri, $data);
     }
-
-    public function get($host_uri,array $data = []){
+    //data : 可以是数组  也可以是  json字符串
+    public function get($host_uri,  $data = ""){
         $this->requestType =  'GET';
         return $this->send($host_uri, $data);
     }

@@ -73,8 +73,8 @@ class Z{
 
         ConfigCenter::get(APP_NAME,"constant");
         //初始化  traceId  requestId
-        TraceLib::getInc()->getRequestId();
-        TraceLib::getInc()->getTraceId();
+        TraceLib::getInc()->getRequestId(32);
+        TraceLib::getInc()->getTraceId(32);
 	}
 	//指令行方式运行RUN_ENV
 	static function runConsoleApp(){
