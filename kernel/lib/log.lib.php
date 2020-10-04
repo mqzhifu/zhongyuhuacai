@@ -110,8 +110,9 @@ class LogLib {
         $requestId =  TraceLib::getInc()->getRequestId();
 
         $file .= $this->_extName;
-        $date = "[".date("Y-m-d H:i:s").']';
-        $content =$date. " [pid : ".getmypid(). " , traceId : $traceId , requestId : $requestId]  ".$str.$br;
+        $date = date("Y-m-d H:i:s");
+//        $content =" [ $date ,pid : ".getmypid(). " , tid : $traceId , rid : $requestId]  ".$str.$br;
+        $content =" [ $date , ".getmypid(). " , $traceId , $requestId ]  ".$str.$br;
 
         $fd = fopen($file,"a+");
         fwrite($fd,$content);
