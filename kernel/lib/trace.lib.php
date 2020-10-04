@@ -64,9 +64,9 @@ class TraceLib{
         $ZipkinTraceHeader = $this->getZipkinTraceHeader($localEndpoint,$remoteEndpoint);
         $curl = new CurlNewLib();
         $data = array("a"=>2,'c'=>333);
-        $header = array("service_name"=>APP_NAME);
-        $header = array_merge($header,$ZipkinTraceHeader);
-        $curl->setMHttpHeader($header);
+//        $header = array("service_name"=>APP_NAME);
+//        $header = array_merge($header,$ZipkinTraceHeader);
+        $curl->setMHttpHeader($ZipkinTraceHeader);
         $url = "http://127.0.0.1:9411/api/v2/spans";
         $curl->post($url,$data);
     }
@@ -83,6 +83,8 @@ class TraceLib{
 //        }
 //
 //        return $traceHeaders;
+
+        $serviceName = APP_NAME;
 
         $spanId = $this->createSpanId();
         $traceId = $this->getTraceId();
@@ -118,15 +120,16 @@ class TraceLib{
                     )
                 ),
                 "tags"=>array(
-                    "clnt/finagle.label"=>"#/io.l5d.fs/real_test_label",
-                    "clnt/finagle.version"=>"20.4.1",
-                    "http.req.host"=>"web",
-                    "http.req.method"=>"GET",
-                    "http.req.version"=>"HTTP/1.1",
-                    "http.rsp.content-type"=>"text/html; charset=UTF-8",
-                    "http.rsp.transfer-encoding"=>"chunked",
-                    "http.rsp.version"=>"HTTP/1.1",
-                    "http.uri"=>"/real_test_uri.php"
+//                    "clnt/finagle.label"=>"#/io.l5d.fs/real_test_label",
+//                    "clnt/finagle.version"=>"20.4.1",
+//                    "http.req.host"=>"web",
+//                    "http.req.method"=>"GET",
+//                    "http.req.version"=>"HTTP/1.1",
+//                    "http.rsp.content-type"=>"text/html; charset=UTF-8",
+//                    "http.rsp.transfer-encoding"=>"chunked",
+//                    "http.rsp.version"=>"HTTP/1.1",
+//                    "http.uri"=>"/real_test_uri.php"
+                    "service_name"=>$serviceName,
                 )
             ),
         );
