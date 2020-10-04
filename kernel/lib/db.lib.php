@@ -109,6 +109,8 @@ class DbLib{
             $config['port']
         );
 
+        LogLib::inc()->debug(["mysql connect",$config]);
+
         if ( !$connFD ){
             ExceptionFrameLib::throwCatch("connect db error:". mysqli_error($connFD) . " mysql_connect [connect db error]");
         }
