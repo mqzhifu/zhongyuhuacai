@@ -90,7 +90,6 @@ class TraceLib{
 
         $spanId = $this->createSpanId();
         $traceId = $this->getTraceId();
-        var_dump($traceId);exit;
         $now = time();
         $s_time = $now . "000000";
         $data = array(
