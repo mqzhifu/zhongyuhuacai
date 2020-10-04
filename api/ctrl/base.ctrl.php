@@ -2,10 +2,7 @@
 class BaseCtrl {
     public $uid = 0;
     public $uinfo = null;
-
     public $request = null;
-
-
     //微服务 类
     public $userService = null;
     public $productService =null;
@@ -22,6 +19,7 @@ class BaseCtrl {
     public $goodsService = null;
     public $cartService = null;
     public $shareService = null;
+
     function __construct($request){
         LogLib::inc()->debug(['php_server',$_SERVER]);
         $this->request = $request;
@@ -34,21 +32,9 @@ class BaseCtrl {
         ConfigCenter::get(APP_NAME,"rediskey");
 
 //        //实例化 用户 服务 控制器
-        $this->userService = new UserService();
-        $this->systemService = new SystemService();
-        $this->productService = new ProductService();
-        $this->orderService = new OrderService();
-        $this->uploadService = new UploadService();
-        $this->msgService = new MsgService();
-        $this->commentService =  new CommentService();
-        $this->upService = new UpService();
-        $this->collectService =  new CollectService();
-        $this->payService = new PayService();
-        $this->userAddressService = new UserAddressService();
-        $this->agentService = new AgentService();
-        $this->goodsService = new GoodsService();
-        $this->cartService = new CartService();
-        $this->shareService = new ShareService();
+
+        $this->initService();
+        $this->trace();
 
         $tokenRs = $this->initUserLoginInfoByToken();
         if($tokenRs['code'] != 200){
@@ -72,8 +58,6 @@ class BaseCtrl {
 //            $this->userService->setDayActiveUser($this->uid);
 //        }
 
-
-//        var_dump($this->uinfo);exit;
         //有些接口必须，得登陆后，才能访问
         $isLogin = $this->loginAPIExcept($request['ctrl'],$request['ac']);
         if($isLogin){
@@ -81,15 +65,8 @@ class BaseCtrl {
                 return out_ajax(5001);
             }
         }
-        $ip = get_client_ip();
-        $ipBaiduParserAddress = RedisOptLib::getBaiduIpParser($ip);
-        if(!$ipBaiduParserAddress){
-            $ipBaiduParserAddress = AreaLib::getByIp($ip);
-            LogLib::inc()->debug($ip);
-            LogLib::inc()->debug($ipBaiduParserAddress);
-            RedisOptLib::setBaiduIpParser($ip,$ipBaiduParserAddress);
-        }
 
+        $ipBaiduParserAddress = $this->initArea();
         $data = array(
             'a_time'=>time(),
             'ctrl'=>$request['ctrl'],
@@ -97,10 +74,17 @@ class BaseCtrl {
             'uid'=>$this->uid,
             'client_info'=>json_encode(get_client_info()),
             'ip_parser'=>json_encode($ipBaiduParserAddress,JSON_UNESCAPED_UNICODE),
+            'request_id'=>TraceLib::getInc()->getRequestId(),
+            'trace_id'=>TraceLib::getInc()->getTraceId(),
         );
         UserLogModel::db()->add($data);
 //        //每日 任务初始化
 //        $this->taskService->addUserDailyTask($this->uid);
+    }
+
+    function trace($localEndpoint = 'baseService',$remoteEndpoint = 'userService'){
+        TraceLib::getInc()->tracing($localEndpoint,$remoteEndpoint);
+        exit;
     }
 
     function checkSign(){
@@ -115,6 +99,37 @@ class BaseCtrl {
         }
 
     }
+
+    function initArea(){
+        $ip = get_client_ip();
+        $ipBaiduParserAddress = RedisOptLib::getBaiduIpParser($ip);
+        if(!$ipBaiduParserAddress){
+            $ipBaiduParserAddress = AreaLib::getByIp($ip);
+            LogLib::inc()->debug($ip);
+            LogLib::inc()->debug($ipBaiduParserAddress);
+            RedisOptLib::setBaiduIpParser($ip,$ipBaiduParserAddress);
+        }
+        return $ipBaiduParserAddress;
+    }
+
+    function initService(){
+        $this->userService = new UserService();
+        $this->systemService = new SystemService();
+        $this->productService = new ProductService();
+        $this->orderService = new OrderService();
+        $this->uploadService = new UploadService();
+        $this->msgService = new MsgService();
+        $this->commentService =  new CommentService();
+        $this->upService = new UpService();
+        $this->collectService =  new CollectService();
+        $this->payService = new PayService();
+        $this->userAddressService = new UserAddressService();
+        $this->agentService = new AgentService();
+        $this->goodsService = new GoodsService();
+        $this->cartService = new CartService();
+        $this->shareService = new ShareService();
+    }
+
     //返回的数据，1检查格式2如果弱类型要转移成前端想要的类型
     function checkDataAndFormat($data){
         $api = ConfigCenter::get(APP_NAME,"api");

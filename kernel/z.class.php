@@ -72,6 +72,9 @@ class Z{
         ConfigCenter::getEnv(APP_NAME,"redis_".LANG);
 
         ConfigCenter::get(APP_NAME,"constant");
+        //初始化  traceId  requestId
+        TraceLib::getInc()->getRequestId();
+        TraceLib::getInc()->getTraceId();
 	}
 	//指令行方式运行RUN_ENV
 	static function runConsoleApp(){

@@ -90,4 +90,6 @@ define('APP_SHELL_DIR', APP_DIR . DS . "shell");
 ////头像上传路径
 //defined('USER_AVATAR_IMG_UPLOAD') or define('USER_AVATAR_IMG_UPLOAD', BASE_DIR ."/www/" . USER_AVATAR_IMG_VIRTUAL);
 
+//链路追踪
+define("OPEN_TRACE",1);
 return 1;
