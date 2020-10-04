@@ -19,9 +19,10 @@ function get_web_client_data(){
         return array("ip"=>$ip,"HTTP_HOST is empty");
     }
     //静态资源的请求，就没必要记录了
-    if(STATIC_URL == $_SERVER['HTTP_HOST']){
-        return array("ip"=>$ip,"HTTP_HOST is 'STATIC_URL'");
-    }
+    //不过里先注释掉吧，因为微信小程序，静态资源也必须在同一个域名下
+//    if(STATIC_URL == $_SERVER['HTTP_HOST']){
+//        return array("ip"=>$ip,"HTTP_HOST is 'STATIC_URL'");
+//    }
 
     $is_spider = 0;//是否为爬虫
     $os = "";//操作系统
