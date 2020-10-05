@@ -6,7 +6,6 @@ class UserCtrl extends BaseCtrl{
         }
 
         $this->assign("areaProvinceModelOptionsHtml", AreaProvinceModel::getSelectOptionsHtml());
-
         $this->assign("typeOptions",UserModel::getTypeOptions());
         $this->assign("sexOptions", UserModel::getSexOptions());
         $this->assign("innerTypeOptions", UserModel::getInnerTypeOptions());
@@ -18,7 +17,6 @@ class UserCtrl extends BaseCtrl{
         $id = _g("uid");
 
         $where =" uid = $id limit 1000";
-
 //        UserLogModel::db()->delete($where);
 //        OrderModel::db()->delete($where);
 //        MsgModel::db()->delete("from_uid = $id or to_uid = $id");
@@ -50,9 +48,10 @@ class UserCtrl extends BaseCtrl{
                 'id',
                 'uname',
                 'nickname',
+                'province_code',
                 'sex',
                 'mobile',
-                'email',
+                'inner_type',
                 'birthday',
                 'a_time',
                 'type',
@@ -144,9 +143,9 @@ class UserCtrl extends BaseCtrl{
                 $this->notice("手机号格式错误 ");
             }
 
-//            if(!FilterLib::regex($mobile,"email")){
-//                $this->notice("邮箱格式错误 ");
-//            }
+            if(!FilterLib::regex($mobile,"email")){
+                $this->notice("邮箱格式错误 ");
+            }
 
             $data['mobile'] = $mobile ;
             $data['email'] = $email ;
@@ -178,9 +177,6 @@ class UserCtrl extends BaseCtrl{
         $this->assign("sexOption",UserModel::getSexOptions());
         $this->assign("typeOption",UserModel::getTypeOptions());
         $this->assign("statusOpen",UserModel::STATUS_DESC);
-
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
         $this->addHookJS("/people/user_add_hook.html");
         $this->addHookJS("/layout/place.js.html");
@@ -280,45 +276,23 @@ class UserCtrl extends BaseCtrl{
         $id = _g("id");
         $uname = _g("uname");
         $nickname = _g('nickname');
+        $province = _g('province');
         $sex = _g('sex');
+        $inner_type = _g('inner_type');
         $mobile = _g('mobile');
-
-        $email = _g("email");
-        $type = _g("type");
-
         $birthday_from = _g('birthday_from');
         $birthday_to = _g('birthday_to');
-
         $from = _g('from');
         $to = _g('to');
+        $type = _g("type");
 
-//        $consume_total_from = _g('consume_total_from');
-//        $consume_total_to = _g('consume_total_to');
-//        $order_num_from = _g('order_num_from');
-//        $order_num_to = _g('order_num_to');
-        $province = _g('province');
-        $inner_type = _g('inner_type');
-
+//        $email = _g("email");
+//        if($email)
+//            $where .=" and recommend ='$email' ";
 
 
         if($inner_type)
             $where .=" and inner_type = '$inner_type' ";
-
-//        if($consume_total_from){
-//            $where .=" and consume_total >= '$consume_total_from' ";
-//        }
-//
-//        if($consume_total_to){
-//            $where .=" and consume_total <= '$consume_total_to' ";
-//        }
-//
-//        if($order_num_from){
-//            $where .=" and order_num >= '$order_num_from' ";
-//        }
-//
-//        if($order_num_to){
-//            $where .=" and order_num <= '$order_num_to' ";
-//        }
 
         if($id)
             $where .=" and id = '$id' ";
@@ -335,8 +309,6 @@ class UserCtrl extends BaseCtrl{
         if($mobile)
             $where .=" and mobile = '$mobile' ";
 
-        if($email)
-            $where .=" and recommend ='$email' ";
 
         if($type)
             $where .=" and mobile = '$type' ";
@@ -354,7 +326,6 @@ class UserCtrl extends BaseCtrl{
             $to .= ":59";
             $where .=" and a_time <= '".strtotime($to) . "'";
         }
-
 
         if($birthday_from){
             $birthday_from .= ":00";

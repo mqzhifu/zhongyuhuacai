@@ -1,5 +1,5 @@
 <?php
-class UserCommentCtrl extends BaseCtrl{
+class ShareCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
@@ -8,7 +8,7 @@ class UserCommentCtrl extends BaseCtrl{
 //        $this->assign("typeOptions",UserModel::getTypeOptions());
 //        $this->assign("sexOptions", UserModel::getSexOptions());
 
-        $this->display("/people/user_comment_list.html");
+        $this->display("/useraction/share_comment_list.html");
     }
 
     function getList(){
@@ -17,7 +17,7 @@ class UserCommentCtrl extends BaseCtrl{
         //获取搜索条件
         $where = $this->getDataListTableWhere();
         //计算 总数据数 DB中总记录数
-        $iTotalRecords = UserCommentModel::db()->getCount($where);
+        $iTotalRecords = ShareModel::db()->getCount($where);
         if ($iTotalRecords){
             //按照某个字段 排序
             $order_sort = _g("order");
@@ -42,33 +42,40 @@ class UserCommentCtrl extends BaseCtrl{
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
             $limit = " limit $iDisplayStart,$end";
-            $data = UserCommentModel::db()->getAll($where . $order . $limit);
+            $data = ShareModel::db()->getAll($where . $order . $limit);
 
-
+            $userService = new UserService();
 
             foreach($data as $k=>$v){
 //                $avatar = get_avatar_url($v['avatar']);
 //                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
-                $user  = UserModel::db()->getById($v['uid']);
-                $username = "未知";
-                if($user){
-                    $username = $user['nickname'];
+//                $user  = UserModel::db()->getById($v['uid']);
+//                $username = "未知";
+//                if($user){
+//                    $username = $user['nickname'];
+//                }
+
+                $username = $userService->getUserNameByUid($v['uid']);
+
+                $agentName = "未知";
+                if($v['agent_id']){
+                    $agent  = AgentModel::db()->getById($v['agent_id']);
+                    if($agent){
+                        $agentName = $agent['title'];
+                    }
                 }
 
-                $imgs = "";
-                if($v['pic']){
-                    $src = get_comment_url($v['pic']);
-                    $imgs = "<image src='$src' width='50' height='50'  />";
-                }
+
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $imgs,
                     $username,
-                    $v['title'],
-                    $v['content'],
-                    $v['oid'],
+                    $v['pid'],
+                    $v['source'],
+                    $v['goto_page_path'],
+                    $agentName,
+//                    $v['type'],
                     get_default_date($v['a_time']),
                     '',
 //                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
@@ -116,29 +123,9 @@ class UserCommentCtrl extends BaseCtrl{
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/people/user_comment_add_hook.html");
+        $this->addHookJS("/useraction/user_comment_add_hook.html");
         $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_comment_add.html");
-    }
-
-    function detail(){
-        $uid = _g("id");
-        $user = UserModel::db()->getById($uid);
-        $user['dt'] = get_default_date($user['a_time']);
-        $user['status_desc'] = UserModel::STATUS_DESC[$user['status']];
-
-
-        $user['avatar_url'] = get_avatar_url($user['avatar']);
-        $user['birthday_dt'] =  get_default_date($user['birthday']);
-        $user['type_desc'] = UserModel::getTypeDescByKey($user['type']);
-        $orders = OrderModel::getListByUid($uid);
-        $userLog = UserLogModel::getListByUid($uid);
-
-        $this->assign("user",$user);
-        $this->assign("orders",$orders);
-        $this->assign("userLog",$userLog);
-
-        $this->display("/people/user_detail.html");
+        $this->display("/useraction/user_comment_add.html");
     }
 
     function getDataListTableWhere(){

@@ -5,39 +5,45 @@ class FactoryCtrl extends BaseCtrl{
             $this->getList();
         }
 
-
-
         $this->assign("statusOptions",FactoryModel::getStatusOptions());
-//        $this->assign("sexOptions", UserModel::getSexOptions());
-
         $this->display("/people/factory_list.html");
-    }
-
-
-    function getList(){
-        $this->getData();
     }
 
     function add(){
         if(_g('opt')){
             $data =array(
                 'title'=> _g('title'),
-                'real_name'=> _g('realname'),
+                'real_name'=> _g('real_name'),
                 'id_card_num'=> _g('id_card_num'),
                 'mobile'=> _g('mobile'),
                 'category'=>_g("category"),
-                'sex'=>_g("sex"),
-                'status'=>1,
-//                'fee_percent'=> _g('fee_percent'),
-//                'address'=> _g('address'),
-
-//                'province_id'=> _g('province'),
-//                'city_id'=> _g('city'),
-//                'county_id'=> _g('county'),
-//                'town_id'=> _g('street'),
-//                'villages'=> _g('villages'),
+                'status'=>FactoryModel::STATUS_WAIT,
                 'a_time'=>time(),
             );
+
+            if(!$data['title']){
+                $this->notice("工厂名 不能为空 ");
+            }
+
+            if(!$data['real_name']){
+                $this->notice("真实姓名 不能为空 ");
+            }
+
+            if(!$data['id_card_num']){
+                $this->notice("身份证号 不能为空 ");
+            }
+
+            if(!$data['category']){
+                $this->notice("类别 不能为空 ");
+            }
+
+            if(!$data['mobile']){
+                $this->notice("手机号 不能为空 ");
+            }
+
+            if(!FilterLib::regex($data['mobile'],"phone")){
+                $this->notice("手机号格式错误 ");
+            }
 
             $uploadService = new UploadService();
             $uploadRs = $uploadService->factory('pic');
@@ -48,9 +54,7 @@ class FactoryCtrl extends BaseCtrl{
             $data['pic'] = $uploadRs['msg'];
 
             $newId = FactoryModel::add($data);
-
             $this->ok($newId,"",$this->_backListUrl);
-
         }
 
         $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
@@ -71,30 +75,7 @@ class FactoryCtrl extends BaseCtrl{
         $this->display("/people/factory_add.html");
     }
 
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
-
-    function getData(){
+    function getList(){
         $records = array();
         $records["data"] = array();
         $sEcho = intval($_REQUEST['draw']);
@@ -119,6 +100,9 @@ class FactoryCtrl extends BaseCtrl{
                 '',
                 '',
                 'a_time',
+                "status",
+                "",
+                "",
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -165,81 +149,34 @@ class FactoryCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
-        $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
-
+        $id = _g("id");
+        $title = _g("title");
+        $category = _g("category");
+        $real_name = _g('real_name');
+        $mobile = _g('mobile');
         $from = _g("from");
         $to = _g("to");
 
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
-
-
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
-
-        $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($title)
+            $where .=" and title like '%$title%' ";
 
-        if($sex)
-            $where .=" and sex = '$sex' ";
+        if($category)
+            $where .=" and category like '%$category%' ";
 
-        if($status)
-            $where .=" and status = '$status' ";
+        if($real_name)
+            $where .=" and real_name like '%$real_name%' ";
 
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
+        if($mobile)
+            $where .=" and mobile = '$mobile' ";
 
         if($from)
             $where .=" and a_time >=  ".strtotime($from);
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
-
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
 
         return $where;
     }

@@ -18,6 +18,9 @@ class AgentCtrl extends BaseCtrl{
         if($type == 2){
             exit("暂未开发");
         }
+
+        $this->assign("areaProvinceModelOptionsHtml", AreaProvinceModel::getSelectOptionsHtml());
+
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
@@ -135,19 +138,19 @@ class AgentCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
-                '',
-                '',
+                'title',
+                'real_name',
                 'status',
                 'province_code',
-                'city_code',
-                'county_code',
-                'town_code',
-                '',
+                'address',
                 'sex',
                 '',
-                '',
+                'mobile',
                 'fee_percent',
                 'add_time',
+                '',
+                '',
+                '',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -172,7 +175,7 @@ class AgentCtrl extends BaseCtrl{
 
             $agentService = new AgentService();
 
-
+            $userService = new UserService();
 
             foreach($data as $k=>$v){
                 $addressStr = $agentService->getAreaStr($v['id']);
@@ -185,6 +188,9 @@ class AgentCtrl extends BaseCtrl{
                 if($v['status'] == AgentService::STATUS_WAIT ){
                     $auditBnt = '<button class="btn btn-xs default red upstatus margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 审核</button>';
                 }
+
+                $userName = $userService->getUserNameByUid($v['uid']);
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -203,7 +209,7 @@ class AgentCtrl extends BaseCtrl{
                     $v['mobile'],
                     $v['fee_percent'],
                     get_default_date($v['a_time']),
-                    $v['uid'],
+                    $userName,
                     $v['invite_code'],
                     $subAgentNum,
                     '<a target="_blank" href="/people/no/agent/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
@@ -244,8 +250,8 @@ class AgentCtrl extends BaseCtrl{
             }
 
             $rs = AgentModel::db()->upById($aid,$data);
-
-            out_ajax(200,$rs);
+//            $rs = "ok";
+            out_ajax(200,"ok-" .$rs);
         }
         $statusDesc = AgentModel::STATUS;
         $statusDescRadioHtml = "";
@@ -272,39 +278,78 @@ class AgentCtrl extends BaseCtrl{
                 'real_name'=> _g('realname'),
                 'id_card_num'=> _g('id_card_num'),
                 'mobile'=> _g('mobile'),
-                'fee_percent'=> _g('fee_percent'),
-                'status'=>1,
-
+                'sex'=> _g('sex'),
+                'status'=>AgentService::STATUS_WAIT,
                 'type'=>AgentModel::ROLE_LEVEL_ONE,
                 'address'=> _g('address'),
                 'province_code'=> _g('province'),
                 'city_code'=> _g('city'),
                 'county_code'=> _g('county'),
                 'town_code'=> _g('town'),
-                'villages'=> _g('villages'),
+                'fee_percent'=> _g('fee_percent'),
                 'sub_fee_percent'=>_g("sub_fee_percent"),
                 'a_time'=>time(),
+//                'villages'=> _g('villages'),
             );
+
+            if(!$data['title']){
+                $this->notice("店面名称 不能为空 ");
+            }
+
+            if(!$data['real_name']){
+                $this->notice("真实姓名 不能为空 ");
+            }
+
+            if(!$data['id_card_num']){
+                $this->notice("身份证号 不能为空 ");
+            }
+
+            if(!$data['sex']){
+                $this->notice("性别 不能为空 ");
+            }
+
+            if(!$data['mobile']){
+                $this->notice("手机号 不能为空 ");
+            }
+
+            if(!FilterLib::regex($data['mobile'],"phone")){
+                $this->notice("手机号格式错误 ");
+            }
+
+            if(!$data['fee_percent']){
+                $this->notice("佣金比例 不能为空 ");
+            }
+
+            $data['fee_percent'] = (int)$data['fee_percent'];
+            if(!$data['fee_percent']){
+                $this->notice("佣金比例 只允许正整数 ");
+            }
+
+            if(!$data['address']){
+                $this->notice("详细地址 不能为空 ");
+            }
+
+            if(!$data['sub_fee_percent']){
+                $this->notice("二级佣金比例 不能为空 ");
+            }
+            $data['sub_fee_percent'] = (int)$data['sub_fee_percent'];
+            if(!$data['sub_fee_percent']){
+                $this->notice("二级佣金比例 只允许正整数 ");
+            }
 
             $uploadService = new UploadService();
             $uploadRs = $uploadService->agent('pic');
             if($uploadRs['code'] != 200){
-                exit(" uploadService->product error ".json_encode($uploadRs));
+                $this->notice(" uploadService->product error ".json_encode($uploadRs));
             }
 
             $data['pic'] = $uploadRs['msg'];
 
             $newId = AgentModel::add($data);
-
-
-            $invite_code =intToStr($newId);
+            $invite_code = intToStr($newId);
             AgentModel::db()->upById($newId,array("invite_code"=>$invite_code));
 
-
-
             $this->ok($newId,$this->_backListUrl);
-
-
         }
 
         $sexOption = UserModel::getSexOptions();
@@ -319,8 +364,8 @@ class AgentCtrl extends BaseCtrl{
         $this->assign("cityJs",$cityJs);
         $this->assign("countyJs",$countryJs);
 
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+//        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+//        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
         $this->addHookJS("/people/agent_add_hook.html");
 
@@ -334,25 +379,25 @@ class AgentCtrl extends BaseCtrl{
 
         $id = _g("id");
         $title = _g('title');//店铺名称
-        $real_name = _g('');//真实姓名
+        $real_name = _g('realname');//真实姓名
         $status = _g("status");
+        $province = _g('province');
         $address = _g('address');
         $sex = _g("sex");
         $mobile = _g('mobile');
         $fee_percent = _g('fee_percent');
         $from = _g("from");
         $to = _g("to");
-        $user = _g('user');
         $invite_code = _g('invite_code');
 
         if($id)
             $where .=" and id = '$id' ";
 
         if($title)
-            $where .=" and title = '$title' ";
+            $where .=" and title like '%$title%' ";
 
         if($real_name)
-            $where .=" and real_name = '$real_name' ";
+            $where .=" and real_name like '%$real_name%' ";
 
         if($address)
             $where .=" and address like '%$address%' ";
@@ -369,6 +414,9 @@ class AgentCtrl extends BaseCtrl{
         if($status)
             $where .=" and status = '$status' ";
 
+        if($province)
+            $where .=" and province_code = '$province' ";
+
         if($invite_code)
             $where .=" and invite_code = '$invite_code' ";
 
@@ -378,10 +426,10 @@ class AgentCtrl extends BaseCtrl{
         if($to)
             $where .=" and a_time <= ".strtotime($to);
 
-        $user = _g('user');
-        if($user){
-//            $user = UserModel::db()->get
-//            $where .=" and address like '%$address%' ";
+        $username = _g('username');
+        if($username){
+            $userService =  new UserService();
+            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
         }
 
         return $where;

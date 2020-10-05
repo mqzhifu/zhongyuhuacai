@@ -134,30 +134,27 @@
                     type: "post",
                     dataType: "json",
                     success: function (ret) {
-                        window.opener.location.reload();
-                    // }
-                        // alert(1);
-                        // alert(ret);
-                    //     if (ret.error_code === 0) {
-                    //         bootbox.hideAll();
-                    //
-                    //         var UTbox = UTHING.bootbox({
-                    //             message: ret.data.msg,
-                    //             type: "alert",
-                    //             status: "success"
-                    //         });
-                    //
-                    //         UT_Account_TableAjax.reload();
-                    //         setTimeout(function () {
-                    //             bootbox.hideAll();
-                    //         }, 1000);
-                    //     } else {
-                    //         var UTbox = UTHING.bootbox({
-                    //             message: ret.data.msg,
-                    //             type: "alert",
-                    //             status: "error"
-                    //         });
-                    //     }
+                        if (ret.code == 200) {
+                            // window.opener.location.reload();
+                            bootbox.hideAll();
+
+                            var UTbox = UTHING.bootbox({
+                                message: ret.msg,
+                                type: "alert",
+                                status: "success"
+                            });
+                            setTimeout(function () {
+                                document.location.reload();
+                                // UT_Account_TableAjax.reload();
+                                // bootbox.hideAll();
+                            }, 1000);
+                        } else {
+                            var UTbox = UTHING.bootbox({
+                                message: ret.msg,
+                                type: "alert",
+                                status: "error"
+                            });
+                        }
                     }
                 });
             }

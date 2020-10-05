@@ -7,7 +7,7 @@ class DailyFeedbackCtrl extends BaseCtrl{
             $this->getList();
         }
 
-        $this->display("daily/feedback_list.html");
+        $this->display("/useraction/feedback_list.html");
     }
 
 

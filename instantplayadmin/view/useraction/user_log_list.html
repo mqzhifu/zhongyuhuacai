@@ -16,12 +16,13 @@
                             <div class="actions">
                                 <div class="btn-group">
                                     <a href="{$this->_addUrl}">
-                                        <button class="btn green">
-                                            添加 <i class="fa fa-plus"></i>
-                                        </button>
+                                        <!--<button class="btn green">-->
+                                            <!--添加 <i class="fa fa-plus"></i>-->
+                                        <!--</button>-->
                                     </a>
 
                                 </div>
+
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -45,20 +46,21 @@
                                         <th width="5%">
                                             ID
                                         </th>
-
-                                        <th width="20%">
-                                            用户名
+                                        <th width="5%">
+                                            ctrl
+                                        </th>
+                                        <th width="5%">
+                                            ac
+                                        </th>
+                                        <th width="5%">
+                                            uid
+                                        </th>
+                                        <th width="5%">
+                                            request
                                         </th>
 
-                                        <th width="20%">
-                                            产品名
-                                        </th>
-
-                                        <th>来源</th>
-                                        <th>跳转页面</th>
-                                        <th>代理名</th>
-                                        <th width="20%">
-                                            添加时间
+                                        <th width="5%">
+                                            a_time
                                         </th>
 
                                         <th width="5%">
@@ -68,20 +70,21 @@
                                     <tr role="row" class="filter">
                                         <td>
                                         </td>
-                                        <td>
 
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="from_uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="uname" >
                                         </td>
-
-                                        <td></td>
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="to_uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="nickname" >
                                         </td>
                                         <td></td>
+
                                         <td></td>
+
                                         <td>
 
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -100,7 +103,6 @@
                                                     <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
                                                 </span>
                                             </div>
-
 
                                         </td>
                                         <td>
@@ -166,9 +168,9 @@
                         [10, 20, 50, 100, 150 , 999999],
                         [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
                     ],
-                    "pageLength": 10, // default record count per page
+                    "pageLength": 20, // default record count per page
                     "ajax": {
-                        "url": "/people/no/share/getlist/" // ajax sourcedelBat
+                        "url": "/useraction/no/userLog/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
@@ -256,7 +258,7 @@
             if(result == true){
                 $.ajax({
                     type: 'GET',
-                    url: "/user/delOne/uid="+id ,
+                    url: "/people/no/user/delOne/uid="+id ,
                     dataType: 'json',
                     success: function(data){
                         location.reload();
@@ -265,9 +267,6 @@
                 });
             }
         });
-
-
-
     });
 
     if (!jQuery().datetimepicker) {

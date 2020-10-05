@@ -1,5 +1,5 @@
 <?php
-class UserCollectCtrl extends BaseCtrl{
+class UserProductLikedCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
@@ -8,7 +8,7 @@ class UserCollectCtrl extends BaseCtrl{
 //        $this->assign("typeOptions",UserModel::getTypeOptions());
 //        $this->assign("sexOptions", UserModel::getSexOptions());
 
-        $this->display("/people/user_collect_list.html");
+        $this->display("/useraction/user_liked_list.html");
     }
 
     function delOne(){
@@ -21,7 +21,7 @@ class UserCollectCtrl extends BaseCtrl{
         //获取搜索条件
         $where = $this->getDataListTableWhere();
         //计算 总数据数 DB中总记录数
-        $iTotalRecords = UserCollectionModel::db()->getCount($where);
+        $iTotalRecords = UserLikedModel::db()->getCount($where);
         if ($iTotalRecords){
             //按照某个字段 排序
             $order_sort = _g("order");
@@ -49,7 +49,7 @@ class UserCollectCtrl extends BaseCtrl{
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
             $limit = " limit $iDisplayStart,$end";
-            $data = UserCollectionModel::db()->getAll($where . $order . $limit);
+            $data = UserLikedModel::db()->getAll($where . $order . $limit);
 
 
 
@@ -112,10 +112,10 @@ class UserCollectCtrl extends BaseCtrl{
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/people/user_liked_add_hook.html");
+        $this->addHookJS("/useraction/user_liked_add_hook.html");
 //        $this->addHookJS("/layout/place.js.html");
 //        $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_liked_add.html");
+        $this->display("/useraction/user_liked_add.html");
     }
 
     function getDataListTableWhere(){

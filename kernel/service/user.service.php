@@ -1244,4 +1244,17 @@ class UserService{
         return $where;
     }
 
+    function getUserNameByUid($uid,$default = '未知'){
+        if(!$uid){
+            return $default;
+        }
+        $user  = UserModel::db()->getById($uid);
+        if(!$user){
+            return $default;
+        }
+
+        $username = $user['nickname'];
+        return $username;
+    }
+
 }

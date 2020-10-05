@@ -1,12 +1,14 @@
 <?php
-class UserFeedbackCtrl extends BaseCtrl{
+class UserCommentCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
         }
 
-        $this->assign("statusOptions", UserFeedbackModel::getStatusOptions());
-        $this->display("/people/user_feedback_list.html");
+//        $this->assign("typeOptions",UserModel::getTypeOptions());
+//        $this->assign("sexOptions", UserModel::getSexOptions());
+
+        $this->display("/useraction/user_comment_list.html");
     }
 
     function getList(){
@@ -15,7 +17,7 @@ class UserFeedbackCtrl extends BaseCtrl{
         //获取搜索条件
         $where = $this->getDataListTableWhere();
         //计算 总数据数 DB中总记录数
-        $iTotalRecords = UserFeedbackModel::db()->getCount($where);
+        $iTotalRecords = UserCommentModel::db()->getCount($where);
         if ($iTotalRecords){
             //按照某个字段 排序
             $order_sort = _g("order");
@@ -24,10 +26,7 @@ class UserFeedbackCtrl extends BaseCtrl{
 
             $sort = array(
                 'id',
-                'id',
-                'pid',
-                'gid',
-                'a_time',
+                'id'
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -43,20 +42,35 @@ class UserFeedbackCtrl extends BaseCtrl{
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
             $limit = " limit $iDisplayStart,$end";
-            $data = UserFeedbackModel::db()->getAll($where . $order . $limit);
+            $data = UserCommentModel::db()->getAll($where . $order . $limit);
+
+
 
             foreach($data as $k=>$v){
+//                $avatar = get_avatar_url($v['avatar']);
+//                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
+                $user  = UserModel::db()->getById($v['uid']);
+                $username = "未知";
+                if($user){
+                    $username = $user['nickname'];
+                }
+
+                $imgs = "";
+                if($v['pic']){
+                    $src = get_comment_url($v['pic']);
+                    $imgs = "<image src='$src' width='50' height='50'  />";
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
+                    $imgs,
+                    $username,
                     $v['title'],
                     $v['content'],
-                    $v['mobile'],
-                    $v['uid'],
-                    $v['pics'],
-                    $v['status'],
+                    $v['oid'],
                     get_default_date($v['a_time']),
-                    ''
+                    '',
 //                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-scissors"></i>  删除</button>',
                 );
@@ -77,50 +91,34 @@ class UserFeedbackCtrl extends BaseCtrl{
     function add(){
         if(_g('opt')){
             $data =array(
+                'pid'=> _g('pid'),
+                'gid'=> _g('gid'),
                 'uid'=> _g('uid'),
                 'title'=> _g('title'),
                 'content'=> _g('content'),
-                'mobile'=>_g("mobile"),
                 'a_time'=>time(),
             );
 
             $uploadService = new UploadService();
-            $uploadRs = $uploadService->feedback('pic');
+            $uploadRs = $uploadService->comment('pic');
             if($uploadRs['code'] == 200){
-                $data['pics'] = $uploadRs['msg'];
+                $data['pic'] = $uploadRs['msg'];
 //                exit(" uploadService->avatar error ".json_encode($uploadRs));
             }
 
-            $newId = UserFeedbackModel::db()->add($data);
-
+            $newId = UserCommentModel::db()->add($data);
             $this->ok($newId,$this->_addUrl,$this->_backListUrl);
 
         }
 
-//        $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
-//        $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
-//
-//        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
-//        $this->assign("cityJs",$cityJs);
-//        $this->assign("countyJs",$countryJs);
-//
 //        $this->assign("sexOption",UserModel::getSexOptions());
-//        $this->assign("typeOption",UserModel::getTypeOptions());
-//        $this->assign("statusOpen",UserModel::STATUS_DESC);
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-
-        $this->assign("statusOptions", UserFeedbackModel::getStatusOptions());
-
-
-//        $this->addHookJS("/people/user_add_hook.html");
-//        $this->addHookJS("/layout/file_upload.js.html");
-
-        $this->addHookJS("/people/user_feedback_add_hook.html");
+        $this->addHookJS("/useraction/user_comment_add_hook.html");
         $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_feedback_add.html");
+        $this->display("/useraction/user_comment_add.html");
     }
 
     function detail(){
@@ -147,52 +145,32 @@ class UserFeedbackCtrl extends BaseCtrl{
         $where = 1;
 
         $id = _g("id");
-        $uname = _g("uname");
-        $nickname = _g('nickname');
-        $sex = _g('sex');
-        $mobile = _g('mobile');
-
-        $email = _g("email");
-        $type = _g("type");
-
-        $birthday_from = _g('birthday_from');
-        $birthday_to = _g('birthday_to');
-
+        $username = _g("username");
+        $title = _g('title');
+        $content = _g('content');
+        $oid = _g('oid');
+//        $email = _g("email");
+//        $type = _g("type");
         $from = _g('from');
         $to = _g('to');
+
+        $userService =  new UserService();
+        if($username){
+            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
+        }
+
+        if($title)
+            $where .=" and title like '%$title%' ";
+
 
         if($id)
             $where .=" and id = '$id' ";
 
-        if($uname)
-            $where .=" and uname like '%$uname%' ";
+        if($content)
+            $where .=" and content like '%$content%' ";
 
-        if($nickname)
-            $where .=" and nickname like '%$nickname%' ";
-
-        if($sex)
-            $where .=" and sex =$sex ";
-
-        if($mobile)
-            $where .=" and mobile = '$mobile' ";
-
-        if($email)
-            $where .=" and recommend ='$email' ";
-
-        if($type)
-            $where .=" and mobile = '$type' ";
-
-
-//        if($from = _g("from")){
-//            $from .= ":00";
-//            $where .= " and add_time >= '".strtotime($from)."'";
-//        }
-//
-//        if($to = _g("to")){
-//            $to .= ":59";
-//            $where .= " and add_time <= '".strtotime($to)."'";
-//        }
-
+        if($oid)
+            $where .=" and oid =  $oid ";
 
         if($from){
             $where .=" and a_time >=  ".strtotime($from);
@@ -200,12 +178,6 @@ class UserFeedbackCtrl extends BaseCtrl{
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
-
-        if($birthday_from)
-            $where .=" and birthday >=  $birthday_from";
-
-        if($birthday_to)
-            $where .=" and birthday <=  $birthday_to";
 
         return $where;
     }

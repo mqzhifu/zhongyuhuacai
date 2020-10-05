@@ -54,9 +54,12 @@
                                             <!--gid-->
                                         <!--</th>-->
 
-                                        <th>用户名</th>
                                         <th width="20%">
-                                            添加时间
+                                            用户名
+                                        </th>
+
+                                        <th width="20%">
+                                            a_time
                                         </th>
 
                                         <th width="5%">
@@ -65,19 +68,16 @@
                                     </tr>
                                     <tr role="row" class="filter">
                                         <td>
-
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="id" >
+
                                         </td>
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="product_name" >
                                         </td>
-
-                                        <!--<td></td>-->
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="username" >
+                                            <input type="text" class="form-control form-filter input-sm" name="user_name" >
                                         </td>
                                         <td>
 
@@ -165,7 +165,7 @@
                     ],
                     "pageLength": 10, // default record count per page
                     "ajax": {
-                        "url": "/people/no/userProductLiked/getlist/" // ajax sourcedelBat
+                        "url": "/useraction/no/userCollect/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,

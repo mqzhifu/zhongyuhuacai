@@ -1,14 +1,12 @@
 <?php
-class UserLogCtrl extends BaseCtrl{
+class UserFeedbackCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
         }
 
-//        $this->assign("typeOptions",UserModel::getTypeOptions());
-//        $this->assign("sexOptions", UserModel::getSexOptions());
-
-        $this->display("/people/user_log_list.html");
+        $this->assign("statusOptions", UserFeedbackModel::getStatusOptions());
+        $this->display("/useraction/user_feedback_list.html");
     }
 
     function getList(){
@@ -17,7 +15,7 @@ class UserLogCtrl extends BaseCtrl{
         //获取搜索条件
         $where = $this->getDataListTableWhere();
         //计算 总数据数 DB中总记录数
-        $iTotalRecords = UserLogModel::db()->getCount($where);
+        $iTotalRecords = UserFeedbackModel::db()->getCount($where);
         if ($iTotalRecords){
             //按照某个字段 排序
             $order_sort = _g("order");
@@ -27,7 +25,9 @@ class UserLogCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
-                'uname',
+                'pid',
+                'gid',
+                'a_time',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -43,23 +43,20 @@ class UserLogCtrl extends BaseCtrl{
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
             $limit = " limit $iDisplayStart,$end";
-            $data = UserLogModel::db()->getAll($where . $order . $limit);
-
-
+            $data = UserFeedbackModel::db()->getAll($where . $order . $limit);
 
             foreach($data as $k=>$v){
-//                $avatar = get_avatar_url($v['avatar']);
-//                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
-
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['ctrl'],
-                    $v['ac'],
+                    $v['title'],
+                    $v['content'],
+                    $v['mobile'],
                     $v['uid'],
-                    $v['request'],
+                    $v['pics'],
+                    $v['status'],
                     get_default_date($v['a_time']),
-                    '',
+                    ''
 //                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-scissors"></i>  删除</button>',
                 );
@@ -80,57 +77,50 @@ class UserLogCtrl extends BaseCtrl{
     function add(){
         if(_g('opt')){
             $data =array(
-                'uname'=> _g('uname'),
-                'realname'=> _g('realname'),
-                'nickname'=> _g('nickname'),
-                'mobile'=> _g('mobile'),
-                'sex'=> _g('sex'),
-                'email'=> _g('email'),
-                'birthday'=> _g('birthday'),
-                'status'=>_g('status'),
-                'type'=>_g('type'),
-                'third_uid'=>_g('third_uid'),
+                'uid'=> _g('uid'),
+                'title'=> _g('title'),
+                'content'=> _g('content'),
+                'mobile'=>_g("mobile"),
                 'a_time'=>time(),
-                'city_code'=> _g('city'),
-                'county_code'=> _g('county'),
-                'town_code'=> _g('street'),
-                'province_code'=> _g('province'),
             );
 
             $uploadService = new UploadService();
-            $uploadRs = $uploadService->avatar('pic');
-            if($uploadRs['code'] != 200){
-                exit(" uploadService->avatar error ".json_encode($uploadRs));
+            $uploadRs = $uploadService->feedback('pic');
+            if($uploadRs['code'] == 200){
+                $data['pics'] = $uploadRs['msg'];
+//                exit(" uploadService->avatar error ".json_encode($uploadRs));
             }
 
-            $data['avatar'] = $uploadRs['msg'];
+            $newId = UserFeedbackModel::db()->add($data);
 
-            $newId = UserModel::db()->add($data);
-
-            var_dump($newId);exit;
+            $this->ok($newId,$this->_addUrl,$this->_backListUrl);
 
         }
 
-        $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
-        $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
-
-
-
-        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
-        $this->assign("cityJs",$cityJs);
-        $this->assign("countyJs",$countryJs);
-
-        $this->assign("sexOption",UserModel::getSexOptions());
-        $this->assign("typeOption",UserModel::getTypeOptions());
-        $this->assign("statusOpen",UserModel::STATUS_DESC);
+//        $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
+//        $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
+//
+//        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
+//        $this->assign("cityJs",$cityJs);
+//        $this->assign("countyJs",$countryJs);
+//
+//        $this->assign("sexOption",UserModel::getSexOptions());
+//        $this->assign("typeOption",UserModel::getTypeOptions());
+//        $this->assign("statusOpen",UserModel::STATUS_DESC);
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/people/user_add_hook.html");
-        $this->addHookJS("/layout/place.js.html");
+
+        $this->assign("statusOptions", UserFeedbackModel::getStatusOptions());
+
+
+//        $this->addHookJS("/people/user_add_hook.html");
+//        $this->addHookJS("/layout/file_upload.js.html");
+
+        $this->addHookJS("/useraction/user_feedback_add_hook.html");
         $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_add.html");
+        $this->display("/useraction/user_feedback_add.html");
     }
 
     function detail(){

@@ -29,6 +29,27 @@ class ToolsCtrl {
         echo "im index";exit;
     }
 
+    function getMenu(){
+        $menuList = MenuModel::getMenu();
+        $space = "&nbsp;";
+        $html = "<table><tr><td>一级菜单</td><td>二级子菜单</td></tr>";
+        foreach ($menuList as $k=>$v){
+            $html .= "<tr><td>". $v['name'] . "</td>";
+            if($v['sub']){
+                $html .= "<td><table>";
+                foreach ($v['sub'] as $k2=>$v2){
+                    $html .= "<tr><td>".  $v2['name'] . "</td><td>{$v2['desc']}</td></tr>";
+                }
+                $html .= "</table></td>";
+            }
+            $html .= "</tr>";
+        }
+
+        $html .= "</table>";
+        echo $html;
+        exit;
+    }
+
     function delUserToken($uid){
         var_dump($uid);
         $rs = RedisOptLib::delToken($uid);

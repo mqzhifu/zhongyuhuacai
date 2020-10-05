@@ -47,18 +47,16 @@
                                         </th>
 
                                         <th width="20%">
-                                            pic
+                                            产品名
                                         </th>
 
-                                        <th width="20%">
-                                            uid
-                                        </th>
+                                        <!--<th width="20%">-->
+                                            <!--gid-->
+                                        <!--</th>-->
 
-                                        <th>标题</th>
-                                        <th>内容</th>
-                                        <th>订单号</th>
+                                        <th>用户名</th>
                                         <th width="20%">
-                                            a_time
+                                            添加时间
                                         </th>
 
                                         <th width="5%">
@@ -67,21 +65,20 @@
                                     </tr>
                                     <tr role="row" class="filter">
                                         <td>
-                                        </td>
-                                        <td>
 
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="from_uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="product_name" >
                                         </td>
 
-                                        <td></td>
+                                        <!--<td></td>-->
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="to_uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="username" >
                                         </td>
-                                        <td></td>
-                                        <td></td>
                                         <td>
 
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -168,7 +165,7 @@
                     ],
                     "pageLength": 10, // default record count per page
                     "ajax": {
-                        "url": "/people/no/userComment/getlist/" // ajax sourcedelBat
+                        "url": "/useraction/no/userProductLiked/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,

@@ -1,5 +1,5 @@
 <?php
-class ShareCtrl extends BaseCtrl{
+class UserLogCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
@@ -8,7 +8,7 @@ class ShareCtrl extends BaseCtrl{
 //        $this->assign("typeOptions",UserModel::getTypeOptions());
 //        $this->assign("sexOptions", UserModel::getSexOptions());
 
-        $this->display("/people/share_comment_list.html");
+        $this->display("/useraction/user_log_list.html");
     }
 
     function getList(){
@@ -17,7 +17,7 @@ class ShareCtrl extends BaseCtrl{
         //获取搜索条件
         $where = $this->getDataListTableWhere();
         //计算 总数据数 DB中总记录数
-        $iTotalRecords = ShareModel::db()->getCount($where);
+        $iTotalRecords = UserLogModel::db()->getCount($where);
         if ($iTotalRecords){
             //按照某个字段 排序
             $order_sort = _g("order");
@@ -26,7 +26,8 @@ class ShareCtrl extends BaseCtrl{
 
             $sort = array(
                 'id',
-                'id'
+                'id',
+                'uname',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -42,38 +43,21 @@ class ShareCtrl extends BaseCtrl{
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
             $limit = " limit $iDisplayStart,$end";
-            $data = ShareModel::db()->getAll($where . $order . $limit);
+            $data = UserLogModel::db()->getAll($where . $order . $limit);
 
 
 
             foreach($data as $k=>$v){
 //                $avatar = get_avatar_url($v['avatar']);
 //                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
-                $user  = UserModel::db()->getById($v['uid']);
-                $username = "未知";
-                if($user){
-                    $username = $user['nickname'];
-                }
-
-                $agentName = "未知";
-                if($v['agent_id']){
-                    $agent  = AgentModel::db()->getById($v['agent_id']);
-                    if($agent){
-                        $agentName = $agent['title'];
-                    }
-                }
-
-
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $username,
-                    $v['pid'],
-                    $v['source'],
-                    $v['goto_page_path'],
-                    $agentName,
-//                    $v['type'],
+                    $v['ctrl'],
+                    $v['ac'],
+                    $v['uid'],
+                    $v['request'],
                     get_default_date($v['a_time']),
                     '',
 //                    '<a href="/people/no/user/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
@@ -96,34 +80,57 @@ class ShareCtrl extends BaseCtrl{
     function add(){
         if(_g('opt')){
             $data =array(
-                'pid'=> _g('pid'),
-                'gid'=> _g('gid'),
-                'uid'=> _g('uid'),
-                'title'=> _g('title'),
-                'content'=> _g('content'),
+                'uname'=> _g('uname'),
+                'realname'=> _g('realname'),
+                'nickname'=> _g('nickname'),
+                'mobile'=> _g('mobile'),
+                'sex'=> _g('sex'),
+                'email'=> _g('email'),
+                'birthday'=> _g('birthday'),
+                'status'=>_g('status'),
+                'type'=>_g('type'),
+                'third_uid'=>_g('third_uid'),
                 'a_time'=>time(),
+                'city_code'=> _g('city'),
+                'county_code'=> _g('county'),
+                'town_code'=> _g('street'),
+                'province_code'=> _g('province'),
             );
 
             $uploadService = new UploadService();
-            $uploadRs = $uploadService->comment('pic');
-            if($uploadRs['code'] == 200){
-                $data['pic'] = $uploadRs['msg'];
-//                exit(" uploadService->avatar error ".json_encode($uploadRs));
+            $uploadRs = $uploadService->avatar('pic');
+            if($uploadRs['code'] != 200){
+                exit(" uploadService->avatar error ".json_encode($uploadRs));
             }
 
-            $newId = UserCommentModel::db()->add($data);
-            $this->ok($newId,$this->_addUrl,$this->_backListUrl);
+            $data['avatar'] = $uploadRs['msg'];
+
+            $newId = UserModel::db()->add($data);
+
+            var_dump($newId);exit;
 
         }
 
-//        $this->assign("sexOption",UserModel::getSexOptions());
+        $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
+        $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
+
+
+
+        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
+        $this->assign("cityJs",$cityJs);
+        $this->assign("countyJs",$countryJs);
+
+        $this->assign("sexOption",UserModel::getSexOptions());
+        $this->assign("typeOption",UserModel::getTypeOptions());
+        $this->assign("statusOpen",UserModel::STATUS_DESC);
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->addHookJS("/people/user_comment_add_hook.html");
+        $this->addHookJS("/people/user_add_hook.html");
+        $this->addHookJS("/layout/place.js.html");
         $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_comment_add.html");
+        $this->display("/people/user_add.html");
     }
 
     function detail(){
@@ -150,32 +157,52 @@ class ShareCtrl extends BaseCtrl{
         $where = 1;
 
         $id = _g("id");
-        $username = _g("username");
-        $title = _g('title');
-        $content = _g('content');
-        $oid = _g('oid');
-//        $email = _g("email");
-//        $type = _g("type");
+        $uname = _g("uname");
+        $nickname = _g('nickname');
+        $sex = _g('sex');
+        $mobile = _g('mobile');
+
+        $email = _g("email");
+        $type = _g("type");
+
+        $birthday_from = _g('birthday_from');
+        $birthday_to = _g('birthday_to');
+
         $from = _g('from');
         $to = _g('to');
-
-        $userService =  new UserService();
-        if($username){
-            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
-        }
-
-        if($title)
-            $where .=" and title like '%$title%' ";
-
 
         if($id)
             $where .=" and id = '$id' ";
 
-        if($content)
-            $where .=" and content like '%$content%' ";
+        if($uname)
+            $where .=" and uname like '%$uname%' ";
 
-        if($oid)
-            $where .=" and oid =  $oid ";
+        if($nickname)
+            $where .=" and nickname like '%$nickname%' ";
+
+        if($sex)
+            $where .=" and sex =$sex ";
+
+        if($mobile)
+            $where .=" and mobile = '$mobile' ";
+
+        if($email)
+            $where .=" and recommend ='$email' ";
+
+        if($type)
+            $where .=" and mobile = '$type' ";
+
+
+//        if($from = _g("from")){
+//            $from .= ":00";
+//            $where .= " and add_time >= '".strtotime($from)."'";
+//        }
+//
+//        if($to = _g("to")){
+//            $to .= ":59";
+//            $where .= " and add_time <= '".strtotime($to)."'";
+//        }
+
 
         if($from){
             $where .=" and a_time >=  ".strtotime($from);
@@ -183,6 +210,12 @@ class ShareCtrl extends BaseCtrl{
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
+
+        if($birthday_from)
+            $where .=" and birthday >=  $birthday_from";
+
+        if($birthday_to)
+            $where .=" and birthday <=  $birthday_to";
 
         return $where;
     }

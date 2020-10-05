@@ -225,6 +225,9 @@ class BaseCtrl{
 
         $this->addJs('/assets/global/scripts/datatable.js');
         $this->addJs('/assets/global/plugins/bootbox/bootbox.min.js');
+
+        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+        $this->addJs('/js/additional-methods_cn.js');
     }
 
     function notice($msg,$backUrl = ""){

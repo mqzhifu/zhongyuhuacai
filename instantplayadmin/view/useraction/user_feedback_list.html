@@ -47,17 +47,17 @@
                                         </th>
 
                                         <th width="20%">
-                                            产品名
+                                            标题
                                         </th>
-
-                                        <!--<th width="20%">-->
-                                            <!--gid-->
-                                        <!--</th>-->
 
                                         <th width="20%">
-                                            用户名
+                                            内容
                                         </th>
 
+                                        <th>手机号</th>
+                                        <th>uid</th>
+                                        <th>图片</th>
+                                        <th>状态</th>
                                         <th width="20%">
                                             a_time
                                         </th>
@@ -73,12 +73,17 @@
 
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="product_name" >
+                                            <input type="text" class="form-control form-filter input-sm" name="from_uid" >
                                         </td>
+
+                                        <td></td>
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="user_name" >
+                                            <input type="text" class="form-control form-filter input-sm" name="to_uid" >
                                         </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td>
 
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -165,7 +170,7 @@
                     ],
                     "pageLength": 10, // default record count per page
                     "ajax": {
-                        "url": "/people/no/userCollect/getlist/" // ajax sourcedelBat
+                        "url": "/useraction/no/userFeedback/getlist/" // ajax sourcedelBat
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
