@@ -4,6 +4,14 @@ class UserService{
     //是否开启用户个人信息缓存到redis中
     public $redisCacheUser = 0;
 
+
+    const STATUS_NORMAL = 1;
+    const STATUS_DENY = 2;
+    const STATUS_DESC = [
+        self::STATUS_NORMAL=>"正常",
+        self::STATUS_DENY=>"禁止",
+    ];
+
     //注册
     // type:类型
     // $name:用户名/手机号/邮箱/三方ID
@@ -1201,7 +1209,7 @@ class UserService{
 
         $data['mobile'] = "";
         $data['ps'] = "";
-
+        $data['status'] = self::STATUS_NORMAL;
 
         $data['realname'] = "";
         $data['id_card_no'] = "";

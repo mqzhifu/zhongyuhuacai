@@ -50,6 +50,9 @@ return array(
     1037=>"share_uid is not agent",
     1038=>"address is is not in db",
 
+
+    4009=>"用户状态错误，可能后台禁止了",
+
     5001=>'此接口必须为登陆状态',
 //
 //    5005=>'curl错误',

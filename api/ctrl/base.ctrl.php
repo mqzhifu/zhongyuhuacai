@@ -44,19 +44,9 @@ class BaseCtrl {
 
         LogLib::inc()->debug(['uinfo', $this->uinfo]);
 
-//        if(arrKeyIssetAndExist($this->uinfo,'id')){
-//            if(RUN_ENV != 'WEBSOCKET'){
-//                $rs = $this->checkIfUserBlocked($this->uid);
-//                if($rs){
-//                    return return $this->out(6004);
-//                }
-//            }
-//        }
-//
-//        if(arrKeyIssetAndExist($this->uinfo,'status')){
-//            return return $this->out(4009);
-//        }
-//
+        if($this->uinfo['status'] != UserService::STATUS_NORMAL ){
+            return out_ajax(4009);
+        }
 //        if($this->uid){
 //            $this->userService->setDayActiveUser($this->uid);
 //        }
