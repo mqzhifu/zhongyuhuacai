@@ -9,7 +9,11 @@ class VerifiercodeCtrl extends BaseCtrl{
 
         $statusOption = VerifiercodeModel::getStatusOption();
         $typeOption = VerifiercodeModel::getTypeOption();
+        $ruleOptions = SmsRuleModel::getAllFormatOption();
 
+
+
+        $this->assign("ruleOptions",$ruleOptions);
         $this->assign("typeOption",$typeOption);
         $this->assign("statusOption",$statusOption);
         $this->display("/system/verifiercode_list.html");
@@ -59,15 +63,21 @@ class VerifiercodeCtrl extends BaseCtrl{
             $data = VerifiercodeModel::db()->getAll($where . $order);
 
             foreach($data as $k=>$v){
+                $ruleName = "";
+                if($v['rule_id']){
+                    $rule = SmsRuleModel::db()->getById($v['rule_id']);
+                    $ruleName = $rule['title'];
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['code'],
-                    $v['status'],
-                    $v['type'],
+                    VerifiercodeModel::STATUS_DESC[$v['status']],
+                    VerifiercodeModel::TYPE_DESC[$v['type']],
                     $v['uid'],
                     $v['expire_time'],
-                    $v['rule_id'],
+                    $ruleName,
 
                     get_default_date($v['a_time']),
 
@@ -86,79 +96,32 @@ class VerifiercodeCtrl extends BaseCtrl{
         exit;
     }
 
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
-
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
+        $code = _g("code");
+        $uid = _g("uid");
         $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
+        $type = _g('type');
+        $rule_id = _g('rule_id');
 
         $from = _g("from");
         $to = _g("to");
-
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
-
-
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
 
         $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($code)
+            $where .=" and code = '$code' ";
 
-        if($sex)
-            $where .=" and sex = '$sex' ";
+        if($uid)
+            $where .=" and uid = '$uid' ";
 
-        if($status)
-            $where .=" and status = '$status' ";
+        if($type)
+            $where .=" and type = '$type' ";
 
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
+        if($rule_id)
+            $where .=" and rule_id = '$rule_id' ";
 
         if($from)
             $where .=" and a_time >=  ".strtotime($from);
@@ -166,22 +129,8 @@ class VerifiercodeCtrl extends BaseCtrl{
         if($to)
             $where .=" and a_time <= ".strtotime($to);
 
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
+        if($status)
+            $where .=" and status = '$status' ";
 
 
 //        if($uname)

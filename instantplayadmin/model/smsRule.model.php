@@ -27,19 +27,17 @@ class SmsRuleModel {
         return call_user_func_array(array(self::db(),$func), $arguments);
     }
 	
-	static function login($uname,$ps){
-		return self::db()->getRow(" uname = '$uname' and ps = '$ps'");
-	}
-	
 	static function getName($uname){
 		return self::db()->getRow(" uname = '$uname' ");
 	}
 
-	static function getById($uid){
-        $user = self::db()->getById($uid);
-        if($user){
-
+	static function getAllFormatOption(){
+        $all = self::db()->getAll(1);
+        $html = "";
+        foreach ($all as $k=>$v){
+            $html .= "<option value={$v['id']}>{$v['title']}</option>";
         }
+        return $html;
     }
-	
+
 }

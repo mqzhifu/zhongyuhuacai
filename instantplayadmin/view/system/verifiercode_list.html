@@ -96,30 +96,38 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="code" >
                                         </td>
                                         <td>
 
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="status">
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm form-filter" name="status">
                                                 <option value="">选择</option>
                                                {$statusOption}
                                             </select>
                                         </td>
                                         <td>
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="type">
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm form-filter" name="type">
                                                 <option value="">选择</option>
                                                 {$typeOption}
                                             </select>
                                         </td>
 
                                         <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
                                         </td>
 
                                         <td></td>
-                                        <td></td>
+                                        <td>
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm form-filter" name="rule_id">
+                                                <option value="">选择</option>
+                                                {$ruleOptions}
+                                            </select>
+
+
+                                        </td>
 
                                         <td>
                                             <div class="input-group date form_datetime margin-bottom-5">

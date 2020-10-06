@@ -12,29 +12,6 @@ class SmsRuleCtrl extends BaseCtrl{
         $this->getData();
     }
 
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
-
     function getData(){
         $records = array();
         $records["data"] = array();
@@ -106,81 +83,44 @@ class SmsRuleCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
-        $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
+        $title = _g("title");
+        $content = _g("content");
+        $period_times = _g("period_times");
+        $day_times = _g('day_times');
+        $type = _g('type');
+        $period = _g('period');
 
         $from = _g("from");
         $to = _g("to");
-
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
-
-
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
 
         $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($title)
+            $where .=" and $title like '%$title%' ";
 
-        if($sex)
-            $where .=" and sex = '$sex' ";
+        if($content)
+            $where .=" and $content like '%$content%' ";
 
-        if($status)
-            $where .=" and status = '$status' ";
 
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
+        if($period_times)
+            $where .=" and period_times = '$period_times' ";
 
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
+        if($day_times)
+            $where .=" and day_times = '$day_times' ";
 
-//        if($content)
-//            $where .= " and content like '%$content%'";
+        if($type)
+            $where .=" and type = '$type' ";
+
+        if($period)
+            $where .=" and period = '$period' ";
 
         if($from)
             $where .=" and a_time >=  ".strtotime($from);
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
-
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
 
         return $where;
     }
