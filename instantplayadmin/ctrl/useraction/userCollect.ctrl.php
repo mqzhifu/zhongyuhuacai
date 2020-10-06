@@ -129,7 +129,7 @@ class UserCollectCtrl extends BaseCtrl{
 
         $productService = new ProductService();
         if($product_name){
-            $where .= $productService->searchUidsByKeywordUseDbWhere($username);
+            $where .= $productService->searchUidsByKeywordUseDbWhere($product_name);
         }
 
         $userService =  new UserService();

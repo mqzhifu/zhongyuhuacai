@@ -87,17 +87,17 @@
                                             原价
                                         </th>
 
-                                        <th width="5%">
-                                            支付类型
-                                        </th>
+                                        <!--<th width="5%">-->
+                                            <!--支付类型-->
+                                        <!--</th>-->
 
                                         <th width="5%">
                                             管理员
                                         </th>
 
-                                        <th width="5%">
-                                            来源
-                                        </th>
+                                        <!--<th width="5%">-->
+                                            <!--来源-->
+                                        <!--</th>-->
 
                                         <th width="5%">
                                             运费
@@ -116,17 +116,15 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="product_name" >
                                         </td>
-                                        <!--<td>-->
 
-                                            <!--<input type="text" class="form-control form-filter input-sm" name="ctrlName" >-->
-                                        <!--</td>-->
                                         <td>
-                                            <select name="status">
+                                            <select name="status" class="table-group-action-input form-control input-inline input-small input-sm">
+                                                <option value="">选择</option>
                                                 {$statusSelectOptionHtml}
                                             </select>
                                         </td>
@@ -134,18 +132,37 @@
                                         <td>
                                         </td>
 
-                                        <td></td>
-
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="stock_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="stock_to" >
                                         </td>
 
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="sale_price_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="sale_price_to" >
+
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="original_price_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="original_price_to" >
+
+                                        </td>
                                         <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+
+                                            <input type="text" class="form-control form-filter input-sm" name="haulage_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="haulage_to" >
+
+                                        </td>
+                                        <!--<td></td>-->
+                                        <td>
+
+                                            <input type="text" class="form-control form-filter input-sm" name="order_total_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="order_total_to" >
+
+
+                                        </td>
                                         <td>
 
                                             <div class="input-group date form_datetime margin-bottom-5">

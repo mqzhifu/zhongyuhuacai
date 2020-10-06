@@ -32,11 +32,10 @@ class CategoryAttrParaCtrl extends BaseCtrl{
                 $this->notice("重复:".$name);
             }
 
-
             $uploadService = new UploadService();
             $uploadRs = $uploadService->categoryAttrPara('pic');
             if($uploadRs['code'] != 200){
-                exit(" uploadService->avatar error ".json_encode($uploadRs));
+                $this->notice(" uploadService->avatar error ".json_encode($uploadRs));
             }
 
             $data = array(
@@ -59,29 +58,6 @@ class CategoryAttrParaCtrl extends BaseCtrl{
         $this->display("/product/category_attr_para_add.html");
     }
 
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
-
     function getList(){
         //初始化返回数据格式
         $records = array('data'=>[],'draw'=>$_REQUEST['draw']);
@@ -99,7 +75,12 @@ class CategoryAttrParaCtrl extends BaseCtrl{
 
             $sort = array(
                 'id',
-                'id'
+                'id',
+                'name',
+                'pca_id',
+                '',
+                '',
+
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -119,12 +100,18 @@ class CategoryAttrParaCtrl extends BaseCtrl{
             $data = ProductCategoryAttrParaModel::db()->getAll($where .  $order. " limit $iDisplayStart,$end");
 
             foreach($data as $k=>$v){
+                $pcaName = "";
+                if($v['pca_id']){
+                    $pca = ProductCategoryAttrModel::db()->getById($v['pca_id']);
+                    $pcaName = $pca['name'];
+                }
+
                 $img = get_category_attr_para_url($v['img']);
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['name'],
-                    $v['pca_id'],
+                    $pcaName ."({$v['pca_id']})",
                     '<img height="30" width="30" src="'.$img.'" />',
                     "",
                 );
@@ -142,81 +129,17 @@ class CategoryAttrParaCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
-        $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
-
-        $from = _g("from");
-        $to = _g("to");
-
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
-
-
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
-
+        $name = _g("name");
+        $pcp_id = _g("pcp_id");
         $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($name)
+            $where .=" and name like '%$name%' ";
 
-        if($sex)
-            $where .=" and sex = '$sex' ";
-
-        if($status)
-            $where .=" and status = '$status' ";
-
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
-
-        if($from)
-            $where .=" and a_time >=  ".strtotime($from);
-
-        if($to)
-            $where .=" and a_time <= ".strtotime($to);
-
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
+        if($pcp_id)
+            $where .=" and pcp_id = '$pcp_id' ";
 
         return $where;
     }

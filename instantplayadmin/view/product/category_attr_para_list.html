@@ -80,14 +80,15 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="name" >
                                         </td>
 
                                         <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="pca_id" >
                                         </td>
 
                                         <td></td>
@@ -160,7 +161,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0 , 2 ,4 ,5]
                     }],
                     "order": [
                         [1, "desc"]

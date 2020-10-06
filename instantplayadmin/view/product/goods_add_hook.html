@@ -25,27 +25,31 @@
                 ignore: "", // validate all fields including form hidden input
                 rules: {
                     stock: {
-                        required: true
+                        required: true,
+                        int:true,
                     },
                     status: {
                         required: true
                     },
-                    sort: {
-                        required: true,
-                    },
+                    // sort: {
+                    //     required: true,
+                    // },
                     sale_price: {
-                        required: true
+                        required: true,
+                        price:true
                     },
                     original_price: {
-                        required: true
-                    },
-                    payType: {
-                        required: true
-                    },
+                        required: true,
+                        price:true
+                    } ,
+                    // payType: {
+                    //     required: true
+                    // },
                     haulage: {
-                        required: true
+                        // required: true,
+                        price:true
                     }
-                    ,
+
                     // sort: {
                     //     integer:true,
                     //     maxlength: 4,
@@ -122,7 +126,7 @@
 
                     success3.show();
                     error3.hide();
-                    form[0].submit(); // submit the form
+                    form.submit(); // submit the form
                 }
 
             });
@@ -132,19 +136,14 @@
         return {
             //main function to initiate the module
             init: function () {
-
                 handleValidation3();
-
             }
-
         };
-
     }();
 
 
     jQuery(document).ready(function() {
         FormValidation.init();
-
     });
 
 

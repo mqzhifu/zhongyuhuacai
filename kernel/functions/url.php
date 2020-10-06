@@ -126,19 +126,28 @@ function get_share_qr_code_url($tmpPath , $protocol =HTTP_PROTOCOL){
 
     return get_api_upload_url($tmpPath,"wx_little_share_qrcode",$protocol);
 }
-
-function get_share_qr_code_path($tmpPath){
+function get_wx_product_qr_code_url($tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return "";
     }
 
+    return get_admin_upload_url($tmpPath,"wx_little_product",$protocol);
+}
+//代理分享二维码
+function get_share_qr_code_path($tmpPath){
+    if(!$tmpPath){
+        return "";
+    }
     return get_api_upload_path($tmpPath,"wx_little_share_qrcode");
 }
+//后台，生成一个产品的，微信小程序的二维码
+function get_wx_little_product_path($tmpPath){
+    if(!$tmpPath){
+        return "";
+    }
+    return get_admin_upload_url($tmpPath,"wx_little_product");
+}
 
-
-//function get_avatar_url_by_uid($uid){
-//    $user = UserModel::db()->getById($uid);
-//}
 
 
 

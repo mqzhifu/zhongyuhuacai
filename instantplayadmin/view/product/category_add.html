@@ -55,7 +55,26 @@
                                         <div class="col-md-4">
                                             <div class="input-icon right">
                                                 <i class="fa"></i>
-                                                <input type="text" class="form-control" name="is_show_index"/>
+                                                <select class="table-group-action-input form-control input-inline input-small input-sm" name="is_show_index">
+                                                    <option value="">请选择</option>
+                                                    {$showIndexOptionsHtml}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">显示全部页面 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+                                                <select class="table-group-action-input form-control input-inline input-small input-sm" name="is_show_search">
+                                                    <option value="">请选择</option>
+                                                    {$showSearchOptionsHtml}
+                                                </select>
                                             </div>
                                         </div>
                                     </div>

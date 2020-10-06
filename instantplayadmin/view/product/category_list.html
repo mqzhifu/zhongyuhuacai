@@ -75,17 +75,19 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="name" >
                                         </td>
 
-                                        <td></td>
                                         <td>
 
-                                            <select name="is_show_search" class="form-control form-filter input-sm">
+                                        </td>
+                                        <td>
+
+                                            <select name="is_show_index" class="form-control form-filter input-sm">
                                                 <option value="">请选择</option>
                                                 {$showSearchOptionsHtml}
                                             </select>
@@ -95,7 +97,7 @@
 
                                         <td>
 
-                                            <select name="is_show_index" class="form-control form-filter input-sm">
+                                            <select name="is_show_search" class="form-control form-filter input-sm">
                                                 <option value="">请选择</option>
                                                 {$showIndexOptionsHtml}
                                             </select>
@@ -176,7 +178,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0,2,3,6,7]
                     }],
                     "order": [
                         [1, "desc"]

@@ -25,8 +25,20 @@ class CategoryCtrl extends BaseCtrl{
     function add(){
         if(_g("opt")){
             $name = _g("name");
+            $is_show_index = _g("is_show_index");
+            $is_show_search = _g("is_show_search");
+
+
             if(!$name){
-                $this->notice("name is null");
+                $this->notice("名称为空");
+            }
+
+            if(!$is_show_index){
+                $this->notice("是否显示首页为空");
+            }
+
+            if(!$is_show_search){
+                $this->notice("是否显示到全部商品页");
             }
 
             $exist = ProductCategoryModel::db()->getOneByOneField("name",$name);
@@ -35,49 +47,43 @@ class CategoryCtrl extends BaseCtrl{
             }
 
             $data = array(
-                'name'=>$name
+                'name'=>$name,
+                'is_show_index'=>$is_show_index,
+                'is_show_search'=>$is_show_search,
             );
-
             $newId = ProductCategoryModel::db()->add($data);
 
-            $uploadService = new UploadService();
-            $uploadRs = $uploadService->banner('pic',$newId);
-            if($uploadRs['code'] != 200){
-                exit(" uploadService->banner error ".json_encode($uploadRs));
-            }
+//            $newId = 10;//用于测试
 
+            $uploadService = new UploadService();
+            $uploadRs = $uploadService->category('pic',$newId);
+            if($uploadRs['code'] != 200){
+                $this->notice(" uploadService->banner error ".json_encode($uploadRs));
+            }
             $data['pic'] = $uploadRs['msg'];
+            ProductCategoryModel::db()->upById($newId,$data);
+
 
             $this->ok($newId,$this->_backListUrl);
         }
+
+        $showIndexOptionsHtml = "";
+        foreach (ProductService::CATEGORY_SHOW_INDEX_DESC as $k=>$v){
+            $showIndexOptionsHtml .= "<option value={$k}>$v</option>";
+        }
+
+        $showSearchOptionsHtml = "";
+        foreach (ProductService::CATEGORY_SHOW_SEARCH_DESC as $k=>$v){
+            $showSearchOptionsHtml .= "<option value={$k}>$v</option>";
+        }
+
+        $this->assign("showSearchOptionsHtml",$showSearchOptionsHtml);
+        $this->assign("showIndexOptionsHtml",$showIndexOptionsHtml);
 
         $this->addHookJS("/product/category_add_hook.html");
         $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/product/category_add.html");
     }
-
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
 
     function getList(){
         $records = array();
@@ -98,6 +104,11 @@ class CategoryCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
+                "name",
+                "",
+                "is_show_index",
+                "is_show_search",
+                "",
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -126,7 +137,7 @@ class CategoryCtrl extends BaseCtrl{
                     ProductService::CATEGORY_SHOW_INDEX_DESC[$v['is_show_index']],
                     ProductService::CATEGORY_SHOW_SEARCH_DESC[$v['is_show_search']],
                     $attr,
-                    '<a href="/product/no/categoryAttr/add/cid='.$v['id'].'" class="btn yellow btn-xs margin-bottom-5"><i class="fa fa-edit"></i> 添加属性 </a>',
+                    '<a href="/product/no/categoryAttr/add/cid='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-edit"></i> 添加属性 </a>',
                 );
 
                 $records["data"][] = $row;
@@ -143,81 +154,24 @@ class CategoryCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
-        $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
-
-        $from = _g("from");
-        $to = _g("to");
-
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
 
 
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
-
+        $name = _g("name");
+        $is_show_index = _g("is_show_index");
+        $is_show_search = _g("is_show_search");
         $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($is_show_index)
+            $where .=" and is_show_index = '$is_show_index' ";
 
-        if($sex)
-            $where .=" and sex = '$sex' ";
+        if($is_show_search)
+            $where .=" and is_show_search = '$is_show_search' ";
 
-        if($status)
-            $where .=" and status = '$status' ";
-
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
-
-        if($from)
-            $where .=" and a_time >=  ".strtotime($from);
-
-        if($to)
-            $where .=" and a_time <= ".strtotime($to);
-
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
+        if($name){
+            $where .=" and name like '%$name%' ";
+        }
 
         return $where;
     }

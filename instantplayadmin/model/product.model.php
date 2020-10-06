@@ -11,12 +11,19 @@ class ProductModel {
         self::STATUS_ON => "上架",
         self::STATUS_OFF => "下架",
     ];
-
+    //推荐到首页
     const RECOMMEND_TRUE = 1;
     const RECOMMEND_FALSE = 2;
     const RECOMMEND = [
         self::RECOMMEND_TRUE => "是",
         self::RECOMMEND_FALSE => "否",
+    ];
+    //详情页 收藏页 等，到了底部后，推荐的产品
+    const RECOMMEND_DETAIL_TRUE = 1;
+    const RECOMMEND_DETAIL_FALSE = 2;
+    const RECOMMEND_DETAIL_DESC = [
+        self::RECOMMEND_DETAIL_TRUE => "是",
+        self::RECOMMEND_DETAIL_FALSE => "否",
     ];
 
     static  $_field = array(
@@ -47,6 +54,10 @@ class ProductModel {
 
     const CATE_ATTR_NULL_TRUE = 1;
     const CATE_ATTR_NULL_FALSE = 2;
+    const CATE_ATTR_NULL_DESC = [
+        self::CATE_ATTR_NULL_TRUE => "是",
+        self::CATE_ATTR_NULL_FALSE => "否",
+    ];
 
 
 	static function db(){
@@ -123,6 +134,23 @@ class ProductModel {
         }
         return $html;
     }
+
+    static function getRecommendDetailOptionHtml(){
+        $html = "";
+        foreach (self::RECOMMEND_DETAIL_DESC as $k=>$v) {
+            $html .= "<option value='{$k}'>{$v}</option>";
+        }
+        return $html;
+    }
+
+    static function getIsNoSelectOptionHtml(){
+        $html = "";
+        foreach (self::CATE_ATTR_NULL_DESC as $k=>$v) {
+            $html .= "<option value='{$k}'>{$v}</option>";
+        }
+        return $html;
+    }
+
 
     static function getField(){
 	    $rs =  self::db()->getFieldsByTable();

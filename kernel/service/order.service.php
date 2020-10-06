@@ -218,7 +218,7 @@ class OrderService{
             'total_price'=>$totalPrice,
             'goods_price'=> $goods['sale_price'] ,
             'coupon_price'=>$couponPrice,
-            'allow_pay_type'=>$goods['pay_type'],
+//            'allow_pay_type'=>$product['pay_type'],
             'status'=>OrderModel::STATUS_WAIT_PAY,
             'a_time'=>time(),
             'pay_time'=>0,

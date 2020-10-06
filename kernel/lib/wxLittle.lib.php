@@ -60,6 +60,30 @@ class WxLittleLib{
 //        exit;
         return $res;
     }
+    //上面的方法没敢动
+    function getProductQrCode($pid){
+        $access_token = $this->getToken();
+        $url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token=$access_token";
+        var_dump($url);
+        $scene = "$pid";
+        $data = array(
+//            'access_token'=>$access_token,
+            'scene'=>$scene,
+            'page'=>"pages/goodsDetail/goodsDetail",
+//            'width'=>400,
+//            "auto_color"=>"",
+//            'line_color'=>"",
+//            "is_hyaline"=>"",
+        );
+        var_dump($data);exit;
+        $res = $this->curl($url,false,json_encode($data));
+//        var_dump($res);exit;
+//        header('Content-type: image/jpg');
+//        echo $res;
+//        exit;
+        return $res;
+    }
+
 
     function curl($url,$autoIncludeApp = true,$postData = null)
     {

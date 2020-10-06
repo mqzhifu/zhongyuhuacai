@@ -24,8 +24,11 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    category: {
-                        name: true
+                    name: {
+                        required: true
+                    },
+                    pic: {
+                        required: true
                     },
 
                 },
@@ -78,7 +81,7 @@
 
                     success3.show();
                     error3.hide();
-                    form[0].submit(); // submit the form
+                    form.submit(); // submit the form
                 }
 
             });

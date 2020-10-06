@@ -59,15 +59,19 @@
                                         </th>
                                         <th width="5%">
                                             ID
-                                        </th>
+                                        </th >
 
-                                        <th>
+                                        <th  width="10%">
                                             类型
                                         </th>
 
-                                        <th width="5%">
+                                        <th width="15%">
                                             名称
                                         </th>
+
+                                        <th width="5%">
+                                            空属性
+                                        </th >
 
                                         <th>
                                             子集
@@ -81,16 +85,28 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-
+                                            <select name="pc_id" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$getSelectOptionHtml}
+                                            </select>
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="name" >
                                         </td>
 
+                                        <td>
+                                            <select name="is_no" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$getIsNoSelectOptionHtml}
+                                            </select>
+
+
+
+                                        </td>
                                         <td>
                                         </td>
 
@@ -163,7 +179,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0 , 3 ,   5 ,6]
                     }],
                     "order": [
                         [1, "desc"]

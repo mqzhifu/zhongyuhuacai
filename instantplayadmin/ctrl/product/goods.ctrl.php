@@ -5,8 +5,6 @@ class GoodsCtrl extends BaseCtrl{
             $this->getList();
         }
 
-
-
         $this->assign("statusSelectOptionHtml",GoodsModel::getStatusSelectOptionHtml());
         $this->display("/product/goods_list.html");
     }
@@ -22,12 +20,12 @@ class GoodsCtrl extends BaseCtrl{
     function add(){
         $pid = _g("pid");
         if(!$pid){
-            exit("pid is null");
+            $this->notice("pid is null");
         }
 
         $product = ProductModel::db()->getById($pid);
         if(!$product){
-            exit("pid is not in db");
+            $this->notice("pid not in db");
         }
 
 //        $productAttribute= json_decode($product['attribute'],true);
@@ -42,11 +40,53 @@ class GoodsCtrl extends BaseCtrl{
                 'status'=>_g('status'),
                 'sale_price'=>_g('sale_price'),
                 'original_price'=>_g('original_price'),
-                'pay_type'=>implode(",",_g('payType')),
                 'haulage'=>_g('haulage'),
                 'admin_id'=>$this->_adminid,
                 'a_time'=>time(),
+                "sort"=>_g('sort'),
+//                'pay_type'=>implode(",",_g('payType')),
             );
+
+            if(!$data['stock'] ){
+                $this->notice("pid not in db");
+            }
+
+            $data['stock'] = (int)$data['stock'];
+            if(! $data['stock']){
+                $this->notice("库存数 必须为正整数");
+            }
+
+            if(!$data['status'] ){
+                $this->notice("请选择 上下架 状态");
+            }
+
+            if(!$data['sale_price'] ){
+                $this->notice("销售价为不能迷代");
+            }
+
+            if(!is_numeric($data['sale_price'])){
+                $this->notice("销售价格只能是 整数+小数");
+            }
+
+            if(!$data['original_price'] ){
+                $this->notice("原始价格 不能为空");
+            }
+
+            if(!is_numeric($data['original_price'])){
+                $this->notice("原始价格只能是 整数+小数");
+            }
+
+            if($data['haulage'] ){
+                if(!is_numeric($data['haulage'])){
+                    $this->notice("运费价格只能是 整数+小数");
+                }
+            }
+
+
+
+//            $data['sale_price'] = yuanToFen($data['sale_price']);
+//            $data['original_price'] = yuanToFen($data['sale_price']);
+//            $data['haulage'] = yuanToFen($data['sale_price']);
 
             $attrPara = [];
             if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
@@ -54,9 +94,16 @@ class GoodsCtrl extends BaseCtrl{
                 $attrParaStr = "";
                 foreach ($attrParaGroup as $k=>$v) {
                     $attrPara[$k] = _g("categoryAttrPara_".$k);
+                    if( !$attrPara[$k] ){
+                        $ProductCategoryAttr = ProductCategoryAttrModel::db()->getById($k);
+                        $this->notice("类别属性({$ProductCategoryAttr['name']}-$k)，不能为空，请选择一个值！");
+                    }
                     $attrParaStr .= $k ."-". $attrPara[$k] . ",";
                 }
                 $attrParaStr = substr($attrParaStr,0,strlen($attrParaStr)-1);
+                if(!$attrParaStr){
+                    $this->notice("类别属性 不能为空");
+                }
                 $exist = GoodsModel::db()->getRow(" product_attr_ids = '$attrParaStr'");
                 if($exist){
                     $this->notice("该商品已存在 ，请不要重复添加:".$attrParaStr);
@@ -107,35 +154,9 @@ class GoodsCtrl extends BaseCtrl{
         $this->assign("categoryName",$category['name']);
 //        $this->assign("categoryOptions", ProductCategoryModel::getSelectOptionHtml());
 
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
-
         $this->addHookJS("/product/goods_add_hook.html");
         $this->display("/product/goods_add.html");
     }
-
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
 
     function getList(){
         $records = array();
@@ -194,7 +215,7 @@ class GoodsCtrl extends BaseCtrl{
                     }
                 }
 
-                $payTypeArr = OrderModel::getSomePayTypeDesc($v['pay_type']);
+//                $payTypeArr = OrderModel::getSomePayTypeDesc($v['pay_type']);
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
@@ -206,13 +227,13 @@ class GoodsCtrl extends BaseCtrl{
                     $v['stock'],
                     $v['sale_price'],
                     $v['original_price'],
-                    json_encode($payTypeArr,JSON_UNESCAPED_UNICODE),
+//                    json_encode($payTypeArr,JSON_UNESCAPED_UNICODE),
                     AdminUserModel::db()->getOneFieldValueById($v['admin_id'],'uname'),
-                    $v['is_search'],
+//                    $v['is_search'],
                     $v['haulage'],
                     $v['order_total'],
                     get_default_date($v['a_time']),
-                    '<a target="_blank" href="/product/no/goods/makeQrcode/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二维码 </a>',
+
                 );
 
                 $records["data"][] = $row;
@@ -229,54 +250,38 @@ class GoodsCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
+        $id = _g("id");
+        $product_name = _g("product_name");
         $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
 
         $from = _g("from");
         $to = _g("to");
 
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
+        $stock_from = _g("stock_from");
+        $stock_to = _g("stock_to");
+
+        $sale_price_from = _g("sale_price_from");
+        $sale_price_to = _g("sale_price_to");
+
+        $original_price_from = _g("original_price_from");
+        $original_price_to = _g("original_price_to");
+
+        $haulage_from = _g("haulage_from");
+        $haulage_to = _g("haulage_to");
+
+        $order_total_from = _g("order_total_from");
+        $order_total_to = _g("order_total_to");
 
 
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
-
-        $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
-
-        if($sex)
-            $where .=" and sex = '$sex' ";
-
+        $productService = new ProductService();
+        if($product_name){
+            $where .= $productService->searchUidsByKeywordUseDbWhere($product_name);
+        }
         if($status)
             $where .=" and status = '$status' ";
-
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
 
         if($from)
             $where .=" and a_time >=  ".strtotime($from);
@@ -284,26 +289,38 @@ class GoodsCtrl extends BaseCtrl{
         if($to)
             $where .=" and a_time <= ".strtotime($to);
 
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
+        if($stock_from)
+            $where .=" and stock_from >=  ".strtotime($stock_from);
+
+        if($stock_to)
+            $where .=" and stock_to <= ".strtotime($stock_to);
 
 
+        if($sale_price_from)
+            $where .=" and sale_price_from >=  ".strtotime($sale_price_from);
 
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
+        if($sale_price_to)
+            $where .=" and sale_price_to <= ".strtotime($sale_price_to);
+
+        if($original_price_from)
+            $where .=" and original_price_from >=  ".strtotime($original_price_from);
+
+        if($original_price_to)
+            $where .=" and original_price_to <= ".strtotime($original_price_to);
+
+        if($haulage_from)
+            $where .=" and haulage_from >=  ".strtotime($haulage_from);
+
+        if($haulage_to)
+            $where .=" and haulage_to <= ".strtotime($haulage_to);
 
 
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
+        if($order_total_from)
+            $where .=" and order_total_from >=  ".strtotime($order_total_from);
+
+        if($order_total_to)
+            $where .=" and order_total_to <= ".strtotime($order_total_to);
+
 
         return $where;
     }

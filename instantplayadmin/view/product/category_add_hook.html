@@ -24,10 +24,18 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    category: {
-                        name: true
+                    name: {
+                        required: true
                     },
-
+                    pic: {
+                        required: true
+                    },
+                    is_show_index: {
+                        required: true
+                    },
+                    is_show_search: {
+                        required: true
+                    },
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes
@@ -78,7 +86,7 @@
 
                     success3.show();
                     error3.hide();
-                    form[0].submit(); // submit the form
+                    form.submit(); // submit the form
                 }
 
             });
@@ -86,70 +94,14 @@
         }
 
         return {
-            //main function to initiate the module
             init: function () {
-
                 handleValidation3();
-
             }
-
         };
 
     }();
 
 
-
-    function onCategoryChange(obj){
-        var categoryId = $(obj).val();
-        if(!categoryId && categoryId !== 0){
-            $("#categoryAttrPara").css("display",'none');
-            $("#replace_div").html("|checkbox|");
-
-            // return alert("categoryId is null");
-            return -1;
-        }
-        $.ajax({
-            // contentType: "application/json;charset=UTF-8",
-            //请求方式
-            type : "POST",
-            url : "/product/no/product/getProductCategoryRelation/categoryId="+categoryId,
-//            //数据，json字符串
-            // data : JSON.stringify(list),
-            //请求成功
-            success : function(result) {
-                if(!result){
-                    return alert("ajax getProductCategoryRelation is null");
-                }
-
-                $("#replace_div").html("|checkbox|");
-
-                var resultObj=eval("("+result+")");
-                var checkBoxHtml = "";
-                for(var i= 0 ;i <resultObj.length;i++){
-                    checkBoxHtml += "<div  >" + resultObj[i]['name'] ;
-
-                    if(resultObj[i]['para']){
-                        for(var j= 0 ;j <resultObj[i]['para'].length;j++){
-                            checkBoxHtml += "<input type='checkbox' name='categoryAttrPara[]' value="+ categoryId+"_"+resultObj[i]['id'] + "_" + resultObj[i]['para'][j]['id'] + " />&nbsp;"+resultObj[i]['para'][j]['name'];
-                        }
-                    }
-
-                    checkBoxHtml += "</div>";
-                }
-                // var replaceHtml = $("#categoryAttrPara").html();
-                // alert(replaceHtml);
-                // replaceHtml = replaceHtml.replace("|checkbox|",checkBoxHtml);
-
-                $("#categoryAttrPara").css("display",'block');
-                $("#replace_div").html(checkBoxHtml);
-            },
-            //请求失败，包含具体的错误信息
-            error : function(e){
-                alert("ajax failed!");
-            }
-        });
-        //
-    }
 
     jQuery(document).ready(function() {
         FormValidation.init();

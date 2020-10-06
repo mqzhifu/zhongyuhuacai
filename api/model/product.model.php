@@ -47,7 +47,10 @@ class ProductModel {
 
     const CATE_ATTR_NULL_TRUE = 1;
     const CATE_ATTR_NULL_FALSE = 2;
-
+    const CATE_ATTR_NULL_DESC = [
+        self::CATE_ATTR_NULL_TRUE => "是",
+        self::CATE_ATTR_NULL_FALSE => "否",
+    ];
 
     static function db(){
         if(self::$_db)

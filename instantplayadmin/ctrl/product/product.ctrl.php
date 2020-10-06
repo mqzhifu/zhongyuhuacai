@@ -75,18 +75,27 @@ class ProductCtrl extends BaseCtrl{
             $data['notice']  = _g("notice");
             $data['category_id'] = _g("category_id");
             $data['status'] = _g("status");
+            $data['factory_uid'] = _g("factory_uid");
+            $data['recommend'] = _g("recommend");
+            $data['recommend_detail'] = _g("recommend_detail");
+
             $data['a_time'] = time();
             $data['admin_id']  = $this->_adminid;
             $data['pv'] =0;
             $data['uv'] =0;
             $data['lowest_price'] = 0;
-            $data['factory_uid'] = _g("factory_uid");
             $data['goods_total'] = 0;
             $data['user_buy_total'] = 0;
             $data['user_up_total'] = 0;
             $data['user_collect_total'] = 0;
             $data['user_comment_total'] = 0;
 
+            $payType = _g('payType');
+            if(!$payType){
+                $this->notice("请选择支付的类型渠道 ");
+            }
+
+            $data['pay_type'] = implode(",",$payType);
 
             //两个参数，只会有一个是存在的,categoryAttrNull:为特殊参数，空属性
             $categoryAttrPara  = _g("categoryAttrPara");
@@ -125,15 +134,17 @@ class ProductCtrl extends BaseCtrl{
             $this->ok("成功",$this->_backListUrl);
         }
 
+        $this->assign("payType",OrderModel::PAY_TYPE_DESC);
+
+        $this->assign("getRecommendOptionHtml",ProductModel::getRecommendOptionHtml());
+        $this->assign("getRecommendDetailOptionHtml",ProductModel::getRecommendDetailOptionHtml());
+
         $factory = FactoryModel::db()->getById(FACTORY_UID_DEFAULT);
         $this->assign("factory",$factory);
 
         $statusSelectOptionHtml = ProductModel::getStatusSelectOptionHtml();
         $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
         $this->assign("categoryOptions", ProductCategoryModel::getSelectOptionHtml());
-
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
         $this->addJs("/assets/global/plugins/dropzone/dropzone.js");
         $this->addCss("/assets/global/plugins/dropzone/css/dropzone.css" );
@@ -163,6 +174,39 @@ class ProductCtrl extends BaseCtrl{
         exit;
     }
 
+    function makeQrcode(){
+        $id = _g("id");
+        if(!$id){
+            $this->notice("id is null");
+        }
+
+        $product = ProductModel::db()->getById($id);
+        if(!$product){
+            $this->notice("id not in db");
+        }
+
+        $tmpPath = "$id.jpg";
+        $path = get_wx_little_product_path($tmpPath);
+        if(file_exists($path)){
+            $url = get_wx_product_qr_code_url($tmpPath);
+            var_dump($url);exit;
+        }
+
+        $lib = new WxLittleLib();
+        $binaryImg = $lib->getProductQrCode($id);
+        var_dump($binaryImg);
+        if(!$binaryImg){
+            out_ajax(8367);
+        }
+
+        $imService = new UploadService();
+        $imService->saveProductQrCode($binaryImg,$id);
+
+        $url = get_wx_product_qr_code_url($tmpPath);
+        out_ajax(200,$url);
+
+    }
+
     function getList(){
         //初始化返回数据格式
         $records = array('data'=>[],'draw'=>$_REQUEST['draw']);
@@ -181,10 +225,20 @@ class ProductCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
-                '',
-                '',
-                '',
-                '',
+                'title',
+                'goods_total',
+                'lowest_price',
+                'brand',
+                '',//属性个数
+                'pic',
+                'category_id',
+                'status',
+                'admin_id',
+                'factory_uid',
+                'pv',
+                'uv',
+                'sort',
+                'recommend',
                 'add_time',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
@@ -205,6 +259,12 @@ class ProductCtrl extends BaseCtrl{
             $data = ProductModel::db()->getAll($where . $order . $limit);
 
             foreach($data as $k=>$v){
+                $payTypeArr = "";
+                if($v['pay_type']){
+                    $payTypeArr = OrderModel::getSomePayTypeDesc($v['pay_type']);
+                }
+
+
                 $statusBnt = "上架";
                 $type = 2;
                 $statusCssColor = "green";
@@ -228,10 +288,25 @@ class ProductCtrl extends BaseCtrl{
 
                 $attributeArr = ProductModel::attrParaParserToName($v['attribute']);
 
-                $recommendBnt = "";
                 if($v['recommend'] == ProductModel::RECOMMEND_FALSE){
-                    $recommendBnt =   '<button class="btn btn-xs default blue-hoki recommendone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-scissors"></i>  设为推荐</button>';
+                    $recommendBnt =   '<button class="btn btn-xs default red recommendone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  设为推荐首页</button>';
+                }else{
+                    $recommendBnt =   '<button class="btn btn-xs default blue-hoki recommendone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  取消推荐首页</button>';
                 }
+
+                if($v['recommend_detail'] == ProductModel::RECOMMEND_DETAIL_TRUE){
+                    $recommendDetailBnt =   '<button class="btn btn-xs default yellow recommendDetailOne margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  设为推荐产品</button>';
+                }else{
+                    $recommendDetailBnt =   '<button class="btn btn-xs default grey-cascade recommendDetailOne margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  取消推荐产品</button>';
+                }
+
+                $adminUserName = AdminUserModel::getFieldById( $v['admin_id'],'nickname');
+
+                $qrBnt = "";
+                //系统自己生成的，只适用于浏览之类的
+//                $qrBnt =  '<a target="_blank" href="/product/no/goods/makeQrcode/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二维码 </a>';
+                //微信小程序生成的二维码，只能在微信中使用
+//                $qrBnt =  '<a target="_blank" href="/product/no/product/makeQrcode/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二维码 </a>';
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
@@ -240,7 +315,7 @@ class ProductCtrl extends BaseCtrl{
 //                    $v['subtitle'],
                     $v['goods_total'],
                     $v['lowest_price'],
-                    $v['brand'],
+                    json_encode($payTypeArr,JSON_UNESCAPED_UNICODE),
 //                    json_encode($attributeArr,JSON_UNESCAPED_UNICODE),
                     count($attributeArr),
                     '<img height="30" width="30" src="'.$pic.'" />',
@@ -249,7 +324,7 @@ class ProductCtrl extends BaseCtrl{
                     ProductModel::getStatusDescById( $v['status']),
 //                    $v['lables'],
 //                    $v['is_search'],
-                    $v['admin_id'],
+                    $adminUserName,
                     FactoryModel::db()->getOneFieldValueById($v['factory_uid'],'title','--'),
                     $v['pv'],
                     $v['uv'],
@@ -260,8 +335,8 @@ class ProductCtrl extends BaseCtrl{
                     '<button class="btn btn-xs default '.$statusCssColor.' btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-type="'.$type.'"><i class="fa fa-link"></i>'.$statusBnt.'</button>'.
                     '<a href="/product/no/goods/add/pid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加商品 </a>'.
 //                    '<button class="btn btn-xs default dark delone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-scissors"></i>  删除</button>'.
-                    '<a href="" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>'.
-                   $recommendBnt
+//                    '<a href="" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>'.
+                   $recommendBnt . $recommendDetailBnt .$qrBnt
 
                 );
 
@@ -278,8 +353,34 @@ class ProductCtrl extends BaseCtrl{
 
     function recommendOne(){
         $id = _g("id");
-        ProductModel::db()->upById($id,array('recommend'=>ProductModel::RECOMMEND_TRUE));
+        $product = ProductModel::db()->getById($id);
+        if(!$product){
+            return false;
+        }
+
+        if($product['recommend'] == ProductModel::RECOMMEND_TRUE){
+            ProductModel::db()->upById($id,array('recommend'=>ProductModel::RECOMMEND_FALSE));
+        }else{
+            ProductModel::db()->upById($id,array('recommend'=>ProductModel::RECOMMEND_TRUE));
+        }
     }
+
+    function recommendDetailOne(){
+        $id = _g("id");
+        $product = ProductModel::db()->getById($id);
+        if(!$product){
+            return false;
+        }
+
+        if($product['recommend'] == ProductModel::RECOMMEND_DETAIL_TRUE){
+            ProductModel::db()->upById($id,array('recommend_detail'=>ProductModel::RECOMMEND_FALSE));
+        }else{
+            ProductModel::db()->upById($id,array('recommend_detail'=>ProductModel::RECOMMEND_TRUE));
+        }
+    }
+
+
+
 
     function delOne(){
         $id = _g("id");
@@ -363,6 +464,8 @@ class ProductCtrl extends BaseCtrl{
 
         $id = _g("id");
         $title = _g("title");
+        $lowest_price_from = _g('lowest_price_from');
+        $lowest_price_to = _g('lowest_price_to');
         $category_id = _g('category_id');
         $status = _g('status');
         $recommend = _g('recommend');
@@ -378,6 +481,8 @@ class ProductCtrl extends BaseCtrl{
 
         $goods_total_from = _g('goods_total_from');
         $goods_total_to = _g('goods_total_to');
+
+        $sort = _g("sort");
 
         if($id)
             $where .=" and id = '$id' ";
@@ -432,6 +537,12 @@ class ProductCtrl extends BaseCtrl{
 
         if($goods_total_to)
             $where .=" and goods_total <=  $goods_total_from";
+
+        if($lowest_price_from)
+            $where .=" and lowest_price >=  $lowest_price_from";
+
+        if($lowest_price_to)
+            $where .=" and lowest_price <=  $lowest_price_to";
 
         return $where;
     }

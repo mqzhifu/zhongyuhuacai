@@ -41,7 +41,7 @@
 										* </span>
                                         </label>
                                         <div class="col-md-4">
-                                            {$category['name']}
+                                            <input type="text" class="form-control form-filter input-sm" value=" {$category['name']}" disabled>
                                         </div>
                                     </div>
 
@@ -53,6 +53,20 @@
                                             <input type="text" class="form-control form-filter input-sm" name="name">
                                         </div>
                                     </div>
+
+                                    {if !$CategoryAttrExist}
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">空属性<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select name="is_no" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$getIsNoSelectOptionHtml}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    {/if}
 
                                 </div>
                                 <div class="form-actions">

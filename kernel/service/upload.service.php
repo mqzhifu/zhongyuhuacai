@@ -58,10 +58,10 @@ class UploadService
         return $rs;
     }
 
-    function category($postInputName){
+    function category($postInputName,$fileName = 0){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();
-        $rs = $lib->upLoadOneFile($postInputName,'category',array('png','jpg','bmp'),0);
+        $rs = $lib->upLoadOneFile($postInputName,'category',array('png','jpg','bmp'),0,$fileName);
         return $rs;
     }
 
@@ -108,6 +108,13 @@ class UploadService
         if(!is_dir($checkDir)){
             mkdir( $checkDir );
         }
+
+        file_put_contents($path,$binaryImg);
+    }
+
+    function saveProductQrCode($binaryImg,$pid){
+        $tmp = "/$pid.jpg";
+        $path = get_wx_little_product_path($tmp);
 
         file_put_contents($path,$binaryImg);
     }

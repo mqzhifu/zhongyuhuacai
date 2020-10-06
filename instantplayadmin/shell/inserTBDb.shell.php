@@ -52,7 +52,7 @@ class inserTBDb{
         $newGoodsData['a_time'] = time();
         $newGoodsData['u_time'] = time();
         $newGoodsData['status'] = GoodsModel::STATUS_OFF;
-        $newGoodsData['pay_type'] = OrderModel::PAY_WX_H5_NATIVE;
+//        $newGoodsData['pay_type'] = OrderModel::PAY_WX_H5_NATIVE;
 
         out("start insert Product Goods");
         foreach ($products as $k=>$v) {
@@ -67,6 +67,7 @@ class inserTBDb{
             $data['desc_attr'] = $v['attr'];
             $data['pic'] = $v['box_img'];
             $data['spider_source_pid'] = $v['offerid'];
+            $data['pay_type'] = OrderModel::PAY_ALI_H5_NATIVE;
 
             $price = json_decode($v['price'],true);
             //只是单卖，没有任何商品属性，如：一瓶、一件
