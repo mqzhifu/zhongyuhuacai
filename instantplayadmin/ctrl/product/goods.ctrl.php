@@ -178,11 +178,17 @@ class GoodsCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
+                'pid',
+                'status',
                 '',
+                'stock',
+                'sale_price',
+                'original_price',
                 '',
+                'haulage',
+                'order_total',
+                'a_time',
                 '',
-                '',
-                'add_time',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 

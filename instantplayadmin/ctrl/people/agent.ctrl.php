@@ -147,7 +147,7 @@ class AgentCtrl extends BaseCtrl{
                 '',
                 'mobile',
                 'fee_percent',
-                'add_time',
+                'a_time',
                 '',
                 '',
                 '',

@@ -179,7 +179,7 @@ class AddressCtrl extends BaseCtrl{
                 'is_default',
                 'mobile',
                 'address',
-                'add_time',
+                'a_time',
                 '',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;

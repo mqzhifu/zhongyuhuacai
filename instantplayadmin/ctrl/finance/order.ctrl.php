@@ -121,7 +121,7 @@ class OrderCtrl extends BaseCtrl{
                 '',
                 '',
                 '',
-                'add_time',
+                'a_time',
                 'pay_time',
                 'nums',
                 'haulage',

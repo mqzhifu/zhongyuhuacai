@@ -103,6 +103,7 @@ class FactoryCtrl extends BaseCtrl{
                 "status",
                 "",
                 "",
+                "",
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -129,8 +130,9 @@ class FactoryCtrl extends BaseCtrl{
                     $v['category'],
                     $v['real_name'],
                     $v['id_card_num'],
-                    $v['status'],
+
                     get_default_date($v['a_time']),
+                   FactoryModel::STATUS_DESC[ $v['status']],
                     $v['mobile'],
                     "",
                 );

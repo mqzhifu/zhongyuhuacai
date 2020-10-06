@@ -38,6 +38,7 @@ class BannerCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
+                'title',
                 'pid',
                 '',
                 'status',

@@ -308,6 +308,11 @@ class ProductCtrl extends BaseCtrl{
                 //微信小程序生成的二维码，只能在微信中使用
 //                $qrBnt =  '<a target="_blank" href="/product/no/product/makeQrcode/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二维码 </a>';
 
+                $payTypeStr = "--";
+                if($v['pay_type']){
+                    $payTypeStr = json_encode($payTypeArr,JSON_UNESCAPED_UNICODE);
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -315,7 +320,7 @@ class ProductCtrl extends BaseCtrl{
 //                    $v['subtitle'],
                     $v['goods_total'],
                     $v['lowest_price'],
-                    json_encode($payTypeArr,JSON_UNESCAPED_UNICODE),
+                    $payTypeStr,
 //                    json_encode($attributeArr,JSON_UNESCAPED_UNICODE),
                     count($attributeArr),
                     '<img height="30" width="30" src="'.$pic.'" />',

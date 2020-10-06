@@ -32,7 +32,7 @@ class UserProductLikedCtrl extends BaseCtrl{
                 'id',
                 'id',
                 'pid',
-                'gid',
+                'uid',
                 'a_time',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
