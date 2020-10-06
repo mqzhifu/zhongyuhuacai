@@ -41,16 +41,38 @@
 										* </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <input type="text" name="title" data-required="1" id="name" class="form-control" value="" />
+                                            <input type="text" name="title" data-required="1"  class="form-control" value="" />
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">pid<span class="required">
+                                        <label class="control-label col-md-3">状态<span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <input type="text" name="pid" data-required="1" id="pid" class="form-control" value="" />
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="status">
+                                                <option value="">请选择</option>
+                                                {$getStatusOptionHtml }
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">排序
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="sort" data-required="1"  class="form-control" value="" />
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">跳转产品pid<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="pid" data-required="1"   class="form-control" value="" />
                                         </div>
                                     </div>
 

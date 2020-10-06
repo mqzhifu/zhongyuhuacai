@@ -26,7 +26,15 @@ class UserCommentCtrl extends BaseCtrl{
 
             $sort = array(
                 'id',
-                'id'
+                'id',
+                'pic',
+                'uid',
+                'title',
+                'content',
+                'oid',
+                'a_time',
+                '',
+
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -149,8 +157,6 @@ class UserCommentCtrl extends BaseCtrl{
         $title = _g('title');
         $content = _g('content');
         $oid = _g('oid');
-//        $email = _g("email");
-//        $type = _g("type");
         $from = _g('from');
         $to = _g('to');
 

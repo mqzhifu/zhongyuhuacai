@@ -51,11 +51,20 @@
                                         </th>
 
                                         <th>
-                                            产品标题
+                                            跳转-产品
                                         </th>
 
                                         <th>
                                             图片
+                                        </th>
+
+                                        <th width="5%">
+                                            状态
+                                        </th>
+
+
+                                        <th width="5%">
+                                            排序
                                         </th>
 
                                         <th>添加时间</th>
@@ -79,7 +88,31 @@
 
                                         <td></td>
                                         <td>
+                                            <select name="category_id" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$getStatusOptionHtml}
+                                            </select>
+                                        </td>
+                                        <td>
 
+                                        </td>
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
                                         </td>
                                         <td>
                                             <div class="margin-bottom-5">
@@ -150,7 +183,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0 ,2 ,3,4,8]
                     }],
                     "order": [
                         [1, "desc"]
@@ -247,6 +280,31 @@
 
 
     });
+
+
+    $("#datatable_products").on("click",".upstatus",function(){
+        var id = $(this).attr("data-id");
+        var type = $(this).attr("data-type");
+        // UTHING.ajax({
+        //     url:"/product/no/product/upstatus/",
+        //     data:"id="+id+"&type="+type,
+        //     title:"产品"
+        // });
+        bootbox.confirm("Are you sure op?", function(result) {
+            if(result == true){
+                $.ajax({
+                    type: 'GET',
+                    url:"/product/no/banner/upstatus/",
+                    data:"id="+id+"&type="+type,
+                    success: function(data){
+                        location.reload();
+                    }
+
+                });
+            }
+        });
+    });
+
 
     if (!jQuery().datetimepicker) {
         alert(333);

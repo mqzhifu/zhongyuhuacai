@@ -5,10 +5,16 @@ class BannerCtrl extends BaseCtrl{
             $this->getList();
         }
 
-//        $this->assign("typeOptions",BannerModel::getTypeOptions());
+        $this->assign("getStatusOptionHtml",BannerModel::getStatusOptionHtml());
 //        $this->assign("sexOptions", BannerModel::getSexOptions());
 
         $this->display("/product/banner_list.html");
+    }
+
+    function upstatus(){
+        $status = _g("type");
+        $id = _g("id");
+        BannerModel::db()->upById($id,array('status'=>$status));
     }
 
     function delOne(){
@@ -32,6 +38,12 @@ class BannerCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
+                'pid',
+                '',
+                'status',
+                'sort',
+                'a_time',
+                ''
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -51,9 +63,18 @@ class BannerCtrl extends BaseCtrl{
 
 
 
+
+
             foreach($data as $k=>$v){
-//                $avatar = get_avatar_url($v['avatar']);
-//                $userLiveplaceDesc = BannerModel::getLivePlaceDesc($v['id']);
+                $statusBnt = "上架";
+                $type = BannerModel::STATUS_TRUE;
+                $statusCssColor = "green";
+                if($v['status'] == BannerModel::STATUS_TRUE){
+                    $statusBnt = "下架";
+                    $type = BannerModel::STATUS_FALSE;
+                    $statusCssColor = 'red';
+                }
+
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
@@ -61,8 +82,11 @@ class BannerCtrl extends BaseCtrl{
                     $v['title'],
                     ProductModel::db()->getOneFieldValueById($v['pid'],'title'),
                     "<img width=50 height=50 src='".get_banner_url($v['pic'])."' />",
+                    BannerModel::STATUS_DESC[ $v['status']],
+                    $v['sort'],
                     get_default_date($v['a_time']),
-                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-scissors"></i>  删除</button>',
+                    '<button class="btn btn-xs default '.$statusCssColor.' btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-type="'.$type.'"><i class="fa fa-link"></i>'.$statusBnt.'</button>'
+//                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-scissors"></i>  删除</button>',
                 );
 
                 $records["data"][] = $row;
@@ -82,9 +106,29 @@ class BannerCtrl extends BaseCtrl{
         if(_g('opt')){
             $data =array(
                 'pid'=> _g('pid'),
-                'a_time'=>time(),
                 'title'=> _g('title'),
+                'status'=> _g('status'),
+                'sort'=> _g('sort'),
+                'a_time'=>time(),
             );
+
+            if(!$data['pid']){
+                $this->notice("跳转产品pid 不能为空");
+            }
+
+            $product = ProductModel::db()->getById($data['pid']);
+            if(!$product){
+                $this->notice("跳转产品pid 错误，不存在");
+            }
+
+            if(!$data['title']){
+                $this->notice("标题 不能为空");
+            }
+
+            if(!$data['status']){
+                $this->notice("状态 不能为空");
+            }
+
 
             $uploadService = new UploadService();
             $uploadRs = $uploadService->banner('pic');
@@ -100,8 +144,7 @@ class BannerCtrl extends BaseCtrl{
 
         }
 
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+        $this->assign("getStatusOptionHtml",BannerModel::getStatusOptionHtml());
 
         $this->addHookJS("/product/banner_add_hook.html");
         $this->addHookJS("/layout/file_upload.js.html");
@@ -132,52 +175,19 @@ class BannerCtrl extends BaseCtrl{
         $where = 1;
 
         $id = _g("id");
-        $uname = _g("uname");
-        $nickname = _g('nickname');
-        $sex = _g('sex');
-        $mobile = _g('mobile');
-
-        $email = _g("email");
-        $type = _g("type");
-
-        $birthday_from = _g('birthday_from');
-        $birthday_to = _g('birthday_to');
-
+        $title = _g("title");
+        $status = _g('status');
         $from = _g('from');
         $to = _g('to');
 
         if($id)
             $where .=" and id = '$id' ";
 
-        if($uname)
-            $where .=" and uname like '%$uname%' ";
+        if($title)
+            $where .=" and title like '%$title%' ";
 
-        if($nickname)
-            $where .=" and nickname like '%$nickname%' ";
-
-        if($sex)
-            $where .=" and sex =$sex ";
-
-        if($mobile)
-            $where .=" and mobile = '$mobile' ";
-
-        if($email)
-            $where .=" and recommend ='$email' ";
-
-        if($type)
-            $where .=" and mobile = '$type' ";
-
-
-//        if($from = _g("from")){
-//            $from .= ":00";
-//            $where .= " and add_time >= '".strtotime($from)."'";
-//        }
-//
-//        if($to = _g("to")){
-//            $to .= ":59";
-//            $where .= " and add_time <= '".strtotime($to)."'";
-//        }
-
+        if($status)
+            $where .=" and status =$status ";
 
         if($from){
             $where .=" and a_time >=  ".strtotime($from);
@@ -185,12 +195,6 @@ class BannerCtrl extends BaseCtrl{
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
-
-        if($birthday_from)
-            $where .=" and birthday >=  $birthday_from";
-
-        if($birthday_to)
-            $where .=" and birthday <=  $birthday_to";
 
         return $where;
     }

@@ -69,19 +69,25 @@
                                         <td>
                                         </td>
                                         <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="username" >
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="product_name" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="source" >
+                                        </td>
+
+                                        <td>
 
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="from_uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="agent_name" >
                                         </td>
-
-                                        <td></td>
-                                        <td>
-
-                                            <input type="text" class="form-control form-filter input-sm" name="to_uid" >
-                                        </td>
-                                        <td></td>
-                                        <td></td>
                                         <td>
 
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -172,7 +178,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0,2,3,5,6]
                     }],
                     "order": [
                         [1, "desc"]

@@ -47,11 +47,11 @@
                                         </th>
 
                                         <th width="20%">
-                                            pic
+                                            图片
                                         </th>
 
                                         <th width="20%">
-                                            uid
+                                            用户名
                                         </th>
 
                                         <th>标题</th>
@@ -69,19 +69,25 @@
                                         <td>
                                         </td>
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="from_uid" >
+
                                         </td>
 
-                                        <td></td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="username" >
+                                        </td>
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="to_uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="title" >
                                         </td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="content" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="oid" >
+                                        </td>
                                         <td>
 
                                             <div class="input-group date form_datetime margin-bottom-5">
@@ -172,7 +178,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0 , 2 ,3 ,4 ,5 ,8]
                     }],
                     "order": [
                         [1, "desc"]

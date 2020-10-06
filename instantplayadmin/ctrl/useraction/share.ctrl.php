@@ -26,7 +26,16 @@ class ShareCtrl extends BaseCtrl{
 
             $sort = array(
                 'id',
-                'id'
+                'id',
+                'uid',
+                'pid',
+                'source',
+                'goto_page_path',
+                'agent_id',
+                'a_time',
+//                'type',
+                ''
+
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -133,31 +142,35 @@ class ShareCtrl extends BaseCtrl{
 
         $id = _g("id");
         $username = _g("username");
-        $title = _g('title');
-        $content = _g('content');
-        $oid = _g('oid');
-//        $email = _g("email");
-//        $type = _g("type");
+        $product_name = _g("product_name");
+
         $from = _g('from');
         $to = _g('to');
+
+        $source = _g('source');
+        $agent_name = _g('agent_name');
+
+        $productService = new ProductService();
+        if($product_name){
+            $where .= $productService->searchUidsByKeywordUseDbWhere($product_name);
+        }
 
         $userService =  new UserService();
         if($username){
             $where .= $userService->searchUidsByKeywordUseDbWhere($username);
         }
 
-        if($title)
-            $where .=" and title like '%$title%' ";
-
+        if($agent_name){
+            $AgentService = new AgentService();
+            $where .= $AgentService->searchUidsByKeywordUseDbWhere($agent_name,"agent_id");
+        }
 
         if($id)
             $where .=" and id = '$id' ";
 
-        if($content)
-            $where .=" and content like '%$content%' ";
+        if($source)
+            $where .=" and source like '%$source%' ";
 
-        if($oid)
-            $where .=" and oid =  $oid ";
 
         if($from){
             $where .=" and a_time >=  ".strtotime($from);
