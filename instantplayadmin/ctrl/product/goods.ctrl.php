@@ -233,6 +233,7 @@ class GoodsCtrl extends BaseCtrl{
                     $v['haulage'],
                     $v['order_total'],
                     get_default_date($v['a_time']),
+                    "",
 
                 );
 

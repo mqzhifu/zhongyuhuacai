@@ -519,7 +519,7 @@ class AgentService{
     }
 
     //后台，要根据 一个名字，来搜索用户，并返回id值，合并列表
-    function searchUidsByKeywordUseDbWhere($keyword){
+    function searchUidsByKeywordUseDbWhere($keyword ,$whereFiles = 'aid'){
         $where = "";
 
         $productWhere = " title like '%$keyword%' or real_name like '%$keyword%'   ";
@@ -532,7 +532,7 @@ class AgentService{
                 $pids .= $v['id'] . " ,";
             }
             $pids = substr($pids,0,strlen($pids)-1);
-            $where .= " and pid in ( $pids ) ";
+            $where .= " and $whereFiles in ( $pids ) ";
         }
 
         return $where;

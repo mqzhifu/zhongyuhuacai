@@ -14,11 +14,11 @@
                     <div class="portlet light">
                         <div class="portlet-title">
                             <div class="actions">
-                                <a href="{$this->_addUrl}">
-                                    <button class="btn green">
-                                        添加 <i class="fa fa-plus"></i>
-                                    </button>
-                                </a>
+                                <!--<a href="{$this->_addUrl}">-->
+                                    <!--<button class="btn green">-->
+                                        <!--添加 <i class="fa fa-plus"></i>-->
+                                    <!--</button>-->
+                                <!--</a>-->
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -56,9 +56,9 @@
                                             理由
                                         </th>
 
-                                        <th width="5%">
-                                            备注
-                                        </th>
+                                        <!--<th width="5%">-->
+                                            <!--备注-->
+                                        <!--</th>-->
 
                                         <th width="5%">
                                             内容
@@ -70,7 +70,7 @@
 
 
                                         <th width="5%">
-                                            价格
+                                            金额
                                         </th>
 
                                         <th width="5%">
@@ -95,38 +95,41 @@
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
-                                        <td></td>
                                         <td>
-                                            <select name="status" class="form-control">
-                                                <option>请选择</option>
+                                            <input type="text" class="form-control form-filter input-sm" name="oid" >
+                                        </td>
+                                        <td>
+                                            <select name="status" class="form-control  form-filter">
+                                                <option value="">请选择</option>
                                                 {$statusOP}
                                             </select>
                                         </td>
                                         <td>
 
-                                            <select name="type" class="form-control">
-                                                <option>请选择</option>
+                                            <select name="type" class="form-control  form-filter">
+                                                <option value="">请选择</option>
                                                 {$typeOP}
                                             </select>
                                         </td>
                                         <td>
-                                            <select name="reasonOP" class="form-control">
-                                                <option>请选择</option>
+                                            <select name="reason" class="form-control  form-filter">
+                                                <option value="">请选择</option>
                                                 {$reasonOP}
                                             </select>
                                         </td>
 
+                                        <!--<td>-->
+                                            <!--<input type="text" class="form-control form-filter input-sm" name="total_price" >-->
+                                        <!--</td>-->
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="total_price" >
+                                            <input type="text" class="form-control form-filter input-sm" name="content" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="mobile" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="share_uid" >
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="address" >
+                                            <input type="text" class="form-control form-filter input-sm" name="price_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="price_to" >
                                         </td>
                                         <td>
 
@@ -227,7 +230,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0,6,7,9,10,12]
                     }],
                     "order": [
                         [1, "desc"]

@@ -9,29 +9,6 @@ class GoodsLinkCategoryAttrCtrl extends BaseCtrl{
     }
 
 
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
-
     function getList(){
         $records = array();
         $records["data"] = array();
@@ -52,11 +29,11 @@ class GoodsLinkCategoryAttrCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
+                'gid',
+                'pc_id',
+                'pca_id',
+                'pcap_id',
                 '',
-                '',
-                '',
-                '',
-                'add_time',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -106,7 +83,8 @@ class GoodsLinkCategoryAttrCtrl extends BaseCtrl{
                     $v['pcap_id']."-(".ProductCategoryAttrParaModel::db()->getOneFieldValueById($v['pcap_id'],'name') .")",
 //                    $v['order_total'],
 //                    get_default_date($v['a_time']),
-                    '<a target="_blank" href="/product/no/goods/makeQrcode/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二维码 </a>',
+//                    '<a target="_blank" href="/product/no/goods/makeQrcode/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二维码 </a>',
+                    "",
                 );
 
                 $records["data"][] = $row;
@@ -123,81 +101,23 @@ class GoodsLinkCategoryAttrCtrl extends BaseCtrl{
 
     function getDataListTableWhere(){
         $where = 1;
-        $openid = _g("openid");
-        $sex = _g("sex");
-        $status = _g("status");
-
-        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
-
-        $from = _g("from");
-        $to = _g("to");
-
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
 
 
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
-
-
+        $pc_id = _g("pc_id");
+        $pca_id = _g("pca_id");
+        $pcap_id = _g("pcap_id");
         $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($openid)
-            $where .=" and openid = '$openid' ";
+        if($pc_id)
+            $where .=" and pc_id = '$pc_id' ";
 
-        if($sex)
-            $where .=" and sex = '$sex' ";
+        if($pca_id)
+            $where .=" and pca_id = '$pca_id' ";
 
-        if($status)
-            $where .=" and status = '$status' ";
-
-        if($nickname)
-            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
-
-        if($from)
-            $where .=" and a_time >=  ".strtotime($from);
-
-        if($to)
-            $where .=" and a_time <= ".strtotime($to);
-
-//        if($trigger_time_from)
-//            $where .=" and trigger_time_from >=  ".strtotime($trigger_time_from);
-//
-//        if($trigger_time_to)
-//            $where .=" and trigger_time_to <= ".strtotime($trigger_time_to);
-//
-//        if($uptime_from)
-//            $where .=" and up_time >=  ".strtotime($uptime_from);
-//
-//        if($uptime_to)
-//            $where .=" and up_time <= ".strtotime($uptime_to);
-
-
-
-//        if($is_online)
-//            $where .=" and is_online = '$is_online' ";
-
-
-//        if($uname)
-//            $where .=" and uname = '$uname' ";
+        if($pcap_id)
+            $where .=" and pcap_id = '$pcap_id' ";
 
         return $where;
     }

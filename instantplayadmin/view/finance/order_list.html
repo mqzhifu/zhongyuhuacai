@@ -65,11 +65,11 @@
                                         </th>
 
                                         <th width="5%">
-                                            用户ID
+                                            用户
                                         </th>
 
                                         <th width="5%">
-                                            分享者ID
+                                            分享者
                                         </th>
 
                                         <th width="5%">
@@ -114,28 +114,31 @@
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="total_price" >
+                                            <input type="text" class="form-control form-filter input-sm" name="total_price_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="total_price_to" >
                                         </td>
 
 
                                         <td>
-                                            <select name="payType" class="form-control">
+                                            <select name="payType" class="form-control form-filter">
+                                                <option value="">请选择</option>
                                                 {$payTypeOptions}
                                             </select>
                                         </td>
 
                                         <td>
 
-                                            <select name="payType"  class="form-control">
+                                            <select name="status"  class="form-control form-filter">
+                                                <option value="">请选择</option>
                                                 {$statusOptions}
                                             </select>
 
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="username" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="share_uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="share_username" >
                                         </td>
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="address" >
@@ -255,7 +258,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0,2,3,4,8,9,10,15]
                     }],
                     "order": [
                         [1, "desc"]

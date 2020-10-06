@@ -15,7 +15,7 @@
                     <div class="portlet box green">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-gift"></i>添加分类属性
+                                <i class="fa fa-gift"></i>添加订单
                             </div>
                             <div class="actions">
                                 <a href="{$this->_backListUrl}" class="btn btn-default btn-sm">
@@ -41,7 +41,13 @@
                                         </label>
                                         <div class="col-md-4">
                                             <textarea name="gidsNums"></textarea>
+                                            <span class="help-block">
+											e.g: 1234-1 , 1235-99 , 1236-45
+                                        </span>
                                         </div>
+                                        <span class="help-block">
+											 商品ID可以去商品列表中查看
+                                        </span>
                                     </div>
 
 
@@ -52,25 +58,47 @@
                                         <div class="col-md-4">
                                             <input type="text" class="form-control form-filter input-sm" name="uid">
                                         </div>
+
+                                        <span class="help-block">
+											 用户id可以去用户列表中查看
+                                        </span>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">分享者UID<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control form-filter input-sm" name="share_uid">
-                                        </div>
-                                    </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">收货地址ID<span class="required">
+                                        <label class="control-label col-md-3">收货地址id<span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control form-filter input-sm" name="userSelAddressId">
                                         </div>
+                                        <span class="help-block">
+											 id可以去用户收货地址中查看
+                                        </span>
                                     </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">分享者uid
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control form-filter input-sm" name="share_uid">
+                                        </div>
+                                        <span class="help-block">
+											 用户id可以去用户列表中查看
+                                        </span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">备注
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control form-filter input-sm" name="memo">
+                                        </div>
+                                    </div>
+
+
 
 
 

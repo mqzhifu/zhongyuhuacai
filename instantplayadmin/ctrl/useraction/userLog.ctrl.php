@@ -27,7 +27,14 @@ class UserLogCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
-                'uname',
+                'ctrl',
+                'ac',
+                'uid',
+                'trace_id',
+                'request_id',
+                'request',
+                'a_time',
+                ''
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -57,6 +64,8 @@ class UserLogCtrl extends BaseCtrl{
                     $v['ctrl'],
                     $v['ac'],
                     $v['uid'],
+                    $v['trace_id'],
+                    $v['request_id'],
                     $v['request'],
                     get_default_date($v['a_time']),
                     '',
@@ -157,16 +166,11 @@ class UserLogCtrl extends BaseCtrl{
         $where = 1;
 
         $id = _g("id");
-        $uname = _g("uname");
-        $nickname = _g('nickname');
-        $sex = _g('sex');
-        $mobile = _g('mobile');
-
-        $email = _g("email");
-        $type = _g("type");
-
-        $birthday_from = _g('birthday_from');
-        $birthday_to = _g('birthday_to');
+        $ctrl = _g("para_ctrl");
+        $ac = _g('para_ac');
+        $uid = _g('uid');
+        $trace_id = _g('trace_id');
+        $request_id = _g("request_id");
 
         $from = _g('from');
         $to = _g('to');
@@ -174,35 +178,20 @@ class UserLogCtrl extends BaseCtrl{
         if($id)
             $where .=" and id = '$id' ";
 
-        if($uname)
-            $where .=" and uname like '%$uname%' ";
+        if($ctrl)
+            $where .=" and ctrl = '$ctrl' ";
 
-        if($nickname)
-            $where .=" and nickname like '%$nickname%' ";
+        if($ac)
+            $where .=" and ac = '$ac' ";
 
-        if($sex)
-            $where .=" and sex =$sex ";
+        if($uid)
+            $where .=" and uid =$uid ";
 
-        if($mobile)
-            $where .=" and mobile = '$mobile' ";
+        if($trace_id)
+            $where .=" and trace_id = '$trace_id' ";
 
-        if($email)
-            $where .=" and recommend ='$email' ";
-
-        if($type)
-            $where .=" and mobile = '$type' ";
-
-
-//        if($from = _g("from")){
-//            $from .= ":00";
-//            $where .= " and add_time >= '".strtotime($from)."'";
-//        }
-//
-//        if($to = _g("to")){
-//            $to .= ":59";
-//            $where .= " and add_time <= '".strtotime($to)."'";
-//        }
-
+        if($request_id)
+            $where .=" and request_id ='$request_id' ";
 
         if($from){
             $where .=" and a_time >=  ".strtotime($from);
@@ -210,12 +199,6 @@ class UserLogCtrl extends BaseCtrl{
 
         if($to)
             $where .=" and a_time <= ".strtotime($to);
-
-        if($birthday_from)
-            $where .=" and birthday >=  $birthday_from";
-
-        if($birthday_to)
-            $where .=" and birthday <=  $birthday_to";
 
         return $where;
     }

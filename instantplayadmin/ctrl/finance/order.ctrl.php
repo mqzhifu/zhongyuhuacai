@@ -28,15 +28,20 @@ class OrderCtrl extends BaseCtrl{
         if(_g("opt")){
 
             $gidsNums =_g("gidsNums");
-            $couponId = _g("couponId");
+//            $couponId = _g("couponId");
             $memo = _g("memo");
             $uid = _g("uid");
             $share_uid = _g("share_uid");
             $userSelAddressId = _g("userSelAddressId");
 
 
-            $order = $this->orderService->doing($uid,$gidsNums,$couponId,$memo,$share_uid,$userSelAddressId);
-            $this->ok("成功");
+            $rs = $this->orderService->doing($uid,$gidsNums,0 , $memo,$share_uid , $userSelAddressId);
+            if($rs['code'] == 200){
+                $this->ok("成功");
+            }else{
+                $this->notice($rs['code'] . "-".$rs['msg']);
+            }
+
         }
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
@@ -87,28 +92,6 @@ class OrderCtrl extends BaseCtrl{
         echo_json($html);
     }
 
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
     function getList(){
         $records = array();
         $records["data"] = array();
@@ -129,11 +112,20 @@ class OrderCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
-                '',
+                'no',
+                'pids',
+                'gids',
+                'total_price',
+                'pay_type',
+                'status',
                 '',
                 '',
                 '',
                 'add_time',
+                'pay_time',
+                'nums',
+                'haulage',
+                '',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -242,7 +234,9 @@ class OrderCtrl extends BaseCtrl{
         }
 
         $order = OrderModel::db()->getById($id);
-
+        if(!$order){
+            $this->notice("id  not in db");
+        }
         $orderService =  new OrderService();
         //产品/商品列表
         $order['goods_list'] = $orderService->getOneDetail($id)['msg'];
@@ -337,19 +331,19 @@ class OrderCtrl extends BaseCtrl{
 
     }
 
-
     function getDataListTableWhere(){
         $where = 1;
 
 
         $no = _g("no");
-        $total_price = _g("total_price");
+        $total_price_from = _g("total_price_from");
+        $total_price_to = _g("total_price_to");
         $payType = _g('payType');
         $status = _g("status");
 
 
-        $uid = _g('uid');
-        $share_uid = _g('share_uid');
+        $username = _g('username');
+        $share_username = _g('share_username');
         $address = _g('address');
 
         $from = _g("from");
@@ -370,20 +364,22 @@ class OrderCtrl extends BaseCtrl{
         if($no)
             $where .=" and no = '$no' ";
 
-        if($total_price)
-            $where .=" and total_price = '$total_price' ";
+        if($total_price_from)
+            $where .=" and total_price >= '$total_price_from' ";
+
+        if($total_price_to)
+            $where .=" and total_price <= '$total_price_to' ";
 
         if($status)
             $where .=" and status = '$status' ";
 
         if($payType)
-            $where .=" and payType = '$payType' ";
+            $where .=" and pay_type = '$payType' ";
 
-        if($uid)
-            $where .=" and uid = '$uid' ";
-
-        if($share_uid)
-            $where .=" and share_uid = '$share_uid' ";
+        if($share_username){
+            $userService = new UserService();
+            $where .= $userService->searchUidsByKeywordUseDbWhere($share_username);
+        }
 
         if($address)
             $where .=" and address like '%$address%' ";
@@ -405,6 +401,11 @@ class OrderCtrl extends BaseCtrl{
 
         if($pay_to)
             $where .=" and a_time <= ".strtotime($to);
+
+        if($username){
+            $userService = new UserService();
+            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
+        }
 
         return $where;
     }

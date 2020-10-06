@@ -9,13 +9,13 @@ class WithdrawCtrl extends BaseCtrl{
 
         $statusOptions = "";
         foreach ( WithdrawMoneyService::WITHDRAW_STATUS_DESC as $k=>$v){
-            $statusOptions .= "<option value'{$k}'>$v</option>";
+            $statusOptions .= "<option value = '{$k}'>$v</option>";
         }
 
 
         $levelOptions = "";
         foreach ( AgentModel::ROLE as $k=>$v){
-            $levelOptions .= "<option value'{$k}'>$v</option>";
+            $levelOptions .= "<option value = '{$k}'>$v</option>";
         }
 
         $this->assign("levelOptions",$levelOptions);
@@ -58,11 +58,17 @@ class WithdrawCtrl extends BaseCtrl{
             }
 
             if($role != AgentModel::ROLE_FACTORY){
+                if(!arrKeyIssetAndExist($order,'agent_id')){
+                    $this->notice("该订单，不是代理分享的，属于用户正常下单");
+                }
+
                 $agent = AgentModel::db()->getById($order['agent_id']);
                 $fee_percent = $agent['fee_percent'] / 100;
                 $price = $order['total_price'] * $fee_percent;
                 $priceTotal += $price;
                 $showHtml .= "$v($price)";
+            }else{
+
             }
         }
 
@@ -127,12 +133,14 @@ class WithdrawCtrl extends BaseCtrl{
                 'id',
                 'id',
                 '',
-                '',
-                '',
-                '',
-                '',
-                '',
+                'price',
+                'orders_ids',
                 'a_time',
+                'status',
+                'memo',
+                'type',
+                "audit_time",
+                ""
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -291,24 +299,22 @@ class WithdrawCtrl extends BaseCtrl{
     }
 
     function getDataListTableWhere(){
-//        $openid = _g("openid");
-//        $nickname = _g('name');
-//        $nickname_byoid = _g('nickname_byoid');
-//        $content = _g('content');
-//        $is_online = _g('is_online');
-//        $uname = _g('uname');
-//        $trigger_time_from = _g("trigger_time_from");
-//        $trigger_time_to = _g("trigger_time_to");
-//        $uptime_from = _g("uptime_from");
-//        $uptime_to = _g("uptime_to");
+        $where = 1;
 
         $from = _g("from");
         $to = _g("to");
-        $where = 1;
+
         $type = _g("type");
         $status = _g("status");
         $id = _g("id");
         $agentName = _g("agent_name");
+
+        $price_from = _g("price_from");
+        $price_to = _g("price_to");
+//        $memo = _g("memo");
+
+
+
         if($id)
             $where .=" and id = '$id' ";
 
@@ -317,6 +323,13 @@ class WithdrawCtrl extends BaseCtrl{
 
         if($status)
             $where .=" and status = '$status' ";
+
+
+        if($price_from)
+            $where .=" and price >=  ".$price_from;
+
+        if($price_to)
+            $where .=" and price <= ".$price_to;
 
 
         if($from)
@@ -338,32 +351,8 @@ class WithdrawCtrl extends BaseCtrl{
 
         $AgentService = new AgentService();
         if($agentName){
-            $where .= $AgentService->searchUidsByKeywordUseDbWhere($agentName);
+            $where .= $AgentService->searchUidsByKeywordUseDbWhere($agentName,"agent_id");
         }
-
-//        $userService =  new UserService();
-//        if($username){
-//            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
-//        }
-
-//
-//        if($sex)
-//            $where .=" and sex = '$sex' ";
-//        if($nickname)
-//            $where .=" and nickname = '$nickname' ";
-
-//        if($nickname_byoid){
-//            $user = wxUserModel::db()->getRow(" nickname='$nickname_byoid'");
-//            if(!$user){
-//                $where .= " and 0 ";
-//            }else{
-//                $where .=  " and openid = '{$user['openid']}' ";
-//            }
-//        }
-
-//        if($content)
-//            $where .= " and content like '%$content%'";
-
 
         return $where;
     }

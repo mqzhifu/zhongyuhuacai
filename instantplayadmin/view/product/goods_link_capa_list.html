@@ -58,14 +58,11 @@
                                             <input type="checkbox" class="group-checkable">
                                         </th>
                                         <th width="2%">
-                                            ID
+                                            id
                                         </th>
                                         <th width="5%">
                                             gid
                                         </th>
-                                        <!--<th width="10%">-->
-                                            <!--type-->
-                                        <!--</th>-->
 
                                         <th width="5%">
                                             pc_id
@@ -88,13 +85,18 @@
                                         <td>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="uid" >
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="pc_id" >
                                         </td>
 
-                                        <td></td>
-                                        <td></td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="pca_id" >
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="pcap_id" >
+                                        </td>
 
                                         <td>
 
@@ -169,7 +171,7 @@
                     },
                     "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
                         'bSortable' : false,
-                        'aTargets' : [ 0]
+                        'aTargets' : [ 0 , 6]
                     }],
                     "order": [
                         [1, "desc"]

@@ -4,7 +4,7 @@ class UserAddressService{
     const IS_DEFAULT_FALSE = 2;
     const IS_DEFAULT_DESC = [
         self::IS_DEFAULT_TRUE =>"是",
-        self::IS_DEFAULT_TRUE =>"否",
+        self::IS_DEFAULT_FALSE =>"否",
     ];
     function getList($uid,$is_default = 0){
         $where = "uid = {$uid}";
@@ -138,7 +138,6 @@ class UserAddressService{
             'province_code'=>$data['province_code'],
             'city_code'=>$data['city_code'],
             'county_code'=>$data['county_code'],
-//            'town_code'=>$data['town_code'],
             'town_code'=>0,
             'mobile'=>$data['mobile'],
             'uid'=>$uid,
@@ -147,6 +146,11 @@ class UserAddressService{
             'uid'=>$uid,
             'a_time'=>time(),
         );
+
+
+        if(arrKeyIssetAndExist($data,'town_code')){
+            $addData['town_code'] = $data['town_code'];
+        }
 
         if(arrKeyIssetAndExist($data,'is_default')){
             //先把之前已经 设置成默认收货地址 置0

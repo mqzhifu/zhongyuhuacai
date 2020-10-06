@@ -139,28 +139,6 @@ class RefundCtrl extends BaseCtrl{
         echo_json($html);
     }
 
-    function getWhere(){
-        $where = " 1 ";
-        if($mobile = _g("mobile"))
-            $where .= " and mobile = '$mobile'";
-
-        if($message = _g("message"))
-            $where .= " and mobile like '%$message%'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-
-        return $where;
-    }
-
     function getList(){
         $records = array();
         $records["data"] = array();
@@ -181,11 +159,17 @@ class RefundCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
+                'oid',
+                'status',
+                'type',
+                'reason',
+                'content',
+                'mobile',
+                'price',
                 '',
-                '',
-                '',
-                '',
+                'uid',
                 'add_time',
+                ''
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -228,7 +212,7 @@ class RefundCtrl extends BaseCtrl{
 
                 $refundBnt = "";
                 if($v['status'] == OrderService::REFUND_STATS_APPLY  ){
-                    $refundBnt =  '<a href="/finance/no/refund/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
+                    $refundBnt =  '<a href="/finance/no/refund/refund/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
                 }
 
                 $row = array(
@@ -238,7 +222,7 @@ class RefundCtrl extends BaseCtrl{
                    OrderService::REFUND_STATS[$v['status']],
                     OrderService::REFUND_TYPE_DESC[$v['type']],
                     OrderService::REFUND_REASON_DESC[ $v['reason']],
-                    $v['memo'],
+//                    $v['memo'],
 //                    OrderModel::STATUS_DESC[$v['status']],
 //                    $shareUserName,
                     $v['content'],
@@ -401,57 +385,41 @@ class RefundCtrl extends BaseCtrl{
         $where = 1;
 
 
-        $no = _g("no");
-        $total_price = _g("total_price");
-        $payType = _g('payType');
+        $oid = _g("oid");
         $status = _g("status");
-
-
-        $uid = _g('uid');
-        $share_uid = _g('share_uid');
-        $address = _g('address');
+        $type = _g('type');
+        $reason = _g('reason');
+        $content = _g('content');
+        $mobile = _g('mobile');
 
         $from = _g("from");
         $to = _g("to");
 
-        $pay_from = _g("pay_from");
-        $pay_to = _g("pay_to");
+        $price_from = _g("price_from");
+        $price_to = _g("price_to");
 
-
-        $num = _g("num");
-        $haulage = _g("haulage");
-
-
+        $username = _g("username");
         $id = _g("id");
         if($id)
             $where .=" and id = '$id' ";
 
-        if($no)
-            $where .=" and no = '$no' ";
-
-        if($total_price)
-            $where .=" and total_price = '$total_price' ";
+        if($oid)
+            $where .=" and oid = '$oid' ";
 
         if($status)
             $where .=" and status = '$status' ";
 
-        if($payType)
-            $where .=" and payType = '$payType' ";
+        if($type)
+            $where .=" and type = '$type' ";
 
-        if($uid)
-            $where .=" and uid = '$uid' ";
+        if($content)
+            $where .=" and content like '%$content%' ";
 
-        if($share_uid)
-            $where .=" and share_uid = '$share_uid' ";
+        if($reason)
+            $where .=" and reason = '$reason' ";
 
-        if($address)
-            $where .=" and address like '%$address%' ";
-
-        if($num)
-            $where .=" and num = '$num' ";
-
-        if($haulage)
-            $where .=" and haulage = '$haulage' ";
+        if($mobile)
+            $where .=" and mobile = '$mobile' ";
 
         if($from)
             $where .=" and a_time >=  ".strtotime($from);
@@ -459,11 +427,17 @@ class RefundCtrl extends BaseCtrl{
         if($to)
             $where .=" and a_time <= ".strtotime($to);
 
-        if($pay_from)
-            $where .=" and a_time >=  ".strtotime($from);
+        if($price_from)
+            $where .=" and price >=  ".($price_from);
 
-        if($pay_to)
-            $where .=" and a_time <= ".strtotime($to);
+        if($price_to)
+            $where .=" and a_time <= ".($price_to);
+
+        if($username){
+            $userService = new UserService();
+            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
+
+        }
 
         return $where;
     }
