@@ -117,7 +117,6 @@ class AliCallbackCtrl{
             if(!$row){
                 continue;
             }
-            SmsLogModel::
             $status = SmsLogModel::ALI_CALLBACK_MSG_STATUS_OK;
             if(!$v['success']){
                 $status = SmsLogModel::ALI_CALLBACK_MSG_STATUS_FAIL;
