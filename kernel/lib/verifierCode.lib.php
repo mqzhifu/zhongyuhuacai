@@ -151,6 +151,7 @@ class VerifierCodeLib{
             'title'=>$ruleInfo['title'],
             'channel'=>$channel,
             'out_no'=>$out_no,
+            'third_callback_status'=>AliCallbackCtrl::MSG_STATUS_WAIT,
         );
         $templateId = $ruleInfo['third_template_id'];
         if($type == self::TypeCellphone){

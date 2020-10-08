@@ -8,6 +8,16 @@ class AliCallbackCtrl{
         'approved'=>AliSmsLib::SMS_TEMPLATE_STATUS_OK,
         'rejected'=>AliSmsLib::SMS_TEMPLATE_STATUS_FAIL,
     );
+
+    const MSG_STATUS_OK = 1;
+    const MSG_STATUS_FAIL = 2;
+    const MSG_STATUS_WAIT = 3;
+    const MSG_STATUS_DESC = [
+        self::MSG_STATUS_OK=>"成功",
+        self::MSG_STATUS_FAIL=>"失败",
+        self::MSG_STATUS_WAIT=>"未处理",
+    ];
+
     function __construct($request){
         $jsonData = $request['input'];
         if(!$jsonData){
@@ -115,10 +125,15 @@ class AliCallbackCtrl{
             if(!$row){
                 continue;
             }
+            $status = self::MSG_STATUS_OK;
+            if(!$v['success']){
+                $status = self::MSG_STATUS_FAIL;
+            }
             $upData = array(
                 'third_callback_info'=>json_encode($v),
                 'third_callback_time'=>time(),
-                'third_callback_status'=>"{$v['success']}-{$v['err_msg']}-{$v['err_code']}",
+//                'third_callback_status'=>"{$status}-{$v['err_msg']}-{$v['err_code']}",
+                'third_callback_status'=>$status,
                 'third_callback_report_time'=>$v['report_time'],
             );
             SmsLogModel::db()->upById($row['id'],$upData);
