@@ -54,7 +54,7 @@ class AliCallbackCtrl{
 //            }
 //        ]
 
-        
+
         foreach ($this->_data as $k=>$v){
             $thirdId  = $v['template_code'];
             $rule = SmsRuleModel::db()->getRow("third_template_id = '$thirdId'");
@@ -111,7 +111,7 @@ class AliCallbackCtrl{
 //        }
 
         foreach ($this->_data as $k=>$v){
-            $row = SmsLogModel::db()->getById("out_no = '{$v['out_id']}'");
+            $row = SmsLogModel::db()->getRow("out_no = '{$v['out_id']}'");
             if(!$row){
                 continue;
             }
