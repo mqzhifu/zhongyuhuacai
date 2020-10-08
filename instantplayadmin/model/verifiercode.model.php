@@ -8,11 +8,13 @@ class VerifiercodeModel {
     const STATUS_NORMAL = 1;
     const STATUS_USED = 2;
     const STATUS_EXPIRE = 3;
+    const STATUS_REPEAT_EXPIRE = 4;
 
     const STATUS_DESC = array(
         self::STATUS_NORMAL=>"正常",
         self::STATUS_USED=>"已使用",
         self::STATUS_EXPIRE=>"已失效",
+        self::STATUS_REPEAT_EXPIRE =>"重复发送，触发失效",
     );
 
     const TYPE_SMS = 1;

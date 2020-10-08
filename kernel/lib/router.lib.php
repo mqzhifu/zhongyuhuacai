@@ -126,9 +126,15 @@ class RouterLib{
 	    if($_REQUEST){
             $data = $_REQUEST;
         }
+
+        $content_type = get_client_content_type();
+
         $data["ctrl"] =$this->ctrl;
         $data["ac"] =$this->ac;
         $data['ctrlFilePath'] = $this->ctrlFilePath;
+        $data['content_type'] = $content_type;
+        $data['input'] = file_get_contents("php://input");
+
         $this->para = $data;
         //反射，根据POST的KEY-VALUE，对应到方法的参数上
 //	    if($this->reflection){

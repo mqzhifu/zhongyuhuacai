@@ -15,6 +15,13 @@ $main = array(
     ),
 
     'website_title'=>"新零售 - 云分享",
+    'ali_sms'=>array(
+        'domain'=>"dysmsapi.aliyuncs.com",
+        'AccessKeyID'=>'LTAI4GEaDscAQUgNhjq6JE55',//https://ak-console.aliyun.com/
+        'AccessKeySecret'=>"MkOX5wrhSKIG4noOPBnPkIWzys7vPx",
+        "SignName"=>"新零售云分享",//https://dysms..consolealiyun.com/dysms.htm#/develop/sign
+        'RegionId'=>'cn-hangzhou',
+    ),
 );
 
 //$GLOBALS[APP_NAME]['main'] = $main;
