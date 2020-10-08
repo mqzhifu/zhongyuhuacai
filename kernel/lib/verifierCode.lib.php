@@ -151,7 +151,7 @@ class VerifierCodeLib{
             'title'=>$ruleInfo['title'],
             'channel'=>$channel,
             'out_no'=>$out_no,
-            'third_callback_status'=>AliCallbackCtrl::MSG_STATUS_WAIT,
+            'third_callback_status'=>SmsLogModel::ALI_CALLBACK_MSG_STATUS_WAIT,
         );
         $templateId = $ruleInfo['third_template_id'];
         if($type == self::TypeCellphone){
@@ -172,7 +172,7 @@ class VerifierCodeLib{
 //        var_dump($realSendSmsRuntimeBackInfo);
 
         $upData = array(
-            'thrid_back_info'=>json_encode($realSendSmsRuntimeBackInfo['third_back_info']),
+            'third_back_info'=>json_encode($realSendSmsRuntimeBackInfo['third_back_info']),
             'u_time'=>time(),
         );
         if( $realSendSmsRuntimeBackInfo['code'] == 200 ){

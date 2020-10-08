@@ -9,15 +9,6 @@ class AliCallbackCtrl{
         'rejected'=>AliSmsLib::SMS_TEMPLATE_STATUS_FAIL,
     );
 
-    const MSG_STATUS_OK = 1;
-    const MSG_STATUS_FAIL = 2;
-    const MSG_STATUS_WAIT = 3;
-    const MSG_STATUS_DESC = [
-        self::MSG_STATUS_OK=>"成功",
-        self::MSG_STATUS_FAIL=>"失败",
-        self::MSG_STATUS_WAIT=>"未处理",
-    ];
-
     function __construct($request){
         $jsonData = $request['input'];
         if(!$jsonData){
@@ -26,6 +17,7 @@ class AliCallbackCtrl{
         $this->_jsonData = $jsonData;
         $this->_data = json_decode($jsonData,true);
     }
+
 
     //模板状态
     function template($request){
@@ -125,9 +117,10 @@ class AliCallbackCtrl{
             if(!$row){
                 continue;
             }
-            $status = self::MSG_STATUS_OK;
+            SmsLogModel::
+            $status = SmsLogModel::ALI_CALLBACK_MSG_STATUS_OK;
             if(!$v['success']){
-                $status = self::MSG_STATUS_FAIL;
+                $status = SmsLogModel::ALI_CALLBACK_MSG_STATUS_FAIL;
             }
             $upData = array(
                 'third_callback_info'=>json_encode($v),

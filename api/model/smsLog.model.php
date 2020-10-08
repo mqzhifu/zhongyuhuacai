@@ -23,6 +23,24 @@ class SmsLogModel {
 //        self::CHANNEL_TENCENT => "腾讯",
     ];
 
+    const ALI_CALLBACK_MSG_STATUS_OK = 1;
+    const ALI_CALLBACK_MSG_STATUS_FAIL = 2;
+    const ALI_CALLBACK_MSG_STATUS_WAIT = 3;
+    const ALI_CALLBACK_MSG_STATUS_DESC = [
+        self::ALI_CALLBACK_MSG_STATUS_OK=>"成功",
+        self::ALI_CALLBACK_MSG_STATUS_FAIL=>"失败",
+        self::ALI_CALLBACK_MSG_STATUS_WAIT=>"未处理",
+    ];
+
+
+    static function getMsgStatusOptionHtml(){
+        $html = "";
+        foreach (self::ALI_CALLBACK_MSG_STATUS_DESC as $k=>$v) {
+            $html .= "<option value='{$k}'>{$v}</option>";
+        }
+        return $html;
+    }
+
 
     static function getChannelOptionHtml(){
         $html = "";
