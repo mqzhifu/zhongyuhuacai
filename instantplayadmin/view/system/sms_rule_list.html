@@ -42,7 +42,7 @@
                                             <input type="checkbox" class="group-checkable">
                                         </th>
                                         <th width="5%">
-                                            ID
+                                            id
                                         </th>
                                         <th width="5%">
                                             标题
@@ -61,7 +61,7 @@
 
 
                                         <th width="5%">
-                                            1正常2报警
+                                            类型
                                         </th>
 
                                         <th width="5%">
@@ -80,6 +80,13 @@
                                             3方模板备注
                                         </th>
 
+                                        <th width="5%">
+                                            3方回调数据
+                                        </th>
+
+                                        <th width="5%">
+                                            3方回调时间
+                                        </th>
 
                                         <th width="5%">
                                             操作
@@ -124,6 +131,9 @@
                                                 {$getTemplateStatusOptionHtml}
                                             </select>
                                         </td>
+                                        <td></td>
+
+                                        <td></td>
                                         <td></td>
 
                                         <td>
@@ -279,7 +289,7 @@
             if(result == true){
                 $.ajax({
                     type: 'GET',
-                    url: "/user/delOne/uid="+id ,
+                    url: "/system/no/smsRule/delOne/id="+id ,
                     dataType: 'json',
                     success: function(data){
                         location.reload();
@@ -288,9 +298,6 @@
                 });
             }
         });
-
-
-
     });
 
     if (!jQuery().datetimepicker) {

@@ -14,10 +14,6 @@ class SmsRuleCtrl extends BaseCtrl{
 
 
     function getList(){
-        $this->getData();
-    }
-
-    function getData(){
         $records = array();
         $records["data"] = array();
         $sEcho = intval($_REQUEST['draw']);
@@ -37,13 +33,19 @@ class SmsRuleCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
-                '',
-                '',
-                '',
-                '',
+                'title',
+                'content',
+                'period_times',
+                'day_times',
+                'type',
+                'period',
+                'third_template_id',
                 'third_status',
-                'third_memo',
+                'third_reason',
+                'third_callback_info',
+                'third_callback_time',
                 'add_time',
+                '',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -65,12 +67,14 @@ class SmsRuleCtrl extends BaseCtrl{
             $aliSdk = new AliSmsLib();
             $space = "&nbsp;";
             foreach($data as $k=>$v){
-                $aliTemplate = $aliSdk->QuerySmsTemplate($v['third_id']);
-                $TemplateStatus = AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$aliTemplate['TemplateStatus']];
-                $reason = "";
-                if($aliTemplate['TemplateStatus'] == AliSmsLib::SMS_TEMPLATE_STATUS_FAIL){
-                    $reason = $aliSdk['Reason'];
-                }
+//                $aliTemplate = $aliSdk->QuerySmsTemplate($v['third_id']);
+//                $TemplateStatus = AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$aliTemplate['TemplateStatus']];
+//                $reason = "";
+//                if($aliTemplate['TemplateStatus'] == AliSmsLib::SMS_TEMPLATE_STATUS_FAIL){
+//                    $reason = $aliSdk['Reason'];
+//                }
+                $TemplateStatus = AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$v['third_status']];
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -80,11 +84,15 @@ class SmsRuleCtrl extends BaseCtrl{
                     $v['day_times'],
                     $v['type'],
                     $v['period'],
-                    $v['third_id'],
+                    $v['third_template_id'],
                     $TemplateStatus,
-                    $reason,
+                    $v['third_reason'],
+//                    $reason,
+                    $v['third_callback_info'],
+                    $v['third_callback_time'],
                     '<a href="/system/no/smsRule/editone/id='.$v['id'].'" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>编辑</a>'.
-                    '<a href="/system/no/smsRule/sendMsg/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>测试通道</a>',
+                    '<a href="/system/no/smsRule/sendMsg/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>测试通道</a>'.
+                    '<button class="btn btn-xs default red delone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>删除</button>',
                 );
 
                 $records["data"][] = $row;
@@ -134,7 +142,7 @@ class SmsRuleCtrl extends BaseCtrl{
                 'period_times'=>_g("period_times"),
                 'day_times'=>_g("day_times"),
                 'period'=>_g("period"),
-                'third_id'=>_g("third_id"),
+//                'third_id'=>_g("third_id"),
                 'type'=>_g('type'),
                 'channel'=>_g('channel'),
                 'memo'=>_g("memo"),
@@ -178,16 +186,16 @@ class SmsRuleCtrl extends BaseCtrl{
 
             $aliSmsLib = new AliSmsLib();
             $AddSmsTemplateRs =  $aliSmsLib->AddSmsTemplate($data['type'],$data['title'],$data['content'],$data['memo']);
-            if($AddSmsTemplateRs['Code'] == "ok" || $AddSmsTemplateRs['Code'] == "OK"){
-                $data['third_id'] = $AddSmsTemplateRs['TemplateCode'];
-//                $data['third_status'] = AliSmsLib::SMS_TEMPLATE_STATUS_AUDIT;
-                $data['third_memo'] = "";
-                SmsRuleModel::db()->add($data);
-                $this->ok("ok");
-            }else{
+            if($AddSmsTemplateRs['back_code'] != 200){
                 $this->notice("请示3方创建模板失败:".json_encode($AddSmsTemplateRs));
             }
 
+            $data['third_back_info'] = json_encode($AddSmsTemplateRs);
+            $data['third_template_id'] = $AddSmsTemplateRs['TemplateCode'];
+            $data['third_status'] = AliSmsLib::SMS_TEMPLATE_STATUS_AUDIT;//审核中
+            $data['third_reason'] = "";
+            SmsRuleModel::db()->add($data);
+            $this->ok("ok");
         }
 
         $this->assign("getTemplateTypeOptionHtml", AliSmsLib::getTemplateTypeOptionHtml());
@@ -196,6 +204,32 @@ class SmsRuleCtrl extends BaseCtrl{
 
         $this->addHookJS("/system/sms_rule_add_hook.html");
         $this->display("/system/sms_rule_add.html");
+    }
+
+    function delone(){
+        $id = _g("id");
+        if(!$id){
+            exit("id is null");
+        }
+
+        $info = SmsRuleModel::db()->getById($id);
+        if(!$info){
+            exit("id not in db");
+        }
+        $thirdId = $info['third_id'];
+//        $thirdId = "SMS_204126904";
+
+        $AliSmsLib = new AliSmsLib();
+        $back = $AliSmsLib->DeleteSmsTemplate( $thirdId);
+        if($back['back_code'] != 200){
+            out_ajax(500,json_encode($back));
+        }
+        SmsRuleModel::db()->delById($info['id']);
+        out_ajax(200);
+
+        return true;
+//        ["TemplateCode"]=> string(13) "SMS_204117068" ["Message"]=> string(2) "OK" ["RequestId"]=> string(36) "5A58A131-4EED-44AA-A9B9-E209EB1E3FF4" ["Code"]=> string(2) "OK"
+//        var_dump($back);exit;
     }
 
     function editone(){
@@ -211,12 +245,15 @@ class SmsRuleCtrl extends BaseCtrl{
 
         if(_g("opt")){
             $data = array(
+//                'type'=>AliSmsLib::SMS_TEMPLATE_TYPE_CODE,
+//                'third_id'=>_g("third_id"),
+                'type'=>_g('type'),
                 'title'=>_g("title"),
                 'content'=>_g("content"),
                 'period_times'=>_g("period_times"),
                 'day_times'=>_g("day_times"),
                 'period'=>_g("period"),
-                'third_id'=>_g("third_id"),
+                'u_time'=>time(),
             );
 
             if(!$data['title']){
@@ -239,8 +276,22 @@ class SmsRuleCtrl extends BaseCtrl{
                 $this->notice("period 不能为空");
             }
 
-            if(!$data['third_id']){
-                $this->notice("3方渠道供应商-模板ID 不能为空");
+//            if(!$data['third_id']){
+//                $this->notice("3方渠道供应商-模板ID 不能为空");
+//            }
+
+
+            //只有标题 跟 内容发生变化才会请示3方
+            if($data['title'] != $info['title'] || $data['content'] != $info['content']){
+
+                $AliSmsLib = new AliSmsLib();
+                $ModifySmsTemplateRs = $AliSmsLib->ModifySmsTemplate($data['third_template_id'],$data['type'],$data['title'],$data['content'],$data['memo']);
+                if($ModifySmsTemplateRs['back_code'] != 200){
+                    $this->notice("请示3方创建模板失败:".json_encode($ModifySmsTemplateRs));
+                }
+
+                $data['third_back_info'] = json_encode($ModifySmsTemplateRs);
+                $data['third_status'] =  AliSmsLib::SMS_TEMPLATE_STATUS_AUDIT;//审核中
             }
 
             SmsRuleModel::db()->upById($id,$data);

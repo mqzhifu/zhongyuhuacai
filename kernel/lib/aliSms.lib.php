@@ -139,6 +139,17 @@ class AliSmsLib{
         return $content;
     }
 
+    function DeleteSmsTemplate($TemplateCode){
+        $params = array(
+            'TemplateCode'=>$TemplateCode,
+        );
+
+        $action = "DeleteSmsTemplate";
+        $helper = new SignatureHelper();
+        $content = $helper->request($action,$params);
+        return $content;
+    }
+
     function QuerySmsTemplate($TemplateCode){
         $params = array(
             'TemplateCode'=>$TemplateCode,
@@ -223,7 +234,13 @@ class SignatureHelper {
 
         try {
             $content = $this->fetchContent($url, $method, "Signature={$signature}{$sortedQueryStringTmp}");
-            return json_decode($content,true);
+            $decodeContent =  json_decode($content,true);
+            $back_code = 500;
+            if($decodeContent['Code'] == "ok" || $decodeContent['Code'] == "OK"){
+                $back_code = 200;
+            }
+            $decodeContent['back_code'] = $back_code;
+            return $decodeContent;
         } catch( \Exception $e) {
             return false;
         }

@@ -147,13 +147,12 @@ class VerifierCodeLib{
             'status' => SmsLogModel::STATUS_SENDING,//待发送
             'a_time' => time(),
             'ip' => get_client_ip(),
-            'err_info' => "",
-            'type'=>1,
+            'type'=>0,//保留字段
             'title'=>$ruleInfo['title'],
             'channel'=>$channel,
             'out_no'=>$out_no,
         );
-        $templateId = $ruleInfo['third_id'];
+        $templateId = $ruleInfo['third_template_id'];
         if($type == self::TypeCellphone){
             $data['cellphone'] = $addr;
             $newDbIncId = SmsLogModel::db()->add($data);
@@ -194,7 +193,7 @@ class VerifierCodeLib{
         if($channel == SmsLogModel::CHANNEL_ALI){
             $aliSms = new AliSmsLib();
             $backInfo = $aliSms->SendSms($cellphoneNumber,$templateId,$content,$outNo);
-            if( $backInfo['Code'] == 'ok' ||  $backInfo['Code'] == 'OK'){
+            if( $backInfo['back_code'] == 200){
                 $code = 200;
             }
         }elseif($channel == SmsLogModel::CHANNEL_TENCENT){
