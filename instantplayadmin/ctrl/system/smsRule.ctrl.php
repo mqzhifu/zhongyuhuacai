@@ -297,7 +297,7 @@ class SmsRuleCtrl extends BaseCtrl{
             if($data['title'] != $info['title'] || $data['content'] != $info['content'] || $data['type'] != $info['type']){
 
                 $AliSmsLib = new AliSmsLib();
-                $ModifySmsTemplateRs = $AliSmsLib->ModifySmsTemplate($info['third_template_id'],$data['type'],$data['title'],$data['content'],$data['memo']);
+                $ModifySmsTemplateRs = $AliSmsLib->ModifySmsTemplate($info['third_template_id'],$data['type'],$data['title'],$data['content'],$info['memo']);
                 if($ModifySmsTemplateRs['back_code'] != 200){
                     $this->notice("请示3方创建模板失败:".json_encode($ModifySmsTemplateRs));
                 }
