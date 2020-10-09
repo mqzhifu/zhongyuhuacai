@@ -19,7 +19,6 @@ class SystemCtrl extends BaseCtrl {
         $phone = $this->request['phone'];
         $ruleId =  $this->request['rule'];
         $class = new VerifierCodeLib();
-        var_dump(222222);exit;
         $rs = $class->sendCode(VerifierCodeLib::TypeCellphone,$phone,$ruleId);
 
         out_ajax($rs['code'],$rs['msg']);
