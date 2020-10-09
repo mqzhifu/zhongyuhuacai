@@ -70,6 +70,7 @@
                     success : function(result) {
                         var data = eval( "(" + result + ")" );
                         if(data.code == 200){
+                            toastOk("短信已发送，注意查收");
                             validCode = false
 
                             var t = setInterval(function () {
