@@ -102,10 +102,10 @@ class VerifierCodeLib{
             return out_pc(1001);
         }
 
-//        $check = $this->check($type,$addr,$rule);
-//        if($check['code']!=200){
-//            return $check;
-//        }
+        $check = $this->check($type,$addr,$rule);
+        if($check['code']!=200){
+            return $check;
+        }
 
         $content = $rule['content'];
         if(!$content){
@@ -214,21 +214,23 @@ class VerifierCodeLib{
             LogLib::inc()->debug(" sms code test pass , 123321:$type , $addr , $code , $ruleId ");
             return out_pc(200);
         }
+
         if(!$type){
-            return out_pc(8004);
+            return out_pc(3100);
         }
 
-        if(!$this->keyInType($type)){
-            return out_pc(8103);
+        if(! $this->keyInType($type) ){
+            return out_pc(3101);
+        }
+
+        if(!$addr){
+            return out_pc(3102);
         }
 
         if(!$ruleId){
             return out_pc(8005);
         }
 
-        if(!$addr){
-            return out_pc(8015);
-        }
 //        echo " addr = '$addr' and rule_id = $ruleId and status = 1";
 
         $info = VerifiercodeModel::db()->getRow(" addr = '$addr' and rule_id = $ruleId and status = 1");
@@ -246,7 +248,7 @@ class VerifierCodeLib{
         }
 
         if($info['code'] != $code){
-            return out_pc(8110);
+            return out_pc(5010);
         }
 
         VerifiercodeModel::db()->upById($info['id'],array('status'=>2));

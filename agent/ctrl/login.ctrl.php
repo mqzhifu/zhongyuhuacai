@@ -110,7 +110,7 @@ class LoginCtrl extends BaseCtrl  {
     function sms(){
         $cellphone = get_request_one( $this->request,'ids',"name");
         $smsCode = get_request_one( $this->request,'ids',"smsCode");
-//        $rs = $this->selfLogin($cellphone,null,null,$smsCode);
+        $rs = $this->selfLogin($cellphone,null,null,$smsCode);
         $this->userService->selfLogin($cellphone,$ps);
     }
     //用户名/密码+手机号/短信 登陆

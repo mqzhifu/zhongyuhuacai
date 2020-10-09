@@ -17,10 +17,10 @@ class SystemCtrl extends BaseCtrl {
 
     function sendSms(){
         $phone = $this->request['phone'];
-
+        $ruleId =  $this->request['rule'];
         $class = new VerifierCodeLib();
-        $class->sendCode(VerifierCodeLib::TypeCellphone,$phone,1);
+        $rs = $class->sendCode(VerifierCodeLib::TypeCellphone,$phone,$ruleId);
 
-        out_ajax(200);
+        out_ajax($rs['code'],$rs['msg']);
     }
 }
