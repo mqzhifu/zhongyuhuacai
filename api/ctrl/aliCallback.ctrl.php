@@ -140,7 +140,9 @@ class AliCallbackCtrl{
 
     function response($code,$msg){
         $rs = array('code'=>$code,'msg'=>$msg);
-        echo json_encode($rs);
+        $rs = json_encode($rs);
+        LogLib::inc()->debug("AliCallbackCtrl response:".$rs);
+        echo $rs;
         exit;
     }
 }
