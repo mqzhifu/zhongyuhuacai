@@ -97,7 +97,7 @@ class SmsRuleCtrl extends BaseCtrl{
                     $v['third_reason'],
 //                    $reason,
                     $third_callback_info,
-                    $v['third_callback_time'],
+                   get_default_date( $v['third_callback_time']),
                     '<a href="/system/no/smsRule/editone/id='.$v['id'].'" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>编辑</a>'.
                     '<a href="/system/no/smsRule/sendMsg/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>测试通道</a>'.
                     '<button class="btn btn-xs default red delone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>删除</button>',

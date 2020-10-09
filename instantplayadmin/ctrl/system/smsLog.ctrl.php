@@ -82,6 +82,8 @@ class SmsLogCtrl extends BaseCtrl{
 //                    $reason = $aliSdk['Reason'];
 //                }
 //                $TemplateStatus = AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$v['third_status']];
+                $third_callback_info =  str_auto_br_style($v['third_callback_info'],100);
+                $third_back_info =  str_auto_br_style($v['third_back_info'],100);
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
@@ -95,8 +97,8 @@ class SmsLogCtrl extends BaseCtrl{
                     $v['cellphone'],
                     $v['out_no'],
 //                    $v['third_back_info'],
-                    '',
-                    $v['third_callback_info'],
+                    $third_back_info,
+                    $third_callback_info,
                     get_default_date($v['third_callback_time']),
                     SmsLogModel::ALI_CALLBACK_MSG_STATUS_DESC[$v['third_callback_status']],
                     $v['third_callback_report_time'],
