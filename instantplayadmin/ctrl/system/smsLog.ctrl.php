@@ -102,7 +102,7 @@ class SmsLogCtrl extends BaseCtrl{
                     get_default_date($v['third_callback_time']),
                     SmsLogModel::ALI_CALLBACK_MSG_STATUS_DESC[$v['third_callback_status']],
                     $v['third_callback_report_time'],
-
+                    get_default_date($v['a_time']),
                     '',
 //                    '<a href="/system/no/smsRule/editone/id='.$v['id'].'" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>编辑</a>'.
 //                    '<a href="/system/no/smsRule/sendMsg/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>测试通道</a>'.
