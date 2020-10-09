@@ -306,13 +306,15 @@ class SmsRuleCtrl extends BaseCtrl{
             $this->ok("成功");
 
         }
-        $aliSdk = new AliSmsLib();
-        $aliTemplate = $aliSdk->QuerySmsTemplate($info['third_id']);
-        $TemplateStatus = AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$aliTemplate['TemplateStatus']];
-        $reason = "";
-        if($aliTemplate['TemplateStatus'] == AliSmsLib::SMS_TEMPLATE_STATUS_FAIL){
-            $reason = $aliSdk['Reason'];
-        }
+//        $aliSdk = new AliSmsLib();
+//        $aliTemplate = $aliSdk->QuerySmsTemplate($info['third_id']);
+//        $TemplateStatus = AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$aliTemplate['TemplateStatus']];
+        $TemplateStatus =  AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$info['third_status']];
+//        $reason = "";
+//        if($aliTemplate['TemplateStatus'] == AliSmsLib::SMS_TEMPLATE_STATUS_FAIL){
+//            $reason = $aliSdk['Reason'];
+//        }
+        $reason = $info['third_reason'];
 
         $info['channel_desc'] = SmsLogModel::CHANNEL_DESC[$info['channel']];
 
