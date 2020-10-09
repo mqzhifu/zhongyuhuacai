@@ -198,7 +198,7 @@ class SmsRuleCtrl extends BaseCtrl{
                 $this->notice("请示3方创建模板失败:".json_encode($AddSmsTemplateRs,JSON_UNESCAPED_UNICODE));
             }
 
-            $data['third_back_info'] = json_encode($AddSmsTemplateRs);
+            $data['third_back_info'] = json_encode($AddSmsTemplateRs,JSON_UNESCAPED_UNICODE);
             $data['third_template_id'] = $AddSmsTemplateRs['TemplateCode'];
             $data['third_status'] = AliSmsLib::SMS_TEMPLATE_STATUS_AUDIT;//审核中
             $data['third_reason'] = "";
@@ -230,7 +230,7 @@ class SmsRuleCtrl extends BaseCtrl{
         $AliSmsLib = new AliSmsLib();
         $back = $AliSmsLib->DeleteSmsTemplate( $thirdId);
         if($back['back_code'] != 200){
-            out_ajax(500,json_encode($back));
+            out_ajax(500,json_encode($back,JSON_UNESCAPED_UNICODE));
         }
         SmsRuleModel::db()->delById($info['id']);
         out_ajax(200);
@@ -299,7 +299,7 @@ class SmsRuleCtrl extends BaseCtrl{
                 $AliSmsLib = new AliSmsLib();
                 $ModifySmsTemplateRs = $AliSmsLib->ModifySmsTemplate($info['third_template_id'],$data['type'],$data['title'],$data['content'],$info['memo']);
                 if($ModifySmsTemplateRs['back_code'] != 200){
-                    $this->notice("请示3方创建模板失败:".json_encode($ModifySmsTemplateRs));
+                    $this->notice("请示3方创建模板失败:".json_encode($ModifySmsTemplateRs,JSON_UNESCAPED_UNICODE));
                 }
 
                 $data['third_back_info'] = json_encode($ModifySmsTemplateRs,JSON_UNESCAPED_UNICODE);
