@@ -42,30 +42,38 @@ $main = array(
 //        array("qqLogin","getUserinfo"),
     ),
 
-
-    'dayGoldUserRankNum'=>100,//日金币总排行榜，取前X人
-
-    'dayGoldUserRanRewardFirstGold'=>100000,//日金币总排行榜，冠军奖励金币数
-
-    'playGameRewardGoldcoinMaxLimit'=>9900,
-    'todayTotalGoldcoinMaxLimit'=>21100,//每日用户总金额的收益上限
-    'friendIncomeMaxLimit'=>30,
-    'goldcoinExchangeRMB'=>0.0001,
-
-    // 海外版本APP常量配置 add by XiaHB;
-    'playGameRewardGoldcoinMaxLimitOs'=>12000,
-    'friendIncomeMaxLimitOs'=>5,// 美元;
-    'goldcoinExchangeUSD'=>0.00001,// 1比10w;
-
-    'signReward'=>array(
-        array("rewardGold"=>106,'addition'=>0),
-        array("rewardGold"=>128,'addition'=>0),
-        array("rewardGold"=>186,'addition'=>300),
-        array("rewardGold"=>278,'addition'=>0),
-        array("rewardGold"=>310,'addition'=>500),
-        array("rewardGold"=>356,'addition'=>0),
-        array("rewardGold"=>388,'addition'=>1000),
+    'website_title'=>"新零售 - 云分享",
+    'ali_sms'=>array(
+        'domain'=>"dysmsapi.aliyuncs.com",
+        'AccessKeyID'=>'LTAI4GEaDscAQUgNhjq6JE55',//https://ak-console.aliyun.com/
+        'AccessKeySecret'=>"MkOX5wrhSKIG4noOPBnPkIWzys7vPx",
+        "SignName"=>"新零售云分享",//https://dysms..consolealiyun.com/dysms.htm#/develop/sign
+        'RegionId'=>'cn-hangzhou',
     ),
+
+//    'dayGoldUserRankNum'=>100,//日金币总排行榜，取前X人
+//
+//    'dayGoldUserRanRewardFirstGold'=>100000,//日金币总排行榜，冠军奖励金币数
+//
+//    'playGameRewardGoldcoinMaxLimit'=>9900,
+//    'todayTotalGoldcoinMaxLimit'=>21100,//每日用户总金额的收益上限
+//    'friendIncomeMaxLimit'=>30,
+//    'goldcoinExchangeRMB'=>0.0001,
+//
+//    // 海外版本APP常量配置 add by XiaHB;
+//    'playGameRewardGoldcoinMaxLimitOs'=>12000,
+//    'friendIncomeMaxLimitOs'=>5,// 美元;
+//    'goldcoinExchangeUSD'=>0.00001,// 1比10w;
+//
+//    'signReward'=>array(
+//        array("rewardGold"=>106,'addition'=>0),
+//        array("rewardGold"=>128,'addition'=>0),
+//        array("rewardGold"=>186,'addition'=>300),
+//        array("rewardGold"=>278,'addition'=>0),
+//        array("rewardGold"=>310,'addition'=>500),
+//        array("rewardGold"=>356,'addition'=>0),
+//        array("rewardGold"=>388,'addition'=>1000),
+//    ),
 
 );
 
