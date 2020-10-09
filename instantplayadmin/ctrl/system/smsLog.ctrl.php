@@ -91,7 +91,7 @@ class SmsLogCtrl extends BaseCtrl{
                     $v['rule_id'],
                     $v['uid'],
                     $v['content'],
-                    $v['status'],
+                    SmsLogModel::STATUS_DESC[ $v['status']],
                     SmsLogModel::CHANNEL_DESC[$v['channel']],
 //                    $v['IP'],
                     $v['cellphone'],
