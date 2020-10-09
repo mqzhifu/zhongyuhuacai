@@ -41,51 +41,54 @@
                                         <th width="2%">
                                             <input type="checkbox" class="group-checkable">
                                         </th>
-                                        <th width="5%">
+                                        <th width="2%">
                                             id
                                         </th>
                                         <th width="5%">
                                             标题
                                         </th>
-                                        <th width="10%">
+                                        <th width="5%">
                                             内容
                                         </th>
 
-                                        <th width="5%">
-                                            周期时间内，发送次数
+                                        <th width="3%">
+                                            每天次数
+                                            <br/>周期次数
+                                            <br/>周期(秒)
                                         </th>
 
-                                        <th width="5%">
-                                            一天最多发送次数
+                                        <th width="10%">
+                                            请求结果
                                         </th>
 
 
-                                        <th width="5%">
+                                        <th width="3%">
                                             类型
                                         </th>
 
                                         <th width="5%">
-                                            周期时间，秒
+                                            3方模板
+                                            <br/>ID
                                         </th>
 
                                         <th width="5%">
-                                            3方模板ID
+                                            3方模板
+                                            <br/>状态
                                         </th>
 
                                         <th width="5%">
-                                            3方模板状态
+                                            3方回调
+                                            <br/>审核备注
+                                        </th>
+
+                                        <th width="10%">
+                                            3方回调
+                                            <br/>数据
                                         </th>
 
                                         <th width="5%">
-                                            3方模板备注
-                                        </th>
-
-                                        <th width="5%">
-                                            3方回调数据
-                                        </th>
-
-                                        <th width="5%">
-                                            3方回调时间
+                                            3方回调
+                                            <br/>时间
                                         </th>
 
                                         <th width="5%">
@@ -106,7 +109,6 @@
                                         </td>
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="period_times" >
                                         </td>
                                         <td>
                                             <input type="text" class="form-control form-filter input-sm" name="day_times" >
@@ -115,14 +117,15 @@
 
                                         <td>
 
+                                            <select name="channel" class="form-control form-filter input-sm">
+                                                <option value="">请选择</option>
+                                                {$getTemplateTypeOptionHtml}
+                                            </select>
                                         </td>
-                                        <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="period" >
-                                        </td>
 
 
                                         <td>
-
+                                            <input type="text" class="form-control form-filter input-sm" name="day_times" >
                                         </td>
 
                                         <td>

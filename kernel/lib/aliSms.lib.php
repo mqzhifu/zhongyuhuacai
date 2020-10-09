@@ -23,7 +23,7 @@ class AliSmsLib{
         self::SMS_TEMPLATE_STATUS_OK=>'审核通过',
         self::SMS_TEMPLATE_STATUS_FAIL=>'审核失败',//请在返回参数Reason中查看审核失败原因。
     ];
-
+    //html select options  ，给后台用
     static function getTemplateTypeOptionHtml(){
         $html = "";
         foreach (self::SMS_TEMPLATE_TYPE_DESC as $k=>$v) {
@@ -31,7 +31,7 @@ class AliSmsLib{
         }
         return $html;
     }
-
+    //html select options  ，给后台用
     static function getTemplateStatusOptionHtml(){
         $html = "";
         foreach (self::SMS_TEMPLATE_STATUS_DESC as $k=>$v) {

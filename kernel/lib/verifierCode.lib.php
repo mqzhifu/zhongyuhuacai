@@ -143,7 +143,7 @@ class VerifierCodeLib{
         $data = array(
             'rule_id' => $ruleId,
             'uid' => $uid,
-            'content' =>json_encode($sendContent),
+            'content' =>json_encode($sendContent,JSON_UNESCAPED_UNICODE),
             'status' => SmsLogModel::STATUS_SENDING,//待发送
             'a_time' => time(),
             'ip' => get_client_ip(),
@@ -172,7 +172,7 @@ class VerifierCodeLib{
 //        var_dump($realSendSmsRuntimeBackInfo);
 
         $upData = array(
-            'third_back_info'=>json_encode($realSendSmsRuntimeBackInfo['third_back_info']),
+            'third_back_info'=>json_encode($realSendSmsRuntimeBackInfo['third_back_info'],JSON_UNESCAPED_UNICODE),
             'u_time'=>time(),
         );
         if( $realSendSmsRuntimeBackInfo['code'] == 200 ){

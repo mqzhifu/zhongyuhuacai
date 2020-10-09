@@ -66,7 +66,7 @@ class AliCallbackCtrl{
 
             $upData = array(
                 'third_callback_time'=>time(),
-                'third_callback_info'=> json_encode($v),
+                'third_callback_info'=> json_encode($v,JSON_UNESCAPED_UNICODE),
                 'third_reason'=>$v['reason'] ,
                 'third_status'=>$this->_template_status[$v['template_status']],
             );
@@ -122,7 +122,7 @@ class AliCallbackCtrl{
                 $status = SmsLogModel::ALI_CALLBACK_MSG_STATUS_FAIL;
             }
             $upData = array(
-                'third_callback_info'=>json_encode($v),
+                'third_callback_info'=>json_encode($v,JSON_UNESCAPED_UNICODE),
                 'third_callback_time'=>time(),
 //                'third_callback_status'=>"{$status}-{$v['err_msg']}-{$v['err_code']}",
                 'third_callback_status'=>$status,

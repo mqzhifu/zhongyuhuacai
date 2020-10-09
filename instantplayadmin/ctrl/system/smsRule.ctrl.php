@@ -7,7 +7,7 @@ class SmsRuleCtrl extends BaseCtrl{
 
         $this->assign("getTemplateTypeOptionHtml", AliSmsLib::getTemplateTypeOptionHtml());
         $this->assign("getTemplateStatusOptionHtml", AliSmsLib::getTemplateStatusOptionHtml());
-        $this->assign("getStatusOptionHtml", SmsLogModel::getChannelOptionHtml());
+        $this->assign("getChannelOptionHtml", SmsLogModel::getChannelOptionHtml());
 
         $this->display("system/sms_rule_list.html");
     }
@@ -75,20 +75,28 @@ class SmsRuleCtrl extends BaseCtrl{
 //                }
                 $TemplateStatus = AliSmsLib::SMS_TEMPLATE_STATUS_DESC[$v['third_status']];
 
+
+                $third_callback_info =  str_auto_br_style($v['third_callback_info'],100);
+                $third_back_info = str_auto_br_style($v['third_back_info'],100);
+
+                $limitInfo = "{$v['day_times']}<br/>{$v['day_times']}<br/>{$v['period']}";
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['title'],
                     $v['content'],
-                    $v['period_times'],
-                    $v['day_times'],
-                    $v['type'],
-                    $v['period'],
+                    $limitInfo,
+                    $third_back_info,
+//                    $v['period_times'],
+//                    $v['day_times'],
+                AliSmsLib::SMS_TEMPLATE_TYPE_DESC[ $v['type']],
+//                    $v['period'],
                     $v['third_template_id'],
                     $TemplateStatus,
                     $v['third_reason'],
 //                    $reason,
-                    $v['third_callback_info'],
+                    $third_callback_info,
                     $v['third_callback_time'],
                     '<a href="/system/no/smsRule/editone/id='.$v['id'].'" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>编辑</a>'.
                     '<a href="/system/no/smsRule/sendMsg/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-edit"></i>测试通道</a>'.

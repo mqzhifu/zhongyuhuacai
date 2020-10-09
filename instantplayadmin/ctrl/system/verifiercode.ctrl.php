@@ -76,7 +76,8 @@ class VerifiercodeCtrl extends BaseCtrl{
                     VerifiercodeModel::STATUS_DESC[$v['status']],
                     VerifiercodeModel::TYPE_DESC[$v['type']],
                     $v['uid'],
-                    $v['expire_time'],
+                   $v['addr'],
+                   get_default_date( $v['expire_time']),
                     $ruleName,
 
                     get_default_date($v['a_time']),

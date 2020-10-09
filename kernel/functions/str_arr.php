@@ -216,9 +216,22 @@ function get_distance($longitude1, $latitude1, $longitude2, $latitude2, $unit=2,
     return round($distance, $decimal);
 
 }
+//后台UI,table，如果内容过多，不折行
+//改成自动折行并截取，同时加上鼠标移动到时，显示全部
+function str_auto_br_style($str,$maxLocation){
+    if(!$str){
+        return $str;
+    }
+    $sub = str_cut( $str ,$maxLocation,'...') ;
+    $html =  "<span style='word-break:break-all' title='{$str}'>$sub</span>";
+    return $html;
+}
 
 //字符串截取，多余的字符用...填充
 function str_cut($str,$max,$symbol = '...'){
+    if(!$str){
+        return $str;
+    }
     $char = 'utf-8';
     $length = mb_strlen($str,$char);
     if($length < $max)
