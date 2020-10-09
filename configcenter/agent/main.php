@@ -26,6 +26,8 @@ $main = array(
         array("login",'sms'),
         array("login",'psSms'),
         array("login",'findPsBySms'),
+        array("system",'sendLoginSms'),
+
 
 //        array(   'index','index',),
 

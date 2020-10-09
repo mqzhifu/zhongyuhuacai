@@ -11,10 +11,7 @@
             <input type="hidden" name="opt" value="1" />
             <div class="group">
                 <label>手机号</label>
-                <input
-                        id="phone"
-                        name = "phone"
-                    type="text"
+                <input id="phone" name = "phone" type="text"
                     class="ipt"
                     placeholder="请输入手机号"
                     required
@@ -51,45 +48,50 @@
             if (validCode) {
 
                 var phone = $("#phone").val();
-                if(!phone || phone == 'undefined' || typeof(phone) == "undefined"){
+                alert(phone);
+                if(!phone || phone == 'undefined' || typeof(phone) == undefined){
                     return alert("手机号为空");
                 }
+                // return alert(phone);
                 $.ajax({
                     //请求方式
                     type : "POST",
                     //请求的媒体类型
                     // contentType: "application/json;charset=UTF-8",
                     //请求地址
-                    url : "/system/sendSms",
+                    url : "/system/sendLoginSms/",
                     //数据，json字符串
                     // data : JSON.stringify(list),
                     data : "phone="+phone+"&rule=1",
                     //请求成功
                     success : function(result) {
-                        console.log(result);
-                        alert(result);
+                        var data = eval( "(" + result + ")" );
+                        if(data.code == 200){
+                            validCode = false
+
+                            var t = setInterval(function () {
+                                code.addClass('msgs1')
+                                time--
+                                code.html(time + '秒')
+                                if (time == 0) {
+                                clearInterval(t)
+                                code.html('重新获取')
+                                validCode = true
+                                code.removeClass('msgs1')
+                                }
+                            }, 1000)
+                        }else{
+                            alert("发送短信异常:"+data.msg);
+                        }
+
                     },
                     //请求失败，包含具体的错误信息
                     error : function(e){
+                        alert("ajax error");
                         console.log(e.status);
                         console.log(e.responseText);
                     }
                 });
-
-
-                validCode = false
-
-                var t = setInterval(function () {
-                    code.addClass('msgs1')
-                    time--
-                    code.html(time + '秒')
-                    if (time == 0) {
-                        clearInterval(t)
-                        code.html('重新获取')
-                        validCode = true
-                        code.removeClass('msgs1')
-                    }
-                }, 1000)
             }
         })
     })

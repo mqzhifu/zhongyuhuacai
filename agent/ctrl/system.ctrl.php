@@ -19,7 +19,17 @@ class SystemCtrl extends BaseCtrl {
         $phone = $this->request['phone'];
         $ruleId =  $this->request['rule'];
         $class = new VerifierCodeLib();
+        var_dump(222222);exit;
         $rs = $class->sendCode(VerifierCodeLib::TypeCellphone,$phone,$ruleId);
+
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
+    function sendLoginSms(){
+        $phone = $this->request['phone'];
+        $class = new VerifierCodeLib();
+//        $rs = array('code'=>200,'msg'=>'ok');
+        $rs = $class->sendCode(VerifierCodeLib::TypeCellphone,$phone,2);
 
         out_ajax($rs['code'],$rs['msg']);
     }
