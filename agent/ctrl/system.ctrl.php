@@ -29,7 +29,7 @@ class SystemCtrl extends BaseCtrl {
         $phone = $this->request['phone'];
         $class = new VerifierCodeLib();
 //        $rs = array('code'=>200,'msg'=>'ok');
-        $rs = $class->sendCode(VerifierCodeLib::TypeCellphone,$phone,2);
+        $rs = $class->sendCode(VerifierCodeLib::TypeCellphone,$phone,SmsRuleModel::$_type_login);
 
         out_ajax($rs['code'],$rs['msg']);
     }
