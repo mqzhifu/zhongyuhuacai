@@ -24,10 +24,16 @@ class AliSmsLib{
         self::SMS_TEMPLATE_STATUS_FAIL=>'审核失败',//请在返回参数Reason中查看审核失败原因。
     ];
     //html select options  ，给后台用
-    static function getTemplateTypeOptionHtml(){
+    static function getTemplateTypeOptionHtml($selectedId = null){
         $html = "";
         foreach (self::SMS_TEMPLATE_TYPE_DESC as $k=>$v) {
-            $html .= "<option value='{$k}'>{$v}</option>";
+            $selected = "";
+            if($selectedId !== null){
+                if($k == $selectedId){
+                    $selected = "selected";
+                }
+            }
+            $html .= "<option value='{$k}' $selected>{$v}</option>";
         }
         return $html;
     }

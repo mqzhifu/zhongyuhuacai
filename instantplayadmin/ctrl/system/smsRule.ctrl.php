@@ -284,6 +284,10 @@ class SmsRuleCtrl extends BaseCtrl{
                 $this->notice("period 不能为空");
             }
 
+            if(!$data['type'] && $data['type'] != 0 && $data['type'] != '0'){
+                $this->notice("type 不能为空");
+            }
+
 //            if(!$data['third_id']){
 //                $this->notice("3方渠道供应商-模板ID 不能为空");
 //            }
@@ -317,6 +321,9 @@ class SmsRuleCtrl extends BaseCtrl{
         $reason = $info['third_reason'];
 
         $info['channel_desc'] = SmsLogModel::CHANNEL_DESC[$info['channel']];
+
+
+        $this->assign("getTemplateTypeOptionHtml", AliSmsLib::getTemplateTypeOptionHtml($info['type']));
 
         $this->assign("reason",$reason);
         $this->assign("TemplateStatus",$TemplateStatus);
