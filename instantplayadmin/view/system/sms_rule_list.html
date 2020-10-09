@@ -295,7 +295,12 @@
                     url: "/system/no/smsRule/delOne/id="+id ,
                     dataType: 'json',
                     success: function(data){
-                        location.reload();
+                        if(data.code == 200){
+                            location.reload();
+                        }else{
+                            alert(data.msg);
+                        }
+
                     }
 
                 });
