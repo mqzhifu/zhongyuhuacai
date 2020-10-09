@@ -153,10 +153,12 @@ class VerifierCodeLib{
             'out_no'=>$out_no,
             'third_callback_status'=>SmsLogModel::ALI_CALLBACK_MSG_STATUS_WAIT,
         );
+
         $templateId = $ruleInfo['third_template_id'];
         if($type == self::TypeCellphone){
             $data['cellphone'] = $addr;
             $newDbIncId = SmsLogModel::db()->add($data);
+            LogLib::inc()->debug(" send code ,insert table  sms_log new Id :".$newDbIncId);
         }else{
 //            $data['email'] = $addr;
 //            $id = EmailLogModel::db()->add($data);
