@@ -195,7 +195,7 @@ class SmsRuleCtrl extends BaseCtrl{
             $aliSmsLib = new AliSmsLib();
             $AddSmsTemplateRs =  $aliSmsLib->AddSmsTemplate($data['type'],$data['title'],$data['content'],$data['memo']);
             if($AddSmsTemplateRs['back_code'] != 200){
-                $this->notice("请示3方创建模板失败:".json_encode($AddSmsTemplateRs));
+                $this->notice("请示3方创建模板失败:".json_encode($AddSmsTemplateRs,JSON_UNESCAPED_UNICODE));
             }
 
             $data['third_back_info'] = json_encode($AddSmsTemplateRs);
@@ -224,7 +224,7 @@ class SmsRuleCtrl extends BaseCtrl{
         if(!$info){
             exit("id not in db");
         }
-        $thirdId = $info['third_id'];
+        $thirdId = $info['third_template_id'];
 //        $thirdId = "SMS_204126904";
 
         $AliSmsLib = new AliSmsLib();
@@ -302,7 +302,7 @@ class SmsRuleCtrl extends BaseCtrl{
                     $this->notice("请示3方创建模板失败:".json_encode($ModifySmsTemplateRs));
                 }
 
-                $data['third_back_info'] = json_encode($ModifySmsTemplateRs);
+                $data['third_back_info'] = json_encode($ModifySmsTemplateRs,JSON_UNESCAPED_UNICODE);
                 $data['third_status'] =  AliSmsLib::SMS_TEMPLATE_STATUS_AUDIT;//审核中
             }
 
