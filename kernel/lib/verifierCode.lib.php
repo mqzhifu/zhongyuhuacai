@@ -112,6 +112,10 @@ class VerifierCodeLib{
             return out_pc(5008);
         }
 
+        if($rule['third_status'] != AliSmsLib::SMS_TEMPLATE_STATUS_OK){
+            return out_pc(5101);
+        }
+
         return out_pc(200,$rule);
     }
 

@@ -35,7 +35,7 @@
 <script>
     $(function () {
         //获取短信验证码
-        var validCode = true
+        var validCode = true;
         $('.vCode').click(function () {
             var time = 60
             var code = $(this)
@@ -93,14 +93,6 @@
             }
         })
     })
-
-    function checkPhone(){
-        var phone = document.getElementById('phone').value;
-        if(!(/^1[23456789]\d{9}$/.test(phone))){
-            return false;
-        }
-        return true;
-    }
 
     function submitData(){
         $.ajax({

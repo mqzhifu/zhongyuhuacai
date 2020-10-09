@@ -100,4 +100,12 @@
             location.href="/";
         }
 
+        function checkPhone(){
+            var phone = document.getElementById('phone').value;
+            if(!(/^1[23456789]\d{9}$/.test(phone))){
+                return false;
+            }
+            return true;
+        }
+
     </script>
