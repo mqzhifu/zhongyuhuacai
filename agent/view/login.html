@@ -48,9 +48,12 @@
             if (validCode) {
 
                 var phone = $("#phone").val();
-                alert(phone);
+                // alert(phone);
                 if(!phone || phone == 'undefined' || typeof(phone) == undefined){
-                    return alert("手机号为空");
+                    return toastFail("手机号为空");
+                }
+                if(!checkPhone(phone)){
+                    return toastFail("手机号格式错误");
                 }
                 // return alert(phone);
                 $.ajax({
@@ -81,13 +84,13 @@
                                 }
                             }, 1000)
                         }else{
-                            alert("发送短信异常:"+data.msg);
+                            toastFail("发送短信异常:"+data.msg);
                         }
 
                     },
                     //请求失败，包含具体的错误信息
                     error : function(e){
-                        alert("ajax error");
+                        toastFail("ajax error");
                         console.log(e.status);
                         console.log(e.responseText);
                     }
@@ -95,6 +98,14 @@
             }
         })
     })
+
+    function checkPhone(){
+        var phone = document.getElementById('phone').value;
+        if(!(/^1[23456789]\d{9}$/.test(phone))){
+            return false;
+        }
+        return true;
+    }
 
     function submitData(){
         $.ajax({
