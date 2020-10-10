@@ -7,7 +7,7 @@ class SmsRuleModel {
 
 
 	static $_type_login = 2;//登陆
-//    static $_type_bind = 2;//绑定
+    static $_type_agent_apply= 1;//申请代理
 //    static $_type_reg = 3;//注册
 //    static $_type_findPs = 4;//找回密码
 //    static $_type_notice = 5;//报警

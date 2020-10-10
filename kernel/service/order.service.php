@@ -91,6 +91,23 @@ class OrderService{
         $return = array("tmpUrl"=>$tmpUrl,'url'=>$url);
         out_ajax(200,$return);
     }
+
+    function applyAgentUploadPic($uid){
+        $uploadService =  new UploadService();
+        LogLib::inc()->debug(['up avatar php $_FILES ',$_FILES]);
+//        out_ajax(200);
+        $uploadRs = $uploadService->agent('file',1);
+        if($uploadRs['code'] != 200){
+            exit(" uploadService->product error ".json_encode($uploadRs));
+        }
+
+        $tmpUrl = $uploadRs['msg'];
+        $url = get_agent_url( $tmpUrl );
+
+        $return = array("tmpUrl"=>$tmpUrl,'url'=>$url);
+        out_ajax(200,$return);
+    }
+
     //下单入口
     function doing($uid,$gidsNums,$couponId = 0,$memo = '',$share_uid = 0,$userSelAddressId = 0){
         LogLib::inc()->debug([$uid,$gidsNums,$couponId ,$memo ,$share_uid ]);

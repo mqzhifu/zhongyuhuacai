@@ -1,12 +1,13 @@
 <?php
 class SmsRuleModel {
-	static $_table = 'sms_rule';
+    static $_table = 'sms_rule';
     static $_pk = 'id';
     static $_db = null;
     static $_db_key = "instantplay";
 
 
-	static $_type_login = 2;//登陆
+    static $_type_login = 2;//登陆
+    static $_type_agent_apply= 1;//申请代理
 //    static $_type_bind = 2;//绑定
 //    static $_type_reg = 3;//注册
 //    static $_type_findPs = 4;//找回密码
@@ -26,20 +27,18 @@ class SmsRuleModel {
     public static function __callStatic($func, $arguments){
         return call_user_func_array(array(self::db(),$func), $arguments);
     }
-	
-	static function login($uname,$ps){
-		return self::db()->getRow(" uname = '$uname' and ps = '$ps'");
-	}
-	
-	static function getName($uname){
-		return self::db()->getRow(" uname = '$uname' ");
-	}
 
-	static function getById($uid){
-        $user = self::db()->getById($uid);
-        if($user){
-
-        }
+    static function getName($uname){
+        return self::db()->getRow(" uname = '$uname' ");
     }
-	
+
+    static function getAllFormatOption(){
+        $all = self::db()->getAll(1);
+        $html = "";
+        foreach ($all as $k=>$v){
+            $html .= "<option value={$v['id']}>{$v['title']}</option>";
+        }
+        return $html;
+    }
+
 }

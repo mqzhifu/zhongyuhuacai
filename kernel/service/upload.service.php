@@ -21,10 +21,16 @@ class UploadService
         return $rs;
     }
 
-    function agent($postInputName){
+    function agent($postInputName,$isBinary = 0){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();
-        $rs = $lib->upLoadOneFile($postInputName,'agent',array('png','jpg','bmp'),0);
+//        if($isBinary){
+            $rs = $lib->upLoadOneFile($postInputName,'agent',array('png','jpg','bmp'),0,"",0,$isBinary);
+//            var_dump($rs);exit;
+//        }else{
+//            $rs = $lib->upLoadOneFile($postInputName,'agent',array('png','jpg','bmp'),0);
+//        }
+
         return $rs;
     }
 

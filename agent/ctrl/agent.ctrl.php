@@ -24,6 +24,15 @@ class AgentCtrl extends BaseCtrl  {
         $oids =  get_request_one( $this->request,'oids',"");
         $this->agentService->withdrawMoney($this->agent['id'],$num,$oids,$this->uid);
     }
+    //申请成为代理 上传店铺图片
+    function applyAgentUploadPic(){
+//        var_dump($_FILES);
+//        out_ajax(200,"ok");
+
+        $rs = $this->orderService->applyAgentUploadPic($this->uid);
+        out_ajax($rs['code'],$rs['msg']);
+    }
+
     //申请成为一个代理
     function apply($request){
         $this->setTitle('申请成为代理');
@@ -48,7 +57,7 @@ class AgentCtrl extends BaseCtrl  {
             $type = _g("type");
             $mobile = _g("mobile");
             $smsCode  = _g("sms_code");
-
+            $pic_tmp_path  = _g("pic_tmp_path");
 
             if(!$smsCode){
                 out_ajax(8389);
@@ -64,9 +73,9 @@ class AgentCtrl extends BaseCtrl  {
             }
 
             $VerifierCodeLib = new VerifierCodeLib();
-            $VerifierCodeLib->authCode(VerifiercodeModel::TYPE_SMS,$mobile,$smsCode,10);
+            $VerifierCodeLib->authCode(VerifiercodeModel::TYPE_SMS,$mobile,$smsCode,SmsRuleModel::$_type_agent_apply);
 
-            $pic = _g("pic");
+//            $pic = _g("pic");
 //            $town_code = _g("town_code");
 
 //            if(!isset($_FILES['pic'])){
@@ -80,6 +89,7 @@ class AgentCtrl extends BaseCtrl  {
 //                }
 //                $pic = $upRs['msg'];
 //            }
+
 
             if(!$area){
                 out_ajax(8395);
@@ -103,7 +113,7 @@ class AgentCtrl extends BaseCtrl  {
                 'fee_percent'=>$fee_percent,
                 "sub_fee_percent"=>$sub_fee_percent,
                 'invite_agent_code'=>$invite_agent_code,
-                'pic'=>$pic,
+                'pic'=>$pic_tmp_path,
 //                "pic"=>$upRs['msg'],
             );
 
@@ -178,27 +188,7 @@ class AgentCtrl extends BaseCtrl  {
             $title = _g('title');
             $real_name = _g('real_name');
             $area = _g('area');
-            $pic = _g("pic");
-//            if(!$address){
-//                exit("address is null");
-//            }
-//
-//            if(!$sex){
-//                exit("sex is null");
-//            }
-//
-//            if(!$title){
-//                exit("title is null");
-//            }
-//
-//            if(!$real_name){
-//                exit("real_name is null");
-//            }
-//
-//            if(!$area){
-//                exit("area is null");
-//            }
-
+            $pic = _g("pic_tmp_path");
 
             if(!$area){
                 out_ajax(8395);
@@ -217,6 +207,7 @@ class AgentCtrl extends BaseCtrl  {
                  "province_code"=>$province,
                 "city_code"=>$city,
                 "county_code"=>$county,
+                'pic'=>$pic,
             );
 
 //            $picClass = new UploadService();
@@ -234,7 +225,6 @@ class AgentCtrl extends BaseCtrl  {
             $areaStr = $this->uinfo['province_code'] .",". $this->uinfo['city_code']  .",". $this->uinfo['county_code'];
             $placeholder = $this->uinfo['province'] ."/". $this->uinfo['city']  ."/". $this->uinfo['county'];
         }
-
 
         $this->assign("placeholder",$placeholder);
         $this->assign("areaStr",$areaStr);

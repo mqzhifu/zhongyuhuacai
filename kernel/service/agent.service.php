@@ -149,16 +149,19 @@ class AgentService{
         if(!arrKeyIssetAndExist($data,'real_name')){
             return out_pc(8394);
         }
-        //验证 二级代理佣金
-        if(!arrKeyIssetAndExist($data,'sub_fee_percent')){
-            return out_pc(8396);
-        }
-        $data['sub_fee_percent'] = (int)$data['sub_fee_percent'];
-        if(!$data['sub_fee_percent']){
-            return out_pc(8396);
-        }
-        if( $data['sub_fee_percent'] <= 0 ||  $data['sub_fee_percent'] >= 50){
-            return out_pc(8396);
+
+        if($type == WithdrawMoneyService::TYPE_ONE){//一级代理，必须得填写二级代理佣金
+            //验证 二级代理佣金
+            if(!arrKeyIssetAndExist($data,'sub_fee_percent')){
+                return out_pc(8396);
+            }
+            $data['sub_fee_percent'] = (int)$data['sub_fee_percent'];
+            if(!$data['sub_fee_percent']){
+                return out_pc(8396);
+            }
+            if( $data['sub_fee_percent'] <= 0 ||  $data['sub_fee_percent'] >= 50){
+                return out_pc(8396);
+            }
         }
         //验证手机
         if(!arrKeyIssetAndExist($data,'mobile')){
@@ -181,18 +184,16 @@ class AgentService{
         }
 
         $addData = array(
+//            'agent_id'=>$aid,
             'province_code'=>$data['province_code'],
             'city_code'=>$data['city_code'],
             'county_code'=>$data['county_code'],
-            'towns_code'=>$data['town_code'],
+            'town_code'=>$data['town_code'],
             'villages'=>$data['address'],
             'address'=>$data['address'],
 
             'mobile'=>$data['mobile'],
             'title'=>$data['title'],
-
-            'aid'=>$aid,
-
             'id_card_num'=>"",
             'real_name'=>"",
             'type'=>$type,
@@ -456,7 +457,6 @@ class AgentService{
         if(!$aid){
             return out_pc(8390);
         }
-
         //验证
         if(!arrKeyIssetAndExist($data,'address')){
             return out_pc(8391);
@@ -482,21 +482,23 @@ class AgentService{
             return out_pc($checkAddrRs['code'],$checkAddrRs['msg']);
         }
 
-        $data = array(
+        $upData = array(
             'province_code'=>$data['province_code'],
             'city_code'=>$data['city_code'],
             'county_code'=>$data['county_code'],
 //            'town_code'=>$data['town_code'],
 //            'villages'=>$data['address'],
             'address'=>$data['address'],
-
             'title'=>$data['title'],
-            'real_name'=>"",
+            'real_name'=>$data['real_name'],
             'sex'=>$data['sex'],
             'a_time'=>time(),
-//            'pic'=>$data['pic'],
+            'pic'=>$data['pic'],
         );
 
+        if(!$upData['pic']){
+            unset($upData['pic']);
+        }
 
         $rs =  AgentModel::db()->upById($aid,$data);
         return out_pc(200,$rs);

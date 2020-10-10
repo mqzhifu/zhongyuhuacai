@@ -15,7 +15,7 @@ class ImageUpLoadLib{
 
     }
 
-    function realUpLoadOneFile($postInputName,$path ,$allowFileTypes = array(),$useHash = 0,$fileName = "",$isVideo = 0){
+    function realUpLoadOneFile($postInputName,$path ,$allowFileTypes = array(),$useHash = 0,$fileName = "",$isVideo = 0,$isBinary = 0){
         $errInfo = " upLoadOneFile ";
         if(!is_dir($path))
             exit($errInfo." path not dir");
@@ -34,7 +34,6 @@ class ImageUpLoadLib{
 
         if(!isset($_FILES[$postInputName]))
             exit($errInfo.'$_FILES['.$postInputName .'] null notice: enctype="multipart/form-data"');
-
 
         $_FILE = $_FILES[$postInputName];
         $mark = file_mode_info($path);
@@ -67,14 +66,19 @@ class ImageUpLoadLib{
             exit($errInfo . " extFileType $extFileType ");
 
 
-        //2PHP自带的函数
-        $fileType = explode('/',$_FILE["type"]);
-        $preType = $fileType[0];
+        if(!$isBinary){//二进制可能 是： application/octet-stream
+            //2PHP自带的函数
+            $fileType = explode('/',$_FILE["type"]);
+            $preType = $fileType[0];
 
-        $extFileType = strtolower($fileType[1]);
-        if(!in_array($extFileType, $this->fileType)){
-            exit($errInfo . " explode fileType  $extFileType ");
+            $extFileType = strtolower($fileType[1]);
+            if(!in_array($extFileType, $this->fileType)){
+                exit($errInfo . " explode fileType  $extFileType ");
+            }
+        }else{
+            $preType = $extFileType;
         }
+
 
         if($extFileType == 'pjpeg' || $extFileType == 'jpeg'){
             $extFileType = 'jpg';
@@ -118,18 +122,55 @@ class ImageUpLoadLib{
         return out_pc(200,$fileDirName);
     }
 
+//    function upLoadOneFileByBinary($postInputName,$module){
+//        $errInfo = " upLoadOneFile ";
+//        if(!$module){
+//            exit($errInfo." module is null");
+//        }
+//
+//        $path = $this->path . DS . get_upload_cdn_evn() . DS .$module;
+//        if(!is_dir($path))
+//            exit($errInfo." path not dir");
+//
+//        if(!$postInputName)
+//            exit($errInfo." postInputName path not dir");
+//
+//        if(!isset($_FILES[$postInputName]))
+//            exit($errInfo.'$_FILES['.$postInputName .'] null notice: enctype="multipart/form-data"');
+//
+//        $_FILE = $_FILES[$postInputName];
+//        $mark = file_mode_info($path);
+//        if(strtoupper(substr(PHP_OS, 0, 3)) == 'WIN'){
+//            if( $mark < 7){
+//                exit($errInfo." dir not power");
+//            }
+//        }else{
+//            if( $mark != 15){
+//                exit($errInfo." dir not power");
+//            }
+//        }
+//
+//        if(arrKeyIssetAndExist($_FILE,'error')){
+//            exit($errInfo.'$_FILES[$postInputName] have error');
+//        }
+//
+//        if($_FILE['size']  > $this->fileSize  * 1024 * 1024)
+//            exit($errInfo." file size >  ".$this->fileSize);
+//
+//    }
+
 	//开始上传一个文件
     //$path:文件上传路径
     //$fileType：文件类型|文件扩展名
     //$postNames:input name
-    function upLoadOneFile($postInputName,$module ,$allowFileTypes = array(),$useHash = 0 ,$fileName = "" ,$isVideo = 0){
+    function upLoadOneFile($postInputName,$module ,$allowFileTypes = array(),$useHash = 0 ,$fileName = "" ,$isVideo = 0,$isBinary = 0){
         $errInfo = " upLoadOneFile ";
         if(!$module){
             exit($errInfo." module is null");
         }
 
         $path = $this->path . DS . get_upload_cdn_evn() . DS .$module;
-        return $this->realUpLoadOneFile($postInputName,$path,$allowFileTypes,$useHash,$fileName,$isVideo);
+        return $this->realUpLoadOneFile($postInputName,$path,$allowFileTypes,$useHash,$fileName,$isVideo,$isBinary);
     }
 	//上传多文件
 	function upLoad(){
