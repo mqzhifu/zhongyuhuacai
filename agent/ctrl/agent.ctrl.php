@@ -215,6 +215,17 @@ class AgentCtrl extends BaseCtrl  {
 //                $rs = $picClass->agent("pic");
 //            }
 
+
+            $uinfo = $this->uinfo;
+            $uinfo['real_name'] = $real_name;
+            $uinfo['pic'] = $pic;
+            $uinfo['title'] = $title;
+            $uinfo['address'] = $address;
+            $uinfo['sex'] = $sex;
+
+            $this->_sess->setValue("uinfo",$uinfo);
+
+
             $rs = $this->agentService->editOne($this->uinfo['id'],$data);
             out_ajax($rs['code'],$rs['msg']);
         }

@@ -74,7 +74,7 @@ function get_category_attr_para_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     return get_admin_upload_url($tmpPath,"category_attr_para",$protocol);
 }
 
-function get_avatar_url($tmpPath , $protocol =HTTP_PROTOCOL){
+function get_avatar_url($tmpPath = "" , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return get_default_user_url(HTTP_PROTOCOL);
     }

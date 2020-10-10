@@ -315,7 +315,12 @@ class BaseCtrl {
             $uinfo['county'] =  $county;
         }
 
-        $uinfo['avatar_url'] = "";
+        $avatar_url = get_avatar_url();
+        if($uinfo['avatar']){
+            $avatar_url = $uinfo['avatar'];
+        }
+
+        $uinfo['avatar_url'] = $avatar_url;
         $uinfo['pic_url'] = get_agent_url($uinfo['pic']);
 //        var_dump($uinfo['avatar_url'] );exit;
         $this->uinfo = $uinfo;
