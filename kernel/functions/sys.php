@@ -529,7 +529,7 @@ function get_mac($os_type) {
 		case "aix" :
 			break;
 		default :
-			$this->forWindows ();
+			forWindows ();
 			break;
 	}
 	
@@ -744,4 +744,7 @@ function get_app_download_info($andriod_download_url,$log_download_url){
 // 	return $_instens[$className];
 // }
 
+function is_order_finish_by_test($orderStatus){
+
+}
 

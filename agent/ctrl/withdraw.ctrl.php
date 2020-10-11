@@ -77,15 +77,13 @@ class WithdrawCtrl extends BaseCtrl{
             exit("id is null");
         }
 
+        $sercice = new WithdrawMoneyService();
         $info = WithdrawModel::db()->getById($id);
         if(!$info){
             exit(" id not in db");
         }
 
-        $info['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$info['status']];
-        $info['u_date'] = get_default_date($info['u_time']);
-        $info['a_date'] = get_default_date($info['a_time']);
-        $info['price'] = fenToYuan($info['price']);
+        $info = $sercice->formatRow($info);
         $this->assign("info",$info);
 
 
@@ -98,12 +96,12 @@ class WithdrawCtrl extends BaseCtrl{
 
 
         $list = $this->withdrawMoneyService->getAgentWithdrawApplyList($this->uinfo['id']);
-        if($list){
-            foreach ($list as $k=>$v){
-                $list[$k]['a_date'] = get_default_date($v['a_time']);
-                $list[$k]['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['status']];
-            }
-        }
+//        if($list){
+//            foreach ($list as $k=>$v){
+//                $list[$k]['a_date'] = get_default_date($v['a_time']);
+//                $list[$k]['status_desc'] = WithdrawMoneyService::WITHDRAW_STATUS_DESC[$v['status']];
+//            }
+//        }
         $this->assign("list",$list);
 
         $this->display("withdraw.list.html");

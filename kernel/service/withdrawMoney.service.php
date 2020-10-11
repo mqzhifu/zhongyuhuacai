@@ -41,10 +41,28 @@ class WithdrawMoneyService{
     function getRowByOid($oid){
         return  WithdrawModel::db()->getRow(" find_in_set ($oid, oids )  ");
     }
-
+    //获取一个代理的，全部 提现记录
     function getAgentWithdrawApplyList($aid){
-        return WithdrawModel::db()->getAll(" agent_id = $aid ");
+        $list = WithdrawModel::db()->getAll(" agent_id = $aid ");
+        if(!$list){
+            return $list;
+        }
+        $return = null;
+        foreach ($list as $k=>$v){
+            $row = $this->formatRow($v);
+            $return[] = $row;
+        }
+        return $return;
     }
+
+    function formatRow($row){
+        $row['a_date'] = get_default_date($row['a_time']);
+        $row['price_yuan'] = fenToYuan($row['price']);
+        $row['status_desc'] =WithdrawMoneyService::WITHDRAW_STATUS_DESC[$row['status']];
+        $row['u_date'] = get_default_date($row['u_time']);
+        return $row;
+    }
+
     //检查：申请提现的订单状态，是否可以提现
     function checkWithdrawMoneyStatus($orderIds,$agent){
         $orderList = OrderModel::db()->getByIds($orderIds);
