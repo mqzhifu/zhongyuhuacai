@@ -152,7 +152,8 @@ class WithdrawCtrl extends BaseCtrl{
                 $v['withdraw_status'] = $withdrawStatus;
                 $v['total_price'] = fenToYuan( $v['total_price']);
 
-                $nickname = $userService->getFieldById($v['uid'],"nickname");
+//                $nickname = $userService->getFieldById($v['uid'],"nickname");
+                $nickname = $userService->getUserNameByUid($v['uid']);
                 $v['user_nickname'] = $nickname;
 
                 if( in_array($v['status'],$noPay) ){
