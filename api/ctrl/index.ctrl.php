@@ -67,7 +67,24 @@ class IndexCtrl extends BaseCtrl  {
         $rs = $this->shareService->add($this->uid,$data);
         out_ajax(200,$rs['msg']);
     }
+    //分享的时候，合成图，要把头像合进去，按说正常
+    //但是，有些头像是直接从微信端获取的URL，该URL的域名，必须得配置到小程序后台，不可能把微信头像的域名配置到我们自己的后台
+    //所以，得转换一下
+    function getUserWxAvatarBinary(){
+        if(!$this->uinfo['avatar_ori']){
+            out_ajax(200,204);
+        }
+        $avatar_ori = $this->uinfo['avatar_ori'];
+        //判断 ，是从微信端 直接 获取的URL，还是用户自己上传的图片
+        if(substr($avatar_ori,0,"4") != "http"){
+            out_ajax(200,205);
+        }
+        $avatar_url = $this->uinfo['avatar'];
+        $avatar_content = file_get_contents($avatar_url);
 
+        echo $avatar_content;
+        exit;
+    }
 
     function checkToken(){
         return $this->out(200,"ok");

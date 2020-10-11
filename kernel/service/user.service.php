@@ -500,6 +500,7 @@ class UserService{
         }
         //头像
         $user['avatar'] = get_avatar_url($user['avatar']);
+        $user['avatar_ori'] = $user['avatar'];
         //注册时间
         $user['reg_dt'] = get_default_date($user['a_time']);
         if(!arrKeyIssetAndExist($user,"nickname")){
