@@ -44,9 +44,9 @@ class BaseCtrl {
 
         LogLib::inc()->debug(['uinfo', $this->uinfo]);
 
-        if($this->uinfo['status'] != UserService::STATUS_NORMAL ){
-            return out_ajax(4009);
-        }
+//        if($this->uinfo['status'] != UserService::STATUS_NORMAL ){
+//            return out_ajax(4009);
+//        }
 //        if($this->uid){
 //            $this->userService->setDayActiveUser($this->uid);
 //        }

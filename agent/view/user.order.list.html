@@ -5,29 +5,29 @@
         <span class="tab" onclick="sel_tab(3);">已完成</span>
     </div>
     <div class="container" id="container">
-        <div class="item">
-            <div class="num">ID：1200110231</div>
-            <div class="timeSq">商品名称：纯天然无公害秋梨膏</div>
-            <div class="price">
-                ¥420<img class="go" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />
-            </div>
-            <div class="timeDk">下单时间：2020/08/31 09:30</div>
-            <div class="status"><span>用户ID：200010001</span></div>
-        </div>
-        <div class="item">
-            <div class="num">ID：1200110231</div>
-            <div class="timeSq">商品名称：纯天然无公害秋梨膏</div>
-            <div class="price">
-                ¥420<img class="go" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png" />
-            </div>
-            <div class="timeDk">下单时间：2020/08/31 09:30</div>
-            <div class="status"><span>用户ID：200010001</span></div>
-        </div>
-    </div>
-    <div class="tools" id="showBnt">
-        <span class="btnDefault"  onclick="selAll()">
-            <img  class="go"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />全选</span>
-        <span class="btnSelected" onclick="subMoney();">申请提现</span>
+        <!--<div class="item">-->
+            <!--<div class="num">ID：1200110231</div>-->
+            <!--<div class="timeSq">商品名称：纯天然无公害秋梨膏</div>-->
+            <!--<div class="price">-->
+                <!--¥420<img class="go" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />-->
+            <!--</div>-->
+            <!--<div class="timeDk">下单时间：2020/08/31 09:30</div>-->
+            <!--<div class="status"><span>用户ID：200010001</span></div>-->
+        <!--</div>-->
+        <!--<div class="item">-->
+            <!--<div class="num">ID：1200110231</div>-->
+            <!--<div class="timeSq">商品名称：纯天然无公害秋梨膏</div>-->
+            <!--<div class="price">-->
+                <!--¥420<img class="go" src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png" />-->
+            <!--</div>-->
+            <!--<div class="timeDk">下单时间：2020/08/31 09:30</div>-->
+            <!--<div class="status"><span>用户ID：200010001</span></div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="tools" id="showBnt">-->
+        <!--<span class="btnDefault"  onclick="selAll()">-->
+            <!--<img  class="go"  src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-default.png" />全选</span>-->
+        <!--<span class="btnSelected" onclick="subMoney();">申请提现</span>-->
     </div>
 </div>
 
@@ -48,6 +48,7 @@
         tabs.each(function(i,n){
             if(i + 1 == type){
                 var obj = $(n)
+                //选中 样式
                 obj.addClass('active');
 
 
@@ -83,9 +84,11 @@
 
                         container +=itemHtml;
                     }
+                }else{
+                    container += getItemEmptyHtml();
+                    // container += "无";
                 }
 
-                // alert(container);
                 $("#container").html(container);
             }
         });
@@ -112,6 +115,14 @@
                 '<div class="timeDk">下单时间：#a_date#</div>'+
                 '<div class="timeDk">提现状态：#withdraw_status_desc#</div>'+
                 '<div class="status"><span>下单用户：#user_nickname#(#uid#)</span></div>'+
+            '</div>';
+        return html;
+    }
+
+    function getItemEmptyHtml(){
+        var html =
+            '<div class="item">'+
+            '<div class="num">无记录</div>'+
             '</div>';
         return html;
     }

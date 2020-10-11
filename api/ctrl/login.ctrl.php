@@ -103,6 +103,17 @@ class LoginCtrl extends BaseCtrl {
     function decodeWxEncryptedData($request){
 //        $rawData = $request['rawData'];
 //        $signature = $request['signature'];
+        if(arrKeyIssetAndExist($request,'iv')){
+            out_ajax(500,"iv is null");
+        }
+
+        if(arrKeyIssetAndExist($request,'encryptedData')){
+            out_ajax(500,"encryptedData is null");
+        }
+
+        if(arrKeyIssetAndExist($request,'sessionKey')){
+            out_ajax(500,"sessionKey is null");
+        }
 
         $iv = $request['iv'];
         $encryptedData = $request['encryptedData'];
