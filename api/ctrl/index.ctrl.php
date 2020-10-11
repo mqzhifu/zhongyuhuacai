@@ -61,7 +61,7 @@ class IndexCtrl extends BaseCtrl  {
         }
 
         $data = array(
-            'pid'=>$pid,'source'=>$source,'goto_page_path'=>$goto_page_path,'agent_id'=>$agentId,
+            'pid'=>$pid,'source'=>$source,'goto_page_path'=>$goto_page_path,'agent_id'=>$agentId,'type'=>ShareService::TYPE_FRIEND,
         );
 
         $rs = $this->shareService->add($this->uid,$data);
