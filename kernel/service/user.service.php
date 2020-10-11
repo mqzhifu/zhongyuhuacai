@@ -453,7 +453,6 @@ class UserService{
 
     function getFieldById($uid,$field){
         $user = $this->getUinfoById($uid);
-//        LogLib::appWriteFileHash(["aaaaaaaaaaaaaa",$uid,$field,$user[$field]]);
         if(isset($user[$field])){
             return $user[$field];
         }

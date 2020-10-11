@@ -128,6 +128,8 @@ class WithdrawCtrl extends BaseCtrl{
             $noPayOrder = null;
             $payedOrder = null;
             $finishOrder = null;
+
+            $userService = new UserService();
             foreach ($orderAllList as $k=>$v){
                 $v['a_date'] = get_default_date($v['a_time']);
                 $pids = explode(",",$v['pids']);
@@ -149,6 +151,10 @@ class WithdrawCtrl extends BaseCtrl{
                 $v['withdraw_status_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$withdrawStatus];
                 $v['withdraw_status'] = $withdrawStatus;
                 $v['total_price'] = fenToYuan( $v['total_price']);
+
+                $nickname = $userService->getFieldById($v['uid'],"nickname");
+                $v['user_nickname'] = $nickname;
+
                 if( in_array($v['status'],$noPay) ){
                     $noPayOrder[] = $v;
                 }elseif($v == in_array($v['status'],$payed) ){
@@ -156,7 +162,7 @@ class WithdrawCtrl extends BaseCtrl{
                 }elseif($v == in_array($v['status'],$finish) ){
                     $finishOrder[] = $finish;
                 }else{
-                    exit(" order status errr");
+                    exit(" order({$v['id']}) status errr");
                 }
             }
 
