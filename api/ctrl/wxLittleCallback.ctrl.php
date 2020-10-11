@@ -41,7 +41,6 @@ class WxLittleCallbackCtrl extends BaseCtrl {
         $pid = _g('pid');
         if(!$pid){
             out_ajax(8072);
-
         }
 
         $share_uid = _g('share_uid');
@@ -64,6 +63,14 @@ class WxLittleCallbackCtrl extends BaseCtrl {
         if(!$agent){
             out_ajax(1037);
         }
+
+        $shareData = array(
+            'pid'=>$pid,'source'=>'产品详情页','goto_page_path'=>'','agent_id'=>$agent['id'],'type'=>ShareService::TYPE_ALL_FRIEND,
+        );
+
+        $shareService = new ShareService();
+        $rs = $shareService->add($share_uid,$shareData);
+
 
         $tmpPath = "/$pid/$share_uid.jpg";
         $path = get_share_qr_code_path($tmpPath);

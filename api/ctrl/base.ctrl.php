@@ -33,7 +33,6 @@ class BaseCtrl {
         ConfigCenter::get(APP_NAME,"rediskey");
 
 //        //实例化 用户 服务 控制器
-
         $this->initService();
 //        $this->tracing();
 

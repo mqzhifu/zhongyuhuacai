@@ -55,8 +55,13 @@ class IndexCtrl extends BaseCtrl  {
         $goto_page_path =  get_request_one($request,'goto_page_path',"");
 
 
+        $agentId = 0;
+        if(arrKeyIssetAndExist($this->uinfo,'agent')){
+            $agentId = $this->uinfo['agent']['id'];
+        }
+
         $data = array(
-            'pid'=>$pid,'source'=>$source,'goto_page_path'=>$goto_page_path,
+            'pid'=>$pid,'source'=>$source,'goto_page_path'=>$goto_page_path,'agent_id'=>$agentId,
         );
 
         $rs = $this->shareService->add($this->uid,$data);
