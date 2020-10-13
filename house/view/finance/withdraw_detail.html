@@ -1,0 +1,266 @@
+<div class="page-container">
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+
+
+
+
+
+                        <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                        <h4 class="modal-title">Modal title</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Widget settings form goes here
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn blue">Save changes</button>
+                                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- Begin: life time stats -->
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-shopping-cart"></i>提现详情 #{$info['id']}
+                                        </div>
+                                        <div class="actions">
+                                            <a href="javascript:;" class="btn default yellow-stripe">
+                                                <i class="fa fa-angle-left"></i>
+                                                <span class="hidden-480">
+								Back </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="tabbable">
+                                            <ul class="nav nav-tabs nav-tabs-lg">
+                                                <li class="active">
+                                                    <a href="#tab_1" data-toggle="tab">
+                                                        详情 </a>
+                                                </li>
+                                                <!--<li>-->
+                                                    <!--<a href="#tab_3" data-toggle="tab">-->
+                                                        <!--订单列表 </a>-->
+                                                <!--</li>-->
+
+
+                                                <!--<li>-->
+                                                    <!--<a href="#tab_4" data-toggle="tab">-->
+                                                        <!--我的下级 </a>-->
+                                                <!--</li>-->
+                                                <!--<li>-->
+                                                    <!--<a href="#tab_4" data-toggle="tab">-->
+                                                        <!--日志列表 </a>-->
+                                                <!--</li>-->
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="tab_1">
+                                                    <div class="row">
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet yellow-crusta box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>属性
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            id #:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['id']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            金额:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['price']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            注册 日期 & 时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['dt']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            状态:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+																            <span class="label label-success">{$info['status_desc']} </span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            订单ids:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                           {$info['orders_ids']}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            银行:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['bank']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            卡号:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['account_num']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            户主:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['account_master']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            支付宝账号:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['ali']}%
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            微信账号:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['wx']}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            绑定小程序用户:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['uid']}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet blue-hoki box">
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>审批信息
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            后台审核人:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$auditAdminName}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            后台审核时间:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$auditTime}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            审批备注
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$info['memo']}
+                                                                        </div>
+                                                                    </div>
+
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End: life time stats -->
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

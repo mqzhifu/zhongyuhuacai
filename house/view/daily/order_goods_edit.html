@@ -1,0 +1,140 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>添加积分兑换商品
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="?opt=1" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
+
+
+                                <div class="form-body">
+                                    <div class="alert alert-danger display-hide">
+                                        <button class="close" data-close="alert"></button>
+                                        You have some form errors. Please check below.
+                                    </div>
+                                    <div class="alert alert-success display-hide">
+                                        <button class="close" data-close="alert"></button>
+                                        表单验证成功
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">订单ID <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            {$info['id']}
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">订单状态
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            {$info['status_desc']}
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">兑换时间 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            {$info['a_time']}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">兑换商品 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            {$info['goods_info']}
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">收货地址 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            {$info['email']}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">uid <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            {$info['uid']}
+                                        </div>
+                                    </div>
+
+
+                                    {if $info['status'] == 2 ||  $info['status'] == 4 }
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">uid <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            {$info['memo']}
+                                        </div>
+                                    </div>
+                                    {/if}
+                                </div>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            {if $info['status'] == 1 }
+                                                <button type="button" ac="ok" data-loading-text="Loading..." class="demo-loading-btn btn btn-primary green">通过</button>
+                                                <button type="button" ac="deny" data-loading-text="Loading..." class="demo-loading-btn btn btn-primary red">拒绝</button>
+                                            {elseif $info['status'] == 3 }
+                                                <button type="button" ac="send" data-loading-text="Loading..." class="demo-loading-btn btn btn-primary green">确认发货</button>
+                                            {/if}
+                                            <!--<button type="submit" class="btn green">通过</button>-->
+                                            <!--<button type="submit" class="btn red">拒绝</button>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                        <!-- END VALIDATION STATES-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
