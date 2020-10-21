@@ -55,6 +55,9 @@ class UserCtrl extends BaseCtrl{
                 'birthday',
                 'a_time',
                 'type',
+                '',//绑定代理
+                'master_agent_id',//归属代理
+                '',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -94,6 +97,9 @@ class UserCtrl extends BaseCtrl{
                     UserModel::getTypeDescByKey($v['type']),
 //                    $v['wx_open_id'],
 //                    fenToYuan($v['consume_total']),
+                    '',
+
+                    $v['master_agent_id'],
                     '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
 //                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',

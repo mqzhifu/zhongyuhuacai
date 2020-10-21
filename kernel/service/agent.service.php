@@ -573,5 +573,18 @@ class AgentService{
         return out_pc(200,"binding success");
 
     }
+    //获取一个代理下的所有归属用户
+    function getMasterUserList($aid){
+        if(!$aid){
+            return out_pc(8372);
+        }
+
+        $agent = AgentModel::db()->getById($aid);
+        if(!$agent){
+            return out_pc(1040);
+        }
+
+        $userList = UserModel::db()->getAll("master_agent_id = $aid");
+    }
 
 }
