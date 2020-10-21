@@ -515,6 +515,10 @@ class UserService{
             $user['agent'] = "";
         }
 
+        if(arrKeyIssetAndExist($user,'master_agent_id')){
+            $user['master_agent'] = AgentModel::db()->getByIds($user['master_agent_id']);
+        }
+
         return out_pc(200,$user);
 //        if(!arrKeyIssetAndExist($user,'avatar')){
 //            $user['avatar'] = "默认图占位符";

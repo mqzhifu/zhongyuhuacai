@@ -104,8 +104,15 @@ class IndexCtrl extends BaseCtrl  {
             'share_uid'=>$share_uid,
         );
 
+        $bindInfo = "none";
+        if($share_uid){
+            $bindRs = $this->agentService->userBindMasterAgent($this->uid,$share_uid);
+            $bindInfo = json_encode($bindRs);
+        }
+
         $newId = PageViewModel::db()->add($data);
-        out_ajax(200,$newId);
+        $return = array("page_view_new_id"=>$newId,'bind_info'=>$bindInfo);
+        out_ajax(200,$return);
     }
 
     function checkToken(){

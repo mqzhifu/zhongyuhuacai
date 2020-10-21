@@ -539,6 +539,39 @@ class AgentService{
 
         return $where;
     }
+    //一个用户，绑定到一个二级代理下面
+    function userBindMasterAgent($uid,$shareUid){
+        if(!$uid){
+            return out_pc(8002);
+        }
 
+        if(!$shareUid){
+            return out_pc(8110);
+        }
+
+        $user = UserModel::db()->getById($uid);
+        if(!$user){
+            return out_pc(1000);
+        }
+
+        if($user['master_agent_id']){
+            return out_pc(8389);
+        }
+
+        $shareAgentUserRs =  $this->getOneByUid($shareUid);
+        $shareAgent = $shareAgentUserRs['msg'];
+        if(!$shareAgent){
+            return out_pc(1037);
+        }
+
+        if($shareAgent['type'] != AgentModel::ROLE_LEVEL_TWO){
+            return out_pc(8390);
+        }
+
+        $data = array("master_agent_id"=>$shareAgent['id']);
+        $rs =  UserModel::db()->upById($uid,$data);
+        return out_pc(200,"binding success");
+
+    }
 
 }
