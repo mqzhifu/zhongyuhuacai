@@ -83,11 +83,11 @@ class UserCtrl extends BaseCtrl{
                 $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
 
                 $bindAgentName = "--";
-                $bindAgent = $agentService->getOneByUid($v['id']);
-                if($bindAgent){
-                    $bindAgentName  = $bindAgent['real_name'];
+                $bindAgentRs = $agentService->getOneByUid($v['id']);
+                if($bindAgentRs && $bindAgentRs['msg']){
+                    $bindAgentName  = $bindAgentRs['msg']['real_name'];
                 }
-                
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
