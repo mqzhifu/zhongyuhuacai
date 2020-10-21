@@ -86,6 +86,28 @@ class IndexCtrl extends BaseCtrl  {
         exit;
     }
 
+    function pageView($request){
+        $uid = $this->uinfo['id'];
+        $a_time = time();
+        $page  = get_request_one( $request,'page',"");
+        $entry_type = get_request_one( $request,'entry_type',"");
+        $source = get_request_one( $request,'source',"");
+        $share_uid = get_request_one( $request,'share_uid',"");
+
+
+        $data = array(
+            'uid'=>$uid,
+            'a_time'=>$a_time,
+            'page'=>$page,
+            'entry_type'=>$entry_type,
+            'source'=>$source,
+            'share_uid'=>$share_uid,
+        );
+
+        $newId = PageViewModel::db()->add($data);
+        out_ajax(200,$newId);
+    }
+
     function checkToken(){
         return $this->out(200,"ok");
     }
