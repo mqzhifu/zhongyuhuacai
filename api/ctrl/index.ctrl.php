@@ -90,9 +90,9 @@ class IndexCtrl extends BaseCtrl  {
         $uid = $this->uinfo['id'];
         $a_time = time();
         $page  = get_request_one( $request,'page',"");
-        $entry_type = get_request_one( $request,'entry_type',"");
+        $entry_type = get_request_one( $request,'entry_type',0);
         $source = get_request_one( $request,'source',"");
-        $share_uid = get_request_one( $request,'share_uid',"");
+        $share_uid = get_request_one( $request,'share_uid',0);
 
 
         $data = array(
