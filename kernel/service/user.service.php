@@ -515,6 +515,7 @@ class UserService{
             $user['agent'] = "";
         }
 
+        $user['master_agent'] = "";
         if(arrKeyIssetAndExist($user,'master_agent_id')){
             $user['master_agent'] = AgentModel::db()->getByIds($user['master_agent_id']);
         }

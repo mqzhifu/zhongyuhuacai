@@ -187,7 +187,7 @@ class OrderService{
         $shareUser = null;//分享者的用户信息
         $agentShare = null;//分享者为代理，代理的信息
 //        if($share_uid && $share_uid != $uid ){
-            if($share_uid && $share_uid  ){//这里是测试，按说分享者不能分享给自己再下单，赚佣金
+        if($share_uid && $share_uid  ){//这里是测试，按说分享者不能分享给自己再下单，赚佣金
             $shareUserRs = $userService->getUinfoById($share_uid);
             if($shareUserRs['code'] != 200){
                 return out_pc($shareUserRs['code'] ,$shareUserRs['msg']);
