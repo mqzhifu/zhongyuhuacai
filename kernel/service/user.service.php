@@ -517,7 +517,7 @@ class UserService{
 
         $user['master_agent'] = "";
         if(arrKeyIssetAndExist($user,'master_agent_id')){
-            $user['master_agent'] = AgentModel::db()->getByIds($user['master_agent_id']);
+            $user['master_agent'] = AgentModel::db()->getbyid($user['master_agent_id']);
         }
 
         return out_pc(200,$user);
