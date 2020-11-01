@@ -116,6 +116,9 @@ class OrderService{
             return out_pc(8002);
         }
 
+        $userService = new UserService();
+        $userRs = $userService->getUinfoById($uid);
+        $userInfo = $userRs['msg'];
         if(!$gidsNums){
             return out_pc(8982);
         }
@@ -186,20 +189,25 @@ class OrderService{
         $userSelAddress = "";//用户收货地址详细信息
         $shareUser = null;//分享者的用户信息
         $agentShare = null;//分享者为代理，代理的信息
-//        if($share_uid && $share_uid != $uid ){
-        if($share_uid && $share_uid  ){//这里是测试，按说分享者不能分享给自己再下单，赚佣金
-            $shareUserRs = $userService->getUinfoById($share_uid);
-            if($shareUserRs['code'] != 200){
-                return out_pc($shareUserRs['code'] ,$shareUserRs['msg']);
+        if($userInfo['master_agent']  ){//这里新的share_uid 算法，用户第一接收的分享地址中的agent_id 直接绑定到DB中
+            if($userInfo['master_agent']['uid'] != $uid){//不能分享给自己
+                $agentShare = $userInfo['master_agent'];
             }
-            $shareUser = $shareUserRs['msg'];
-
-            $agentShareRs = $agentService->getOneByUid($share_uid);
-            if($agentShareRs['code'] == 200){
-                $agentShare = $agentShareRs['msg'];
-            }
-
         }
+        //下面是旧的，根据 URL参数获取，这种更灵活些
+//        if($share_uid && $share_uid != $uid ){
+////        if($share_uid && $share_uid  ){//这里是测试，按说分享者不能分享给自己再下单，赚佣金
+//            $shareUserRs = $userService->getUinfoById($share_uid);
+//            if($shareUserRs['code'] != 200){
+//                return out_pc($shareUserRs['code'] ,$shareUserRs['msg']);
+//            }
+//            $shareUser = $shareUserRs['msg'];
+//            $agentShareRs = $agentService->getOneByUid($share_uid);
+//            if($agentShareRs['code'] == 200){
+//                $agentShare = $agentShareRs['msg'];
+//            }
+//
+//        }
 
         if($userSelAddressId){
             $userSelAddress = $addressService->getById($userSelAddressId)['msg'];
