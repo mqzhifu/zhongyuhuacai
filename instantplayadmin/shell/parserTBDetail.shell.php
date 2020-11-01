@@ -18,10 +18,10 @@ class parserTBDetail{
                 if($file == "demo.txt"){//忽略特殊文件
                     continue;
                 }
-                if($n > 10){
-                    break;
-                }
-                $n++;
+//                if($n > 10){
+//                    break;
+//                }
+//                $n++;
                 $this->processOneFile($file);
             }
         }
