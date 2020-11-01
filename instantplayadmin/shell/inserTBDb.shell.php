@@ -68,8 +68,11 @@ class inserTBDb{
             $data['pic'] = $v['box_img'];
             $data['spider_source_pid'] = $v['offerid'];
             $data['pay_type'] = OrderModel::PAY_ALI_H5_NATIVE;
-
             $price = json_decode($v['price'],true);
+
+
+            $newGoodsData['haulage'] = $v['haulage'];
+
             //只是单卖，没有任何商品属性，如：一瓶、一件
             if(!arrKeyIssetAndExist($v,'category_attr') ||!arrKeyIssetAndExist($v,'category_attr_para') ){
                 $this->insertNoAttrProduct($price[0]['price'],$data,$newGoodsData);

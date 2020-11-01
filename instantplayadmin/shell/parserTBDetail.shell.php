@@ -50,6 +50,14 @@ class parserTBDetail{
         out("title:$title");
         $mysqlData['title'] = $title;
 
+
+        //匹配 - 运费
+//        $tmpFileContent = str_replace("\n","",$productTxt);
+        preg_match_all('/cost-entries-type\"(.*?)<em(.*?)<\/em>/s',$productTxt,$match);
+        $carriagePrice =  substr($match[2][0],strlen($match[2][0] )-2,2);
+        out("carriagePrice:$carriagePrice");
+        $mysqlData['haulage'] = $carriagePrice;
+
         //匹配 - 图片
         $ge = '/http(.*?)60x60\.jpg/U';
         preg_match_all( $ge,$productTxt,$match);
