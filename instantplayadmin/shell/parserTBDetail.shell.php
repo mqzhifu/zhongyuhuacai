@@ -52,11 +52,11 @@ class parserTBDetail{
 
 
         //匹配 - 运费
-//        $tmpFileContent = str_replace("\n","",$productTxt);
-        preg_match_all('/cost-entries-type\"(.*?)<em(.*?)<\/em>/s',$productTxt,$match);
-
-        var_dump(($match[2]));
-        $carriagePrice =  substr($match[2][0],strlen($match[2][0] )-2,2);
+        preg_match_all('/cost-entries-type\"(.*?)<em class=\"value\">(.*?)<\/em>/s',$productTxt,$match);
+        $carriagePrice = 0;
+        if (strpos($match[2][0], 'costItem') === false) {
+            $carriagePrice = $match[2][0];
+        }
         out("carriagePrice:$carriagePrice");
         $mysqlData['haulage'] = $carriagePrice;
 
