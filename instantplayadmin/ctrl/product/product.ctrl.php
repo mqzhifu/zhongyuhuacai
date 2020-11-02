@@ -317,7 +317,7 @@ class ProductCtrl extends BaseCtrl{
                 $title = $v['title'];
                 if(arrKeyIssetAndExist($v,'spider_source_pid')){
 //                    https://detail.1688.com/offer/586488270712.html?spm=a312h.2018_new_sem.dh_002.61.329e665ag5LjFb&tracelog=p4p&clickid=56e32cc4a129445fa4f36265622f0334&sessionid=b7984bce6a1b07e7961e2b179048eac9
-                    $title .= "<a target='_blank' href='https://detail.1688.com/offer/{$v['spider_source_pid']}.html'>$title</a>";
+                    $title = "<a target='_blank' href='https://detail.1688.com/offer/{$v['spider_source_pid']}.html'>$title</a>";
                 }
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
