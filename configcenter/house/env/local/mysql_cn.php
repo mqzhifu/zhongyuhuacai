@@ -1,0 +1,30 @@
+<?php
+$db_config =  array(
+    'house'=>array(
+        'master'=>array(
+            'type'=>'mysql',
+            'host'=>'127.0.0.1',
+            'user'=>'root',
+            'pwd'=>'root',
+            'port'=>'3306',
+            'db_name'=>'house',
+            'db_preifx'=>'',
+            'char'=>'utf8',
+            'conn_persistence'=>true,
+            'conn_timeout'=>60,
+        ),
+        'slave'=>array(
+            'type'=>'mysql',
+            'host'=>'127.0.0.1',
+            'user'=>'root',
+            'pwd'=>'root',
+            'port'=>'3306',
+            'db_name'=>'house',
+            'db_preifx'=>'',
+            'char'=>'utf8',
+            'conn_persistence'=>true,
+            'conn_timeout'=>60,
+        )
+    ),
+);
+$GLOBALS[APP_NAME]['db_config'] = $db_config;

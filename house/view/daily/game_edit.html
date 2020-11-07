@@ -1,0 +1,278 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>编辑游戏
+                            </div>
+                            <!--<div class="tools">-->
+                                <!--<a href="javascript:;" class="collapse">-->
+                                <!--</a>-->
+                                <!--<a href="#portlet-config" data-toggle="modal" class="config">-->
+                                <!--</a>-->
+                                <!--<a href="javascript:;" class="reload">-->
+                                <!--</a>-->
+                                <!--<a href="javascript:;" class="remove">-->
+                                <!--</a>-->
+                            <!--</div>-->
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="?opt=1" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
+                                <div class="form-body">
+                                    <div class="alert alert-danger display-hide">
+                                        <button class="close" data-close="alert"></button>
+                                        You have some form errors. Please check below.
+                                    </div>
+                                    <div class="alert alert-success display-hide">
+                                        <button class="close" data-close="alert"></button>
+                                        表单验证成功
+                                    </div>
+
+                                    <!--<div class="form-group">-->
+                                        <!--<label class="control-label col-md-3">原密码 <span class="required">-->
+										<!--* </span>-->
+                                        <!--</label>-->
+                                        <!--<div class="col-md-4">-->
+
+                                            <!--<input type="password" name="old_ps" data-required="1" class="form-control" value="" />-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="form-group">-->
+                                        <!--<label class="control-label col-md-3">新密码 <span class="required">-->
+										<!--* </span>-->
+                                        <!--</label>-->
+                                        <!--<div class="col-md-4">-->
+
+                                            <!--<input type="password" name="ps" data-required="1" id="ps" class="form-control" value="" />-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="form-group">-->
+                                        <!--<label class="control-label col-md-3">确认 <span class="required">-->
+										<!--* </span>-->
+                                        <!--</label>-->
+                                        <!--<div class="col-md-4">-->
+
+                                            <!--<input type="password" name="ps_sure" data-required="1" class="form-control" value="" />-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+
+
+
+
+
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">名称 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="text" name="name" data-required="1" id="name" class="form-control" value="{$info['name']}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">分类 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <select name="category">
+
+                                                {$categoryOption}
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">在线状态 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <select name="is_online">
+                                                {foreach ($onlineDesc as  $k=>$v)  }
+
+                                                <option value="{$k}" {if $info['is_online'] == $k}selected="selected"{/if}>{$v}</option>
+
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">小图 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="file" name="small_img" data-required="1" id="small_img" class="form-control" value="" />
+                                        </div>
+                                        <div class="col-md-1">
+                                            <img src="{$info['small_img']}"  width="50" height="50"/>
+                                        </div>
+
+                                        
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">列表图 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="file" name="list_img" data-required="1" id="list_img" class="form-control" value="" />
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <img src="{$info['list_img']}"  width="50" height="50"/>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">推荐图 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="file" name="index_reco_img" data-required="1" id="index_reco_img" class="form-control" value="" />
+                                        </div>
+
+                                        <div class="col-md-1">
+                                            <img src="{$info['index_reco_img']}"  width="50" height="50"/>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">推荐</span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            首页
+                                            <input type="checkbox"  name="recommend_index" {if $info['recommend_index'] == 1}checked="checked"{/if} />
+                                            IM托盘
+                                            <input type="checkbox"  name="recommend_im_invite" {if $info['recommend_im_invite'] == 1}checked="checked"{/if} />
+                                            最新
+                                            <input type="checkbox"  name="recommend_new" {if $info['recommend_new'] == 1}checked="checked"{/if} />
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">屏幕 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <select name="screen">
+                                                {foreach ($screenDesc as  $k=>$v)  }
+
+                                                <option value="{$k}" {if $info['screen'] == $k}selected="selected"{/if}>{$v}</option>
+
+                                                {/foreach}
+
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">排序 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="text" name="sort" data-required="1" id="sort" class="form-control" value="{$info['sort']}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">简介 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <textarea rows="5" cols="40" name="summary">{$info['summary']}</textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">底色背景 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="text" name="background_color" data-required="1" id="background_color" class="form-control" value="{$info['background_color']}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">游戏地址 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="text" name="play_url" data-required="1" id="play_url" class="form-control" value="{$info['play_url']}" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">打开方式
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="text" name="open_method" data-required="1" id="open_method" class="form-control" value="{$info['open_method']}" />
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <button type="submit" class="btn green">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                        <!-- END VALIDATION STATES-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

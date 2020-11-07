@@ -1,0 +1,226 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN VALIDATION STATES-->
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>说明
+                            </div>
+                            <!--<div class="tools">-->
+                            <!--<a href="javascript:;" class="collapse">-->
+                            <!--</a>-->
+                            <!--<a href="#portlet-config" data-toggle="modal" class="config">-->
+                            <!--</a>-->
+                            <!--<a href="javascript:;" class="reload">-->
+                            <!--</a>-->
+                            <!--<a href="javascript:;" class="remove">-->
+                            <!--</a>-->
+                            <!--</div>-->
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <form action="/systemAdminUser/upPs/opt=1" method="post" id="form_sample_3" class="form-horizontal">
+                                <div class="form-body">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">SVN说明：
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            1、请找周小龙，开通SVN权限，然后CO.<br/>
+                                            2、代码目录有2个，1trunk，这个是每次上线的版本2branch 这个是日常开发的版本<br/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">需要安装的开发软件
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            1、web-service   apache nginx均可<br/>
+                                            2、PHP7.1以上<br/>
+                                            3、redis最好是3.0以上<br/>
+                                            4、mysql5.1及以上，推荐用更高的版本<br/>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">web-service配置
+                                        </label>
+                                        <div class="col-md-4">
+                                            1、apache需要开通rewrite、headers<br/>
+                                            2、NGINX 也一样<br/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">PHP配置
+                                        </label>
+                                        <div class="col-md-4">
+                                            1、主流的扩展就不写了<br/>
+                                            2、如果有web socket 需要用到SWOOLE扩展<br/>
+                                            3、如果有web socket 压缩要求，要有protobuf<br/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">框架目录
+                                        </label>
+                                        <div class="col-md-4">
+                                            app config doc log functions lib linux_tools service www
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">app
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            项目分类，大部分代码写在这里，分为3层，M V C ，其中shell目录是存在后台计算或者守护进程的目录<br/>
+                                            每新开一个项目，这里就增加一个，注意：要定义，项目名称，和运行时环境<br/>
+                                            注意下view_c：文件夹，这个是模板 编译后（PHP+DIV）的目录，需要有写权限
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">config
+                                        </label>
+                                        <div class="col-md-4">
+                                            所有的配置信息，均放在此下面。每个项目，有不同的配置文件夹。上线后，此文件最后应该独立项目存放，1是安全2是热加载<br/>
+                                            其中：对于 MYSQL、REDIS 连接这些信息，要分成3个环境，也就是3个文件夹。local:本地，dev:测试，release：线上<br/>
+                                            需要注意：evn.php，此文件，是切换环境 的配置目录<br/>
+                                            protobuf：长连接 二进制 配置文件<br/>
+                                            api.php:所有API对外接口，如：移动端、H5都在要配置此文件<br/>
+                                            main.php:项目中一些常量值<br/>
+                                            另外，还有些像  密钥 证书也放在些<br/>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">doc
+                                        </label>
+                                        <div class="col-md-4">
+                                            这里是一些 文档说明、DB初始化脚本的东西
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">functions
+                                        </label>
+                                        <div class="col-md-4">
+                                            公共函数，均放在此
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">lib
+                                        </label>
+                                        <div class="col-md-4">
+                                            公共类库
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">linux_tool
+                                        </label>
+                                        <div class="col-md-4">
+                                            linux 下在的一些 工具
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">log
+                                        </label>
+                                        <div class="col-md-4">
+                                            所有的文本日志，以项目文件夹为维度。其中，<br/>
+                                            access 访问日志<br/>
+                                            app日常行为日志<br/>
+                                            ws 长连接日志<br/>
+                                            system:error 非终止脚本日志，fatal：脚本被终止日志，exception:异常日志
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">plugins
+                                        </label>
+                                        <div class="col-md-4">
+                                            开源类库插件
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">service
+                                        </label>
+                                        <div class="col-md-4">
+                                            虽然APP层，写了大部分代码，但是如果要跨项目使用相同的功能，这就很麻烦。所以，要把可能会跨项目的 脚本逻辑写在这里，以便后期，做分布式
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">www
+                                        </label>
+                                        <div class="col-md-4">
+                                            所有静态资源均在这个目录下
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">开发注意事项
+                                        </label>
+                                        <div class="col-md-4">
+                                            1、MYSQL尽量不要联表或者子查询<br/>
+                                            2、尽量不要在循环里写SQL QUERY<br/>
+                                            3、代码结构，尽量什么类型的代码放在哪个目录正面<br/>比如配置就放在config，静态文件就放在www下。<br/>
+                                               日志也最好统一写在同一个文件夹。<br/>
+                                               不紧好维护，也方便日后做扩展<br/>
+                                            4、URL的东西，域名尽量不要写死到DB中，最好是写相对路径，PHP根据项目名，动态计算域名<br/>
+                                            5、能封装的东西，尽量封装成公共类。一些静态值，最好不要写死，定义成  常量，方便修改<br/>
+                                            6、MYSQL建表的时候，都要加上注释信息<br/>
+                                            7、在开发的过程中，要有一个记事本，记录如果上线修改的东西，如：配置信息、MYSQL修改、修改了哪些文件<br/>
+                                            8、所有的APP接口开发，都走驱动测试模式，也就是：统一有一个接口配置文件，包括：请求参数、参数类型、返回等等。能通过程序调用API文档，自动化请求并测试<br/>
+                                            9、代码中，尽量给核心代码写上注释，方便日后查看<br/>
+                                            10、代码风格不做强求。能按照JAVA的方式最好，如：驼峰式。尽量:(人类)能看懂你写的代码，少用如：三目运算这些不易阅读的方式 。<br/>
+                                            11、实时性要求不高的需求，和产品沟通下，能扔缓存里的都扔进去。。<br/>
+                                            12、调试API接口时，要会使用抓包工具，如：Wireshark，同时要有记日志的习惯，方便调错.<br/>
+                                            13、每天下班关电脑前，必须把当天所有开发代码，提交到SVN服务器。
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </form>
+                            <!-- END FORM-->
+                        </div>
+                        <!-- END VALIDATION STATES-->
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->

@@ -1,0 +1,632 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td {
+        white-space: normal;
+        word-wrap: break-word;
+        break-word: break-all;
+    }
+    .ad_detail {
+        width: 360px;
+        display: block;
+        height: 30px;
+    }
+    .ad_table span {
+        display: inline-block;
+        width: 70px;
+        margin-right: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .ad_table span+input{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .ad_table span+select{
+        display:inline-block;
+        width: 120px;
+        margin-right: 40px;
+    }
+    .modal-body {
+        margin: 0;
+    }
+    .strategySelect {
+        width: 160px
+    }
+    .sort_input {
+        width: 40px;
+    }
+    select:disabled {
+        border: 1px solid #DDD;
+        background-color: #F5F5F5;
+        color: #ACA899;
+    }
+    .opt {
+        margin-right: 10px;
+    }
+    .unView {
+        display:none;
+    }
+    .view {
+        display:block;
+    }
+    .btnView {
+        display:inline-block;
+        cursor:pointer;
+    }
+</style>
+
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light">
+                        <div class="portlet-title">
+                            <div class="actions">
+                                <div class="btn-group">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <div class="table-actions-wrapper">
+									<span>
+									</span>
+                                    <select class="table-group-action-input form-control input-inline input-small input-sm">
+                                        <option value="select">选择</option>
+                                        <!--<option value="delete">批量删除</option>-->
+                                    </select>
+                                    <a href="/content/no/doc/docEdit/" class="btn btn-sm default blue" target="_blank"><i class="fa fa-file-text"></i> 新建文档</a>
+                                    <!--<button class="btn btn-sm default green" id="add_game" onclick="content_edit(this)">设置分类</button>-->
+                                    <a id="add_game" class="btn btn-sm default red" onclick="content_edit(this)"><i class="fa fa-file-text"></i> 编辑分类</a>
+                                    <button type="button" class="btn btn-sm btn-warning table-group-action-submit"><i class="fa fa-times"></i> 删除选中</button>
+                                </div>
+                                <table class="table table-striped table-bordered table-hover" id="datatable_products">
+                                    <thead>
+                                    <tr role="row" class="heading">
+                                        <th width="2%">
+                                            <input type="checkbox" class="group-checkable">
+                                        </th>
+                                        <th width="5%">
+                                            文档ID
+                                        </th>
+                                        <th width="8%">
+                                            文档标题
+                                        </th>
+                                        <th width="8%">
+                                            所属分类
+                                        </th>
+                                        <th width="5%">
+                                            排序
+                                        </th>
+                                        <th width="10%">
+                                            创建时间
+                                        </th>
+                                        <th width="10%">
+                                            最后更新时间
+                                        </th>
+                                        <th width="5%">
+                                            操作
+                                        </th>
+                                    </tr>
+                                    <tr role="row" class="filter">
+                                        <td></td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="id" >
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="title" >
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="name" >
+                                        </td>
+
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="sort" >
+                                        </td>
+                                        <td>
+                                        <div class="input-group date form_datetime margin-bottom-5">
+                                            <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
+                                            <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                        </div>
+
+
+                                        <div class="input-group date form_datetime margin-bottom-5">
+                                            <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="to">
+                                            <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                        </div>
+                                    </td>
+                                        <td>
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="from" placeholder="From">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="input-group date form_datetime margin-bottom-5">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="to" placeholder="to">
+                                                <span class="input-group-btn">
+                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
+                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="margin-bottom-5">
+                                                <button class="btn btn-sm yellow filter-submit margin-bottom"><i class="fa fa-search"></i> 搜索</button>
+                                            </div>
+                                            <button class="btn btn-sm green filter-cancel"><i class="fa fa-times"></i> 重置</button>
+                                        </td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End: life time stats -->
+                </div>
+            </div>
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel" align="center"><span style="font-weight: bold">分类设置</span></h4>
+            </div>
+            <div class="modal-body" style="width: 800px;margin-left: 20px">
+
+                <br/>
+                <br/>
+                <!-- 基本设置 -->
+                <div id="base-set" style="margin-left: 20px;margin-right: 60px;">
+
+                    <hr style="width: 600px;">
+                    <div align="center">
+                        <table class="table table-bordered" id="ad_map_tb">
+                            <thead>
+                            <tr>
+                                <th>分类</th>
+                                <th>分类名称</th>
+                                <th>排序</th>
+                                <th style="width:100px">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="add" style="background-color: green"><span style="color: white">添加</span></button>
+                    <br>
+                    <hr style="width: 700px;">
+                </div>
+
+            </div>
+
+            <div class="modal-footer-diy" align="center">
+                <br>
+                <button type="button" class="btn btn-sm default red" style="margin-right: 10px" data-dismiss="modal">取消</button>
+                <!--<button type="button" class="save">确认</button>-->
+                <br>
+                <br>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function content_edit(obj) {
+            $.ajax({
+                url: "/content/no/doc/getDetails/",
+                type: "post",
+                data: {
+                    id: 1
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data.code == 200) {
+                        $('#id').val(data.data['base']['id']);
+                        $('#name').val(data.data['base']['name']);
+                        $('#sort').val(data.data['base']['sort']);
+                        $('#ad_map_tb tbody').html("");
+
+                        var items = data.data['real_ad_data'];
+                        for (var i = 0; i < items.length; i++) {
+
+                            $('#ad_map_tb tbody').append(
+                                "<tr attr-id='" + items[i].id + "'>"+
+                                "<td>"+
+                                "<span class='id_span'>"+items[i].id+"</span>"+
+                                "<input type='text' class='outer_id unView' value="+items[i].id+">"+
+                                "</td>"+
+                                "<td>"+
+                                "<span class='name_span'>"+items[i].name+"</span>"+
+                                "<input type='text' class='outer_name unView' value="+items[i].name+">"+
+                                "</td>"+
+                                "<td>"+
+                                "<span class='sort_span'>"+items[i].sort+"</span>"+
+                                "<input type='text' class='outer_sort unView' value="+items[i].sort+">"+
+                                "</td>"+
+                                "<td>"+
+                                "<div class='optCancel opt unView'>取消</div>"+
+                                "<div class='editSubmit opt unView'>确认</div>"+
+                                "<div class='delAdUnit opt btnView'>删除</div>"+
+                                "<div class='editAdUnit opt btnView'>编辑</div>"+
+                                "</td>"+
+                                "</tr>");
+                        }
+
+
+                        $('#myModal').modal();
+                    }
+                }
+            });
+    }
+
+    $('.add').click(function () {
+        $('#ad_map_tb tbody').append(
+            "<tr>"+
+            "<td>"+
+            "<span class='id_span unView'></span>"+
+            "<input type='text' class='outer_id'>"+
+            "</td>"+
+            "<td>"+
+            "<span class='name_span unView'></span>"+
+            "<input type='text' class='outer_name'>"+
+            "</td>"+
+            "<td>"+
+            "<span class='sort_span unView'></span>"+
+            "<input type='text' class='outer_sort'>"+
+            "</td>"+
+            "<td>"+
+            "<div class='optCancel opt btnView'>取消</div>"+
+            "<div class='editSubmit opt btnView'>确认</div>"+
+            "<div class='delAdUnit opt unView'>删除</div>"+
+            "<div class='editAdUnit opt unView'>编辑</div>"+
+            "</td>"+
+            "</tr>"
+        );
+    });
+
+    // 确认按钮;
+    $("#ad_map_tb").on("click", ".editSubmit", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").siblings("td").children(".outer_id").val();
+        var name = $editElem.parents("td").siblings("td").children(".outer_name").val();
+        var sort = $editElem.parents("td").siblings("td").children(".outer_sort").val();
+        if (id == '' || name == '' || sort == '') {
+            alert("请将信息补充完整");
+            return;
+        }
+
+        var inner_ad_id = $('#ad_id').val();
+
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');// 分类id
+        var url = "/content/no/doc/doDoc/";
+        var post_data = {
+            id:id,
+            name:name,
+            sort:sort
+        };
+        $.ajax({
+            url: url,
+            type: 'post',
+            data: post_data,
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+//                    var id = data.data;
+                    $editElem.parents("td").parents("tr").attr('attr-id', id);
+
+                    // span 赋值
+                    $editElem.parents("td").siblings("td").children(".id_span").html(id);
+                    $editElem.parents("td").siblings("td").children(".name_span").html(name);
+                    $editElem.parents("td").siblings("td").children(".sort_span").html(sort);
+
+                    // span 显示
+                    $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+                    $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+                    $editElem.parents("td").siblings("td").children(".sort_span").removeClass("unView");
+
+                    // 输入 隐藏
+                    $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+                    $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+                    $editElem.parents("td").siblings("td").children(".outer_sort").addClass("unView");
+
+                    // 按钮 隐藏 显示
+                    $editElem.siblings(".optCancel").removeClass("btnView").addClass("unView");
+                    $editElem.removeClass("btnView").addClass("unView");
+
+                    $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+                    $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+    // 取消按钮;
+    $("#ad_map_tb").on("click", ".optCancel", function (e) {
+        var $editElem = $(this);
+        var id = $editElem.parents("td").parents("tr").attr('attr-id');
+        console.log(id);
+
+        if (id == '' || id == undefined) {
+            // 广告单元未保存 移除该行
+            $editElem.parents("td").parents("tr").remove();
+        } else {
+            // span 显示
+            $editElem.parents("td").siblings("td").children(".id_span").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".name_span").removeClass("unView");
+            $editElem.parents("td").siblings("td").children(".sort_span").removeClass("unView");
+
+            // 输入 隐藏
+            $editElem.parents("td").siblings("td").children(".outer_id").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_name").addClass("unView");
+            $editElem.parents("td").siblings("td").children(".outer_sort").addClass("unView");
+
+            // 按钮 隐藏 显示
+            $editElem.siblings(".editSubmit").removeClass("btnView").addClass("unView");
+            $editElem.removeClass("btnView").addClass("unView");
+
+            $editElem.siblings(".delAdUnit").removeClass("unView").addClass("btnView");
+            $editElem.siblings(".editAdUnit").removeClass("unView").addClass("btnView");
+        }
+    });
+
+    // 编辑按钮;
+    $("#ad_map_tb").on("click", ".editAdUnit", function (e) {
+        var $editElem = $(this);
+        // span 隐藏
+        $editElem.parents("td").siblings("td").children(".id_span").addClass("unView");
+        $editElem.parents("td").siblings("td").children(".name_span").addClass("unView");
+        $editElem.parents("td").siblings("td").children(".sort_span").addClass("unView");
+
+        // 输入 选中
+        var channel = $editElem.parents("td").siblings("td").children(".id_span").html();
+        var advertiser = $editElem.parents("td").siblings("td").children(".name_span").html();
+        var system = $editElem.parents("td").siblings("td").children(".sort_span").html();
+
+        // 输入 显示
+        $editElem.parents("td").siblings("td").children(".outer_id").removeClass("unView");
+        $editElem.parents("td").siblings("td").children(".outer_name").removeClass("unView");
+        $editElem.parents("td").siblings("td").children(".outer_sort").removeClass("unView");
+
+        // 按钮 隐藏 显示
+        $editElem.siblings(".optCancel").removeClass("unView").addClass("btnView");
+        $editElem.siblings(".editSubmit").removeClass("unView").addClass("btnView");
+
+        $editElem.siblings(".delAdUnit").removeClass("btnView").addClass("unView");
+        $editElem.removeClass("btnView").addClass("unView");
+    });
+
+    // 删除按钮;
+    $("#ad_map_tb").on("click", ".delAdUnit", function (e) {
+        if (!confirm("确认删除吗？")) {
+            return false;
+        }
+
+        var $editElem = $(this);
+        var attr_id =  $editElem.parents("td").parents("tr").attr('attr-id');
+        $.ajax({
+            url: "/content/no/doc/delOne/",
+            type: 'post',
+            data: {id:attr_id},
+            dataType: 'json',
+            success: function (data) {
+                if (data.code == 200) {
+                    $editElem.parents("td").parents("tr").remove();
+                } else {
+                    alert(data.message);
+                }
+            },
+        });
+
+    });
+
+</script>
+
+<script language="javascript" type="text/javascript">// Example: obj = findObj("image1");
+
+function findObj(theObj, theDoc)
+{
+    var p, i, foundObj;
+    if(!theDoc) theDoc = document;
+    if( (p = theObj.indexOf("?")) > 0 && parent.frames.length)
+    {
+        theDoc = parent.frames[theObj.substring(p+1)].document;
+        theObj = theObj.substring(0,p);
+    }
+    if(!(foundObj = theDoc[theObj]) && theDoc.all)
+        foundObj = theDoc.all[theObj];
+    for (i=0; !foundObj && i < theDoc.forms.length; i++)
+        foundObj = theDoc.forms[i][theObj];
+    for(i=0; !foundObj && theDoc.layers && i < theDoc.layers.length; i++)
+        foundObj = findObj(theObj,theDoc.layers[i].document);
+    if(!foundObj && document.getElementById)
+        foundObj = document.getElementById(theObj);
+    return foundObj;
+}
+
+</script>
+
+<script>
+
+    var EcommerceProducts = function () {
+
+        var initPickers = function () {
+            //init date pickers
+            $('.date-picker').datepicker({
+                rtl: Metronic.isRTL(),
+                autoclose: true
+            });
+        }
+
+        var handleProducts = function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#datatable_products"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                loadingMessage: 'Loading...',
+                dataTable: { // here you can define a typical datatable settings from http://datatables.net/usage/options
+
+                    // Uncomment below line("dom" parameter) to fix the dropdown overflow issue in the datatable cells. The default datatable layout
+                    // setup uses scrollable div(table-scrollable) with overflow:auto to enable vertical scroll(see: assets/global/scripts/datatable.js).
+                    // So when dropdowns used the scrollable div should be removed.
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150 , 999999],
+                        [10, 20, 50, 100, 150 , '所有(会很慢)'] // change per page values here
+                    ],
+                    "pageLength": 20, // default record count per page
+                    "ajax": {
+                        "url": "/content/no/doc/getList/" // ajax sourcedelBat
+                    },
+                    "aoColumnDefs" : [{  // define columns sorting options(by default all columns are sortable extept the first checkbox column)
+                        'bSortable' : false,
+                        'aTargets' : []
+                    }],
+                    "order": [
+                        [1, "desc"]
+                    ] // set first column as a default sort by asc
+                }
+            });
+            // handle group actionsubmit button click
+            grid.getTableWrapper().on('click', '.table-group-action-submit', function (e) {
+                e.preventDefault();
+                var action = $(".table-group-action-input", grid.getTableWrapper());
+                if (action.val() != "" && grid.getSelectedRowsCount() > 0) {
+                    var ids = "";
+                    $('tbody > tr > td:nth-child(1) input[type="checkbox"]:checked').each(
+                        function(){
+                            ids += ($(this).val())+",";
+                        }
+                    );
+                    // 删除最后一个','
+                    ids = ids.substr(0,ids.length-1);
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/content/no/doc/delDocs/ids="+ids,
+                        dataType: 'json',
+                        success: function(data){
+                            if (data == 1) {
+                                alert("删除成功");
+                                location.reload();
+                            } else {
+                                alert("删除失败");
+                                location.reload();
+                            }
+                            
+                        }
+
+                    });
+
+
+                } else if (action.val() == "") {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '请选择一个动作',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                } else if (grid.getSelectedRowsCount() === 0) {
+                    Metronic.alert({
+                        type: 'danger',
+                        icon: 'warning',
+                        message: '至少选择一条数据',
+                        container: grid.getTableWrapper(),
+                        place: 'prepend'
+                    });
+                }
+            });
+        }
+
+        return {
+
+            //main function to initiate the module
+            init: function () {
+
+                handleProducts();
+                initPickers();
+
+
+            }
+
+        };
+
+    }();
+
+    jQuery(document).ready(function() {
+        EcommerceProducts.init();
+
+    });
+
+
+</script>
+
+<script>
+
+
+    if (!jQuery().datetimepicker) {
+        alert(333);
+    }
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        minView: "month",
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
+
+    
+
+</script>
+

@@ -1,0 +1,203 @@
+<style>
+    .table-scrollable > .table > tbody > tr > td{white-space:normal;word-wrap: break-word; break-word: break-all;}
+</style>
+
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+
+    {include layout/left.html}
+
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <h3 class="page-title">
+                仪表盘 <small>报表 & 统计</small>
+            </h3>
+            <div class="page-bar">
+                <ul class="page-breadcrumb">
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="index.html">Home</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="#">仪表盘</a>
+                    </li>
+                </ul>
+                <div class="page-toolbar">
+                    <div id="dashboard-report-range" class="pull-right tooltips btn btn-fit-height grey-salt" data-placement="top" data-original-title="Change dashboard date range">
+                        <i class="icon-calendar"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block"></span>&nbsp; <i class="fa fa-angle-down"></i>
+                    </div>
+                </div>
+            </div>
+            <!-- END PAGE HEADER-->
+            <div class="clearfix">
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light bg-inverse">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-green-sharp"></i>
+                                <span class="caption-subject font-green-sharp ">用户 新增/活跃</span>
+                                <span class="caption-helper">月/天</span>
+                            </div>
+                            <div class="actions">
+                                <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                    <!--<label class="btn btn-transparent grey-salsa btn-circle btn-sm active">-->
+                                        <!--<input type="radio" name="options" class="toggle" id="option1">New</label>-->
+                                        <select id="year" name="year">
+                                            <option>年</option>
+                                        </select>
+                                    <select id="month" name="month" onchange='monthChange()' >
+                                        <option>月</option>
+                                    </select>
+                                    <!--<select id="day" name="day">-->
+                                        <!--<option>日</option>-->
+                                    <!--</select>-->
+
+                                    <!--<label class="btn btn-transparent grey-salsa btn-circle btn-sm">-->
+                                        <!--<input type="radio" name="options" class="toggle" id="option2">Returning</label>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="site_statistics_loading">
+                                <img src="{const|H_STATIC_URL}/assets/admin/layout/img/loading.gif" alt="loading"/>
+                            </div>
+                            <div id="site_statistics_content" class="display-none">
+                                <div id="site_statistics" class="chart">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="btn-toolbar">
+                                <div class="btn-group stackControls">
+                                    <input type="button" class="btn blue" value="新增"/>
+                                    <input type="button" class="btn red" value="活跃"/>
+                                </div>
+                                <div class="space5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+
+                <!--<div class="col-md-6 col-sm-6">-->
+                    <!--&lt;!&ndash; BEGIN PORTLET&ndash;&gt;-->
+                    <!--<div class="portlet light bg-inverse">-->
+                        <!--<div class="portlet-title">-->
+                            <!--<div class="caption">-->
+                                <!--<i class="icon-share font-red-sunglo"></i>-->
+                                <!--<span class="caption-subject font-red-sunglo ">PV/UV</span>-->
+                                <!--<span class="caption-helper">monthly stats...</span>-->
+                            <!--</div>-->
+                            <!--<div class="actions">-->
+                                <!--<div class="btn-group pull-right">-->
+                                    <!--<a href="" class="btn grey-salsa btn-circle btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">-->
+                                        <!--Filter Range<span class="fa fa-angle-down">-->
+									<!--</span>-->
+                                    <!--</a>-->
+                                    <!--<ul class="dropdown-menu pull-right">-->
+                                        <!--<li>-->
+                                            <!--<a href="javascript:;">-->
+                                                <!--Q1 2014 <span class="label label-sm label-default">-->
+											<!--past </span>-->
+                                            <!--</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="javascript:;">-->
+                                                <!--Q2 2014 <span class="label label-sm label-default">-->
+											<!--past </span>-->
+                                            <!--</a>-->
+                                        <!--</li>-->
+                                        <!--<li class="active">-->
+                                            <!--<a href="javascript:;">-->
+                                                <!--Q3 2014 <span class="label label-sm label-success">-->
+											<!--current </span>-->
+                                            <!--</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="javascript:;">-->
+                                                <!--Q4 2014 <span class="label label-sm label-warning">-->
+											<!--upcoming </span>-->
+                                            <!--</a>-->
+                                        <!--</li>-->
+                                    <!--</ul>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="portlet-body">-->
+                            <!--<div id="site_activities_loading">-->
+                                <!--<img src="{const|H_STATIC_URL}/assets/admin/layout/img/loading.gif" alt="loading"/>-->
+                            <!--</div>-->
+                            <!--<div id="site_activities_content" class="display-none">-->
+                                <!--<div id="site_activities" style="height: 228px;">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div style="margin: 20px 0 10px 30px">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-3 col-sm-3 col-xs-6 text-stat">-->
+										<!--<span class="label label-sm label-success">-->
+										<!--Revenue: </span>-->
+                                        <!--<h3>$13,234</h3>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3 col-sm-3 col-xs-6 text-stat">-->
+										<!--<span class="label label-sm label-info">-->
+										<!--Tax: </span>-->
+                                        <!--<h3>$134,900</h3>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3 col-sm-3 col-xs-6 text-stat">-->
+										<!--<span class="label label-sm label-danger">-->
+										<!--Shipment: </span>-->
+                                        <!--<h3>$1,134</h3>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3 col-sm-3 col-xs-6 text-stat">-->
+										<!--<span class="label label-sm label-warning">-->
+										<!--Orders: </span>-->
+                                        <!--<h3>235090</h3>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash; END PORTLET&ndash;&gt;-->
+                <!--</div>-->
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet box red">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>PV/UV
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config">
+                                </a>
+                                <a href="javascript:;" class="reload">
+                                </a>
+                                <a href="javascript:;" class="remove">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div id="chart_2" class="chart">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+

@@ -1,0 +1,139 @@
+<!-- BEGIN CONTAINER -->
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+
+    {include layout/left.html}
+
+
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+						<span class="label label-danger">
+						NOTE: </span>
+                        &nbsp; This plugins works only on Latest Chrome, Firefox, Safari, Opera & Internet Explorer 10.
+                    </p>
+                    <!--<form action="/product/no/product/testDropImgUploadServer/" class="dropzone" id="my-dropzone">-->
+                    <!--</form>-->
+
+
+                    <div id="my-dropzone" class="dropzone" style="">
+                    </div>
+
+
+                </div>
+            </div>
+
+
+            <!-- END PAGE CONTENT-->
+        </div>
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+<script>
+    var FormDropzone = function () {
+
+
+        return {
+            //main function to initiate the module
+            init: function () {
+
+                Dropzone.options.myDropzone = {
+                    init: function() {
+                        var mockFile = {
+                            name: "1.png" , //显示的文件名
+                            accepted:true,
+                            size:0
+                        };
+
+                        // let mockFile = { name: "Filename", size: 12345 };
+                        // myDropzone.displayExistingFile(mockFile, 'https://image-url');
+
+                        this.on("addedfile", function(file) {
+                            // Create the remove button\aoert
+                            var removeButton = Dropzone.createElement("<button class='btn btn-sm btn-block'>Remove file</button>");
+
+                            // Capture the Dropzone instance as closure.
+                            var _this = this;
+
+                            // Listen to the click event
+                            removeButton.addEventListener("click", function(e) {
+                                // Make sure the button click doesn't submit the form:
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                // Remove the file preview.
+                                _this.removeFile(file);
+                                // If you want to the delete the file on the server as well,
+                                // you can do the AJAX request here.
+                            });
+
+                            // Add the button to the file preview element.
+                            file.previewElement.appendChild(removeButton);
+                        });
+
+
+                        var imageUrl = "http://local.z-s.com/upload/instantplayadmin/dev/category/1.png";
+                        this.emit( 'addedfile',mockFile);
+                        this.emit("thumbnail", mockFile, imageUrl);
+                    }
+
+                    // this.on("addedfile", function(file) {
+                    //     //上传文件时触发的事件
+                    // });
+                    // this.on("queuecomplete",function(file) {
+                    //     //上传完成后触发的方法
+                    // });
+                    // this.on("removedfile",function(file){
+                    //         //删除文件时触发的方法
+                    //     });
+                    // });
+                }
+
+                Dropzone.autoDiscover = false;
+
+                $("#my-dropzone").dropzone(
+                    {
+                        url :"/product/no/product/testDropImgUploadServer/",
+                        dictCancelUpload: '取消',
+                        dictRemoveFile: '删除'
+                    }
+                )
+
+                // var a_div = $("#my-dropzone");
+                // var mockFile = {
+                //     name: "1.png" , //显示的文件名
+                //     accepted:true
+                // };
+                // Dropzone.addedfile( mockFile);
+                //图片地址
+                // var imageUrl = "http://local.z-s.com/upload/instantplayadmin/dev/category/1.png";
+                //生成缩略图
+                // Dropzone.emit("thumbnail", mockFile,imageUrl);
+                // 完成（如果没有，缩略图上会有一根进度条一直存在）
+                // Dropzone.emit("complete", mockFile);
+
+
+
+                // var mockFile = { name:"image.jpg", size: 123 };
+                // imgUrl ="http://local.z-s.com/upload/instantplayadmin/dev/category/1.png";
+                // myDropzone.options.addedfile.call(myDropzone, mockFile);
+                // myDropzone.options.thumbnail.call(myDropzone, mockFile, imgUrl);
+            }
+        };
+    }();
+
+
+    jQuery(document).ready(function() {
+        FormDropzone.init();
+    });
+
+</script>
+
