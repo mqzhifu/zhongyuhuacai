@@ -10,8 +10,6 @@ storage/img_resize/*
 /static
 /static/upload/
 
-configcenter/api/env/local
-configcenter/instantplayadmin/env/local
-configcenter/agent/env/local
+
 
 kernel/plugins/structure/testData
