@@ -26,7 +26,7 @@ class FixProductPrice{
                 exit("goodsRow is null");
             }
             $upData = array('lowest_price'=>$goodsRow['sale_price']);
-            echo "pid : {$v['id']} now price : {$v['sale_price']} , up price : {$v['sale_price']} \n";
+            echo "pid : {$v['id']} now low_price : {$v['lowest_price']} , up price : {$v['sale_price']} \n";
             //ProductModel::db()->upById($v['id'],$upData);
         }
     }

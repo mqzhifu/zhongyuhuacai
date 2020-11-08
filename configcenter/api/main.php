@@ -29,12 +29,12 @@ $main = array(
             array("login","cellphoneSMS",),//手机验证码登陆
             array("login","third",),//其它，3方平台登陆
 
-            array("PayCallback","wxJsapi",),//微信支付回调  jsapi模式
+            array("payCallback","wxJsapi",),//微信支付回调  jsapi模式
 
 
-            array("WxLittleCallback","receive",),
-            array("WxLittleCallback","log",),
-            array("WxLittleCallback","getShareQrCode",),
+            array("wxLittleCallback","receive",),
+            array("wxLittleCallback","log",),
+            array("wxLittleCallback","getShareQrCode",),
 
             array("user","reg",),//注册
 
