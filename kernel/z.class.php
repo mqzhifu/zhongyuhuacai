@@ -290,7 +290,7 @@ class Z{
 
     static function checkExt(){
         LogLib::inc()->debug(["checkExt"]);
-	    $arr = array('gd','mysqli','json','mbstring','openssl','redis','xml','zip','zlib','curl','dom','json','reflection','spl','pcre',
+	    $arr = array('gd','mysqli','json','mbstring','openssl','redis','xml','zlib','curl','dom','json','reflection','spl','pcre',
 //            'seaslog',
 //            'swoole',
 //            'grpc',

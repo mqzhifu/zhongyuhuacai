@@ -58,6 +58,12 @@ class GoodsModel {
         }else{
             //这是特殊情况，产品无参数
         }
+        //1688 的产品要自动给加上佣金
+        if(arrKeyIssetAndExist($product,'spider_source_type') && $product['spider_source_type'] == ProductModel::SPIDER_TYPE_1688){
+            $percent = 0.3;//30%
+            $data['sale_price'] = $data['sale_price'] + $data['sale_price'] * $percent;
+            $data['original_price'] = $data['original_price'] + $data['original_price'] * $percent;
+        }
 
         $data['sale_price'] = ProductService::formatDataPrice(1,$data,'sale_price');
         $data['original_price'] = ProductService::formatDataPrice(1,$data,'original_price');

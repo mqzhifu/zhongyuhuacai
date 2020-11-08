@@ -9,8 +9,16 @@ class parserTBDetail{
 
     public function run(){
         $s_time = time();
+        $open_dir = STORAGE_DIR .DS ."tb_product";
+        if(!is_dir($open_dir)){
+            exit("not dir $open_dir");
+        }
         //读取文件夹下的，所有文件
         $fileList = get_dir(STORAGE_DIR .DS ."tb_product");
+        if(!$fileList){
+            exit("open dir is empty!");
+        }
+
         foreach ($fileList as $k=>$files) {
             out("k:",$k);
             $n = 0;//计数，先处理，一个文件夹下的10个文件用于测试
@@ -27,7 +35,7 @@ class parserTBDetail{
         }
 
         $eTime = time() - $s_time;
-        out("finale process time:".$eTime);
+        out("final process time:".$eTime);
     }
 
 
