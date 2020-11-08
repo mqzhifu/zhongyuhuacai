@@ -303,7 +303,7 @@ class UserAddressService{
     }
 
     function getById($id){
-        $row = UserAddressModel::db()->getRow($id);
+        $row = UserAddressModel::db()->getById($id);
         if(!$row){
             return out_pc(200,$row);
         }
