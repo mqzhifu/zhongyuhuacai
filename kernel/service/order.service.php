@@ -167,6 +167,7 @@ class OrderService{
 
             $goodsTotalPrice += $goods['sale_price'];
             $haulage += yuanToFen($goods['haulage']);
+            
 
 //            $goodsLinkPcap = GoodsLinkCategoryAttrModel::db()->getAll(" gid = $gid ");
 //            if(!$goodsLinkPcap){
