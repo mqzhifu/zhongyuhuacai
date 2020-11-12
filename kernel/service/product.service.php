@@ -125,6 +125,10 @@ class ProductService
         }
 
         $list = $this->formatShow($list);
+        //将产品的最低价格，保留一位小数，因为2位小数 会破坏前端样式
+        foreach ($list as $k=>$v){
+            $list[$k]['lowest_price'] = round($v['lowest_price'],1);
+        }
 
         $returnPageInfo['page'] = $page;
         $returnPageInfo['limit'] = $limit;
