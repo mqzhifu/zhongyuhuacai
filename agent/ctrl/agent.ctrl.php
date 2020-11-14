@@ -39,7 +39,7 @@ class AgentCtrl extends BaseCtrl  {
         }else{
             $aid = $this->uinfo['id'];
         }
-        $url = get_domain_url() ."agent/applyQrcode/aid=".$aid ;
+        $url = get_domain_url() ."agent/apply/type=2&aid=".$aid ;
 
         require_once PLUGIN . '/phpqrcode/qrlib.php';
 
@@ -69,10 +69,21 @@ class AgentCtrl extends BaseCtrl  {
 
         $this->addJs("/agent/assets/js/area_province.js");
 
-
         $type = _g("type");
         $this->assign("type",$type);
 //        $this->printAreaData();
+
+        $aid = _g("aid");
+        if(!$aid){
+            exit("aid is null");
+        }
+
+        $agent = AgentModel::db()->getById($aid);
+        if(!$agent){
+            exit("aid not in db.");
+        }
+        $this->assign("agent",$agent);
+
 
         if(_g("opt")){
             $address = _g('address');
@@ -80,7 +91,7 @@ class AgentCtrl extends BaseCtrl  {
             $title = _g('title');
             $real_name = _g('real_name');
             $area = _g('area');
-            $invite_agent_code = _g("invite_agent_code");
+//            $invite_agent_code = _g("invite_agent_code");
             $fee_percent = _g('fee_percent');
             $sub_fee_percent = _g('sub_fee_percent');
             $type = _g("type");
@@ -141,12 +152,14 @@ class AgentCtrl extends BaseCtrl  {
                 "mobile"=>$mobile,
                 'fee_percent'=>$fee_percent,
                 "sub_fee_percent"=>$sub_fee_percent,
-                'invite_agent_code'=>$invite_agent_code,
+//                'invite_agent_code'=>$invite_agent_code,
+                'invite_agent_code'=>$agent['invite_code'],
                 'pic'=>$pic_tmp_path,
 //                "pic"=>$upRs['msg'],
             );
 
-            $rs = $this->agentService->apply($this->uinfo['id'],$type , $data);
+//            $rs = $this->agentService->apply($this->uinfo['id'],$type , $data);
+            $rs = $this->agentService->apply($aid,$type , $data);
             return out_pc($rs['code'],$rs['msg']);
         }
 

@@ -28,6 +28,7 @@ $main = array(
         array("login",'findPsBySms'),
         array("system",'sendLoginSms'),
         array("agent",'applyQrcode'),
+        array("agent",'apply'),
 
 //        array(   'index','index',),
 
