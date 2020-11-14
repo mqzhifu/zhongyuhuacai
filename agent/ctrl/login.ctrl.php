@@ -65,6 +65,10 @@ class LoginCtrl extends BaseCtrl  {
                 out_ajax(8386);
             }
 
+            if($agentUser['status']  != AgentService::STATUS_OK){
+                out_ajax(8407);
+            }
+
             $this->_sess->setValue("uinfo",$agentUser);
             out_ajax(200);
         }

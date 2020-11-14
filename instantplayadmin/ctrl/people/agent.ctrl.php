@@ -337,6 +337,10 @@ class AgentCtrl extends BaseCtrl{
                 $this->notice("二级佣金比例 只允许正整数 ");
             }
 
+            $mobileExist = UserModel::db()->getRow(" mobile = '{$data['mobile']}' ");
+            if($mobileExist){
+                $this->notice("该手机号已存在 ");
+            }
             $uploadService = new UploadService();
             $uploadRs = $uploadService->agent('pic');
             if($uploadRs['code'] != 200){
