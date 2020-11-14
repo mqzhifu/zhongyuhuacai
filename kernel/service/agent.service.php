@@ -4,8 +4,8 @@ class AgentService{
     public $orderService = null;
     public $withdrawMoneyService = null;
     const STATUS_WAIT = 1;
-    const STATUS_OK = 2;
-    const STATUS_REJECT = 3;
+    const STATUS_OK = 3;
+    const STATUS_REJECT = 2;
 
     const STATUS_DESC = [
         self::STATUS_WAIT =>"待审批",
