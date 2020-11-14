@@ -289,6 +289,7 @@ class AgentCtrl extends BaseCtrl{
                 'fee_percent'=> _g('fee_percent'),
                 'sub_fee_percent'=>_g("sub_fee_percent"),
                 'a_time'=>time(),
+                villages=>"place_hold",//占位吧
 //                'villages'=> _g('villages'),
             );
 
@@ -337,7 +338,7 @@ class AgentCtrl extends BaseCtrl{
                 $this->notice("二级佣金比例 只允许正整数 ");
             }
 
-            $mobileExist = UserModel::db()->getRow(" mobile = '{$data['mobile']}' ");
+            $mobileExist = AgentService::db()->getRow(" mobile = '{$data['mobile']}' ");
             if($mobileExist){
                 $this->notice("该手机号已存在 ");
             }
