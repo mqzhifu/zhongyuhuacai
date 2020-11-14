@@ -33,6 +33,35 @@ class AgentCtrl extends BaseCtrl  {
         out_ajax($rs['code'],$rs['msg']);
     }
 
+    function applyQrcode($request){
+        if(arrKeyIssetAndExist($request,'aid')){
+            $aid = $request['aid'];
+        }else{
+            $aid = $this->uinfo['id'];
+        }
+        $url = get_domain_url() ."agent/applyQrcode/aid=".$aid ;
+
+        require_once PLUGIN . '/phpqrcode/qrlib.php';
+
+        $value = $url;					//二维码内容
+
+        $errorCorrectionLevel = 'L';	//容错级别
+        $matrixPointSize = 5;			//生成图片大小
+
+        $service = new UploadService();
+        //生成二维码图片
+        $filename = $service->getApplyAgentUploadPath($aid);
+        QRcode::png($value,$filename , $errorCorrectionLevel, $matrixPointSize, 2);
+
+        $url = $service->getApplyAgentUrl($aid);			//已经生成的原始二维码图片文件
+        echo "<img src='$url' />";
+        exit;
+    }
+
+    function applyByQrcode(){
+
+    }
+
     //申请成为一个代理
     function apply($request){
         $this->setTitle('申请成为代理');

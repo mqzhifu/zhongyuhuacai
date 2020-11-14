@@ -8,6 +8,10 @@ function get_api_project_name(){
     return "api";
 }
 
+function get_agent_project_name(){
+    return "agent";
+}
+
 function get_base_upload_path( ){
     $staticUrl = STATIC_DIR;
     return $staticUrl . DS . "upload" . DS;
@@ -30,6 +34,16 @@ function get_api_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
 
 function get_api_upload_path($tmpPath,$module ){
     $base =  get_base_upload_path().get_api_project_name() . DS . get_upload_cdn_evn() .  DS;
+    return $base.$module.DS . $tmpPath;
+}
+
+function get_agent_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
+    $base =  get_base_upload_url($protocol).get_agent_project_name() . DS . get_upload_cdn_evn() .  DS;
+    return $base.$module.DS . $tmpPath;
+}
+
+function get_agent_upload_path($tmpPath,$module ){
+    $base =  get_base_upload_path().get_agent_project_name() . DS . get_upload_cdn_evn() .  DS;
     return $base.$module.DS . $tmpPath;
 }
 

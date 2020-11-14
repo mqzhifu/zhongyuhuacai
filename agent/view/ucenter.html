@@ -82,19 +82,23 @@
 
     <div class="tools">
 
-        <div class="item">
-            <a href="/agent/apply/type=1">
-                <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
-                <p>申请一级代理</p>
-            </a>
-        </div>
+<!--        <div class="item">-->
+<!--            <a href="/agent/apply/type=1">-->
+<!--                <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />-->
+<!--                <p>申请一级代理</p>-->
+<!--            </a>-->
+<!--        </div>-->
+
+        {if $uinfo['type'] == 1}
 
         <div class="item">
-            <a href="/agent/apply/type=2">
+            <a href="/agent/applyQrcode/type=2" target="_blank">
                 <img src="{CONST|H_STATIC_URL}/agent/assets/images/my/tools4.png" alt="" />
                 <p>申请二级代理</p>
             </a>
         </div>
+
+        {/if}
 
         <div class="item">
             <a href="/login/logout/">

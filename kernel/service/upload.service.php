@@ -117,6 +117,19 @@ class UploadService
 
         file_put_contents($path,$binaryImg);
     }
+    //一级代理，想要招募二级代理时，要有一个公共外部可访问的连接，且是二维码
+    //因为PHPQRCODE类库已经帮忙生成了文件，所以不需要我们来存储了，只需要给出路径即可
+    function getApplyAgentUploadPath($aid){
+        $tmp = "$aid.png";
+        $path = get_agent_upload_path($tmp,'apply_qrcode');
+        return $path;
+    }
+
+    function getApplyAgentUrl($aid){
+        $tmp = "$aid.png";
+        $path = get_agent_upload_url($tmp,'apply_qrcode');
+        return $path;
+    }
 
     function saveProductQrCode($binaryImg,$pid){
         $tmp = "/$pid.jpg";
