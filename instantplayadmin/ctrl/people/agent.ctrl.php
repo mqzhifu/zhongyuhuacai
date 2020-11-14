@@ -289,7 +289,7 @@ class AgentCtrl extends BaseCtrl{
                 'fee_percent'=> _g('fee_percent'),
                 'sub_fee_percent'=>_g("sub_fee_percent"),
                 'a_time'=>time(),
-                villages=>"place_hold",//占位吧
+                'villages'=>"place_hold",//占位吧
 //                'villages'=> _g('villages'),
             );
 
