@@ -5,6 +5,7 @@ storage/view_c/*
 storage/product_tb/*
 storage/deploy/*
 storage/img_resize/*
+storage/tb_product/*
 
 /doc
 /static
