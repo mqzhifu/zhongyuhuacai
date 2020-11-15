@@ -285,6 +285,13 @@ class OrderCtrl extends BaseCtrl{
             }
         }
 
+//        if($order['goods_list']){
+//            foreach ($order['goods_list'] as $k=>$v){
+//                $product = $v[''];
+//                $order['goods_list'][$k]['spider_source_pid'] = $product['spider_source_pid'];
+//            }
+//        }
+
         $this->assign("address",$address);
 
         $this->assign("shareUser",$shareUser);

@@ -710,6 +710,7 @@ class OrderService{
             $product['pcap_desc_str'] = $pcap_desc_str;
             $product['goodsAttrParaDesc'] = $goodsAttrParaDesc;
             $product['haulage'] = $goods['haulage'];
+            $product['spider_source_pid'] = $product['spider_source_pid'];
             $productGoods[] = $product;
         }
 
