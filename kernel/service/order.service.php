@@ -688,6 +688,7 @@ class OrderService{
 
             $goods = GoodsModel::db()->getById($gid);
             $product = ProductModel::db()->getById($goods['pid']);
+            $productTmp = $product;
             $product = $productService->formatRow($product,$orders['uid'],0);
             $product = $productService->formatShow(array($product))[0];
 
@@ -710,7 +711,7 @@ class OrderService{
             $product['pcap_desc_str'] = $pcap_desc_str;
             $product['goodsAttrParaDesc'] = $goodsAttrParaDesc;
             $product['haulage'] = $goods['haulage'];
-            $product['spider_source_pid'] = $product['spider_source_pid'];
+            $product['spider_source_pid'] = $productTmp['spider_source_pid'];
             $productGoods[] = $product;
         }
 
