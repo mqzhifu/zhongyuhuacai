@@ -371,7 +371,7 @@
                                                             {foreach ($orderDetail['goods_list'] as $k=>$v) }
                                                             <tr>
 
-                                                                <td>{$v['title']}</td>
+                                                                <td><a href="https://detail.1688.com/offer/{$v['spider_source_pid']}.html" target='_blank' >{$v['title']}</a></td>
                                                                 <td>{$v['id']}/{$v['gid']}</td>
                                                                 <td>{$v['price']}</td>
                                                                 <td>{$v['num']}</td>
