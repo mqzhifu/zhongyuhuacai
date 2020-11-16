@@ -4,6 +4,10 @@ function get_admin_project_name(){
     return "instantplayadmin";
 }
 
+function get_house_project_name(){
+    return "house";
+}
+
 function get_api_project_name(){
     return "api";
 }
@@ -29,6 +33,11 @@ function get_admin_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
 
 function get_api_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
     $base =  get_base_upload_url($protocol).get_api_project_name() . DS . get_upload_cdn_evn() .  DS;
+    return $base.$module.DS . $tmpPath;
+}
+
+function get_house_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
+    $base =  get_base_upload_url($protocol).get_house_project_name() . DS . get_upload_cdn_evn() .  DS;
     return $base.$module.DS . $tmpPath;
 }
 
@@ -70,6 +79,13 @@ function get_banner_url( $tmpPath , $protocol =HTTP_PROTOCOL){
         return false;
     }
     return get_admin_upload_url($tmpPath,"banner",$protocol);
+}
+
+function get_house_url( $tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return false;
+    }
+    return get_house_upload_url($tmpPath,"banner",$protocol);
 }
 
 function get_category_url( $tmpPath , $protocol =HTTP_PROTOCOL){

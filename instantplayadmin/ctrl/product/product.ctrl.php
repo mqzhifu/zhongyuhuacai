@@ -5,7 +5,6 @@ class ProductCtrl extends BaseCtrl{
             $this->getList();
         }
 
-
         $statusSelectOptionHtml = ProductModel::getStatusSelectOptionHtml();
         $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
         $this->assign("categoryOptions", ProductCategoryModel::getSelectOptionHtml());

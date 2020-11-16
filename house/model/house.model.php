@@ -18,11 +18,11 @@ class HouseModel {
     ];
 
 
-    const STATUS_ON = 2;
-    const STATUS_OFF = 1;
+    const STATUS_WAIT = 1;
+    const STATUS_USED = 2;
     const STATUS = [
-        self::STATUS_ON => "上架",
-        self::STATUS_OFF => "下架",
+        self::STATUS_WAIT => "待租/售",
+        self::STATUS_USED => "出租中",
     ];
 
     const DIRECTION_EAST  = 1;

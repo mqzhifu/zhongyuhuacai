@@ -76,44 +76,72 @@ class ProductCtrl extends BaseCtrl{
 //                $this->notice("标题重复:"._g('title'));
 //            }
 
-            $data['sort'] = _g('sort');
-            $data['title']= _g("title");
-            $data['desc'] = _g("desc");
-            $data['brand'] = _g("brand");
-            $data['notice']  = _g("notice");
-            $data['category_id'] = _g("category_id");
-            $data['status'] = _g("status");
-            $data['factory_uid'] = _g("factory_uid");
-            $data['recommend'] = _g("recommend");
-            $data['recommend_detail'] = _g("recommend_detail");
+            $data['status'] = HouseModel::STATUS_WAIT;
+            $data['master_id'] = _g('master_id');
+            $data['uid']= _g("uid");
+//            $data['status'] = _g("status");
+            $data['pics'] = _g("pics");
+            $data['desc']  = _g("desc");
+            $data['community'] = _g("community");
+            $data['province_code'] = _g("province");
+            $data['city_code'] = _g("city");
+            $data['county_code'] = _g("county");
+            $data['town_code'] = _g("town");
 
+
+            $data['build_no'] = _g("build_no");
+            $data['build_unit'] = _g("build_unit");
+            $data['build_detail_no'] = _g("build_detail_no");
+            $data['build_floor'] = _g("build_floor");
+            $data['build_direction'] = _g("build_direction");
+            $data['build_area'] = _g("build_area");
+            $data['build_room_num'] = _g("build_room_num");
+            $data['build_fitment'] = _g("build_fitment");
             $data['a_time'] = time();
             $data['admin_id']  = $this->_adminid;
-            $data['pv'] =0;
-            $data['uv'] =0;
-            $data['lowest_price'] = 0;
-            $data['goods_total'] = 0;
-            $data['user_buy_total'] = 0;
-            $data['user_up_total'] = 0;
-            $data['user_collect_total'] = 0;
-            $data['user_comment_total'] = 0;
 
-            $payType = _g('payType');
-            if(!$payType){
-                $this->notice("请选择支付的类型渠道 ");
+            if(!$data['master_id']){
+                $this->notice("master_id is null ");
             }
 
-            $data['pay_type'] = implode(",",$payType);
+            if(!$data['uid']){
+                $this->notice("uid is null ");
+            }
 
-            //两个参数，只会有一个是存在的,categoryAttrNull:为特殊参数，空属性
-            $categoryAttrPara  = _g("categoryAttrPara");
-            $categoryAttrNull = _g("categoryAttrNull");
+            if(!$data['community']){
+                $this->notice("community is null ");
+            }
 
-            if(!$data['title'])
-                $this->notice("title is null ");
+            if(!$data['province_code']){
+                $this->notice("province_code is null ");
+            }
 
-            if(!$categoryAttrPara && !$categoryAttrNull){
-                $this->notice("categoryAttrPara is null ");
+            if(!$data['city_code']){
+                $this->notice("city_code is null ");
+            }
+
+            if(!$data['county_code']){
+                $this->notice("county_code is null ");
+            }
+
+            if(!$data['build_no']){
+                $this->notice("build_no is null ");
+            }
+
+            if(!$data['build_unit']){
+                $this->notice("build_unit is null ");
+            }
+
+            if(!$data['build_detail_no']){
+                $this->notice("build_detail_no is null ");
+            }
+
+            if(!$data['build_floor']){
+                $this->notice("build_floor is null ");
+            }
+
+            if(!$data['build_area']){
+                $this->notice("build_area is null ");
             }
 
             $pics = _g("pics");
@@ -125,39 +153,44 @@ class ProductCtrl extends BaseCtrl{
                 }
                 $pic = substr($pic,0,strlen($pic)-1);
             }
-            $data['pic'] = $pic;
+            $data['pics'] = $pic;
 
-//            $uploadService = new UploadService();
-//            $uploadRs = $uploadService->product('pic');
-//            if($uploadRs['code'] != 200){
-//                exit(" uploadService->product error ".json_encode($uploadRs));
-//            }
-
-
-//            $data['pic'] = $uploadRs['msg'];
-
-            $productService = new ProductService();
-            $productService->addOne($data,$categoryAttrNull,$categoryAttrPara);
+            $newId = HouseModel::db()->add($data);
 
             $this->ok("成功",$this->_backListUrl);
         }
 
-        $this->assign("payType",OrderModel::PAY_TYPE_DESC);
+//        $this->assign("payType",OrderModel::PAY_TYPE_DESC);
+//        $this->assign("getRecommendOptionHtml",ProductModel::getRecommendOptionHtml());
+//        $this->assign("getRecommendDetailOptionHtml",ProductModel::getRecommendDetailOptionHtml());
+//        $factory = FactoryModel::db()->getById(FACTORY_UID_DEFAULT);
+//        $this->assign("factory",$factory);
+//        $statusSelectOptionHtml = ProductModel::getStatusSelectOptionHtml();
+//        $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
+//        $this->assign("categoryOptions", ProductCategoryModel::getSelectOptionHtml());
 
-        $this->assign("getRecommendOptionHtml",ProductModel::getRecommendOptionHtml());
-        $this->assign("getRecommendDetailOptionHtml",ProductModel::getRecommendDetailOptionHtml());
+        $getFitmentSelectOptionHtml = HouseModel::getFitmentSelectOptionHtml();
+        $this->assign("getFitmentSelectOptionHtml",$getFitmentSelectOptionHtml);
 
-        $factory = FactoryModel::db()->getById(FACTORY_UID_DEFAULT);
-        $this->assign("factory",$factory);
+        $getDirectionSelectOptionHtml = HouseModel::getDirectionSelectOptionHtml();
+        $this->assign("getDirectionSelectOptionHtml",$getDirectionSelectOptionHtml);
 
-        $statusSelectOptionHtml = ProductModel::getStatusSelectOptionHtml();
-        $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
-        $this->assign("categoryOptions", ProductCategoryModel::getSelectOptionHtml());
+
+        $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
+        $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
+
+
+
+        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
+        $this->assign("cityJs",$cityJs);
+        $this->assign("countyJs",$countryJs);
+
 
         $this->addJs("/assets/global/plugins/dropzone/dropzone.js");
         $this->addCss("/assets/global/plugins/dropzone/css/dropzone.css" );
 
         $this->addHookJS("product/product_add_hook.html");
+        $this->addHookJS("/layout/place.js.html");
         $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/product/product_add.html");
     }
@@ -267,20 +300,20 @@ class ProductCtrl extends BaseCtrl{
             $data = HouseModel::db()->getAll($where . $order . $limit);
 
             foreach($data as $k=>$v){
-                $statusBnt = "上架";
-                $type = 2;
-                $statusCssColor = "green";
-                if($v['status'] == HouseModel::STATUS_ON){
-                    $statusBnt = "下架";
-                    $type = 1;
-                    $statusCssColor = 'red';
-                }
+//                $statusBnt = "上架";
+//                $type = 2;
+//                $statusCssColor = "green";
+//                if($v['status'] == HouseModel::STATUS_ON){
+//                    $statusBnt = "下架";
+//                    $type = 1;
+//                    $statusCssColor = 'red';
+//                }
 
 
                 $pic = "";
                 if(arrKeyIssetAndExist($v,'pic')){
                     $pics = explode(",",$v['pic']);
-                    $pic = get_product_url($pics[0]);
+                    $pic = get_house_url($pics[0]);
                 }
 
 //                $attributeArr = ProductModel::attrParaParserToName($v['attribute']);
@@ -324,21 +357,23 @@ class ProductCtrl extends BaseCtrl{
                     $v['id'],
                     $v['master_id'],
                     $v['uid'],
-                    $v['status'],
-//                    '<img height="30" width="30" src="'.$pic.'" />',
-//                    $adminUserName,
-                    $v['province_code'] .$v['city_code'].$v['county_code'].$v['town_code'],
-                    $v['pv'],
-                    $v['uv'],
+                    HouseModel::STATUS[$v['status']],
+                    '<img height="30" width="30" src="'.$pic.'" />',
                     $v['community'],
+                    $v['province_code'] ."-".$v['city_code'].$v['county_code'].$v['town_code'],
+
                     $v['build_floor'],
-                    $v['build_direction'],
+
+                    HouseModel::DIRECTION_DESC[$v['build_direction']],
+
                     $v['build_area'],
                     $v['build_room_num'],
-                    $v['build_fitment'],
+                    HouseModel::FITMENT_DESC[$v['build_fitment']],
 
                     get_default_date($v['a_time']),
-                    '<a href="/product/no/product/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>',
+
+                    '',
+//                    '<a href="/product/no/product/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>',
 //                    '<button class="btn btn-xs default '.$statusCssColor.' btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-type="'.$type.'"><i class="fa fa-link"></i>'.$statusBnt.'</button>'.
 //                    '<a href="/product/no/goods/add/pid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加商品 </a>'.
                 );
@@ -551,18 +586,8 @@ class ProductCtrl extends BaseCtrl{
     }
 
     function multipleUploadOneImg(){
-//        if(!$id){
-//            exit("id is null");
-//        }
-//
-//        $product = ProductModel::db()->getById($id);
-//        if(!$product){
-//            exit("pid not in db.");
-//        }
-
-
         $uploadService = new UploadService();
-        $uploadRs = $uploadService->product('pic');
+        $uploadRs = $uploadService->house('pic');
         if($uploadRs['code'] != 200){
             exit(" uploadService->product error ".json_encode($uploadRs));
         }

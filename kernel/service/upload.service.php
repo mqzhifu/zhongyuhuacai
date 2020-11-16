@@ -13,11 +13,21 @@ class UploadService
     function getAdminProjectDir(){
         return FILE_UPLOAD_DIR .DS .get_admin_project_name();
     }
+    function getHouseProjectDir(){
+        return FILE_UPLOAD_DIR .DS .get_house_project_name();
+    }
 
     function product($postInputName){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getAdminProjectDir();
         $rs = $lib->upLoadOneFile($postInputName,'product',array('png','jpg','bmp'),0);
+        return $rs;
+    }
+
+    function house($postInputName){
+        $lib = new ImageUpLoadLib();
+        $lib->path = $this->getHouseProjectDir();
+        $rs = $lib->upLoadOneFile($postInputName,'house',array('png','jpg','bmp'),0);
         return $rs;
     }
 

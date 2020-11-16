@@ -24,43 +24,42 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    title: {
-                        minlength: 2,
-                        maxlength: 50,
+                    master_id: {
                         required: true
                     },
-                    category_id: {
-                        required: true
-                    },
-                    status: {
+                    uid: {
                         required: true,
                     },
-                    pic: {
+                    pics: {
                         required: true
                     },
-                    list_img: {
+                    community: {
                         required: true
                     },
-                    // ,
-                    // index_reco_img: {
-                    //     required: true
-                    // },
-                    // screen: {
-                    //     required: true
-                    // },
-                    // sort: {
-                    //     integer:true,
-                    //     maxlength: 4,
-                    //     required: true
-                    // },
-                    // background_color: {
-                    //     minlength: 7,
-                    //     maxlength: 7,
-                    //     required: true
-                    // },
-                    // play_url: {
-                    //     required: true
-                    // },
+                    province: {
+                        required: true
+                    },
+                    city: {
+                        required: true
+                    },
+                    county: {
+                        required: true
+                    },
+                    town: {
+                        required: true
+                    },
+                    build_no: {
+                        required: true
+                    },
+                    build_floor: {
+                        required: true
+                    },
+                    build_area: {
+                        required: true
+                    },
+                    build_detail_no: {
+                        required: true
+                    },
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes

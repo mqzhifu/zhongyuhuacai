@@ -212,6 +212,7 @@ class AgentCtrl extends BaseCtrl{
                     $userName,
                     $v['invite_code'],
                     $subAgentNum,
+                    $v['type'],
                     '<a target="_blank" href="/people/no/agent/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
                     $auditBnt . "&nbsp;"
 //                    '<a href="" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',

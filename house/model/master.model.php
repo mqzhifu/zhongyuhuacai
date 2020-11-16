@@ -5,6 +5,8 @@ class MasterModel {
     static $_db = null;
     static $_db_key = DB_CONN_DEFAULT;
 
+    static $_sex_male = 1;//男
+    static $_sex_female = 2;//女
 
     static function db(){
         if(self::$_db)
@@ -17,6 +19,23 @@ class MasterModel {
     public static function __callStatic($func, $arguments){
         return call_user_func_array(array(self::db(),$func), $arguments);
     }
+
+    static function getSexDesc(){
+        return array(self::$_sex_male=>'男',self::$_sex_female=>'女');
+    }
+
+    static function keyInSex($key){
+        return in_array($key,array_flip(self::getSexDesc()));
+    }
+
+    static function getSexDescByKey($key){
+        if(!self::keyInSex($key)){
+            return "未知";
+        }
+        $arr = self::getSexDesc();
+        return $arr[$key];
+    }
+
 	
 	static function login($uname,$ps){
 //	    var_dump(" uname = '$uname' and ps = '$ps'");
