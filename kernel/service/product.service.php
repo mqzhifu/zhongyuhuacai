@@ -401,6 +401,8 @@ class ProductService
                 }
             }
             $realUrl = substr($realUrl, 0, strlen($realUrl) - 1);
+            $resize_tmp = explode(".",$realUrl);
+            $realUrl = $realUrl[0] . ".200x200.".$resize_tmp[1];
             $row['pic'] = $realUrl;
         }
         return $row;
