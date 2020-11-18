@@ -397,13 +397,16 @@ class ProductService
             $realUrl = "";
             foreach ($picsTmpUrl as $k => $v) {
                 if (strpos($v, 'src') === false) {
-                    $realUrl .= get_product_url($v) . ",";
+                    if(strpos($v, 'cdn') === false){
+                        $realUrl .= get_product_url($v) . ",";
+                    }else{
+                        $tmp = get_product_url($v);
+                        $tmp = substr($tmp,0,strlen($tmp) - 4) . ".200x200.".substr($tmp,-3);
+                        $realUrl .= $tmp . ",";
+                    }
                 }
             }
             $realUrl = substr($realUrl, 0, strlen($realUrl) - 1);
-            if(strpos($realUrl,'alicdn') !== false ){
-                $realUrl = substr($realUrl,0,strlen($realUrl-4)) . ".200x200.".substr($realUrl,strlen($realUrl-3));
-            }
             $row['pic'] = $realUrl;
         }
         return $row;
