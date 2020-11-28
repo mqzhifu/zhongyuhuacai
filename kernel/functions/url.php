@@ -74,6 +74,13 @@ function get_agent_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     return get_admin_upload_url($tmpPath,"agent",$protocol);
 }
 
+function get_contract_url( $tmpPath , $protocol =HTTP_PROTOCOL){
+    if(!$tmpPath){
+        return get_default_user_url(HTTP_PROTOCOL);
+    }
+    return get_admin_upload_url($tmpPath,"contract",$protocol);
+}
+
 function get_banner_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
