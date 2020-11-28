@@ -120,4 +120,12 @@ class LoginCtrl extends BaseCtrl  {
     function findPsBySms(){
     }
 
+    function wordUserProtocol(){
+        $this->display("word_user_protocol.html");
+    }
+
+    function wordPrivateProtocol(){
+        $this->display("word_private_protocol.html");
+    }
+
 }

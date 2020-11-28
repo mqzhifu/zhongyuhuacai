@@ -29,7 +29,8 @@ $main = array(
         array("system",'sendLoginSms'),
         array("agent",'applyQrcode'),
         array("agent",'apply'),
-
+        array("login",'wordUserProtocol'),
+        array("login",'wordPrivateProtocol'),
 //        array(   'index','index',),
 
 //        array(   'index','testProtoBuf',),

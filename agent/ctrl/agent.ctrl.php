@@ -2,6 +2,8 @@
 class AgentCtrl extends BaseCtrl  {
     public $request = null;
     public $agent = null;
+    //二级代理，佣金10%，写死了
+    public $sub_fee_percent = 10;
     function __construct($request)
     {
         parent::__construct($request);
@@ -77,6 +79,7 @@ class AgentCtrl extends BaseCtrl  {
         if(!$aid){
             exit("aid is null");
         }
+        $this->assign("aid",$aid);
 
         $agent = AgentModel::db()->getById($aid);
         if(!$agent){
@@ -93,7 +96,8 @@ class AgentCtrl extends BaseCtrl  {
             $area = _g('area');
 //            $invite_agent_code = _g("invite_agent_code");
             $fee_percent = _g('fee_percent');
-            $sub_fee_percent = _g('sub_fee_percent');
+//            $sub_fee_percent = _g('sub_fee_percent');
+            $sub_fee_percent = $this->sub_fee_percent;
             $type = _g("type");
             $mobile = _g("mobile");
             $smsCode  = _g("sms_code");
@@ -162,7 +166,8 @@ class AgentCtrl extends BaseCtrl  {
             $rs = $this->agentService->apply($aid,$type , $data);
             return out_pc($rs['code'],$rs['msg']);
         }
-
+        //二级代理佣金
+        $this->assign("sub_fee_percent",$this->sub_fee_percent);
         $this->setTitle('申请成为代理');
 
         $this->display("apply.html");
