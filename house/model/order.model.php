@@ -14,11 +14,13 @@ class OrderModel {
     ];
     const PAY_TYPE_MONTH = 1;
     const PAY_TYPE_QUARTER = 2;
-    const PAY_TYPE_YEAR = 3;
+    const PAY_TYPE_HALF_YEAR = 3;
+    const PAY_TYPE_YEAR = 4;
 
     const PAY_TYPE_DESC = [
         self::PAY_TYPE_MONTH=>"月",
         self::PAY_TYPE_QUARTER=>"季",
+        self::PAY_TYPE_HALF_YEAR=>"半年",
         self::PAY_TYPE_YEAR=>"年",
     ];
 

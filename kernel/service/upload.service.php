@@ -24,6 +24,13 @@ class UploadService
         return $rs;
     }
 
+    function contract($postInputName){
+        $lib = new ImageUpLoadLib();
+        $lib->path = $this->getHouseProjectDir();
+        $rs = $lib->upLoadOneFile($postInputName,'contract',array('png','jpg','bmp',"word","txt"),0,"",1);
+        return $rs;
+    }
+
     function house($postInputName){
         $lib = new ImageUpLoadLib();
         $lib->path = $this->getHouseProjectDir();

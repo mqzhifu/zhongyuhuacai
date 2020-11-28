@@ -24,45 +24,47 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    stock: {
+                    deposit_price: {
                         required: true,
-                        int:true,
+                        price:true
+                        // int:true,
                     },
-                    status: {
-                        required: true
-                    },
+                    // status: {
+                    //     required: true
+                    // },
                     // sort: {
                     //     required: true,
                     // },
-                    sale_price: {
+                    price: {
                         required: true,
                         price:true
                     },
-                    original_price: {
+                    type: {
                         required: true,
-                        price:true
                     } ,
-                    // payType: {
-                    //     required: true
-                    // },
-                    haulage: {
-                        // required: true,
-                        price:true
-                    }
-
-                    // sort: {
-                    //     integer:true,
-                    //     maxlength: 4,
-                    //     required: true
-                    // },
+                    tenancy_pay_mode: {
+                        required: true
+                    },
+                    master_pay_mode: {
+                        required: true,
+                    },
+                    warn_trigger_time: {
+                        int: true
+                    },
                     // background_color: {
                     //     minlength: 7,
                     //     maxlength: 7,
                     //     required: true
                     // },
-                    // play_url: {
-                    //     required: true
-                    // },
+                    contract_start_time: {
+                        required: true
+                    },
+                    contract_end_time: {
+                        required: true
+                    },
+                    contract_attachment: {
+                        required: true
+                    },
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes
@@ -151,41 +153,30 @@
 
 
 <script>
-
-    {if ($product['category_attr_null'] == 2)}
-    var productLinkCategoryAttr = eval ({$productLinkCategoryAttr});
-    var paraMax = {$paraMax};
-    function initCategoryAttrPara(obj){
-        // var radioBoxHtml = "";
-        var radioBoxHtml = '<table class="table table-hover table-bordered table-striped">';
-        for(var i= 0 ;i <obj.length;i++){
-            var paraMaxTdNum = 1;
-
-            radioBoxHtml += "<tr  ><td>" + obj[i]['name'] +"</td>" ;
-            // radioBoxHtml += "<div  >" + obj[i]['name'] ;
-
-            if(obj[i]['para']){
-                for(var j= 0 ;j <obj[i]['para'].length;j++){
-                    radioBoxHtml += "<td><input type='radio' class='md-radiobtn' name='categoryAttrPara_"+obj[i]['id']+"' value=" + obj[i]['para'][j]['id'] + " />&nbsp;"+obj[i]['para'][j]['name'] + "</td>";
-                    paraMaxTdNum++;
-                }
-            }
-
-            for(var x=paraMaxTdNum;x<=paraMax;x++){
-                radioBoxHtml += "<td></td>";
-            }
+    jQuery(document).ready(function() {
+        FormValidation.init();
 
 
-            radioBoxHtml += "</tr>";
-            // radioBoxHtml += "</div>";
-        }
-        radioBoxHtml += "</table>";
-        // var replaceHtml = $("#categoryAttrPara").html();
-        // alert(replaceHtml);
-        // replaceHtml = replaceHtml.replace("|checkbox|",checkBoxHtml);
+        $(".form_date").datetimepicker({
+            isRTL: Metronic.isRTL(),
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            todayBtn: true,
+            startDate: "2013-02-14 10:00",
+            // pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+            // minuteStep: 10
+        });
 
-        $("#categoryAttrPara").html(radioBoxHtml);
-    }
-    initCategoryAttrPara(productLinkCategoryAttr);
-    {/if}
+    });
+
+
+    $(".form_datetime").datetimepicker({
+        isRTL: Metronic.isRTL(),
+        format: "yyyy-mm-dd hh:ii",
+        autoclose: true,
+        todayBtn: true,
+        startDate: "2013-02-14 10:00",
+        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+        minuteStep: 10
+    });
 </script>

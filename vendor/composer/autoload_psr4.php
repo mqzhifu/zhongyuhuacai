@@ -8,5 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'zhongyuhuacai\\' => array($baseDir . '/'),
     'phpseclib\\' => array($vendorDir . '/phpseclib/phpseclib/phpseclib'),
+    'Workerman\\' => array($vendorDir . '/workerman/workerman'),
     'PhpAmqpLib\\' => array($vendorDir . '/php-amqplib/php-amqplib/PhpAmqpLib'),
 );

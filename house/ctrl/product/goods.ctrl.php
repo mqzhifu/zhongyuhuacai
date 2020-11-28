@@ -19,142 +19,130 @@ class GoodsCtrl extends BaseCtrl{
         QRcode::png($url,false,"L",10);
     }
 
+    function createPayRecord(){
+        $oid = _g("oid");
+        if(!$oid){
+            $this->notice("oid is null");
+        }
+
+        $order = OrderModel::db()->getById($oid);
+        if(!$order){
+            $this->notice("oid not in db");
+        }
+
+        $distance = $order['contract_end_time'] - $order['contract_start_time'];
+        if($distance < 31 * 24 * 60 * 60){
+            $this->notice("合同的周期，不能小于31天，因为最付款单元为：月");
+        }
+
+        if($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_YEAR){
+            if($distance < 365 * 24 * 60 * 60){
+                $this->notice("年付，合同的周期，不能小于365天");
+            }
+        }elseif($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_HALF_YEAR){
+
+        }elseif($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_QUARTER){
+
+        }elseif($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_MONTH){
+
+        }else{
+            exit("pay_type err");
+        }
+
+    }
+
     function add(){
-        $pid = _g("pid");
-        if(!$pid){
-            $this->notice("pid is null");
+        $hid = _g("hid");
+        if(!$hid){
+            $this->notice("hid is null");
         }
 
-        $product = ProductModel::db()->getById($pid);
-        if(!$product){
-            $this->notice("pid not in db");
+        $house = HouseModel::db()->getById($hid);
+        if(!$house){
+            $this->notice("hid not in db");
         }
 
-//        $productAttribute= json_decode($product['attribute'],true);
-//        foreach ($productAttribute as $k=>$v) {
-//            $productAttributeId = $k;
-//        }
         if(_g("opt")){
 
             $data = array(
-                'pid'=>$pid,
-                'stock'=>_g('stock'),
-                'status'=>_g('status'),
-                'sale_price'=>_g('sale_price'),
-                'original_price'=>_g('original_price'),
-                'haulage'=>_g('haulage'),
+                'house_id'=>$hid,
+                'deposit_price'=>_g('deposit_price'),
+                'contract_start_time'=> strtotime( _g('contract_start_time')),
+                'contract_end_time'=> strtotime( _g('contract_end_time')),
+                'type'=>_g('type'),
+                'price'=>_g('price'),
                 'admin_id'=>$this->_adminid,
                 'a_time'=>time(),
-                "sort"=>_g('sort'),
-//                'pay_type'=>implode(",",_g('payType')),
+                "tenancy_pay_mode"=>_g('tenancy_pay_mode'),
+                "master_pay_mode"=>_g('master_pay_mode'),
+                "warn_trigger_time"=>_g('warn_trigger_time'),
             );
 
-            if(!$data['stock'] ){
-                $this->notice("pid not in db");
+
+//            if(!$data['deposit_price'] ){
+//                $this->notice("pid not in db");
+//            }
+
+            $data['deposit_price'] = (int)$data['deposit_price'];
+            if(! $data['deposit_price'] || $data['deposit_price'] <= 0){
+                $this->notice("押金，不能为空且 必须为正整数");
             }
 
-            $data['stock'] = (int)$data['stock'];
-            if(! $data['stock']){
-                $this->notice("库存数 必须为正整数");
+            $data['price'] = (int)$data['price'];
+            if(! $data['price'] || $data['price'] <= 0){
+                $this->notice("合同金额，不能为空且 必须为正整数");
             }
 
-            if(!$data['status'] ){
-                $this->notice("请选择 上下架 状态");
+            if(!$data['contract_start_time'] ){
+                $this->notice("合同开始时间 不能为空");
             }
 
-            if(!$data['sale_price'] ){
-                $this->notice("销售价为不能迷代");
+            if(!$data['contract_end_time'] ){
+                $this->notice("合同结束时间 不能为空");
             }
 
-            if(!is_numeric($data['sale_price'])){
-                $this->notice("销售价格只能是 整数+小数");
+            if($data['contract_start_time'] >= $data['contract_end_time']){
+                $this->notice("合同开始时间不能 >= 结束时间");
             }
 
-            if(!$data['original_price'] ){
-                $this->notice("原始价格 不能为空");
+            $distance = $data['contract_end_time'] - $data['contract_start_time'];
+            if($distance < 31 * 24 * 60 * 60){
+                $this->notice("合同的周期，不能小于31天，因为最付款单元为：月");
             }
 
-            if(!is_numeric($data['original_price'])){
-                $this->notice("原始价格只能是 整数+小数");
+            if(!is_numeric($data['tenancy_pay_mode'])){
+                $this->notice("租户付款方式不能为空");
             }
 
-            if($data['haulage'] ){
-                if(!is_numeric($data['haulage'])){
-                    $this->notice("运费价格只能是 整数+小数");
-                }
+            if(!$data['type'] ){
+                $this->notice("类型 不能为空");
             }
 
-
-
-//            $data['sale_price'] = yuanToFen($data['sale_price']);
-//            $data['original_price'] = yuanToFen($data['sale_price']);
-//            $data['haulage'] = yuanToFen($data['sale_price']);
-
-            $attrPara = [];
-            if($product['category_attr_null'] == ProductModel::CATE_ATTR_NULL_FALSE){
-                $attrParaGroup = ProductLinkCategoryAttrModel::getAttrParaGroup($product['id']);
-                $attrParaStr = "";
-                foreach ($attrParaGroup as $k=>$v) {
-                    $attrPara[$k] = _g("categoryAttrPara_".$k);
-                    if( !$attrPara[$k] ){
-                        $ProductCategoryAttr = ProductCategoryAttrModel::db()->getById($k);
-                        $this->notice("类别属性({$ProductCategoryAttr['name']}-$k)，不能为空，请选择一个值！");
-                    }
-                    $attrParaStr .= $k ."-". $attrPara[$k] . ",";
-                }
-                $attrParaStr = substr($attrParaStr,0,strlen($attrParaStr)-1);
-                if(!$attrParaStr){
-                    $this->notice("类别属性 不能为空");
-                }
-                $exist = GoodsModel::db()->getRow(" product_attr_ids = '$attrParaStr'");
-                if($exist){
-                    $this->notice("该商品已存在 ，请不要重复添加:".$attrParaStr);
-                }
-            }else{
-                $goods = GoodsModel::db()->getRow(" pid = $pid");
-                if($goods){
-                    $this->notice("<空属性>的产品，只能添加一个商品.");
-                }
-
-                $attrParaGroup = ProductLinkCategoryAttrModel::getAttrParaGroup($product['id']);
-                foreach ($attrParaGroup as $k=>$v){
-                    $attrPara[$k] = $v;
-                }
+            if(!$data['master_pay_mode']){
+                $this->notice("房主付款方式不能为空");
             }
 
-            $newId = GoodsModel::addOne($data,$product,$attrPara);
+            $data['warn_trigger_time'] = (int)$data['warn_trigger_time'];
+            if(!$data['warn_trigger_time'] ){
+                $this->notice("房主付款方式不能为空");
+            }
+
+            $uploadService = new UploadService();
+            $uploadRs = $uploadService->contract('contract_attachment');
+            if($uploadRs['code'] != 200){
+                exit(" uploadService->contract_attachment error ".json_encode($uploadRs));
+            }
+            $data['contract_attachment'] = $uploadRs['msg'];
+
+//            var_dump($data);exit;
+            $newId = OrderModel::db()->add($data);
             $this->ok($newId,$this->_backListUrl);
         }
 
-        $this->assign("product",$product);
-        $this->assign("payType",OrderModel::PAY_TYPE_DESC);
+        $this->assign("house",$house);
 
-        $productLinkCategoryAttr = ProductLinkCategoryAttrModel::getRelationFormatHtml($pid);
-//        if(!$productLinkCategoryAttr){
-//            $attr = ProductCategoryAttrModel::db()->getById($productAttributeId);
-//        }
-        $this->assign("productLinkCategoryAttr",json_encode($productLinkCategoryAttr));
-
-
-
-        $paraMax = 0;
-        foreach ($productLinkCategoryAttr as $k=>$v) {
-            if(arrKeyIssetAndExist($v,'para')){
-                if(count($v['para']) > $paraMax){
-                    $paraMax = count($v['para']);
-                }
-            }
-        }
-
-        $this->assign("paraMax",$paraMax);
-
-
-        $category = ProductCategoryModel::db()->getById($product['category_id']);
-
-        $statusSelectOptionHtml = ProductModel::getStatusSelectOptionHtml();
-        $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
-        $this->assign("categoryName",$category['name']);
-//        $this->assign("categoryOptions", ProductCategoryModel::getSelectOptionHtml());
+        $this->assign("getPayTypeOptions",OrderModel::getPayTypeOptions());
+        $this->assign("getTypeOptions",OrderModel::getTypeOptions());
 
         $this->addHookJS("/product/goods_add_hook.html");
         $this->display("/product/goods_add.html");
@@ -211,37 +199,22 @@ class GoodsCtrl extends BaseCtrl{
             $data = OrderModel::db()->getAll($where . $order .$limit);
 
 
-//                 'id',
-//                'id',
-//                'house_id',
-//                'type',
-//                'price',
-//                'deposit_price',
-//                'tenancy_pay_mode',
-//                'master_pay_mode',
-//                'contract_attachment',
-//                'contract_start_time',
-//                'contract_end_time',
-//                "a_time",
-//                'admin_id',
-//                '',
-
             foreach($data as $k=>$v){
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['house_id'],
-                    $v['type'],
+                    OrderModel::TYPE_DESC[$v['type']],
                     $v['price'],
                     $v['deposit_price'],
-                    $v['tenancy_pay_mode'],
-                    $v['master_pay_mode'],
+                    OrderModel::PAY_TYPE_DESC[$v['tenancy_pay_mode']],
+                    OrderModel::PAY_TYPE_DESC[$v['master_pay_mode']],
                     $v['contract_attachment'],
                     get_default_date($v['contract_start_time']),
                     get_default_date($v['contract_end_time']),
                     get_default_date($v['a_time']),
                     $v['admin_id'],
-                    "",
+                    '<a href="/product/no/goods/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 生成付款记录 </a>',
                 );
 
                 $records["data"][] = $row;

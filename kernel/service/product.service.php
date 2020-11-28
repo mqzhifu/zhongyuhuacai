@@ -188,6 +188,12 @@ class ProductService
             }
             $goodsLowPriceRow = $goodsDb[0];
             //处理 商品：最低价 总库存 商品关联PCAP 数据
+            $goodsDbIds = "";
+            foreach ($goodsDb as $k=>$v){
+                $goodsDbIds .= $v['id'] . ",";
+            }
+            $goodsDbIds = substr($goodsDbIds,0,strlen($goodsDbIds)-1);
+            $goodsDbLinkCategoryAttrList = GoodsLinkCategoryAttrModel::db()->getAll(" gid in ({$goodsDbIds})",null," pca_id , pcap_id , gid");
             foreach ($goodsDb as $k => $v) {
                 $row = $v;
                 //价格最低的那个商品
@@ -198,7 +204,13 @@ class ProductService
                 $stock += $v['stock'];
 
                 //获取每个商品对应的  分类属性参数
-                $linkList = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}",null," pca_id , pcap_id");
+//                $linkList = GoodsLinkCategoryAttrModel::db()->getAll(" gid = {$v['id']}",null," pca_id , pcap_id");
+                $linkList = null;
+                foreach ($goodsDbLinkCategoryAttrList as $k2=>$v2){
+                    if($v2['gid'] == $v['id']){
+                        $linkList[] = $v2;
+                    }
+                }
                 $row['goods_link_category_attr'] = $linkList;
                 $goodsList[]= $row;
             }

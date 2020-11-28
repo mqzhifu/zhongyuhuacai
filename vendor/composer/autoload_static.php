@@ -19,6 +19,10 @@ class ComposerStaticInit788e0c6ec5c75d08b3ab8265c924e6c7
         array (
             'phpseclib\\' => 10,
         ),
+        'W' => 
+        array (
+            'Workerman\\' => 10,
+        ),
         'P' => 
         array (
             'PhpAmqpLib\\' => 11,
@@ -34,10 +38,18 @@ class ComposerStaticInit788e0c6ec5c75d08b3ab8265c924e6c7
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
         ),
+        'Workerman\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/workerman/workerman',
+        ),
         'PhpAmqpLib\\' => 
         array (
             0 => __DIR__ . '/..' . '/php-amqplib/php-amqplib/PhpAmqpLib',
         ),
+    );
+
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -45,6 +57,7 @@ class ComposerStaticInit788e0c6ec5c75d08b3ab8265c924e6c7
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit788e0c6ec5c75d08b3ab8265c924e6c7::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit788e0c6ec5c75d08b3ab8265c924e6c7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit788e0c6ec5c75d08b3ab8265c924e6c7::$classMap;
 
         }, null, ClassLoader::class);
     }

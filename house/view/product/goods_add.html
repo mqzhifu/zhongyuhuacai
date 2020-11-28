@@ -15,7 +15,7 @@
                     <div class="portlet box green">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-gift"></i>添加商品
+                                <i class="fa fa-gift"></i>添加订单
                             </div>
                             <div class="actions">
                                 <a href="{$this->_backListUrl}" class="btn btn-default btn-sm">
@@ -25,7 +25,7 @@
                         <div class="portlet-body form">
                             <!-- BEGIN FORM-->
                             <form action="/product/no/goods/add/opt=1" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
-                                <input type="hidden" value="{$product['id']}" name="pid" />
+                                <input type="hidden" value="{$house['id']}" name="hid" />
                                 <div class="form-body">
                                     <div class="alert alert-danger display-hide">
                                         <button class="close" data-close="alert"></button>
@@ -39,27 +39,30 @@
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">产品名称</label>
+                                        <label class="control-label col-md-3">house_id</label>
                                         <div class="col-md-4">
-                                            <input type="text" disabled class="form-control" value="{$product['title']}" />
+                                            <input type="text" disabled class="form-control" value="{$house['id']}" />
                                         </div>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">分类</label>
-                                        <div class="col-md-4">
-                                            <input type="text" disabled class="form-control" value="{$categoryName}" />
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">库存<span class="required">
+                                        <label class="control-label col-md-3">合同金额
+                                            <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <input type="text" name="stock" data-required="1" class="form-control" value="" />
+                                            <input type="text" class="form-control" name="price" value="" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">押金<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="deposit_price" data-required="1" class="form-control" value="" />
                                         </div>
                                     </div>
 
@@ -67,68 +70,105 @@
 
 
                                     <div class="form-group" id="categoryAttr" >
-                                        <label class="control-label col-md-3">类别属性<span class="required">
+                                        <label class="control-label col-md-3">类型<span class="required">
 										* </span>
                                         </label>
-                                        <div class="col-md-4" id="categoryAttrPara">
-                                            {if ($product['category_attr_null'] == 1)}
-                                            <input type="text" class="form-control" value="无属性" disabled />
-                                            {/if}
+                                        <div class="col-md-4">
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="type">
+                                                <option value="">请选择</option>
+                                                {$getTypeOptions}
+                                            </select>
+
                                         </div>
                                     </div>
 
                                     <!--<div id="categoryAttrPara" style="display: none"></div>-->
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">在线状态 <span class="required">
+                                        <label class="control-label col-md-3">租户付款模式 <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
 
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="status">
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="tenancy_pay_mode">
                                                 <option value="">请选择</option>
-                                                {$statusSelectOptionHtml}
+                                                {$getPayTypeOptions}
                                             </select>
                                         </div>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">销售价格(元) <span class="required">
+                                        <label class="control-label col-md-3">房主付款模式 <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
 
-                                            <input type="text" name="sale_price" data-required="1" class="form-control" value="" />
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="master_pay_mode">
+                                                <option value="">请选择</option>
+                                                {$getPayTypeOptions}
+                                            </select>
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">付款提醒(秒)
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="text" name="warn_trigger_time" data-required="1" class="form-control" value="" />
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">原始价格(元) <span class="required">
+                                        <label class="control-label col-md-3">合同开始时间 <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
 
-                                            <input type="text" name="original_price" data-required="1"  class="form-control" value="" />
+                                                <div class="input-group date form_datetime margin-bottom-5">
+                                                    <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="contract_start_time" id="" placeholder="datetime">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>
+                                                        <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                    </span>
+                                                </div>
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">合同结束时间 <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-icon right">
+                                                <i class="fa"></i>
+
+                                                <div class="input-group date form_datetime margin-bottom-5">
+                                                    <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="contract_end_time" placeholder="datetime">
+                                                    <span class="input-group-btn">
+                                                        <button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>
+                                                        <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
+                                                    </span>
+                                                </div>
+
+
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">运费(元)
+                                        <label class="control-label col-md-3">合同附件<span class="required">
+										* </span>
                                         </label>
                                         <div class="col-md-4">
-
-                                            <input type="text" name="haulage" data-required="1" class="form-control" value="" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">排序
-                                        </label>
-                                        <div class="col-md-4">
-
-                                            <input type="text" name="sort" data-required="1" class="form-control" value="" />
+                                            <input type="file" name="contract_attachment" data-required="1" class="form-control" value="" />
                                         </div>
                                     </div>
 
