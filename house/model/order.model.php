@@ -21,7 +21,28 @@ class OrderModel {
         self::PAY_TYPE_MONTH=>"月",
         self::PAY_TYPE_QUARTER=>"季",
         self::PAY_TYPE_HALF_YEAR=>"半年",
-        self::PAY_TYPE_YEAR=>"年",
+        self::PAY_TYPE_YEAR=>"整年",
+    ];
+    //支付类型 - 转换成具体的 天
+    const PAY_TYPE_TURN_DAY = [
+        self::PAY_TYPE_MONTH=>31,
+        self::PAY_TYPE_QUARTER=>90,
+        self::PAY_TYPE_HALF_YEAR=>183,
+        self::PAY_TYPE_YEAR=>365,
+    ];
+
+    const CATE_MASTER = 1;
+    const CATE_USER = 2;
+    const CATE_DESC = [
+        self::CATE_MASTER=>"房主",
+        self::CATE_USER=>"用户",
+    ];
+
+    const FINANCE_INCOME = 1;
+    const FINANCE_EXPENSE = 2;
+    const FINANCE_DESC = [
+        self::FINANCE_INCOME=>"收入",
+        self::FINANCE_EXPENSE=>"支出",
     ];
 
 
@@ -56,6 +77,14 @@ class OrderModel {
     static function getTypeOptions(){
         $html = "";
         foreach (self::TYPE_DESC as $k=>$v) {
+            $html .= "<option value={$k}>{$v}</option>";
+        }
+        return $html;
+    }
+
+    static function getCateTypeOptions(){
+        $html = "";
+        foreach (self::CATE_DESC as $k=>$v) {
             $html .= "<option value={$k}>{$v}</option>";
         }
         return $html;

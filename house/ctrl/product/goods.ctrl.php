@@ -7,18 +7,11 @@ class GoodsCtrl extends BaseCtrl{
 
         $this->assign("getPayTypeOptions",OrderModel::getPayTypeOptions());
         $this->assign("getTypeOptions",OrderModel::getTypeOptions());
+        $this->assign("getCateTypeOptions",OrderModel::getCateTypeOptions());
 
         $this->display("/product/goods_list.html");
     }
-
-
-    function makeQrcode(){
-//        var_dump(1);
-        include PLUGIN .DS."phpqrcode".DS."qrlib.php";
-        $url = "http://www.baidu.com";
-        QRcode::png($url,false,"L",10);
-    }
-
+    //一个订单，生成-付款记录
     function createPayRecord(){
         $oid = _g("oid");
         if(!$oid){
@@ -30,25 +23,35 @@ class GoodsCtrl extends BaseCtrl{
             $this->notice("oid not in db");
         }
 
+        $this->checkContractTimePeriodPay($order['contract_start_time'] , $order['contract_end_time'],$order['pay_mode']);
+
         $distance = $order['contract_end_time'] - $order['contract_start_time'];
-        if($distance < 31 * 24 * 60 * 60){
-            $this->notice("合同的周期，不能小于31天，因为最付款单元为：月");
-        }
-
-        if($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_YEAR){
-            if($distance < 365 * 24 * 60 * 60){
-                $this->notice("年付，合同的周期，不能小于365天");
-            }
-        }elseif($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_HALF_YEAR){
-
-        }elseif($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_QUARTER){
-
-        }elseif($order['tenancy_pay_mode'] == OrderModel::PAY_TYPE_MONTH){
-
+        $days = $distance / ( 24 * 60 * 60);
+        $num = (int)$days / OrderModel::PAY_TYPE_TURN_DAY[$order['pay_mode']];
+        $mod = $days / OrderModel::PAY_TYPE_TURN_DAY[$order['pay_mode']];
+        //每次付款的单价
+        $price = $order['price'] / $num;
+        if($order['category'] == OrderModel::CATE_MASTER){
+            $type = OrderModel::FINANCE_EXPENSE;
         }else{
-            exit("pay_type err");
+            $type = OrderModel::FINANCE_INCOME;
         }
-
+        for($i=0;$i<$num;$i++){
+            $data = array(
+                "house_id"=>$order['house_id'],
+                "oid"=>$order['id'],
+                'type' =>$type,
+                'price'=>$price,
+//                start_time
+//                end_time
+                'pay_third_no'=>"",
+                'pay_type'=> 0,
+                'pay_time'=>0,
+                'a_time'=>time(),
+                "warn_trigger_time"=>$order['warn_trigger_time'],
+            );
+        }
+        var_dump($data);exit;
     }
 
     function add(){
@@ -70,14 +73,16 @@ class GoodsCtrl extends BaseCtrl{
                 'contract_start_time'=> strtotime( _g('contract_start_time')),
                 'contract_end_time'=> strtotime( _g('contract_end_time')),
                 'type'=>_g('type'),
+                'category'=>_g('category'),
+                'uid'=>_g('uid'),
                 'price'=>_g('price'),
                 'admin_id'=>$this->_adminid,
                 'a_time'=>time(),
-                "tenancy_pay_mode"=>_g('tenancy_pay_mode'),
-                "master_pay_mode"=>_g('master_pay_mode'),
+                "pay_mode"=>_g('pay_mode'),
+//                "tenancy_pay_mode"=>_g('tenancy_pay_mode'),
+//                "master_pay_mode"=>_g('master_pay_mode'),
                 "warn_trigger_time"=>_g('warn_trigger_time'),
             );
-
 
 //            if(!$data['deposit_price'] ){
 //                $this->notice("pid not in db");
@@ -105,26 +110,43 @@ class GoodsCtrl extends BaseCtrl{
                 $this->notice("合同开始时间不能 >= 结束时间");
             }
 
-            $distance = $data['contract_end_time'] - $data['contract_start_time'];
-            if($distance < 31 * 24 * 60 * 60){
-                $this->notice("合同的周期，不能小于31天，因为最付款单元为：月");
-            }
+//            if(!is_numeric($data['tenancy_pay_mode'])){
+//                $this->notice("租户付款方式不能为空");
+//            }
+//            if(!$data['master_pay_mode']){
+//                $this->notice("房主付款方式不能为空");
+//            }
 
-            if(!is_numeric($data['tenancy_pay_mode'])){
-                $this->notice("租户付款方式不能为空");
+            if(!is_numeric($data['pay_mode'])){
+                $this->notice("付款方式不能为空");
             }
+            $this->checkContractTimePeriodPay($data['contract_start_time'],$data['contract_end_time'] , $data['pay_mode']);
 
             if(!$data['type'] ){
                 $this->notice("类型 不能为空");
             }
 
-            if(!$data['master_pay_mode']){
-                $this->notice("房主付款方式不能为空");
+            if(!$data['category'] ){
+                $this->notice("用户类型不能为空!");
+            }
+
+            if(!$data['uid'] ){
+                $this->notice("用户ID不能为空!");
+            }
+
+            if($data['category'] == OrderModel::CATE_MASTER){
+                $uinfo = MasterModel::db()->getById($data['uid']);
+            }else{
+                $uinfo = UserModel::db()->getById($data['uid']);
+            }
+
+            if(!$uinfo){
+                $this->notice("用户ID不在DB中!");
             }
 
             $data['warn_trigger_time'] = (int)$data['warn_trigger_time'];
             if(!$data['warn_trigger_time'] ){
-                $this->notice("房主付款方式不能为空");
+                $this->notice("付款提醒时间");
             }
 
             $uploadService = new UploadService();
@@ -143,9 +165,35 @@ class GoodsCtrl extends BaseCtrl{
 
         $this->assign("getPayTypeOptions",OrderModel::getPayTypeOptions());
         $this->assign("getTypeOptions",OrderModel::getTypeOptions());
+        $this->assign("getCateTypeOptions",OrderModel::getCateTypeOptions());
 
         $this->addHookJS("/product/goods_add_hook.html");
         $this->display("/product/goods_add.html");
+    }
+    //检查 合同的 时间周期  与付款方式
+    function checkContractTimePeriodPay($s_time,$e_time,$payType){
+        $distance = $e_time - $s_time;
+        if($payType == OrderModel::PAY_TYPE_YEAR){
+            if($distance < OrderModel::PAY_TYPE_TURN_DAY[$payType] * 24 * 60 * 60){
+                $this->notice("整年付，合同的周期，不能小于365天");
+            }
+        }elseif($payType == OrderModel::PAY_TYPE_HALF_YEAR){
+            if($distance < OrderModel::PAY_TYPE_TURN_DAY[$payType] * 24 * 60 * 60){
+                $this->notice("半年付，合同的周期，不能小于183天");
+            }
+        }elseif($payType == OrderModel::PAY_TYPE_QUARTER){
+            if($distance < OrderModel::PAY_TYPE_TURN_DAY[$payType] * 24 * 60 * 60){
+                $this->notice("季付，合同的周期，不能小于90天");
+            }
+        }elseif($payType == OrderModel::PAY_TYPE_MONTH){
+            if($distance < OrderModel::PAY_TYPE_TURN_DAY[$payType] * 24 * 60 * 60){
+                $this->notice("月付，合同的周期，不能小于31天");
+            }
+        }else{
+            $this->notice("pay_type err");
+        }
+
+        return 1;
     }
 
     function getList(){
@@ -171,8 +219,9 @@ class GoodsCtrl extends BaseCtrl{
                 'type',
                 'price',
                 'deposit_price',
-                'tenancy_pay_mode',
-                'master_pay_mode',
+                'pay_mode',
+                'category',
+                'uid',
                 'contract_attachment',
                 'contract_start_time',
                 'contract_end_time',
@@ -198,7 +247,6 @@ class GoodsCtrl extends BaseCtrl{
             $limit = " limit $iDisplayStart,$end";
             $data = OrderModel::db()->getAll($where . $order .$limit);
 
-
             foreach($data as $k=>$v){
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
@@ -207,14 +255,15 @@ class GoodsCtrl extends BaseCtrl{
                     OrderModel::TYPE_DESC[$v['type']],
                     $v['price'],
                     $v['deposit_price'],
-                    OrderModel::PAY_TYPE_DESC[$v['tenancy_pay_mode']],
-                    OrderModel::PAY_TYPE_DESC[$v['master_pay_mode']],
+                    OrderModel::PAY_TYPE_DESC[$v['pay_mode']],
+                    OrderModel::CATE_DESC[$v['category']],
+                    $v['uid'],
                     $v['contract_attachment'],
                     get_default_date($v['contract_start_time']),
                     get_default_date($v['contract_end_time']),
                     get_default_date($v['a_time']),
                     $v['admin_id'],
-                    '<a href="/product/no/goods/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 生成付款记录 </a>',
+                    '<a href="/product/no/goods/createPayRecord/oid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 生成付款记录 </a>',
                 );
 
                 $records["data"][] = $row;

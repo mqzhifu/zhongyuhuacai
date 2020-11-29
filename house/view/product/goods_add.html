@@ -58,16 +58,13 @@
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">押金<span class="required">
-										* </span>
+                                        <label class="control-label col-md-3">押金
+<!--                                            <span class="required">* </span>-->
                                         </label>
                                         <div class="col-md-4">
                                             <input type="text" name="deposit_price" data-required="1" class="form-control" value="" />
                                         </div>
                                     </div>
-
-
-
 
                                     <div class="form-group" id="categoryAttr" >
                                         <label class="control-label col-md-3">类型<span class="required">
@@ -82,29 +79,36 @@
                                         </div>
                                     </div>
 
-                                    <!--<div id="categoryAttrPara" style="display: none"></div>-->
-
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">租户付款模式 <span class="required">
+                                        <label class="control-label col-md-3">用户类型<span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
-
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="tenancy_pay_mode">
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="category">
                                                 <option value="">请选择</option>
-                                                {$getPayTypeOptions}
+                                                {$getCateTypeOptions}
                                             </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">用户ID<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" name="uid" data-required="1" class="form-control" value="" />
                                         </div>
                                     </div>
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">房主付款模式 <span class="required">
+                                        <label class="control-label col-md-3">付款模式 <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
 
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="master_pay_mode">
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="pay_mode">
                                                 <option value="">请选择</option>
                                                 {$getPayTypeOptions}
                                             </select>
@@ -128,8 +132,8 @@
                                             <div class="input-icon right">
                                                 <i class="fa"></i>
 
-                                                <div class="input-group date form_datetime margin-bottom-5">
-                                                    <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="contract_start_time" id="" placeholder="datetime">
+                                                <div class="input-group date form_date margin-bottom-5">
+                                                    <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="contract_start_time" id="" placeholder="date">
                                                     <span class="input-group-btn">
                                                         <button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>
                                                         <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
@@ -150,8 +154,8 @@
                                             <div class="input-icon right">
                                                 <i class="fa"></i>
 
-                                                <div class="input-group date form_datetime margin-bottom-5">
-                                                    <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="contract_end_time" placeholder="datetime">
+                                                <div class="input-group date form_date margin-bottom-5">
+                                                    <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="contract_end_time" placeholder="date">
                                                     <span class="input-group-btn">
                                                         <button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>
                                                         <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>

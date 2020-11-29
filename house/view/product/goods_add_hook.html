@@ -24,17 +24,17 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    deposit_price: {
-                        required: true,
-                        price:true
-                        // int:true,
-                    },
-                    // status: {
-                    //     required: true
-                    // },
-                    // sort: {
+                    // deposit_price: {
                     //     required: true,
+                    //     price:true
+                    //     // int:true,
                     // },
+                    category: {
+                        required: true
+                    },
+                    uid: {
+                        required: true,
+                    },
                     price: {
                         required: true,
                         price:true
@@ -42,12 +42,12 @@
                     type: {
                         required: true,
                     } ,
-                    tenancy_pay_mode: {
+                    pay_mode: {
                         required: true
                     },
-                    master_pay_mode: {
-                        required: true,
-                    },
+                    // master_pay_mode: {
+                    //     required: true,
+                    // },
                     warn_trigger_time: {
                         int: true
                     },
@@ -162,7 +162,7 @@
             format: "yyyy-mm-dd",
             autoclose: true,
             todayBtn: true,
-            startDate: "2013-02-14 10:00",
+            // startDate: "2013-02-14",
             // pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
             // minuteStep: 10
         });
@@ -170,13 +170,13 @@
     });
 
 
-    $(".form_datetime").datetimepicker({
-        isRTL: Metronic.isRTL(),
-        format: "yyyy-mm-dd hh:ii",
-        autoclose: true,
-        todayBtn: true,
-        startDate: "2013-02-14 10:00",
-        pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
-        minuteStep: 10
-    });
+    // $(".form_datetime").datetimepicker({
+    //     isRTL: Metronic.isRTL(),
+    //     format: "yyyy-mm-dd hh:ii",
+    //     autoclose: true,
+    //     todayBtn: true,
+    //     startDate: "2013-02-14 10:00",
+    //     pickerPosition: (Metronic.isRTL() ? "bottom-right" : "bottom-left"),
+    //     minuteStep: 10
+    // });
 </script>
