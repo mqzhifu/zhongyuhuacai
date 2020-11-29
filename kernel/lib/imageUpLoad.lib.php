@@ -11,6 +11,8 @@ class ImageUpLoadLib{
     public $hash = true;
     public $postInputName = null;
     public $module = "";
+    public $compress = 1;//开启压缩
+    public $compressSize = 512;//多大后，开启压缩，KB
     function __construct(){
 
     }
@@ -56,6 +58,14 @@ class ImageUpLoadLib{
         if($_FILE['size']  > $this->fileSize  * 1024 * 1024)
             exit($errInfo." file size >  ".$this->fileSize);
 
+        if($this->compress){
+            if($this->compressSize){
+                if($_FILE['size'] > $this->compressSize  * 1024){
+
+                }
+            }
+        }
+
         //判断文件类型(扩展)，共3步，1：文件名、2：PHP自带的函数、3：打开二进制文件
 
 
@@ -64,7 +74,6 @@ class ImageUpLoadLib{
         $extFileType = strtolower($extFileType);//转小写
         if(!in_array($extFileType, $this->fileType))
             exit($errInfo . " extFileType $extFileType ");
-
 
         if(!$isBinary){//二进制可能 是： application/octet-stream
             //2PHP自带的函数

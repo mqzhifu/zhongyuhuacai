@@ -1,42 +1,50 @@
 
 <script>
-    var areaSelectedProvince = 0;
-    var areaSelectedCity = 0;
+    //4级 联动 select 区域选择
+    //使用方法
+    // id="province" onchange="areaChange('province',this)"
+    // id="city" onchange="areaChange('city',this)"
+    // id="county" onchange="areaChange('county',this)"
+    // id="town"
 
-    var city = eval({$cityJs});
-    var county = eval({$countyJs});
-    var ajaxStreetData = null;
+    var level = 3;//联动级别， 3 和 4
+    var areaSelectedProvince = 0;//当前选择的省ID
+    var areaSelectedCity = 0;//当前选择的市ID
 
+    var city = eval({$cityJs});//由后端生成的城市数据
+    var county = eval({$countyJs});//由后端生成的县级数据
+    //乡/镇，后端生成数据
+    var ajaxStreetData = null;//镇级因为数据库量有点大，每次就ajax获取了
 
     function isEmpty(value){
-        if(!value || typeof value == "undefined" || value == 'undefined' || value == 'undefine'){
+        if(!value || typeof value == "undefined" ||  value == 'undefined' || value == 'undefine'){
             return 1;
         }
         return 0;
     }
-
+    //变更选择框后的事件监听
     function areaChange(type,obj){
-        if(type == 'province'){
+        if(type == 'province'){//省级select变动，需要清空另外几个select
             areaSelectedProvince = $(obj).val();
-
             //清除原数据
             $("#city").html("<option value=''>请选择</option>");
             $("#county").html("<option value=''>请选择</option>");
-            $("#street").html("<option value=''>请选择</option>");
-
-            if(isEmpty(areaSelectedProvince)){
-                return alert("province is undefined");
+            if(level == 4){
+                $("#street").html("<option value=''>请选择</option>");
             }
 
+            if(isEmpty(areaSelectedProvince) || areaSelectedProvince == "请选择"){
+                return alert("areaSelectedProvince is empty,province is undefined!");
+            }
             //找到下级城市的数据列表
             var cityList = city[areaSelectedProvince];
+            //初始化-城市列表中的数据源，更新到select中
             var optionHtml = "<option value=''>请选择</option>";
             for(var i=0;i<cityList.length;i++){
                 optionHtml += "<option value='"+cityList[i][2]+"'>"+cityList[i][1]+"</option>";
             }
-            // var optionHtml = getOptionHtml(cityList);
             $("#city").html(optionHtml);
-            //4个直辖市
+            //4个直辖市，需要特殊处理一下
             if(areaSelectedProvince == 110000 || areaSelectedProvince == 120100 || areaSelectedProvince == 310100|| areaSelectedProvince == 500100 ){
                 var special = new Array();
                 special[110000] = 110100;
@@ -60,16 +68,18 @@
                 return alert("countyId is undefined");
             }
 
-            // $("#county").html("<option value=''>请选择</option>");
-            $("#town").html("<option value=''>请选择</option>");
-            ajaxGetAreaStreet(countyId);
+            if(level == 4){
+                // $("#county").html("<option value=''>请选择</option>");
+                $("#town").html("<option value=''>请选择</option>");
+                ajaxGetAreaStreet(countyId);
 
-            var streetData = ajaxStreetData;
-            var optionHtml = "<option value=''>请选择</option>";
-            for(var i=0;i<streetData.length;i++){
-                optionHtml += "<option value='"+streetData[i]['code']+"'>"+streetData[i]['short_name']+"</option>";
+                var streetData = ajaxStreetData;
+                var optionHtml = "<option value=''>请选择</option>";
+                for(var i=0;i<streetData.length;i++){
+                    optionHtml += "<option value='"+streetData[i]['code']+"'>"+streetData[i]['short_name']+"</option>";
+                }
+                $("#town").html(optionHtml);
             }
-            $("#town").html(optionHtml);
         }else{
             return alert(" type error");
         }
@@ -87,7 +97,9 @@
             return alert("city is undefined");
         }
 
-        $("#town").html("<option value=''>请选择</option>");
+        if(level == 4){
+            $("#town").html("<option value=''>请选择</option>");
+        }
 
         var countyList = county[areaSelectedCity];
         // var optionHtml = getOptionHtml(countyList);
@@ -98,23 +110,22 @@
         $("#county").html(optionHtml);
     }
 
-    function getOptionHtml(data){
-        var optionHtml = "";
-        for(var i=0;i<data.length;i++){
-            optionHtml += "<option value='"+data[i][2]+"'>"+data[i][1]+"</option>";
-        }
-        return optionHtml;
-    }
-
+    // function getOptionHtml(data){
+    //     var optionHtml = "";
+    //     for(var i=0;i<data.length;i++){
+    //         optionHtml += "<option value='"+data[i][2]+"'>"+data[i][1]+"</option>";
+    //     }
+    //     return optionHtml;
+    // }
+    //因为乡/镇数据量有点大，所以 ，每次都是ajax获取
     function ajaxGetAreaStreet(countyId){
         $.ajax({
             async: false,
             // contentType: "application/json;charset=UTF-8",
             //请求方式
+            // data : JSON.stringify(list),//数据，json字符串
             type : "POST",
             url : "/people/no/agent/getCountyData/countyId="+countyId,
-//            //数据，json字符串
-            // data : JSON.stringify(list),
             //请求成功
             success : function(result) {
                 if(!result){

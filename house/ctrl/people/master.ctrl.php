@@ -1,5 +1,5 @@
 <?php
-class UserCtrl extends BaseCtrl{
+class MasterCtrl extends BaseCtrl{
     function index(){
         if(_g("getlist")){
             $this->getList();
@@ -10,24 +10,7 @@ class UserCtrl extends BaseCtrl{
         $this->assign("sexOptions", UserModel::getSexOptions());
         $this->assign("innerTypeOptions", UserModel::getInnerTypeOptions());
 
-        $this->display("/people/user_list.html");
-    }
-
-    function delOne(){
-        $id = _g("uid");
-
-        $where =" uid = $id limit 1000";
-//        UserLogModel::db()->delete($where);
-//        OrderModel::db()->delete($where);
-//        MsgModel::db()->delete("from_uid = $id or to_uid = $id");
-//        UserCollectionModel::db()->delete($where);
-//        UserFeedbackModel::db()->delete($where);
-//        UserProductLikedModel::db()->delete($where);
-//        UserCommentModel::db()->delete($where);
-//        VerifiercodeModel::db()->delete($where);
-//
-//
-//        UserModel::db()->delById($id);
+        $this->display("/people/master_list.html");
     }
 
     function getList(){
@@ -36,7 +19,7 @@ class UserCtrl extends BaseCtrl{
         //获取搜索条件
         $where = $this->getDataListTableWhere();
         //计算 总数据数 DB中总记录数
-        $iTotalRecords = UserModel::db()->getCount($where);
+        $iTotalRecords = MasterModel::db()->getCount($where);
         if ($iTotalRecords){
             //按照某个字段 排序
             $order_sort = _g("order");
@@ -46,17 +29,16 @@ class UserCtrl extends BaseCtrl{
             $sort = array(
                 'id',
                 'id',
-                'uname',
-                'nickname',
-                'province_code',
-                'sex',
+                'name',
                 'mobile',
-                'inner_type',
-                'birthday',
-                'a_time',
-                'type',
-                '',//绑定代理
-                'master_agent_id',//归属代理
+                'live_address',
+                'sex',
+                'bank_name',
+                'bank_account_name',
+                'bank_account_no',
+                'wx',
+                'ali',
+                'a_time',//归属代理
                 '',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
@@ -73,39 +55,32 @@ class UserCtrl extends BaseCtrl{
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
             $limit = " limit $iDisplayStart,$end";
-            $data = UserModel::db()->getAll($where . $order . $limit);
+            $data = MasterModel::db()->getAll($where . $order . $limit);
 
-
-            $agentService = new AgentService();
 
             foreach($data as $k=>$v){
-                $avatar = get_avatar_url($v['avatar']);
-                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
-
-                $bindAgentName = "--";
-                $bindAgentRs = $agentService->getOneByUid($v['id']);
-                if($bindAgentRs && $bindAgentRs['msg']){
-                    $bindAgentName  = $bindAgentRs['msg']['real_name'];
-                }
+//                $avatar = get_avatar_url($v['avatar']);
+//                $userLiveplaceDesc = UserModel::getLivePlaceDesc($v['id']);
+//                $bindAgentName = "--";
+//                $bindAgentRs = $agentService->getOneByUid($v['id']);
+//                if($bindAgentRs && $bindAgentRs['msg']){
+//                    $bindAgentName  = $bindAgentRs['msg']['real_name'];
+//                }
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['uname'],
-                    $v['nickname'],
-                    $userLiveplaceDesc,
-                    UserModel::getSexDescByKey($v['sex']),
-//                    $v['order_num'],
+                    $v['name'],
                     $v['mobile'],
-                    UserModel::INNER_TYPE_DESC[ $v['inner_type']],
-                    get_default_date($v['birthday']),
+                    $v['live_address'],
+                    MasterModel::getSexDescByKey($v['sex']),
+                    $v['bank_name'],
+                    $v['bank_account_name'],
+                    $v['bank_account_no'],
+                    $v['wx'],
+                    $v['ali'],
+                    $v['admin_id'],
                     get_default_date($v['a_time']),
-                    '<img height="30" width="30" src="'.$avatar.'" />',
-                    UserModel::getTypeDescByKey($v['type']),
-//                    $v['wx_open_id'],
-//                    fenToYuan($v['consume_total']),
-                    $bindAgentName,
-                    $v['master_agent_id'],
                     '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
 //                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
@@ -127,84 +102,72 @@ class UserCtrl extends BaseCtrl{
     function add(){
 
         if(_g('opt')){
-            $data =array(
-                'uname'=> _g('uname'),
-                'realname'=> _g('realname'),
-                'nickname'=> _g('nickname'),
-                'sex'=> _g('sex'),
-                'birthday'=> strtotime( _g('birthday')),
-                'status'=>UserModel::STATUS_NORMAL,
-                'inner_type'=>UserModel::INNER_TYPE_HUMAN,
-                'type'=>_g('type'),
-                'wx_open_id'=>_g('third_uid'),
-                'city_code'=> _g('city'),
-                'county_code'=> _g('county'),
-//                'town_code'=> _g('town'),
+            $name = _g("name");
+            $live_address = _g('live_address');
+            $sex = _g('sex');
+            $mobile = _g('mobile');
+            $bank_account_no = _g('bank_account_no');
+            $bank_name = _g('bank_name');
+            $bank_account_name = _g('bank_account_name');
+            $wx = _g('wx');
+            $ali = _g("ali");
 
-                'town_code'=>0,
-                'province_code'=> _g('province'),
-                'id_card_no'=> _g('id_card_no'),
-                'a_time'=>strtotime( _g('a_time')),
+            $data =array(
+                'name'=> _g('name'),
+                'live_address'=> _g('live_address'),
+                'sex'=> _g('sex'),
+                'bank_account_no'=> _g('bank_account_no'),
+                'bank_name'=>_g('bank_name'),
+                'bank_account_name'=>_g('bank_account_name'),
+                'wx'=> _g('wx'),
+                'ali'=> _g('ali'),
+                'a_time'=>time(),
             );
-            if(_g("a_time")){
-                $data['a_time'] = strtotime( _g("a_time"));
-            }
+//            if(_g("a_time")){
+//                $data['a_time'] = strtotime( _g("a_time"));
+//            }
+//            $email = _g('email');
+//            if(!FilterLib::regex($mobile,"email")){
+//                $this->notice("邮箱格式错误 ");
+//            }
+//            $data['email'] = $email ;
+//
+//            $uploadService = new UploadService();
+//            $uploadRs = $uploadService->avatar('pic');
+//            if($uploadRs['code'] != 200){
+//                exit(" uploadService->avatar error ".json_encode($uploadRs));
+//            }
+//
+//            $data['avatar'] = $uploadRs['msg'];
 
             $mobile =  _g('mobile');
-            $email = _g('email');
-
             if(!FilterLib::regex($mobile,"phone")){
                 $this->notice("手机号格式错误 ");
             }
 
-            if($email){
-                if(!FilterLib::regex($email,"email")){
-                    $this->notice("邮箱格式错误 ");
-                }
-            }
-
-            if(!$data['birthday']){
-                $data['birthday'] = time();
-            }
-
-            if(!$data['a_time']){
-                $data['a_time'] = time();
-            }
-
             $data['mobile'] = $mobile ;
-            $data['email'] = $email ;
-
-            $uploadService = new UploadService();
-            $uploadRs = $uploadService->avatar('pic');
-            if($uploadRs['code'] != 200){
-                exit(" uploadService->avatar error ".json_encode($uploadRs));
-            }
-
-            $data['avatar'] = $uploadRs['msg'];
-
-            $newId = UserModel::db()->add($data);
-
+            $newId = MasterModel::db()->add($data);
             $this->ok("成功-$newId");
 
         }
 
-        $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
-        $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
+//        $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
+//        $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
 
 
 
-        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
-        $this->assign("cityJs",$cityJs);
-        $this->assign("countyJs",$countryJs);
+//        $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
+//        $this->assign("cityJs",$cityJs);
+//        $this->assign("countyJs",$countryJs);
 
         $this->assign("sexOption",UserModel::getSexOptions());
-        $this->assign("typeOption",UserModel::getTypeOptions());
-        $this->assign("statusOpen",UserModel::STATUS_DESC);
+//        $this->assign("typeOption",UserModel::getTypeOptions());
+//        $this->assign("statusOpen",UserModel::STATUS_DESC);
 
-        $this->addHookJS("/people/user_add_hook.html");
-        $this->addHookJS("/layout/place.js.html");
+        $this->addHookJS("/people/master_add_hook.html");
+//        $this->addHookJS("/layout/place.js.html");
         $this->addHookJS("/layout/file_upload.js.html");
-        $this->display("/people/user_add.html");
+        $this->display("/people/master_add.html");
     }
 
     function detail(){
@@ -297,34 +260,38 @@ class UserCtrl extends BaseCtrl{
         $where = 1;
 
         $id = _g("id");
-        $uname = _g("uname");
-        $nickname = _g('nickname');
-        $province = _g('province');
+        $name = _g("name");
+        $live_address = _g('live_address');
         $sex = _g('sex');
-        $inner_type = _g('inner_type');
         $mobile = _g('mobile');
-        $birthday_from = _g('birthday_from');
-        $birthday_to = _g('birthday_to');
+        $bank_account_no = _g('bank_account_no');
+        $bank_name = _g('bank_name');
+        $bank_account_name = _g('bank_account_name');
+        $wx = _g('wx');
+        $ali = _g("ali");
         $from = _g('from');
         $to = _g('to');
-        $type = _g("type");
+
 
 //        $email = _g("email");
 //        if($email)
 //            $where .=" and recommend ='$email' ";
 
 
-        if($inner_type)
-            $where .=" and inner_type = '$inner_type' ";
-
         if($id)
             $where .=" and id = '$id' ";
 
-        if($uname)
-            $where .=" and uname like '%$uname%' ";
+        if($name)
+            $where .=" and name like '%$name%' ";
 
-        if($nickname)
-            $where .=" and nickname like '%$nickname%' ";
+        if($live_address)
+            $where .=" and live_address like '%$live_address%' ";
+
+        if($wx)
+            $where .=" and wx like '%$wx%' ";
+
+        if($ali)
+            $where .=" and ali like '%$ali%' ";
 
         if($sex)
             $where .=" and sex =$sex ";
@@ -332,13 +299,14 @@ class UserCtrl extends BaseCtrl{
         if($mobile)
             $where .=" and mobile = '$mobile' ";
 
+        if($bank_account_no)
+            $where .=" and bank_account_no like '%$bank_account_no%' ";
 
-        if($type)
-            $where .=" and mobile = '$type' ";
+        if($bank_name)
+            $where .=" and bank_name like '%$bank_name%' ";
 
-        if($province){
-            $where .=" and province_code = '$province' ";
-        }
+        if($bank_account_name)
+            $where .=" and bank_account_name like '%$bank_account_name%' ";
 
         if($from){
             $from .= ":00";
@@ -348,17 +316,6 @@ class UserCtrl extends BaseCtrl{
         if($to){
             $to .= ":59";
             $where .=" and a_time <= '".strtotime($to) . "'";
-        }
-
-        if($birthday_from){
-            $birthday_from .= ":00";
-            $where .=" and birthday >=  '".strtotime($birthday_from) . "'";
-        }
-
-
-        if($birthday_to){
-            $birthday_to .= ":59";
-            $where .=" and birthday <= '".strtotime($birthday_to)."'";
         }
 
         return $where;

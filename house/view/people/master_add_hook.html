@@ -19,17 +19,14 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "",  // validate all fields including form hidden input
                 rules: {
-                    uname: {
+                    // avatar: {
+                    //     required: true
+                    // },
+                    // pic: {
+                    //     required: true,
+                    // },
+                    name: {
                         required: true
-                    },
-                    avatar: {
-                        required: true
-                    },
-                    nickname: {
-                        required: true
-                    },
-                    pic: {
-                        required: true,
                     },
                     sex: {
                         required: true
@@ -38,32 +35,27 @@
                         mobile:true,
                         required: true
                     },
-                    type: {
+                    bank_name: {
                         required: true
                     },
-                    province: {
-                        required: true
-                    },
-
-                    city: {
+                    bank_account_name: {
                         required: true
                     },
 
-                    county: {
+                    bank_account_no: {
                         required: true
-                    }
+                    },
+
+                    // county: {
+                    //     required: true
+                    // },
+                    //
                     // town: {
                     //     required: true
                     // },
                     // email:{
                     //     email_new:true
                     // }
-                    // birthday: {
-                    //     required: true
-                    // },
-                    // realname: {
-                    //     required: true,
-                    // },
                 },
 
                 invalidHandler: function (event, validator) { //display error alert on form submit
@@ -96,22 +88,30 @@
                 submitHandler: function (form) {
                     // success2.show();
                     // error2.hide();
-                    form.submit(); // submit the form
+                    form[0].submit(); // submit the form
                 }
             });
 
+
         }
+
+
 
         return {
             //main function to initiate the module
             init: function () {
+
                 handleValidation3();
+
             }
+
         };
+
     }();
 
     jQuery(document).ready(function() {
         FormValidation.init();
+
 
         $(".form_date").datetimepicker({
             isRTL: Metronic.isRTL(),
