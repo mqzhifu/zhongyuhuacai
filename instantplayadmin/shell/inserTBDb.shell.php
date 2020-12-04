@@ -22,7 +22,7 @@ class inserTBDb{
         //2：生成产品信息
         //3：生成商品信息
 
-        $this->insertProductCategoryAttrPara($products);
+//        $this->insertProductCategoryAttrPara($products);
         $this->insertProduct($products);
 
         $endTime = time();
@@ -33,12 +33,11 @@ class inserTBDb{
     }
 
     function insertProduct($products){
+        //为了保证数据的干净度，先把无用的相关表数据，清理一下
         ProductModel::db()->delete(" id > 0 limit 1000 ");
         GoodsModel::db()->delete(" id > 0 limit 4000 ");
         ProductLinkCategoryAttrModel::db()->delete(" pid > 0 limit 1000 ");
         GoodsLinkCategoryAttrModel::db()->delete(" gid > 0 limit 1000 ");
-
-
         //初始化，要插入product DB的每一个记录的field
         $newProductData = ProductModel::getField();
         $newProductData['category_id'] = $this->tbCategoryId;
@@ -54,12 +53,13 @@ class inserTBDb{
         $newGoodsData['status'] = GoodsModel::STATUS_OFF;
 //        $newGoodsData['pay_type'] = OrderModel::PAY_WX_H5_NATIVE;
 
+//        $cnt = 0;
         out("start insert Product Goods");
         foreach ($products as $k=>$v) {
-//            if($k != 7){
-//                continue;
+//            if($k >= 10){
+//                break;
 //            }
-            out(" productTb num: $k ");
+            out(" productTb num: $k  ,tb_pid : ".$v['id']);
             $data = $newProductData;
             $data['title'] = $v['title'];
             $data['subtitle'] = $v['title'];
@@ -69,11 +69,10 @@ class inserTBDb{
             $data['spider_source_pid'] = $v['offerid'];
             $data['pay_type'] = OrderModel::PAY_ALI_H5_NATIVE;
             $price = json_decode($v['price'],true);
-
-
+            //运费
             $newGoodsData['haulage'] = $v['haulage'];
 
-            //只是单卖，没有任何商品属性，如：一瓶、一件
+            //只是单卖，没有任何商品属性，如：一瓶、一件,忽略 这种情况 吧，在生成 product_tb记录时，已经没有了
             if(!arrKeyIssetAndExist($v,'category_attr') ||!arrKeyIssetAndExist($v,'category_attr_para') ){
                 $this->insertNoAttrProduct($price[0]['price'],$data,$newGoodsData);
             }else{
@@ -85,9 +84,8 @@ class inserTBDb{
                     }
                     break;
                 }
-
                 if($isScalar){
-                    $this->insertOnePriceProduct($price[0][1],$v['category_attr'],$data,$newGoodsData);
+                    $this->insertOnePriceProduct($price[0][1],$v,$data,$newGoodsData);
                 }else{
                     $this->insertComplexProduct($price,$v['category_attr'],$data,$newGoodsData);
                 }
@@ -191,7 +189,7 @@ class inserTBDb{
         ProductModel::upTotal($newPid);
     }
 
-    function insertOnePriceProduct($price,$category_attr,$productData,$newGoodsData){
+    function insertOnePriceProduct($price,$tbProductOld,$productData,$newGoodsData){
         $space = "    ";
         out($space ."case 2 ,is scalar , price : $price");
         //所有属性组合都是一个价格
@@ -199,10 +197,14 @@ class inserTBDb{
 
         $finalPrice = $price;//最第一个，也就是，最高的价格
         //取出<分类为：1688抓取>的所有产品的分类
-        $categoryArr = explode(",",$category_attr);
+//        $categoryArr = explode(",",$category_attr);
 //        var_dump($categoryArr);
 
-        $newProductAttribute = $this->calcSingleProductGoodsPrice($categoryArr,$this->tbCategoryId,'getIds');
+//        $categoryArr = json_decode($tbProductOld['category_attr_para'],true);
+//        var_dump($categoryArr);
+//        return 1;
+
+        $newProductAttribute = $this->calcSingleProductGoodsPrice($tbProductOld);
         $productService = new ProductService();
         $newPid = $productService->addOne($productData,0,$newProductAttribute);
         $newProduct = ProductModel::db()->getById($newPid);
@@ -246,13 +248,13 @@ class inserTBDb{
         out(" create goods, id:$GoodsNewId");
     }
 
-    function calcSingleProductGoodsPrice($categoryArr,$tbCategoryId){
+    function calcSingleProductGoodsPrice($tbProductOld){
         $categoryArrParaIds = [];
-//        var_dump($categoryArr);
-        foreach ($categoryArr as $k2=>$v2) {
+        $categoryArr = json_decode($tbProductOld['category_attr_para'],true);
+        foreach ($categoryArr as $k=>$v) {
 //            var_dump($v2);
-            $attr = trim($v2);
 //            var_dump($attr);
+            $attr = trim($k);
             if(!$attr){
                 //待处理
                 out("calcSingleProductGoodsPrice is null");
@@ -263,15 +265,18 @@ class inserTBDb{
             if(!$categoryAttrDb){
                 exit(" db has this attr");
             }
+//            $categoryAttrPara = ProductCategoryAttrParaModel::db()->getAll(" pca_id = ".$categoryAttrDb['id']);
+//            if(!$categoryAttrPara){
+//                exit(" pca_id err");
+//            }
 
-            $categoryAttrPara = ProductCategoryAttrParaModel::db()->getAll(" pca_id = ".$categoryAttrDb['id']);
-            if(!$categoryAttrPara){
-                exit(" pca_id err");
+            foreach ($v as $k2=>$v2){
+                $pcap = ProductCategoryAttrParaModel::db()->getRow(" name = '".$v2['name']."'");
+                $categoryArrParaIds[] = $categoryAttrDb['id'] ."_" .$pcap['id'];
             }
-
-            foreach ($categoryAttrPara as $k=>$v) {
-                $categoryArrParaIds[] = $categoryAttrDb['id'] ."_" .$v['id'];
-            }
+//            foreach ($categoryAttrPara as $k=>$v) {
+//                $categoryArrParaIds[] = $categoryAttrDb['id'] ."_" .$v['id'];
+//            }
 //            return $categoryArrParaIds;
         }
         return $categoryArrParaIds;

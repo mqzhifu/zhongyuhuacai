@@ -221,24 +221,9 @@ class ProductService
         }
 
         $productCategoryAttrParaData = $this->defaultSelGoods($productCategoryAttrParaData,$goodsList,$goodsLowPriceRow);
-
-
         $data = array('productCategoryAttrParaData'=>$productCategoryAttrParaData,'goodsList'=>$goodsList,'goodsLowPriceRow'=>$goodsLowPriceRow,'stock'=>$stock);
 
         return out_pc(200,$data);
-//        //这里是方便测试，如果一个产品的一个属性，下面有太多的参数选项，会导致产品详情页爆了.
-//            foreach ($categoryAttrParaIds as $k=>$v){
-//                if(count($v ) >5){
-//                    $tmp = null;
-//                    foreach ($v as $k2=>$v2){
-//                        if($k2 >5 ){
-//                            break;
-//                        }
-//                        $tmp[] = $v2;
-//                    }
-//                    $categoryAttrParaIds[$k] = $tmp;
-//                }
-//            }
     }
     //找到最低价格那个，默认把 PCAP 规格参数 给选中 状态
     private function defaultSelGoods($productCategoryAttrParaData,$goodsList,$goods_low_price_row){
