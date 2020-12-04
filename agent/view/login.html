@@ -45,7 +45,6 @@
             var time = 60
             var code = $(this)
             if (validCode) {
-
                 var phone = $("#phone").val();
                 // alert(phone);
                 if(!phone || phone == 'undefined' || typeof(phone) == undefined){
@@ -54,6 +53,8 @@
                 if(!checkPhone(phone)){
                     return toastFail("手机号格式错误");
                 }
+
+
                 // return alert(phone);
                 $.ajax({
                     //请求方式
@@ -99,7 +100,20 @@
         })
     })
 
+
     function submitData(){
+        var checkProtocolFalse = 0;
+        $("input[name='word']").each(function(){
+            if($(this).is(":checked")){
+                // alert("我被选bai中du啦！");
+            }else{
+                checkProtocolFalse = 1;
+                // alert("还没有选择啊");
+            }
+        });
+        if(checkProtocolFalse){
+            return toastFail("请先勾选：用户协议与隐私政策");
+        }
         $.ajax({
             url:'/login/index/',
             data:$('#myForm').serialize(),                 //将表单数据序列化，格式为name=value
