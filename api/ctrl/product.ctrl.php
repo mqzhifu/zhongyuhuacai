@@ -41,6 +41,9 @@ class ProductCtrl extends BaseCtrl  {
         $includeGoods = get_request_one( $this->request,'include_goods',1);
 
         $data = $this->productService->getOneDetail($id,$includeGoods,$this->uid,1,1);
+        if(arrKeyIssetAndExist($data,'pic')){
+            $data['pic'] = str_replace($data['pic'],"200x200","400x400");
+        }
 //        return $this->out($data['code'],$data['msg']);
         out_ajax($data['code'],$data['msg']);
     }
