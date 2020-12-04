@@ -42,7 +42,7 @@ class ProductCtrl extends BaseCtrl  {
 
         $data = $this->productService->getOneDetail($id,$includeGoods,$this->uid,1,1);
         if(arrKeyIssetAndExist($data,'pic')){
-            $data['pic'] = str_replace($data['pic'],"200x200","400x400");
+            $data['pic'] = str_replace("200x200","400x400",$data['pic']);
         }
 //        return $this->out($data['code'],$data['msg']);
         out_ajax($data['code'],$data['msg']);
