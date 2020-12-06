@@ -24,15 +24,18 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "", // validate all fields including form hidden input
                 rules: {
-                    // deposit_price: {
-                    //     required: true,
-                    //     price:true
-                    //     // int:true,
-                    // },
+                    deposit_price: {
+                        required: true,
+                        // price:true
+                        // int:true,
+                    },
                     category: {
                         required: true
                     },
                     uid: {
+                        required: true,
+                    },
+                    master_id: {
                         required: true,
                     },
                     price: {
@@ -167,7 +170,59 @@
             // minuteStep: 10
         });
 
+
     });
+
+    function changeUserType(obj){
+        var obj = $(obj);
+        var userTypeId = obj.val();
+        if(userTypeId == 1){//房主
+            // $("#user_type_block").css("display","none");
+            $("#user_type_block").html("")
+            // $("#user_type_block").html(getMasterBlock())
+        }else{//用户
+            // $("#user_type_block").css("display","");
+            $("#user_type_block").html("")
+            $("#user_type_block").html(getUserBlock())
+        }
+    }
+
+    function getMasterBlock(){
+        var html = '<div class="form-group">\n' +
+            '                                            <label class="control-label col-md-3">房主ID<span class="required">\n' +
+            '                                            * </span>\n' +
+            '                                            </label>\n' +
+            '                                            <div class="col-md-4">\n' +
+            '                                                <input type="text" name="master_id" data-required="1" class="form-control" value="" id="master_id" />\n' +
+            '                                            </div>\n' +
+            '                                        </div>\n' +
+            '\n';
+        return html;
+    }
+
+    function getUserBlock(){
+        var html = '<div class="form-group">\n' +
+            '                                            <label class="control-label col-md-3">用户ID<span class="required">\n' +
+            '                                            * </span>\n' +
+            '                                            </label>\n' +
+            '                                            <div class="col-md-4">\n' +
+            '                                                <input type="text" name="uid" data-required="1" class="form-control" value="" id="uid" />\n' +
+            '                                            </div>\n' +
+            '                                        </div>\n' +
+            '\n' +
+            '\n' +
+            '                                        <div class="form-group">\n' +
+            '                                            <label class="control-label col-md-3">押金\n' +
+            '                                                                                            <span class="required">* </span>\n' +
+            '                                            </label>\n' +
+            '                                            <div class="col-md-4">\n' +
+            '                                                <input type="text" name="deposit_price" data-required="1" class="form-control" value="" id="deposit_price" />\n' +
+            '                                            </div>\n' +
+            '                                        </div>';
+
+        return html;
+    }
+
 
 
     // $(".form_datetime").datetimepicker({

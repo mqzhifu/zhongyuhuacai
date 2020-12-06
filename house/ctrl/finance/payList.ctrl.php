@@ -1,5 +1,5 @@
 <?php
-class OrderCtrl extends BaseCtrl{
+class PayListCtrl extends BaseCtrl{
 
     public $orderService = null;
 
@@ -14,9 +14,10 @@ class OrderCtrl extends BaseCtrl{
             $this->getList();
         }
 
-        $this->assign("statusOptions", OrderModel::getStatusOptions());
-        $this->assign("payTypeOptions", OrderModel::getPayTypeOptions());
-
+        $this->assign("statusOptions", OrderPayListModel::getStatusOptions());
+        $this->assign("payTypeOptions", OrderPayListModel::getPayTypeOptions());
+        $this->assign("getFinanceDescOption", OrderModel::getFinanceDescOption());
+        $this->assign("getCateTypeOptions", OrderModel::getCateTypeOptions());
 
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
@@ -24,70 +25,70 @@ class OrderCtrl extends BaseCtrl{
         $this->display("/finance/order_list.html");
     }
 
-    function add(){
-        if(_g("opt")){
+//    function add(){
+//        if(_g("opt")){
+//
+//            $gidsNums =_g("gidsNums");
+////            $couponId = _g("couponId");
+//            $memo = _g("memo");
+//            $uid = _g("uid");
+//            $share_uid = _g("share_uid");
+//            $userSelAddressId = _g("userSelAddressId");
+//
+//
+//            $rs = $this->orderService->doing($uid,$gidsNums,0 , $memo,$share_uid , $userSelAddressId);
+//            if($rs['code'] == 200){
+//                $this->ok("成功");
+//            }else{
+//                $this->notice($rs['code'] . "-".$rs['msg']);
+//            }
+//
+//        }
+//
+//        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
+//        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
+//
+//        $this->addHookJS("/finance/order_add_hook.html");
+//        $this->display("/finance/order_add.html");
+//    }
 
-            $gidsNums =_g("gidsNums");
-//            $couponId = _g("couponId");
-            $memo = _g("memo");
-            $uid = _g("uid");
-            $share_uid = _g("share_uid");
-            $userSelAddressId = _g("userSelAddressId");
-
-
-            $rs = $this->orderService->doing($uid,$gidsNums,0 , $memo,$share_uid , $userSelAddressId);
-            if($rs['code'] == 200){
-                $this->ok("成功");
-            }else{
-                $this->notice($rs['code'] . "-".$rs['msg']);
-            }
-
-        }
-
-        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
-
-        $this->addHookJS("/finance/order_add_hook.html");
-        $this->display("/finance/order_add.html");
-    }
-
-    function editShip(){
+    function upStatus(){
         $id = _g("id");
         if(!$id){
             exit("id 为空");
         }
-        $order = OrderModel::db()->getById($id);
-        if(!$order){
+        $record = OrderPayListModel::db()->getById($id);
+        if(!$record){
             exit("id 不在 db中");
         }
         if(_g('opt')){
-            $no = _g("no");
-            $shipType = _g("ship_type");
+            $no = _g("pay_third_no");
+            $payType = _g("pay_type");
+
+            if(!$no){
+                out_ajax(600,"三方流水号为空");
+            }
+
+            if(!$payType){
+                out_ajax(601,"支付类型为空");
+            }
 
             $data = array(
-                'ship_time'=>time(),
-                'express_no'=>$no,
-                'ship_type'=>$shipType,
+                'pay_type'=>$payType,
+                'pay_third_no'=>$no,
+                'a_time'=>time(),
+                'status'=>OrderPayListModel::STATUS_OK,
             );
-
-            $upRs = OrderModel::db()->upById($id,$data);
-
-            var_dump($upRs);
-            var_dump($data);exit;
-        }
-        $shipTypeDesc = OrderService::SHIP_TYPE_DESC;
-        $shipTypeDescHtml = "";
-        foreach ($shipTypeDesc as $k=>$v) {
-            $shipTypeDescHtml .= "<option name='$k'>$v</option>";
+            $upRs = OrderPayListModel::db()->upById($id,$data);
+            out_ajax(200);
         }
 
         $data = array(
-            'shipTypeDescHtml'=>$shipTypeDescHtml,
+            'getPayTypeOptions'=>OrderPayListModel::getPayTypeOptions(),
             'id'=>$id,
         );
 
-
-        $html = $this->_st->compile("/finance/order_edit_ship.html",$data);
+        $html = $this->_st->compile("/finance/pay_list_up_status.html",$data);
         $html = file_get_contents($html);
         echo_json($html);
     }
@@ -99,7 +100,7 @@ class OrderCtrl extends BaseCtrl{
 
         $where = $this->getDataListTableWhere();
 
-        $cnt = OrderModel::db()->getCount($where);
+        $cnt = OrderPayListModel::db()->getCount($where);
 
         $iTotalRecords = $cnt;//DB中总记录数
         if ($iTotalRecords){
@@ -111,20 +112,19 @@ class OrderCtrl extends BaseCtrl{
 
             $sort = array(
                 'id',
-                'id',
-                'no',
-                'pids',
-                'gids',
-                'total_price',
-                'pay_type',
+                'house_id',
+                'oid',
+                'type',
+                'price',
+                'start_time',
+                'end_time',
+                'pay_third_no',
                 'status',
-                '',
-                '',
-                '',
-                'a_time',
+                'pay_type',
                 'pay_time',
-                'nums',
-                'haulage',
+                'warn_trigger_time',
+                'a_time',
+                'category',
                 '',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
@@ -142,49 +142,51 @@ class OrderCtrl extends BaseCtrl{
             $end = $iDisplayStart + $iDisplayLength;
             $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-            $data = OrderModel::db()->getAll($where . $order);
-
+            $data = OrderPayListModel::db()->getAll($where . $order);
             foreach($data as $k=>$v){
                 $payType = "--";
                 if($v['pay_type']){
-                    $payType = OrderModel::PAY_TYPE_DESC[$v['pay_type']];
+                    $payType = OrderPayListModel::PAY_TYPE_DESC[$v['pay_type']];
                 }
-
-                $refundBnt = "";
-//                if($v['status'] == OrderModel::STATUS_REFUND){
-//                    $refundBnt =  '<a href="/finance/no/order/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
+                $upStatusBnt = "";
+                if($v['status'] == OrderPayListModel::STATUS_WAIT){
+                    $upStatusBnt =  '<a class="btn red btn-xs margin-bottom-5 upStatus" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 更新状态 </a>';
+                }
+//                $shareUserName = "";
+//                if(arrKeyIssetAndExist($v,'share_uid')){
+//                    $shareUserName = UserModel::db()->getOneFieldValueById($v['share_uid'],'nickname',"--");
 //                }
-
-
-                $shareUserName = "";
-                if(arrKeyIssetAndExist($v,'share_uid')){
-                    $shareUserName = UserModel::db()->getOneFieldValueById($v['share_uid'],'nickname',"--");
-                }
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['no'],
-                    $v['pids'],
-//                    ProductModel::db()->getOneFieldValueById($v['pid'],'title'),
-                    $v['gids'],
-                    $v['total_price'],
+                    $v['house_id'],
+                    $v['oid'],
+                    OrderModel::FINANCE_DESC[$v['type']],
+                    $v['price'],
+                    get_default_date($v['start_time']),
+                    get_default_date($v['end_time']),
+
+                    $v['pay_third_no'],
+                    OrderPayListModel::STATUS_DESC[$v['status']],
                     $payType,
-                    OrderModel::STATUS_DESC[$v['status']],
-                    UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
-                    $shareUserName,
-                    $v['agent_id']."-".$v['address_agent'],
-                    get_default_date($v['a_time']),
                     get_default_date($v['pay_time']),
-                    $v['nums'],
-                    $v['haulage'],
-                    $refundBnt.
-                    '<a target="_blank"  href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
-                    '<a target="_blank"  href="/finance/no/order/edit/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 编辑 </a>'.
-                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
-                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_TWO.'&oids='.$v['id'].'&uid=2" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二级代理提现 </a>'.
-                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_FACTORY.'&oids='.$v['id'].'&fid=3" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 工厂提现 </a>'.
-                    '<button class="btn btn-xs default red editship margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 快递信息</button>'. "&nbsp;",
+                    get_default_date($v['warn_trigger_time']),
+
+//                    OrderModel::STATUS_DESC[$v['status']],
+//                    UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
+//                    $shareUserName,
+//                    $v['agent_id']."-".$v['address_agent'],
+                    get_default_date($v['a_time']),
+
+                    OrderModel::CATE_DESC[$v['category']],
+                    $upStatusBnt,
+//                    '<a target="_blank"  href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
+//                    '<a target="_blank"  href="/finance/no/order/edit/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 编辑 </a>'.
+//                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
+//                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_TWO.'&oids='.$v['id'].'&uid=2" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 二级代理提现 </a>'.
+//                    '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_FACTORY.'&oids='.$v['id'].'&fid=3" class="btn yellow btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 工厂提现 </a>'.
+//                    '<button class="btn btn-xs default red editship margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 快递信息</button>'. "&nbsp;",
                 );
 
                 $records["data"][] = $row;

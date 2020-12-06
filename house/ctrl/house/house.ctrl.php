@@ -352,16 +352,30 @@ class HouseCtrl extends BaseCtrl{
 //                );
 
                 $adminUserName = AdminUserModel::getFieldById( $v['admin_id'],'nickname');
+                $masterName = MasterModel::getFieldById( $v['master_id'],'name');
+                $userName = "";
+                if(arrKeyIssetAndExist($v,'uid')){
+                    $userName = UserModel::db()->getById( $v['uid'])['name'];
+                }
+
+                $HouseService =  new HouseService();
+                $v = $HouseService->formatRow($v);
+
+                $addOrderBnt = "";
+                if($v['status'] == HouseModel::STATUS_WAIT){
+                    $addOrderBnt = '<a href="/house/no/order/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>';
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
-                    $v['master_id'],
-                    $v['uid'],
+                    $masterName,
+                    $userName,
                     HouseModel::STATUS[$v['status']],
                     '<img height="30" width="30" src="'.$pic.'" />',
+//                    $v['province_code'] ."-".$v['city_code'].$v['county_code'].$v['town_code'],
+                    $v['province_cn'] ." ".$v['city_cn']." ".$v['county_cn']." ".$v['town_cn'],
                     $v['community'],
-                    $v['province_code'] ."-".$v['city_code'].$v['county_code'].$v['town_code'],
-
                     $v['build_floor'],
 
                     HouseModel::DIRECTION_DESC[$v['build_direction']],
@@ -371,11 +385,10 @@ class HouseCtrl extends BaseCtrl{
                     HouseModel::FITMENT_DESC[$v['build_fitment']],
 
                     get_default_date($v['a_time']),
-
+                    $addOrderBnt,
 //                    '<a href="/product/no/product/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>',
 //                    '<button class="btn btn-xs default '.$statusCssColor.' btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-type="'.$type.'"><i class="fa fa-link"></i>'.$statusBnt.'</button>'.
-                    '<a href="/product/no/goods/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>',
-                );
+                    );
 
                 $records["data"][] = $row;
             }

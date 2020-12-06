@@ -18,40 +18,108 @@ class OrderCtrl extends BaseCtrl{
             $this->notice("oid is null");
         }
 
-        $order = OrderModel::db()->getById($oid);
+        $order = OrderModel::getById($oid);
         if(!$order){
             $this->notice("oid not in db");
         }
 
+        $orderPayListExist = OrderPayListModel::db()->getRow(" oid = {$order['id']} and category = {$order['category']}");
+        if($orderPayListExist){
+            $this->notice("该订单已生成过支付记录，请不要重复操作");
+        }
+        //检查 - 合同 开始时间  与  结束时间   是否正确
         $this->checkContractTimePeriodPay($order['contract_start_time'] , $order['contract_end_time'],$order['pay_mode']);
-
+        //结束时间  - 开始时间  = 合同周期 (秒)
         $distance = $order['contract_end_time'] - $order['contract_start_time'];
+        //合同周期 秒 => 天
         $days = $distance / ( 24 * 60 * 60);
+        //根据 付款 方式 计算出，一共需要收付款 次数
         $num = (int)$days / OrderModel::PAY_TYPE_TURN_DAY[$order['pay_mode']];
-        $mod = $days / OrderModel::PAY_TYPE_TURN_DAY[$order['pay_mode']];
+        //虽然能计算出，每次付款金额，但肯定很多情况会有 余数
+        $mod = $days % OrderModel::PAY_TYPE_TURN_DAY[$order['pay_mode']];
         //每次付款的单价
         $price = $order['price'] / $num;
         if($order['category'] == OrderModel::CATE_MASTER){
             $type = OrderModel::FINANCE_EXPENSE;
+            $typeDesc = "支出";
         }else{
             $type = OrderModel::FINANCE_INCOME;
+            $typeDesc = "收入";
         }
+
+        $payList = [];
+        $s_time = $order['contract_start_time'];
+        $e_time = 0;
         for($i=0;$i<$num;$i++){
+            $finalPrice = $price;
+            if(!$i ){//第一次付款如果是租房，得把押金一并给了
+                if($order['category'] == OrderModel::CATE_USER){
+                    $finalPrice = $price+$order['deposit_price'];
+                }
+            }
+            $e_time = $s_time + OrderModel::PAY_TYPE_TURN_DAY[$order['pay_mode']] * 24 * 60 * 60;
+            $warn_trigger_time = $e_time - $order['warn_trigger_time'];
             $data = array(
+                'id'=>$i+1,
                 "house_id"=>$order['house_id'],
                 "oid"=>$order['id'],
                 'type' =>$type,
-                'price'=>$price,
-//                start_time
-//                end_time
+                'price'=>$finalPrice,
+                "start_time"=>$s_time,
+                "end_time"=>$e_time,
+                "start_time_dt"=>get_default_date($s_time),
+                "end_time_dt"=>get_default_date($e_time),
+
+                "status"=>OrderPayListModel::STATUS_WAIT,
                 'pay_third_no'=>"",
                 'pay_type'=> 0,
                 'pay_time'=>0,
                 'a_time'=>time(),
-                "warn_trigger_time"=>$order['warn_trigger_time'],
+                "warn_trigger_time_dt"=>get_default_date($warn_trigger_time),
+                "warn_trigger_time"=>$warn_trigger_time,
+                'category'=>$order['category'],
             );
+            $payList[] = $data;
         }
-        var_dump($data);exit;
+
+        if(_g("opt")){
+            foreach ($payList as $k=>$v){
+                unset($v['id']);
+                unset($v['start_time_dt']);
+                unset($v['end_time_dt']);
+                unset($v['warn_trigger_time_dt']);
+
+                OrderPayListModel::db()->add($v);
+            }
+
+            $this->ok("生成记录成功!");
+        }
+
+
+        $this->assign("typeDesc",$typeDesc);
+        $this->assign("distance",$distance);
+        $this->assign("days",$days);
+        $this->assign("num",$num);
+        $this->assign("mod",$mod);
+        $this->assign("price",$price);
+
+        $this->assign("payList",$payList);
+        $this->assign("order",$order);
+
+        $this->display("/house/create_pay_record.html");
+    }
+
+    function testEcho(){
+//        echo "<table>";
+//        echo "<tr><td>收付款类型</td><td>$typeDesc</td></tr>";
+//        echo "<tr><td>合同金额：</td><td>{$order['price']}</td></tr>";
+//        echo "<tr><td>周期</td><td>$days(day)</td><td>{$order['contract_end_time'] }-{$order['contract_start_time']}=$distance=$days(day)</td></tr>";
+//        echo "<tr><td>收付款类型</td><td>".OrderModel::PAY_TYPE_DESC[$order['pay_mode']]."</td><td>".OrderModel::PAY_TYPE_TURN_DAY[$order['pay_mode']]."</td></tr>";
+//        echo "<tr><td>收付款次数</td><td>$num 次</td></tr>";
+//        echo "<tr><td>每次收付款金额</td><td>$price </td><td> {$order['price']} / $num</td></tr>";
+//        echo "<tr><td>最后余额</td><td>$mod</td></tr>";
+//        echo "</table>";
+//        exit;
     }
 
     function add(){
@@ -75,6 +143,7 @@ class OrderCtrl extends BaseCtrl{
                 'type'=>_g('type'),
                 'category'=>_g('category'),
                 'uid'=>_g('uid'),
+//                'master_id'=>_g('master_id'),
                 'price'=>_g('price'),
                 'admin_id'=>$this->_adminid,
                 'a_time'=>time(),
@@ -84,13 +153,37 @@ class OrderCtrl extends BaseCtrl{
                 "warn_trigger_time"=>_g('warn_trigger_time'),
             );
 
-//            if(!$data['deposit_price'] ){
-//                $this->notice("pid not in db");
-//            }
+            if($data['category'] == OrderModel::CATE_USER){
+                $data['deposit_price'] = (int)$data['deposit_price'];
+                if(! $data['deposit_price'] || $data['deposit_price'] <= 0){
+                    $this->notice("押金，不能为空且 必须为正整数");
+                }
 
-            $data['deposit_price'] = (int)$data['deposit_price'];
-            if(! $data['deposit_price'] || $data['deposit_price'] <= 0){
-                $this->notice("押金，不能为空且 必须为正整数");
+                if(arrKeyIssetAndExist($data,'uid')){
+                    $this->notice("uid不能为空");
+                }
+                $user = UserModel::db()->getById($data['uid']);
+                if(!$user){
+                    $this->notice("uid错误，不在DB中");
+                }
+            }else{
+//                if(arrKeyIssetAndExist($data,'master_id')){
+//                    $this->notice("master_id 不能为空");
+//                }
+//                $master = MasterModel::db()->getById($data['master_id']);
+//                if(!$master){
+//                    $this->notice("master_id 错误，不在DB中");
+//                }
+            }
+
+            if($house['status'] == HouseModel::STATUS_USED){
+                $this->notice("该房源状态为：".HouseModel::STATUS[HouseModel::STATUS_USED].",不能添加订单");
+            }
+
+            $existOrder = OrderModel::db()->getRow(" house_id = {$hid} and category = {$data['category']} and status =  ".OrderModel::STATUS_WAIT);
+            if($existOrder){
+                $msg = "该房源，已存在<未支付><".OrderModel::CATE_DESC[$data['category']].">订单，不能重复添加";
+                $this->notice($msg);
             }
 
             $data['price'] = (int)$data['price'];
@@ -248,6 +341,12 @@ class OrderCtrl extends BaseCtrl{
             $data = OrderModel::db()->getAll($where . $order .$limit);
 
             foreach($data as $k=>$v){
+                $contract_attachment = "";
+                if($v['contract_attachment']){
+                    $url = get_contract_url($v['contract_attachment']);
+                    $contract_attachment = "<a href='$url' target='_blank'>".'<i class="fa fa-file-text"></i></a>';
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -258,12 +357,12 @@ class OrderCtrl extends BaseCtrl{
                     OrderModel::PAY_TYPE_DESC[$v['pay_mode']],
                     OrderModel::CATE_DESC[$v['category']],
                     $v['uid'],
-                    $v['contract_attachment'],
+                    $contract_attachment,
                     get_default_date($v['contract_start_time']),
                     get_default_date($v['contract_end_time']),
                     get_default_date($v['a_time']),
                     $v['admin_id'],
-                    '<a href="/product/no/goods/createPayRecord/oid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 生成付款记录 </a>',
+                    '<a href="/house/no/order/createPayRecord/oid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 生成收/付款 </a>',
                 );
 
                 $records["data"][] = $row;

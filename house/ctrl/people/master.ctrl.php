@@ -66,7 +66,7 @@ class MasterCtrl extends BaseCtrl{
 //                if($bindAgentRs && $bindAgentRs['msg']){
 //                    $bindAgentName  = $bindAgentRs['msg']['real_name'];
 //                }
-
+                $adminUserName = AdminUserModel::getFieldById( $v['admin_id'],'nickname');
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -79,9 +79,11 @@ class MasterCtrl extends BaseCtrl{
                     $v['bank_account_no'],
                     $v['wx'],
                     $v['ali'],
-                    $v['admin_id'],
+                    $adminUserName,
                     get_default_date($v['a_time']),
-                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
+
+                    '',
+//                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
 //                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );

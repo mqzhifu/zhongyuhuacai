@@ -45,6 +45,39 @@ class OrderModel {
         self::FINANCE_EXPENSE=>"支出",
     ];
 
+    const STATUS_WAIT = 1;
+    const STATUS_OK = 2;
+    const STATUS_DESC = [
+        self::FINANCE_INCOME=>"未处理",
+        self::FINANCE_EXPENSE=>"已确认",
+    ];
+
+
+//    const NOTIFY_WX = 1;
+//    const NOTIFY_SMS = 2;
+//    const NOTIFY_EMAIL = 3;
+//    const NOTIFY_EMAIL = 3;
+//
+//    const NOTIFY_DESC = [
+//        self::NOTIFY_WX=>"微信",
+//        self::NOTIFY_SMS=>"短信",
+//        self::NOTIFY_EMAIL=>"邮件",
+//    ];
+
+    //提醒通知 - 渠道
+    const NOTIFY_WX = 1;
+    const NOTIFY_WX_COMPANY = 2;
+    const NOTIFY_DINGDING = 3;
+    const NOTIFY_EMAIL = 3;
+    const NOTIFY_SMS = 2;
+    const NOTIFY_DESC = [
+        self::NOTIFY_WX=>"微信",
+        self::NOTIFY_WX_COMPANY=>"企业微信",
+        self::NOTIFY_DINGDING=>"钉钉",
+        self::NOTIFY_EMAIL=>"邮件",
+        self::NOTIFY_SMS=>"短信",
+    ];
+
 
 	static function db(){
 		if(self::$_db)
@@ -58,11 +91,38 @@ class OrderModel {
 		return call_user_func_array(array(self::db(),$func), $arguments);
 	}
 
+    static function getById($id){
+        $row = self::db()->getById($id);
+        if(!$row){
+            return $row;
+        }
+
+        return self::format($row);
+    }
+
+    static function format($row){
+        $row['dt'] = get_default_date($row['a_time']);
+        $row['contract_end_time_dt'] = get_default_date($row['contract_end_time']);
+        $row['contract_start_time_dt'] = get_default_date($row['contract_start_time']);
+
+        $row['pay_mode_turn_day'] = OrderModel::PAY_TYPE_TURN_DAY[$row['pay_mode']];
+        $row['pay_mode_desc'] = OrderModel::PAY_TYPE_DESC[$row['pay_mode']];
+        return $row;
+    }
+
 	static function getStatusOptions(){
 	    $html = "";
 	    foreach (self::STATUS_DESC as $k=>$v) {
             $html .= "<option value={$k}>{$v}</option>";
 	    }
+        return $html;
+    }
+
+    static function getFinanceDescOption(){
+        $html = "";
+        foreach (self::FINANCE_DESC as $k=>$v) {
+            $html .= "<option value={$k}>{$v}</option>";
+        }
         return $html;
     }
 

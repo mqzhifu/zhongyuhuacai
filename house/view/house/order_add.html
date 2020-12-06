@@ -24,7 +24,7 @@
                         </div>
                         <div class="portlet-body form">
                             <!-- BEGIN FORM-->
-                            <form action="/product/no/goods/add/opt=1" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
+                            <form action="/house/no/order/add/opt=1" method="post" id="form_sample_3" class="form-horizontal" enctype="multipart/form-data">
                                 <input type="hidden" value="{$house['id']}" name="hid" />
                                 <div class="form-body">
                                     <div class="alert alert-danger display-hide">
@@ -39,30 +39,9 @@
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">house_id</label>
+                                        <label class="control-label col-md-3">房源ID</label>
                                         <div class="col-md-4">
                                             <input type="text" disabled class="form-control" value="{$house['id']}" />
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">合同金额
-                                            <span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <input type="text" class="form-control" name="price" value="" />
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">押金
-<!--                                            <span class="required">* </span>-->
-                                        </label>
-                                        <div class="col-md-4">
-                                            <input type="text" name="deposit_price" data-required="1" class="form-control" value="" />
                                         </div>
                                     </div>
 
@@ -84,7 +63,7 @@
 										* </span>
                                         </label>
                                         <div class="col-md-4">
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="category">
+                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="category" onchange="changeUserType(this);">
                                                 <option value="">请选择</option>
                                                 {$getCateTypeOptions}
                                             </select>
@@ -92,15 +71,11 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">用户ID<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <input type="text" name="uid" data-required="1" class="form-control" value="" />
-                                        </div>
+                                    <div id="user_type_block">
+
                                     </div>
 
+                                    <hr/>
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3">付款模式 <span class="required">
@@ -123,6 +98,20 @@
                                             <input type="text" name="warn_trigger_time" data-required="1" class="form-control" value="" />
                                         </div>
                                     </div>
+
+
+                                    <hr/>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">合同金额
+                                            <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" name="price" value="" />
+                                        </div>
+                                    </div>
+
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3">合同开始时间 <span class="required">
