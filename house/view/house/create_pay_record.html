@@ -13,10 +13,6 @@
                 <div class="col-md-12">
                     <!-- BEGIN VALIDATION STATES-->
 
-
-
-
-
                         <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
                         <div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -111,14 +107,15 @@
                                                                         </div>
                                                                         <div class="col-md-7 value">
 																<span class="label label-success">
-																{$order['status']} </span>
+																{$order['status_desc']} </span>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                                master_id:
+                                                                                房主:
                                                                         </div>
                                                                         <div class="col-md-7 value">
+                                                                            {$master['name']}
                                                                         </div>
                                                                     </div>
                                                                     <div class="row static-info">
@@ -141,15 +138,6 @@
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            付款方式:
-                                                                        </div>
-                                                                        <div class="col-md-7 value">
-                                                                            {$order['pay_mode_desc']}
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="row static-info">
-                                                                        <div class="col-md-5 name">
                                                                             提醒时间:
                                                                         </div>
                                                                         <div class="col-md-7 value">
@@ -162,7 +150,7 @@
                                                                             管理员:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$order['admin_id']}
+                                                                            {$order['admin_name']}
                                                                         </div>
                                                                     </div>
 
@@ -171,7 +159,16 @@
                                                                             类型:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$order['category']}
+                                                                            {$order['type_desc']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            分类:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$order['category_desc']}
                                                                         </div>
                                                                     </div>
 
@@ -227,6 +224,27 @@
                                                                         </div>
                                                                     </div>
 
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            房租总金额:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$finalPrice}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            月租:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$order['month_price']}
+                                                                        </div>
+                                                                    </div>
+
+
+
+
 
                                                                 </div>
                                                             </div>
@@ -243,6 +261,13 @@
                                                                 <div class="portlet-body">
 
                                                                     <div class="row static-info">
+                                                                        <div class="col-md-5 name">付款方式</div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$order['pay_mode_desc']}({$order['pay_mode_turn_day']})
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
                                                                         <div class="col-md-5 name">收付款类型</div>
                                                                         <div class="col-md-7 value">
                                                                             {$typeDesc}
@@ -250,23 +275,16 @@
                                                                     </div>
 
                                                                     <div class="row static-info">
-                                                                        <div class="col-md-5 name">次数</div>
+                                                                        <div class="col-md-5 name">收付款次数</div>
                                                                         <div class="col-md-7 value">
                                                                             {$num}
                                                                         </div>
                                                                     </div>
 
                                                                     <div class="row static-info">
-                                                                        <div class="col-md-5 name">每次金额</div>
+                                                                        <div class="col-md-5 name">每天金额</div>
                                                                         <div class="col-md-7 value">
-                                                                            {$price}
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="row static-info">
-                                                                        <div class="col-md-5 name">最后余额天数</div>
-                                                                        <div class="col-md-7 value">
-                                                                            {$mod}
+                                                                            {$everyDayPrice}
                                                                         </div>
                                                                     </div>
 
@@ -304,6 +322,9 @@
                                                                                 <th width="10%">
                                                                                     提醒时间
                                                                                 </th>
+                                                                                <th width="10%">
+                                                                                    天数
+                                                                                </th>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -316,7 +337,7 @@
                                                                                 <td>{$v['end_time_dt']}</td>
                                                                                 <td>{$v['price']}</td>
                                                                                 <td>{$v['warn_trigger_time_dt']}</td>
-
+                                                                                <td>{$v['distance_day']}</td>
                                                                             </tr>
                                                                             {/foreach}
 
@@ -355,6 +376,9 @@
                                                                 <th width="10%">
                                                                     提醒时间
                                                                 </th>
+                                                                <th width="10%">
+                                                                    天数
+                                                                </th>
                                                             </tr>
                                                             </thead>
                                                             <tbody>
@@ -367,7 +391,7 @@
                                                                 <td>{$v['original_price']}</td>
                                                                 <td>{$v['stock']}</td>
                                                                 <td>{$v['product_attr_ids']}</td>
-
+                                                                <td>{$v['distance_day']}</td>
                                                             </tr>
                                                             {/foreach}
 

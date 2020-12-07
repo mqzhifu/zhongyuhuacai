@@ -71,6 +71,10 @@
                                         </th>
 
                                         <th width="5%">
+                                            状态
+                                        </th>
+
+                                        <th width="5%">
                                             合同金额
                                         </th>
 
@@ -139,6 +143,9 @@
                                             </select>
                                         </td>
 
+                                        <td>
+
+                                        </td>
                                         <td>
                                         </td>
 
@@ -381,23 +388,24 @@
             if(result == true){
                 $.ajax({
                     type: 'GET',
-                    url: "/user/delOne/uid="+id ,
-                    dataType: 'json',
+                    url: "/house/no/order/delone/id="+id ,
+                    // dataType: 'json',
                     success: function(data){
-                        location.reload();
-                    }
+                        var res = eval(""+data + "");
 
+                        if(res.code == 200){
+                            var msg = res.code + "-成功!";
+                            alert(msg);
+                        }else{
+                            var msg = res.msg + "-失败!";
+                            alert(msg);
+                        }
+                        localtion.reload();
+                    }
                 });
             }
         });
 
-
-
-    });
-
-    $("#datatable_products").on("click",".qrcode",function(){
-        var id = $(this).attr("data-id");
-        location.href="/product/no/goods/makeQrcode/";
     });
 
     if (!jQuery().datetimepicker) {

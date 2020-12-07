@@ -219,7 +219,7 @@ class BaseCtrl{
         $this->addJs('/assets/global/plugins/select2/select2.min.js');
         $this->addJs('/assets/global/plugins/datatables/media/js/jquery.dataTables.min.js');
         $this->addJs('/assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js');
-//        $this->addJs('/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
+        $this->addJs('/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js');
 
         $this->addJs('/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
 

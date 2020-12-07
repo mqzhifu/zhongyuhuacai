@@ -34,6 +34,11 @@
                     },
                     uid: {
                         required: true,
+                        int:true
+                    },
+                    month_price: {
+                        required: true,
+                        int:true
                     },
                     master_id: {
                         required: true,
@@ -160,7 +165,7 @@
         FormValidation.init();
 
 
-        $(".form_date").datetimepicker({
+        $(".form_date").datepicker({
             isRTL: Metronic.isRTL(),
             format: "yyyy-mm-dd",
             autoclose: true,
@@ -173,19 +178,23 @@
 
     });
 
-    function changeUserType(obj){
-        var obj = $(obj);
+    function changeUserType(){
+        var obj = $("#category");
         var userTypeId = obj.val();
         if(userTypeId == 1){//房主
             // $("#user_type_block").css("display","none");
-            $("#user_type_block").html("")
+            $("#user_type_block").html("");
             // $("#user_type_block").html(getMasterBlock())
-        }else{//用户
+        }else if(userTypeId == 2) {//用户
             // $("#user_type_block").css("display","");
-            $("#user_type_block").html("")
-            $("#user_type_block").html(getUserBlock())
+            $("#user_type_block").html("");
+            $("#user_type_block").html(getUserBlock());
+        }else{
+            $("#user_type_block").html("");
         }
     }
+
+    changeUserType();
 
     function getMasterBlock(){
         var html = '<div class="form-group">\n' +

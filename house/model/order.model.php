@@ -31,6 +31,14 @@ class OrderModel {
         self::PAY_TYPE_YEAR=>365,
     ];
 
+    //支付类型 - 转换成具体的 月
+    const PAY_TYPE_TURN_MONTH = [
+        self::PAY_TYPE_MONTH=>1,
+        self::PAY_TYPE_QUARTER=>3,
+        self::PAY_TYPE_HALF_YEAR=>6,
+        self::PAY_TYPE_YEAR=>12,
+    ];
+
     const CATE_MASTER = 1;
     const CATE_USER = 2;
     const CATE_DESC = [
@@ -107,6 +115,11 @@ class OrderModel {
 
         $row['pay_mode_turn_day'] = OrderModel::PAY_TYPE_TURN_DAY[$row['pay_mode']];
         $row['pay_mode_desc'] = OrderModel::PAY_TYPE_DESC[$row['pay_mode']];
+        $row['type_desc'] = OrderModel::TYPE_DESC[$row['type']];
+        $row['status_desc'] = OrderModel::STATUS_DESC[$row['status']];
+        $row['category_desc'] = OrderModel::CATE_DESC[$row['category']];
+        $row['admin_name'] = AdminUserModel::getFieldById($row['admin_id'],'uname');
+
         return $row;
     }
 

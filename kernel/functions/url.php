@@ -78,7 +78,7 @@ function get_contract_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return get_default_user_url(HTTP_PROTOCOL);
     }
-    return get_admin_upload_url($tmpPath,"contract",$protocol);
+    return get_house_upload_url($tmpPath,"contract",$protocol);
 }
 
 function get_banner_url( $tmpPath , $protocol =HTTP_PROTOCOL){
@@ -92,7 +92,7 @@ function get_house_url( $tmpPath , $protocol =HTTP_PROTOCOL){
     if(!$tmpPath){
         return false;
     }
-    return get_house_upload_url($tmpPath,"banner",$protocol);
+    return get_house_upload_url($tmpPath,"house",$protocol);
 }
 
 function get_category_url( $tmpPath , $protocol =HTTP_PROTOCOL){

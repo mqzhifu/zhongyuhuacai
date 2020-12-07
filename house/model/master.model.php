@@ -68,5 +68,22 @@ class MasterModel {
         return "默认昵称";
 
     }
-	
+
+    static function getSearchWhereByKeyword($keyword,$fieldName = ""){
+        $where = "";
+
+        $keywordWhere = " name like '%$keyword%' ";
+        $list = self::db()->getAll($keywordWhere,null, " id ");
+        if(!$list){
+            $where .= " and 0";
+        }else{
+            $ids = "";
+            foreach ($list as $k=>$v){
+                $ids .= $v['id'] . " ,";
+            }
+            $ids = substr($ids,0,strlen($ids)-1);
+            $where .= " and $fieldName in ( $ids ) ";
+        }
+        return $where;
+    }
 }

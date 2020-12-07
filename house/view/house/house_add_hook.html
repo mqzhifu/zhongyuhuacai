@@ -25,40 +25,48 @@
                 ignore: "", // validate all fields including form hidden input
                 rules: {
                     master_id: {
-                        required: true
-                    },
-                    uid: {
                         required: true,
+                        int:true
                     },
+                    // uid: {
+                    //     required: true,
+                    // },
                     pics: {
                         required: true
                     },
                     community: {
                         required: true
                     },
-                    province: {
-                        required: true
-                    },
-                    city: {
-                        required: true
-                    },
-                    county: {
-                        required: true
-                    },
-                    town: {
-                        required: true
-                    },
+                    // province: {
+                    //     required: true
+                    // },
+                    // city: {
+                    //     required: true
+                    // },
+                    // county: {
+                    //     required: true
+                    // },
+                    // town: {
+                    //     required: true
+                    // },
                     build_no: {
-                        required: true
+                        required: true,
+                        // int:true
                     },
                     build_floor: {
-                        required: true
+                        required: true,
+                        // int:true
+                    },
+                    build_unit: {
+                        required: true,
+                        // int:true
                     },
                     build_area: {
                         required: true
                     },
                     build_detail_no: {
-                        required: true
+                        required: true,
+                        int:true
                     },
                 },
 
@@ -243,7 +251,7 @@
                 // )
 
                 Dropzone.options.myDropzone = {
-                    url :"/product/no/product/multipleUploadOneImg/",
+                    url :"/house/no/house/multipleUploadOneImg/",
                     dictDefaultMessage: "拖拉图片文件到这里或者点击",
                     paramName :"pic",
                     acceptedFiles: ".jpg,.gif,.png",

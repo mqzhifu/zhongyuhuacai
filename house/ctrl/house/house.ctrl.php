@@ -5,18 +5,14 @@ class HouseCtrl extends BaseCtrl{
             $this->getList();
         }
 
-
         $statusSelectOptionHtml = HouseModel::getStatusSelectOptionHtml();
         $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
-
 
         $getFitmentSelectOptionHtml = HouseModel::getFitmentSelectOptionHtml();
         $this->assign("getFitmentSelectOptionHtml",$getFitmentSelectOptionHtml);
 
         $getDirectionSelectOptionHtml = HouseModel::getDirectionSelectOptionHtml();
         $this->assign("getDirectionSelectOptionHtml",$getDirectionSelectOptionHtml);
-
-
 
         $this->display("/house/house_list.html");
     }
@@ -71,24 +67,17 @@ class HouseCtrl extends BaseCtrl{
 
     function add(){
         if(_g('opt')){
-
-//            if(ProductModel::db()->getOneByOneField("title",_g('title'))){
-//                $this->notice("标题重复:"._g('title'));
-//            }
-
             $data['status'] = HouseModel::STATUS_WAIT;
             $data['master_id'] = _g('master_id');
-            $data['uid']= _g("uid");
-//            $data['status'] = _g("status");
+//            $data['uid']= _g("uid");
             $data['pics'] = _g("pics");
             $data['desc']  = _g("desc");
             $data['community'] = _g("community");
-            $data['province_code'] = _g("province");
-            $data['city_code'] = _g("city");
-            $data['county_code'] = _g("county");
-            $data['town_code'] = _g("town");
-
-
+//            $data['province_code'] = _g("province");
+//            $data['city_code'] = _g("city");
+//            $data['county_code'] = _g("county");
+//            $data['town_code'] = _g("town");
+            //房屋信息
             $data['build_no'] = _g("build_no");
             $data['build_unit'] = _g("build_unit");
             $data['build_detail_no'] = _g("build_detail_no");
@@ -100,49 +89,69 @@ class HouseCtrl extends BaseCtrl{
             $data['a_time'] = time();
             $data['admin_id']  = $this->_adminid;
 
+//            if(ProductModel::db()->getOneByOneField("title",_g('title'))){
+//                $this->notice("标题重复:"._g('title'));
+//            }
+//            if(!$data['uid']){
+//                $this->notice("uid is null ");
+//            }
+//            if(!$data['province_code']){
+//                $this->notice("province_code is null ");
+//            }
+//
+//            if(!$data['city_code']){
+//                $this->notice("city_code is null ");
+//            }
+//
+//            if(!$data['county_code']){
+//                $this->notice("county_code is null ");
+//            }
+//
+//            if(!$data['town_code']){
+//                $this->notice("town_code is null ");
+//            }
             if(!$data['master_id']){
-                $this->notice("master_id is null ");
+                $this->notice("master_id 为空 ");
             }
+            $this->checkRequestDataInt($data['master_id'],"master_id 只允许为正整数 ");
 
-            if(!$data['uid']){
-                $this->notice("uid is null ");
+            $master = MasterModel::db()->getById($data['master_id']);
+            if(!$master){
+                $this->notice("master_id 错误，不在DB中 ");
             }
 
             if(!$data['community']){
                 $this->notice("community is null ");
             }
 
-            if(!$data['province_code']){
-                $this->notice("province_code is null ");
-            }
-
-            if(!$data['city_code']){
-                $this->notice("city_code is null ");
-            }
-
-            if(!$data['county_code']){
-                $this->notice("county_code is null ");
-            }
-
             if(!$data['build_no']){
                 $this->notice("build_no is null ");
             }
+//            $this->checkRequestDataInt($data['build_no'],"楼号 只允许为正整数 ");
 
             if(!$data['build_unit']){
                 $this->notice("build_unit is null ");
             }
+//            $this->checkRequestDataInt($data['build_unit'],"单元号 只允许为正整数 ");
 
             if(!$data['build_detail_no']){
                 $this->notice("build_detail_no is null ");
             }
+            $this->checkRequestDataInt($data['build_detail_no'],"门牌号只允许为正整数 ");
 
             if(!$data['build_floor']){
                 $this->notice("build_floor is null ");
             }
+//            $this->checkRequestDataInt($data['build_floor'],"楼层号 只允许为正整数 ");
 
             if(!$data['build_area']){
                 $this->notice("build_area is null ");
             }
+
+            $data['province_code'] = 130000;
+            $data['city_code'] = 131000;
+            $data['county_code'] = 131082;
+            $data['town_code'] = 131082450;
 
             $pics = _g("pics");
             $pic = "";
@@ -157,17 +166,8 @@ class HouseCtrl extends BaseCtrl{
 
             $newId = HouseModel::db()->add($data);
 
-            $this->ok("成功",$this->_backListUrl);
+            $this->ok("成功-$newId",$this->_backListUrl);
         }
-
-//        $this->assign("payType",OrderModel::PAY_TYPE_DESC);
-//        $this->assign("getRecommendOptionHtml",ProductModel::getRecommendOptionHtml());
-//        $this->assign("getRecommendDetailOptionHtml",ProductModel::getRecommendDetailOptionHtml());
-//        $factory = FactoryModel::db()->getById(FACTORY_UID_DEFAULT);
-//        $this->assign("factory",$factory);
-//        $statusSelectOptionHtml = ProductModel::getStatusSelectOptionHtml();
-//        $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
-//        $this->assign("categoryOptions", ProductCategoryModel::getSelectOptionHtml());
 
         $getFitmentSelectOptionHtml = HouseModel::getFitmentSelectOptionHtml();
         $this->assign("getFitmentSelectOptionHtml",$getFitmentSelectOptionHtml);
@@ -179,12 +179,9 @@ class HouseCtrl extends BaseCtrl{
         $cityJs = json_encode(AreaCityModel::getJsSelectOptions());
         $countryJs = json_encode(AreaCountyModel::getJsSelectOptions());
 
-
-
         $this->assign("provinceOption",AreaProvinceModel::getSelectOptionsHtml());
         $this->assign("cityJs",$cityJs);
         $this->assign("countyJs",$countryJs);
-
 
         $this->addJs("/assets/global/plugins/dropzone/dropzone.js");
         $this->addCss("/assets/global/plugins/dropzone/css/dropzone.css" );
@@ -193,6 +190,13 @@ class HouseCtrl extends BaseCtrl{
         $this->addHookJS("/layout/place.js.html");
         $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/house/house_add.html");
+    }
+
+    function checkRequestDataInt($value,$msg = ''){
+        $value = (int)$value;
+        if(!$value){
+            $this->notice($msg);
+        }
     }
 
     function getProductCategoryRelation(){
@@ -365,14 +369,18 @@ class HouseCtrl extends BaseCtrl{
                 if($v['status'] == HouseModel::STATUS_WAIT){
                     $addOrderBnt = '<a href="/house/no/order/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>';
                 }
-
+                $pics= "";
+                if($v['pics']){
+                    $p = explode(",",$v['pics']);
+                    $pics = '<img height="30" width="30" src="'.get_house_url($p[0]).'" />';
+                }
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $masterName,
                     $userName,
                     HouseModel::STATUS[$v['status']],
-                    '<img height="30" width="30" src="'.$pic.'" />',
+                    $pics,
 //                    $v['province_code'] ."-".$v['city_code'].$v['county_code'].$v['town_code'],
                     $v['province_cn'] ." ".$v['city_cn']." ".$v['county_cn']." ".$v['town_cn'],
                     $v['community'],
@@ -440,159 +448,72 @@ class HouseCtrl extends BaseCtrl{
         OrderModel::db()->delete("goods_id = $id");
     }
 
-    function getWhere(){
-        $where = " 1 ";
-
-
-        $status = _g("status");
-        $title = _g("title");
-        $category_id = _g("category_id");
-        $pv_from = _g("pv_from");
-        $pv_to = _g("pv_to");
-        $uv_from = _g("uv_from");
-        $uv_to = _g("uv_to");
-        $sort = _g("sort");
-        $recommend = _g("recommend");
-
-        $id = _g("id");
-        if($id)
-            $where .=" and id = '$id' ";
-
-        if($status)
-            $where .= " and status = $status";
-
-        if($title)
-            $where .= " and content like '%$title%'";
-
-        if($category_id)
-            $where .= " and category_id = '$category_id'";
-
-        if($pv_from)
-            $where .= " and pv_from >= $pv_from";
-
-        if($pv_to )
-            $where .= " and pv_to <= $pv_to";
-
-
-        if( $uv_from  )
-            $where .= " and uv_from >= $uv_from";
-
-        if( $uv_to  )
-            $where .= " and uv_to <= $uv_to";
-
-        if($recommend)
-            $where .= " and recommend = '$recommend'";
-
-        if($from = _g("from")){
-            $from .= ":00";
-            $where .= " and add_time >= '".strtotime($from)."'";
-        }
-
-        if($to = _g("to")){
-            $to .= ":59";
-            $where .= " and add_time <= '".strtotime($to)."'";
-        }
-
-        return $where;
-    }
-
-    function upSort(){
-        $sort = _g("sort");
-        $id = _g("id");
-        ProductModel::db()->upById($id,array('sort'=>$sort));
-    }
-
-
-    function upstatus(){
-        $status = _g("type");
-        $id = _g("id");
-        ProductModel::db()->upById($id,array('status'=>$status));
-    }
-
     function getDataListTableWhere(){
         $where = 1;
 
         $id = _g("id");
-        $title = _g("title");
-        $lowest_price_from = _g('lowest_price_from');
-        $lowest_price_to = _g('lowest_price_to');
-        $category_id = _g('category_id');
+        $master = _g("master");
+        $user = _g('user');
         $status = _g('status');
-        $recommend = _g('recommend');
+        $community = _g('community');
+        $build_floor_from = _g('build_floor_from');
+        $build_floor_to = _g('build_floor_to');
 
-        $from = _g("atime_from");
-        $to = _g("atime_to");
+        $build_direction = _g("build_direction");
+        $build_area_from = _g("build_area_from");
+        $build_area_to = _g('build_area_to');
 
-        $pv_from = _g('pv_from');
-        $pv_to = _g('pv_to');
+        $build_room_num = _g('build_room_num');
+        $build_fitment = _g('build_fitment');
 
-        $uv_from = _g('uv_from');
-        $uv_to = _g('uv_to');
-
-        $goods_total_from = _g('goods_total_from');
-        $goods_total_to = _g('goods_total_to');
-
-        $sort = _g("sort");
+        $from = _g('from');
+        $to = _g('to');
 
         if($id)
             $where .=" and id = '$id' ";
 
-        if($title)
-            $where .=" and title like '%$title%' ";
+        if($master)
+            $where .= MasterModel:: getSearchWhereByKeyword($master,'master_id');
 
-        if($category_id)
-            $where .=" and category_id =$category_id ";
+        if($user)
+            $where .= UserModel::getSearchWhereByKeyword($user,'uid');
 
         if($status)
             $where .=" and status = '$status' ";
 
-        if($recommend)
-            $where .=" and recommend =$recommend ";
+        if($community)
+            $where .=" and community like '%$community%' ";
 
+        if($build_floor_from)
+            $where .=" and build_floor >= '$build_floor_from' ";
 
-//        if($from = _g("from")){
-//            $from .= ":00";
-//            $where .= " and add_time >= '".strtotime($from)."'";
-//        }
-//
-//        if($to = _g("to")){
-//            $to .= ":59";
-//            $where .= " and add_time <= '".strtotime($to)."'";
-//        }
+        if($build_floor_to)
+            $where .=" and build_floor <= '$build_floor_to' ";
 
+        if($build_direction)
+            $where .=" and build_direction = $build_direction ";
 
         if($from){
-            $where .=" and a_time >=  ".strtotime($from);
+            $from .= ":00";
+            $where .= " and add_time >= '".strtotime($from)."'";
         }
 
+        if($to){
+            $to .= ":59";
+            $where .= " and add_time <= '".strtotime($to)."'";
+        }
 
-        if($to)
-            $where .=" and a_time <= ".strtotime($to);
+        if($build_area_from)
+            $where .=" and build_area >=  '$build_area_from'";
 
-        if($uv_from)
-            $where .=" and uv >=  $uv_from";
+        if($build_area_to)
+            $where .=" and build_area <=  '$build_area_to";
 
-        if($uv_to)
-            $where .=" and uv <=  $uv_from";
+        if($build_room_num)
+            $where .=" and build_room_num = $build_room_num";
 
-        if($pv_from)
-            $where .=" and pv >=  $pv_from";
-
-        if($pv_to)
-            $where .=" and pv <=  $pv_to";
-
-
-        if($goods_total_from)
-            $where .=" and goods_total >=  $goods_total_from";
-
-        if($goods_total_to)
-            $where .=" and goods_total <=  $goods_total_from";
-
-        if($lowest_price_from)
-            $where .=" and lowest_price >=  $lowest_price_from";
-
-        if($lowest_price_to)
-            $where .=" and lowest_price <=  $lowest_price_to";
+        if($build_fitment)
+            $where .=" and build_fitment = $build_fitment";
 
         return $where;
     }

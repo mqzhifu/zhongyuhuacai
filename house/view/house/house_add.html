@@ -36,7 +36,12 @@
                                         表单验证成功
                                     </div>
 
-
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">省/市/县/镇</label>
+                                        <div class="col-md-4">
+                                            <input type="text" disabled class="form-control" value="河北-廊坊-三河-燕郊开发区" />
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3">房主ID<span class="required">
@@ -48,20 +53,20 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">用户ID<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
+<!--                                    <div class="form-group">-->
+<!--                                        <label class="control-label col-md-3">用户ID<span class="required">-->
+<!--										* </span>-->
+<!--                                        </label>-->
+<!--                                        <div class="col-md-4">-->
 
-                                            <input type="text" name="uid" data-required="1"   class="form-control" value="" />
-                                        </div>
-                                    </div>
+<!--                                            <input type="text" name="uid" data-required="1"   class="form-control" value="" />-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
 
 
                                     <div class="form-group"  >
-                                        <label class="control-label col-md-3">社区<span class="required">
+                                        <label class="control-label col-md-3">小区名<span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
@@ -69,75 +74,75 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">省<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="input-icon right">
-                                                <i class="fa"></i>
+<!--                                    <div class="form-group">-->
+<!--                                        <label class="control-label col-md-3">省<span class="required">-->
+<!--										* </span>-->
+<!--                                        </label>-->
+<!--                                        <div class="col-md-4">-->
+<!--                                            <div class="input-icon right">-->
+<!--                                                <i class="fa"></i>-->
 
 
-                                                <select  name="province" id="province" class="form-control" onchange="areaChange('province',this)">
-                                                    <option value="">请选择</option>
-                                                    {$provinceOption}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+<!--                                                <select  name="province" id="province" class="form-control" onchange="areaChange('province',this)">-->
+<!--                                                    <option value="">请选择</option>-->
+<!--                                                    {$provinceOption}-->
+<!--                                                </select>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">市<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="input-icon right">
-                                                <i class="fa"></i>
-                                                <select  name="city" id="city" class="form-control" onchange="areaChange('city',this)">
-                                                    <option value="">请选择</option>
-                                                </select>
-                                            </div>
-                                            <span class="help-block">
-											请先选择省</span>
-                                        </div>
-                                    </div>
+<!--                                    <div class="form-group">-->
+<!--                                        <label class="control-label col-md-3">市<span class="required">-->
+<!--										* </span>-->
+<!--                                        </label>-->
+<!--                                        <div class="col-md-4">-->
+<!--                                            <div class="input-icon right">-->
+<!--                                                <i class="fa"></i>-->
+<!--                                                <select  name="city" id="city" class="form-control" onchange="areaChange('city',this)">-->
+<!--                                                    <option value="">请选择</option>-->
+<!--                                                </select>-->
+<!--                                            </div>-->
+<!--                                            <span class="help-block">-->
+<!--											请先选择省</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">县(区)<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="input-icon right">
-                                                <i class="fa"></i>
-                                                <select  name="county" id="county" class="form-control" onchange="areaChange('county',this)">
-                                                    <option value="">请选择</option>
-                                                </select>
-                                            </div>
-                                            <span class="help-block">
-											请先选择省，再选择市</span>
-                                        </div>
-                                    </div>
+<!--                                    <div class="form-group">-->
+<!--                                        <label class="control-label col-md-3">县(区)<span class="required">-->
+<!--										* </span>-->
+<!--                                        </label>-->
+<!--                                        <div class="col-md-4">-->
+<!--                                            <div class="input-icon right">-->
+<!--                                                <i class="fa"></i>-->
+<!--                                                <select  name="county" id="county" class="form-control" onchange="areaChange('county',this)">-->
+<!--                                                    <option value="">请选择</option>-->
+<!--                                                </select>-->
+<!--                                            </div>-->
+<!--                                            <span class="help-block">-->
+<!--											请先选择省，再选择市</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
-                                    <div class="form-group">
-                                        <label class="control-label col-md-3">乡镇(街道)<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <div class="input-icon right">
-                                                <i class="fa"></i>
-
-
+<!--                                    <div class="form-group">-->
+<!--                                        <label class="control-label col-md-3">乡镇(街道)<span class="required">-->
+<!--										* </span>-->
+<!--                                        </label>-->
+<!--                                        <div class="col-md-4">-->
+<!--                                            <div class="input-icon right">-->
+<!--                                                <i class="fa"></i>-->
 
 
-                                                <select name="town" id="town"  class="form-control" >
-                                                    <option value="">请选择</option>
-                                                </select>
 
-                                            </div>
-                                            <span class="help-block">
-											请先选择省，再选择市，再选择县</span>
-                                        </div>
-                                    </div>
+
+<!--                                                <select name="town" id="town"  class="form-control" >-->
+<!--                                                    <option value="">请选择</option>-->
+<!--                                                </select>-->
+
+<!--                                            </div>-->
+<!--                                            <span class="help-block">-->
+<!--											请先选择省，再选择市，再选择县</span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
 
 
