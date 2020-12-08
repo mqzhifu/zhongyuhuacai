@@ -61,10 +61,15 @@ class PayListCtrl extends BaseCtrl{
         if(!$record){
             exit("id 不在 db中");
         }
+//        $order = OrderModel::db()->getById($record['oid']);
+//        if(!$order){
+//            exit("pay_list oid not in db");
+//        }
         if(_g('opt')){
+
             $no = _g("pay_third_no");
             $payType = _g("pay_type");
-
+            $real_price = _g("real_price");
             if(!$no){
                 out_ajax(600,"三方流水号为空");
             }
@@ -73,13 +78,23 @@ class PayListCtrl extends BaseCtrl{
                 out_ajax(601,"支付类型为空");
             }
 
+            if(!$real_price){
+                out_ajax(601,"实际收支为空");
+            }
+
             $data = array(
                 'pay_type'=>$payType,
                 'pay_third_no'=>$no,
                 'a_time'=>time(),
+                'real_price'=>$real_price,
                 'status'=>OrderPayListModel::STATUS_OK,
             );
             $upRs = OrderPayListModel::db()->upById($id,$data);
+
+            $list = OrderPayListModel::db()->getRow("oid = {$record['oid']} and status = ".OrderPayListModel::STATUS_OK);
+            if(!$list){//证明所有的支付记录均已完成，可以更新<上级>状态了
+                OrderModel::upStatus($real_price['oid'],OrderModel::STATUS_FINISH);
+            }
             out_ajax(200);
         }
 
@@ -150,7 +165,7 @@ class PayListCtrl extends BaseCtrl{
                 }
                 $upStatusBnt = "";
                 if($v['status'] == OrderPayListModel::STATUS_WAIT){
-                    $upStatusBnt =  '<a class="btn red btn-xs margin-bottom-5 upStatus" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 更新状态 </a>';
+                    $upStatusBnt =  '<a class="btn red btn-xs margin-bottom-5 upStatus" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 完结 </a>';
                 }
 //                $shareUserName = "";
 //                if(arrKeyIssetAndExist($v,'share_uid')){

@@ -220,7 +220,7 @@
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">合同周期</div>
                                                                         <div class="col-md-7 value">
-                                                                            {$days}(天){$distance}(秒)
+                                                                            {$days}(天)
                                                                         </div>
                                                                     </div>
 
@@ -235,10 +235,10 @@
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            月租:
+                                                                            年/半年/季/月付单元金额:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$order['month_price']}
+                                                                            {$order['price_unit']}
                                                                         </div>
                                                                     </div>
 
@@ -261,21 +261,21 @@
                                                                 <div class="portlet-body">
 
                                                                     <div class="row static-info">
-                                                                        <div class="col-md-5 name">付款方式</div>
+                                                                        <div class="col-md-5 name">{$person}付款方式</div>
                                                                         <div class="col-md-7 value">
-                                                                            {$order['pay_mode_desc']}({$order['pay_mode_turn_day']})
+                                                                            {$order['pay_mode_desc']}
                                                                         </div>
                                                                     </div>
 
-                                                                    <div class="row static-info">
-                                                                        <div class="col-md-5 name">收付款类型</div>
-                                                                        <div class="col-md-7 value">
-                                                                            {$typeDesc}
-                                                                        </div>
-                                                                    </div>
+<!--                                                                    <div class="row static-info">-->
+<!--                                                                        <div class="col-md-5 name">收付款类型</div>-->
+<!--                                                                        <div class="col-md-7 value">-->
+<!--                                                                            {$typeDesc}-->
+<!--                                                                        </div>-->
+<!--                                                                    </div>-->
 
                                                                     <div class="row static-info">
-                                                                        <div class="col-md-5 name">收付款次数</div>
+                                                                        <div class="col-md-5 name">{$typeDesc}款次数</div>
                                                                         <div class="col-md-7 value">
                                                                             {$num}
                                                                         </div>
@@ -310,6 +310,9 @@
                                                                                 <th width="5%">
                                                                                     id
                                                                                 </th>
+                                                                                <th width="10%">
+                                                                                    类型
+                                                                                </th>
                                                                                 <th width="15%">
                                                                                     开始时间
                                                                                 </th>
@@ -333,6 +336,7 @@
                                                                             <tr>
 
                                                                                 <td>{$v['id']}</td>
+                                                                                <td>{$v['type_desc']}</td>
                                                                                 <td>{$v['start_time_dt']}</td>
                                                                                 <td>{$v['end_time_dt']}</td>
                                                                                 <td>{$v['price']}</td>

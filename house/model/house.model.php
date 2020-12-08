@@ -20,9 +20,11 @@ class HouseModel {
 
     const STATUS_WAIT = 1;
     const STATUS_USED = 2;
+    const STATUS_CLOSE = 3;
     const STATUS = [
         self::STATUS_WAIT => "待租/售",
         self::STATUS_USED => "出租中",
+        self::STATUS_CLOSE => "关闭",
     ];
 
     const DIRECTION_EAST  = 1;
@@ -102,7 +104,11 @@ class HouseModel {
         }
 
         return "默认昵称";
+    }
 
+    static function upStatus($oid,$status,$data = []){
+        $upData = array("status"=>$status);
+        return self::db()->upById($oid,$upData);
     }
 	
 }

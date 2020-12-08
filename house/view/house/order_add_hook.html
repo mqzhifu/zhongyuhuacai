@@ -36,7 +36,7 @@
                         required: true,
                         int:true
                     },
-                    month_price: {
+                    price_unit: {
                         required: true,
                         int:true
                     },
@@ -59,11 +59,11 @@
                     warn_trigger_time: {
                         int: true
                     },
-                    // background_color: {
+                    master_breach_price: {
                     //     minlength: 7,
                     //     maxlength: 7,
-                    //     required: true
-                    // },
+                        required: true
+                    },
                     contract_start_time: {
                         required: true
                     },
@@ -184,7 +184,7 @@
         if(userTypeId == 1){//房主
             // $("#user_type_block").css("display","none");
             $("#user_type_block").html("");
-            // $("#user_type_block").html(getMasterBlock())
+            $("#user_type_block").html(getMasterBlock());
         }else if(userTypeId == 2) {//用户
             // $("#user_type_block").css("display","");
             $("#user_type_block").html("");
@@ -198,11 +198,11 @@
 
     function getMasterBlock(){
         var html = '<div class="form-group">\n' +
-            '                                            <label class="control-label col-md-3">房主ID<span class="required">\n' +
+            '                                            <label class="control-label col-md-3">房主违约金<span class="required">\n' +
             '                                            * </span>\n' +
             '                                            </label>\n' +
             '                                            <div class="col-md-4">\n' +
-            '                                                <input type="text" name="master_id" data-required="1" class="form-control" value="" id="master_id" />\n' +
+            '                                                <input type="text" name="master_breach_price" data-required="1" class="form-control" value="" id="master_breach_price" />\n' +
             '                                            </div>\n' +
             '                                        </div>\n' +
             '\n';

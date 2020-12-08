@@ -55,9 +55,11 @@ class OrderModel {
 
     const STATUS_WAIT = 1;
     const STATUS_OK = 2;
+    const STATUS_FINISH = 3;
     const STATUS_DESC = [
         self::FINANCE_INCOME=>"未处理",
         self::FINANCE_EXPENSE=>"已确认",
+        self::STATUS_FINISH=>"已完结",
     ];
 
 
@@ -98,6 +100,7 @@ class OrderModel {
 	public static function __callStatic($func, $arguments){
 		return call_user_func_array(array(self::db(),$func), $arguments);
 	}
+
 
     static function getById($id){
         $row = self::db()->getById($id);
@@ -162,6 +165,10 @@ class OrderModel {
         }
         return $html;
     }
+    static function upStatus($oid,$status,$data = []){
+	    $upData = array("status"=>$status);
+	    return self::db()->upById($oid,$upData);
+    }
 
     static function getSomePayTypeDesc($payTypeIds ){
 	    if(!is_array($payTypeIds)){
@@ -173,7 +180,6 @@ class OrderModel {
             $rs[$v] = self::PAY_TYPE_DESC[$v];
         }
         return $rs;
-
     }
 
 }

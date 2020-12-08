@@ -369,6 +369,7 @@ class HouseCtrl extends BaseCtrl{
                 if($v['status'] == HouseModel::STATUS_WAIT){
                     $addOrderBnt = '<a href="/house/no/order/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>';
                 }
+                $closeBnt = '<button class="btn red upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
                 $pics= "";
                 if($v['pics']){
                     $p = explode(",",$v['pics']);
@@ -393,9 +394,8 @@ class HouseCtrl extends BaseCtrl{
                     HouseModel::FITMENT_DESC[$v['build_fitment']],
 
                     get_default_date($v['a_time']),
-                    $addOrderBnt,
+                    $addOrderBnt. " ".$closeBnt,
 //                    '<a href="/product/no/product/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>',
-//                    '<button class="btn btn-xs default '.$statusCssColor.' btn blue upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-type="'.$type.'"><i class="fa fa-link"></i>'.$statusBnt.'</button>'.
                     );
 
                 $records["data"][] = $row;
@@ -407,6 +407,36 @@ class HouseCtrl extends BaseCtrl{
 
         echo json_encode($records);
         exit;
+    }
+
+    function upStatus($id,$status){
+        if(!$id)
+            out_ajax(500);
+
+        $house = HouseModel::db()->getById($id);
+        if(!$house)
+            out_ajax(500);
+
+        if(!$status)
+            out_ajax(500);
+
+        if($house['status'] == $status){
+            out_ajax(500);
+        }
+
+        if($status == HouseModel::STATUS_CLOSE){
+            $masterOrder = OrderModel::db()->getRow("house_id = $id and status = ".OrderModel::STATUS_OK ." and category = ".OrderModel::CATE_MASTER );
+            if($masterOrder){
+                out_ajax(500);
+            }
+
+            $userOrder = OrderModel::db()->getRow("house_id = $id and status = ".OrderModel::STATUS_OK ." and category = ".OrderModel::CATE_USER );
+            if($userOrder){
+                out_ajax(500);
+            }
+
+            HouseModel::upStatus($id,$status);
+        }
     }
 
     function recommendOne(){
