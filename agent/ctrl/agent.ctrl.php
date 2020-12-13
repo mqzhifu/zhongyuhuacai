@@ -56,7 +56,7 @@ class AgentCtrl extends BaseCtrl  {
         QRcode::png($value,$filename , $errorCorrectionLevel, $matrixPointSize, 0);
 
 
-        $original_pic_path = get_agent_apply_original_pic_path(2);
+        $original_pic_path = get_agent_apply_original_pic_path(2 );
         $finalPic = $this->mergePic($original_pic_path,$filename);
 
 
