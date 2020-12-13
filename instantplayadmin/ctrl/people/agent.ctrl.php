@@ -282,7 +282,7 @@ class AgentCtrl extends BaseCtrl{
                 'sex'=> _g('sex'),
                 'status'=>AgentService::STATUS_WAIT,
                 'type'=>AgentModel::ROLE_LEVEL_ONE,
-                'address'=> _g('address'),
+                'address'=> _g('address'),//一级代理，无用，占位吧
                 'province_code'=> _g('province'),
                 'city_code'=> _g('city'),
                 'county_code'=> _g('county'),
@@ -290,7 +290,7 @@ class AgentCtrl extends BaseCtrl{
                 'fee_percent'=> _g('fee_percent'),
                 'sub_fee_percent'=>_g("sub_fee_percent"),
                 'a_time'=>time(),
-                'villages'=>"place_hold",//占位吧
+                'villages'=>"place_hold",//无用，占位吧
 //                'villages'=> _g('villages'),
             );
 
@@ -327,9 +327,9 @@ class AgentCtrl extends BaseCtrl{
                 $this->notice("佣金比例 只允许正整数 ");
             }
 
-            if(!$data['address']){
-                $this->notice("详细地址 不能为空 ");
-            }
+//            if(!$data['address']){
+//                $this->notice("详细地址 不能为空 ");
+//            }
 
             if(!$data['sub_fee_percent']){
                 $this->notice("二级佣金比例 不能为空 ");
@@ -343,13 +343,13 @@ class AgentCtrl extends BaseCtrl{
             if($mobileExist){
                 $this->notice("该手机号已存在 ");
             }
-            $uploadService = new UploadService();
-            $uploadRs = $uploadService->agent('pic');
-            if($uploadRs['code'] != 200){
-                $this->notice(" uploadService->product error ".json_encode($uploadRs));
-            }
-
-            $data['pic'] = $uploadRs['msg'];
+            $data['pic'] = "";//一级代理，没有图片跟详情地址，这里先占位吧
+//            $uploadService = new UploadService();
+//            $uploadRs = $uploadService->agent('pic');
+//            if($uploadRs['code'] != 200){
+//                $this->notice(" uploadService->product error ".json_encode($uploadRs));
+//            }
+//            $data['pic'] = $uploadRs['msg'];
 
             $newId = AgentModel::add($data);
             $invite_code = intToStr($newId);
@@ -375,8 +375,8 @@ class AgentCtrl extends BaseCtrl{
 
         $this->addHookJS("/people/agent_add_hook.html");
 
-        $this->addHookJS("/layout/place.js.html");
-        $this->addHookJS("/layout/file_upload.js.html");
+//        $this->addHookJS("/layout/place.js.html");
+//        $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/people/agent_add.html");
     }
 
