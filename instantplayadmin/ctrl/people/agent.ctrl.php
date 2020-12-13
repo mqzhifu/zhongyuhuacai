@@ -375,7 +375,7 @@ class AgentCtrl extends BaseCtrl{
 
         $this->addHookJS("/people/agent_add_hook.html");
 
-//        $this->addHookJS("/layout/place.js.html");
+        $this->addHookJS("/layout/place.js.html");
 //        $this->addHookJS("/layout/file_upload.js.html");
         $this->display("/people/agent_add.html");
     }
