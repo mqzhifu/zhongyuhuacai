@@ -51,6 +51,12 @@ function get_agent_upload_url($tmpPath,$module, $protocol = HTTP_PROTOCOL){
     return $base.$module.DS . $tmpPath;
 }
 
+function get_agent_apply_original_pic_path($level){
+    $fileName = "apply_agent_".$level. ".jpg";
+    $base =  get_base_upload_path().get_agent_project_name() . DS . get_upload_cdn_evn() .  DS;
+    return $base . $fileName;
+}
+
 function get_agent_upload_path($tmpPath,$module ){
     $base =  get_base_upload_path().get_agent_project_name() . DS . get_upload_cdn_evn() .  DS;
     return $base.$module.DS . $tmpPath;

@@ -55,9 +55,24 @@ class AgentCtrl extends BaseCtrl  {
         $filename = $service->getApplyAgentUploadPath($aid);
         QRcode::png($value,$filename , $errorCorrectionLevel, $matrixPointSize, 2);
 
+
+        $original_pic_path = get_agent_apply_original_pic_path();
+        $finalPic = $this->mergePic($original_pic_path,$filename);
+
+
         $url = $service->getApplyAgentUrl($aid);			//已经生成的原始二维码图片文件
         echo "<img src='$url' />";
         exit;
+    }
+
+    function mergePic($src,$qrCode){
+        $srcImg = imagecreatefromjpeg($src);
+        $qrCodeImg = imagecreatefrompng($qrCode);
+
+        imagecopymerge($srcImg, $qrCodeImg, 80, 90, 0,0, imagesx($qrCodeImg), imagesy($qrCodeImg), 100);
+
+        $merge = 'merge.png';
+        var_dump(imagepng($srcImg,'./merge.png'));//bool(true)
     }
 
     function applyByQrcode(){
