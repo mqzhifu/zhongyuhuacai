@@ -294,10 +294,6 @@ class AgentCtrl extends BaseCtrl{
 //                'villages'=> _g('villages'),
             );
 
-            if(!$data['title']){
-                $this->notice("店面名称 不能为空 ");
-            }
-
             if(!$data['real_name']){
                 $this->notice("真实姓名 不能为空 ");
             }
@@ -327,10 +323,6 @@ class AgentCtrl extends BaseCtrl{
                 $this->notice("佣金比例 只允许正整数 ");
             }
 
-//            if(!$data['address']){
-//                $this->notice("详细地址 不能为空 ");
-//            }
-
             if(!$data['sub_fee_percent']){
                 $this->notice("二级佣金比例 不能为空 ");
             }
@@ -343,6 +335,15 @@ class AgentCtrl extends BaseCtrl{
             if($mobileExist){
                 $this->notice("该手机号已存在 ");
             }
+
+//            if(!$data['title']){
+//                $this->notice("店面名称 不能为空 ");
+//            }
+
+//            if(!$data['address']){
+//                $this->notice("详细地址 不能为空 ");
+//            }
+
             $data['pic'] = "";//一级代理，没有图片跟详情地址，这里先占位吧
 //            $uploadService = new UploadService();
 //            $uploadRs = $uploadService->agent('pic');
