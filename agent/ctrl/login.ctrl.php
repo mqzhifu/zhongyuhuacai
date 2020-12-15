@@ -128,4 +128,37 @@ class LoginCtrl extends BaseCtrl  {
         $this->display("word_private_protocol.html");
     }
 
+    function enterQrCode(){
+//        $url = get_domain_url() ."agent/apply/type=2&aid=".$aid ;
+//        $url = "http://agent-dev.xlsyfx.cn/";
+        $url = get_domain_url() ;
+
+        require_once PLUGIN . '/phpqrcode/qrlib.php';
+
+        $value = $url;					//二维码内容
+        $errorCorrectionLevel = 'L';	//容错级别
+        $matrixPointSize = 11;			//生成图片大小
+
+        $service = new UploadService();
+        //生成二维码图片
+        $filename = $service->getApplyAgentUploadPath(999);
+        QRcode::png($value,$filename , $errorCorrectionLevel, $matrixPointSize, 0);
+
+        $original_pic_path = get_agent_apply_original_pic_path(1 );
+        $this->mergePic($original_pic_path,$filename);
+    }
+
+    function mergePic($src,$qrCode){
+        header('Content-type: image/jpg');
+
+        $srcImg = imagecreatefromjpeg($src);
+        $qrCodeImg = imagecreatefrompng($qrCode);
+
+        imagecopymerge($srcImg, $qrCodeImg, 235,697, 0,0, imagesx($qrCodeImg), imagesy($qrCodeImg), 100);
+        imagejpeg($srcImg);
+        exit;
+//        $merge = 'merge.png';
+//        var_dump(imagepng($srcImg,'./merge.png'));//bool(true)
+    }
+
 }
