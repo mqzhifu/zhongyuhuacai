@@ -31,7 +31,7 @@ $main = array(
         array("agent",'apply'),
         array("login",'wordUserProtocol'),
         array("login",'wordPrivateProtocol'),
-            array('login','enterQrCode',),
+        array('login','enterQrCode',),
 
 //        array(   'index','testProtoBuf',),
 //        array(   'index','getUiShowConfig',),
