@@ -31,7 +31,7 @@ class AgentCtrl extends BaseCtrl  {
 //        var_dump($_FILES);
 //        out_ajax(200,"ok");
 
-        $rs = $this->orderService->applyAgentUploadPic($this->uid);
+        $rs = $this->orderService->applyAgentUploadPic();
         out_ajax($rs['code'],$rs['msg']);
     }
 

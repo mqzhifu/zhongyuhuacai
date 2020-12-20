@@ -32,6 +32,7 @@ $main = array(
         array("login",'wordUserProtocol'),
         array("login",'wordPrivateProtocol'),
         array('login','enterQrCode',),
+        array('agent','applyAgentUploadPic',),
 
 //        array(   'index','testProtoBuf',),
 //        array(   'index','getUiShowConfig',),

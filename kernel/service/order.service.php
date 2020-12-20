@@ -92,7 +92,7 @@ class OrderService{
         out_ajax(200,$return);
     }
 
-    function applyAgentUploadPic($uid){
+    function applyAgentUploadPic(){
         $uploadService =  new UploadService();
         LogLib::inc()->debug(['up avatar php $_FILES ',$_FILES]);
 //        out_ajax(200);
