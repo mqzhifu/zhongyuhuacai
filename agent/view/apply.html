@@ -485,7 +485,8 @@
         // 加载监听
         // xhr.addEventListener('load', ()=>{console.log("加载中");}, false);
         // 错误监听
-        xhr.addEventListener('error', ()=>{Toast.error("上传失败！", 2000, undefined, false);}, false);
+        xhr.addEventListener('error', ()=>{showInfo("addEventListener 上传失败")}, false);
+        showInfo("开启ajax post data...")
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 const result = JSON.parse(xhr.responseText);
