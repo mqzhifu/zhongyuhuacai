@@ -478,7 +478,7 @@
     function uploadImg (formData) {
         const xhr = new XMLHttpRequest();
 
-        showInfo("正式开始上传图片...uploadImg")
+        showInfo("正在开始上传图片...uploadImg")
 
         // 进度监听
         xhr.upload.addEventListener('progress', (e)=>{console.log(e.loaded / e.total)}, false);
@@ -490,6 +490,7 @@
             if (xhr.readyState === 4) {
                 const result = JSON.parse(xhr.responseText);
                 if (xhr.status === 200) {
+                    showInfo("good~上传完成并成功")
                     // 上传成功
                     $("#pic_tmp_path").val(result.msg.tmpUrl);
                     $("#agent_pic").attr("src",result.msg.url);
