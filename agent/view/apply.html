@@ -337,6 +337,7 @@
         // 判断是否是ios
         if(!!window.navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)){
             // iOS
+            showInfo("ios 开始 特殊处理")
             transformFileToFormData(file);
             return showInfo("ios 错误 -3");
         }
@@ -365,7 +366,7 @@
     function transformFileToDataUrl (file) {
         const imgCompassMaxSize = 200 * 1024; // 超过 200k 就压缩
 
-        return showInfo("开始压缩...");
+        showInfo("开始压缩...");
 
         // 存储文件相关信息
         imgFile.type = file.type || 'image/jpeg'; // 部分安卓出现获取不到type的情况
