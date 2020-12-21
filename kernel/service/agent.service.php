@@ -169,12 +169,18 @@ class AgentService{
         }
 
         if(!FilterLib::preg($data['mobile'],'phone') ){
-            out_ajax(8003);
+            return out_pc(8003);
         }
 
         $exist = $this->getRowByMobile($data['mobile']);
+        //手机号是否已经存在
         if($exist){
-            return out_pc(8276);
+            //如果，已存在的手机 号是1级的，申请的是2级的，错误信息是不一样的
+            if($exist['type'] == AgentModel::ROLE_LEVEL_ONE && $type == AgentModel::ROLE_LEVEL_TWO ){
+                return out_pc(8277);
+            }else{
+                return out_pc(8276);
+            }
         }
         //校验一个 地址信息
         $addressService = new UserAddressService();
