@@ -38,7 +38,7 @@ $main = array(
 //        array(   'index','getUiShowConfig',),
 //        array(   'system','getAppUpgradeInfo',),
 
-//        array("system","sendSMS",),
+        array("system","sendSMS",),
 
 //        array("wxopen","push",),
 //        array("qqLogin","login"),
