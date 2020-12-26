@@ -361,6 +361,9 @@ class AgentCtrl extends BaseCtrl  {
         $this->setTitle('我的下级');
         $this->setSubTitle('我的下级');
 
+        $list = $this->agentService->getAgentSubList($this->uid);
+        $this->assign("list",$list);
+
         $this->display("mysub.html");
     }
 

@@ -254,6 +254,52 @@ class AgentService{
         return $list;
     }
 
+    function getAgentSubList($aid){
+        $subAgent = $this->getSubAgentList($aid);
+        if(!$subAgent)
+            return null;
+
+        foreach ($subAgent as $k=>$v){
+            $subAgent[$k]['order_num'] = 0;
+            $subAgent[$k]['order_total_price'] = 0;
+            $subAgent[$k]['uname'] = "未绑定";
+            $subAgent[$k]['dt'] = get_default_date($v['a_time']);
+
+            $orderList = $this->orderService ->getListByAgentId($v['id'],OrderModel::STATUS_PAYED);
+            if(arrKeyIssetAndExist($v['uid'])){
+                $user = UserModel::db()->getById($v['uid']);
+                $subAgent[$k]['uname'] = $user['uname'];
+            }
+            if($orderList){
+                $row[$k]['order_num'] = count($orderList);
+                $order_total_price = 0;
+                foreach ($orderList as $k2=>$v2){
+                    $order_total_price += $v2['total_price'];
+                }
+                $row[$k]['order_total_price'] = $order_total_price;
+            }
+        }
+        return $subAgent;
+//        if($subAgent){
+//            $subAgentIds = "";
+//            $subUids = "";
+//            foreach ($subAgent as $k=>$v){
+//                $subAgentIds .= $v['id'] .",";
+//            }
+//            $subAgentIds = substr($subAgentIds,0,strlen($subAgentIds)-1);
+//            if($type == 1){
+//                $orderList =  $this->orderService ->getListByAgentId($subAgentIds);
+//            }elseif($type == 2){
+//                $orderList =  $this->orderService ->getListByAgentId($subAgentIds,OrderModel::STATUS_FINISH,WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT,WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT);
+//            }else{
+//                exit("type err");
+//            }
+//            $orderList =  $this->orderService ->getListByAgentId($subAgentIds);
+//            return $orderList;
+//        }
+
+        return null;
+    }
     //获取一个 一级代理，下的，所有二级代理的，所有订单
     function getAgentSubOrderList($aid,$type){
         $subAgent = $this->getSubAgentList($aid);

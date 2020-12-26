@@ -1,41 +1,46 @@
 <div class="pageMyTx pageMyXj bgColor">
     <div class="container">
-        <div class="item">
-            <div class="num">用户ID：1200110231</div>
-            <div class="num">用户名：我的下级1</div>
-            <div class="timeSq">加入时间：2020/08/31 09:30</div>
-            <div class="timeSq">成交订单数：31</div>
-            <div class="pprice">成交总金额：¥1219.88</div>
-            <div class="pprice">可获得佣金：¥121.98</div>
-            <img
-                class="imgGo"
-                src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png"
-                alt=""
-            />
-        </div>
-        <div class="item">
-            <div class="num">用户ID：1200110231</div>
-            <div class="num">用户名：我的下级1</div>
-            <div class="timeSq">加入时间：2020/08/31 09:30</div>
-            <div class="timeSq">成交订单数：31</div>
-            <div class="pprice">成交总金额：¥1219.88</div>
-            <div class="pprice">可获得佣金：¥121.98</div>
-            <img
-                class="imgGo"
-                src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png"
-                alt=""
-            />
-        </div>
+        {if $list}
+            {foreach ($list as  $k=>$v) }
+            <div class="item">
+                <div class="num">绑定用户：{$v['uname']}</div>
+                <div class="num">代理ID：{$v['id']}</div>
+                <div class="num">代理名：{$v['real_name']}</div>
+                <div class="timeSq">加入时间：{$v['dt']}</div>
+                <div class="timeSq">成交订单数：{$v['order_num']}</div>
+                <div class="pprice">成交总金额：{$v['order_total_price']}</div>
+    <!--            <div class="pprice">可获得佣金：¥121.98</div>-->
+                <img
+                    class="imgGo"
+                    src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png"
+                    alt=""
+                />
+            </div>
+            {/foreach}
+        {/if}
+<!--        <div class="item">-->
+<!--            <div class="num">用户ID：1200110231</div>-->
+<!--            <div class="num">用户名：我的下级1</div>-->
+<!--            <div class="timeSq">加入时间：2020/08/31 09:30</div>-->
+<!--            <div class="timeSq">成交订单数：31</div>-->
+<!--            <div class="pprice">成交总金额：¥1219.88</div>-->
+<!--            <div class="pprice">可获得佣金：¥121.98</div>-->
+<!--            <img-->
+<!--                class="imgGo"-->
+<!--                src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png"-->
+<!--                alt=""-->
+<!--            />-->
+<!--        </div>-->
     </div>
-    <div class="tools">
-        <span class="btnDefault textColor"
-        ><img
-                class="go"
-                src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png"
-            />全选</span
-        >
-        <span class="btnSelected">申请提现</span>
-    </div>
+<!--    <div class="tools">-->
+<!--        <span class="btnDefault textColor"-->
+<!--        ><img-->
+<!--                class="go"-->
+<!--                src="{CONST|H_STATIC_URL}/agent/assets/images/my/icon-go2-selected.png"-->
+<!--            />全选</span-->
+<!--        >-->
+<!--        <span class="btnSelected">申请提现</span>-->
+<!--    </div>-->
 </div>
 <!-- //End -->
 </body>

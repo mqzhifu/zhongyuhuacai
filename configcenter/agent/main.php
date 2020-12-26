@@ -38,7 +38,7 @@ $main = array(
 //        array(   'index','getUiShowConfig',),
 //        array(   'system','getAppUpgradeInfo',),
 
-    
+
         array("system","sendSms",),
 
 //        array("wxopen","push",),
