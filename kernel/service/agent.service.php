@@ -266,9 +266,11 @@ class AgentService{
             $subAgent[$k]['dt'] = get_default_date($v['a_time']);
 
             $orderList = $this->orderService ->getListByAgentId($v['id'],OrderModel::STATUS_PAYED);
-            if(arrKeyIssetAndExist($v['uid'])){
+            if(arrKeyIssetAndExist($v,'uid')){
                 $user = UserModel::db()->getById($v['uid']);
-                $subAgent[$k]['uname'] = $user['uname'];
+                if($user)
+                    $subAgent[$k]['uname'] = $user['uname'];
+                else$subAgent[$k]['uname'] = $v['uid'];
             }
             if($orderList){
                 $row[$k]['order_num'] = count($orderList);

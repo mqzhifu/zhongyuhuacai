@@ -1,30 +1,30 @@
 <?php
 class AgentCtrl extends BaseCtrl  {
     public $request = null;
-    public $agent = null;
+//    public $agent = null;
     //二级代理，佣金10%，写死了
     public $sub_fee_percent = 10;
     function __construct($request)
     {
         parent::__construct($request);
 
-        $agent = $this->agentService->getOneByUid($this->uid);
-        if(!$agent){
-            out_ajax(8368);
-        }
-
-        $this->agent = $agent;
+//        $agent = $this->agentService->getOneByUid($this->uid);
+//        if(!$agent){
+//            out_ajax(8368);
+//        }
+//
+//        $this->agent = $agent;
     }
     //获取一个代理，分享出去的连接，所成交的所有订单
     function getOrderList($request){
-        $list = $this->agentService->getOrderListByAId($this->agent['id']);
+        $list = $this->agentService->getOrderListByAId($this->uinfo['id']);
         out_ajax(200,$list['msg']);
     }
 
     function withDraw(){
         $num =  get_request_one( $this->request,'num',0);
         $oids =  get_request_one( $this->request,'oids',"");
-        $this->agentService->withdrawMoney($this->agent['id'],$num,$oids,$this->uid);
+        $this->agentService->withdrawMoney($this->uinfo['id'],$num,$oids,$this->uid);
     }
     //申请成为代理 上传店铺图片
     function applyAgentUploadPic(){
@@ -361,7 +361,7 @@ class AgentCtrl extends BaseCtrl  {
         $this->setTitle('我的下级');
         $this->setSubTitle('我的下级');
 
-        $list = $this->agentService->getAgentSubList($this->uid);
+        $list = $this->agentService->getAgentSubList($this->uinfo['id']);
         $this->assign("list",$list);
 
         $this->display("mysub.html");

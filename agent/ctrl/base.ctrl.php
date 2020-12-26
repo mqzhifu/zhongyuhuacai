@@ -1,6 +1,5 @@
 <?php
 class BaseCtrl {
-    public $uid = 0;
     public $uinfo = null;
 
     public $request = null;
@@ -94,7 +93,7 @@ class BaseCtrl {
             'a_time' => time(),
             'ctrl' => $request['ctrl'],
             'ac' => $request['ac'],
-            'uid' => $this->uid,
+            'uid' => $this->uinfo['id'],
             'client_info' => json_encode(get_client_info()),
             'ip_parser' => json_encode($ipBaiduParserAddress, JSON_UNESCAPED_UNICODE),
         );
@@ -326,6 +325,8 @@ class BaseCtrl {
         $this->uinfo = $uinfo;
 //        $uinfoRs = $this->userService->getUinfoById($uid);
 //        $uinfo = AgentModel::db()->getById($uid);
+
+
 
 
         //处理绑定用户的ID
