@@ -336,8 +336,8 @@ class BaseCtrl {
         }
 
         if(arrKeyIssetAndExist($uinfo,'invite_agent_uid')){
-            $user = UserModel::db()->getById($uinfo['uid']);
-            $this->_myLeader = $user;
+            $agent = AgentModel::db()->getById($uinfo['invite_agent_uid']);
+            $this->_myLeader = $agent;
         }
 
 
