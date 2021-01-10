@@ -220,35 +220,35 @@ class HouseCtrl extends BaseCtrl{
     }
 
     function makeQrcode(){
-        $id = _g("id");
-        if(!$id){
-            $this->notice("id is null");
-        }
-
-        $product = ProductModel::db()->getById($id);
-        if(!$product){
-            $this->notice("id not in db");
-        }
-
-        $tmpPath = "$id.jpg";
-        $path = get_wx_little_product_path($tmpPath);
-        if(file_exists($path)){
-            $url = get_wx_product_qr_code_url($tmpPath);
-            var_dump($url);exit;
-        }
-
-        $lib = new WxLittleLib();
-        $binaryImg = $lib->getProductQrCode($id);
-        var_dump($binaryImg);
-        if(!$binaryImg){
-            out_ajax(8367);
-        }
-
-        $imService = new UploadService();
-        $imService->saveProductQrCode($binaryImg,$id);
-
-        $url = get_wx_product_qr_code_url($tmpPath);
-        out_ajax(200,$url);
+//        $id = _g("id");
+//        if(!$id){
+//            $this->notice("id is null");
+//        }
+//
+//        $product = ProductModel::db()->getById($id);
+//        if(!$product){
+//            $this->notice("id not in db");
+//        }
+//
+//        $tmpPath = "$id.jpg";
+//        $path = get_wx_little_product_path($tmpPath);
+//        if(file_exists($path)){
+//            $url = get_wx_product_qr_code_url($tmpPath);
+//            var_dump($url);exit;
+//        }
+//
+//        $lib = new WxLittleLib();
+//        $binaryImg = $lib->getProductQrCode($id);
+//        var_dump($binaryImg);
+//        if(!$binaryImg){
+//            out_ajax(8367);
+//        }
+//
+//        $imService = new UploadService();
+//        $imService->saveProductQrCode($binaryImg,$id);
+//
+//        $url = get_wx_product_qr_code_url($tmpPath);
+//        out_ajax(200,$url);
 
     }
 
@@ -285,6 +285,7 @@ class HouseCtrl extends BaseCtrl{
                 'build_room_num',
                 'build_fitment',
                 'add_time',
+                'u_time',
             );
             $order = " order by ". $sort[$order_column]." ".$order_dir;
 
@@ -320,21 +321,6 @@ class HouseCtrl extends BaseCtrl{
                     $pic = get_house_url($pics[0]);
                 }
 
-//                $attributeArr = ProductModel::attrParaParserToName($v['attribute']);
-//
-//                if($v['recommend'] == ProductModel::RECOMMEND_FALSE){
-//                    $recommendBnt =   '<button class="btn btn-xs default red recommendone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  设为推荐首页</button>';
-//                }else{
-//                    $recommendBnt =   '<button class="btn btn-xs default blue-hoki recommendone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  取消推荐首页</button>';
-//                }
-//
-//                if($v['recommend_detail'] == ProductModel::RECOMMEND_DETAIL_TRUE){
-//                    $recommendDetailBnt =   '<button class="btn btn-xs default yellow recommendDetailOne margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  设为推荐产品</button>';
-//                }else{
-//                    $recommendDetailBnt =   '<button class="btn btn-xs default grey-cascade recommendDetailOne margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-share-alt"></i>  取消推荐产品</button>';
-//                }
-
-
 //                $sort = array(
 //                    'id',
 //                    'id',
@@ -367,9 +353,12 @@ class HouseCtrl extends BaseCtrl{
 
                 $addOrderBnt = "";
                 if($v['status'] == HouseModel::STATUS_WAIT){
-                    $addOrderBnt = '<a href="/house/no/order/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>';
+                    $addOrderBnt =
+                        '<a href="/house/no/order/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>';
                 }
-                $closeBnt = '<button class="btn red upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
+                $closeBnt = "";
+//                $closeBnt =
+//                    '<button class="btn red upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
                 $pics= "";
                 if($v['pics']){
                     $p = explode(",",$v['pics']);
@@ -394,8 +383,9 @@ class HouseCtrl extends BaseCtrl{
                     HouseModel::FITMENT_DESC[$v['build_fitment']],
 
                     get_default_date($v['a_time']),
-                    $addOrderBnt. " ".$closeBnt,
-//                    '<a href="/product/no/product/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>',
+                    get_default_date($v['u_time']),
+                    $addOrderBnt. " ".$closeBnt.
+                    '<a href="/house/no/house/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>',
                     );
 
                 $records["data"][] = $row;

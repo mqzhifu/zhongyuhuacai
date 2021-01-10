@@ -60,27 +60,36 @@
                                         <th width="2%">
                                             ID
                                         </th>
-                                        <th width="5%">
+                                        <th width="3%">
                                             房源id
                                         </th>
                                         <!--<th width="10%">-->
                                             <!--type-->
                                         <!--</th>-->
-                                        <th width="5%">
+                                        <th width="3%">
                                             类型
                                         </th>
 
-                                        <th width="5%">
+                                        <th width="3%">
                                             状态
                                         </th>
 
                                         <th width="5%">
+                                            结算类型
+                                        </th>
+
+
+                                        <th width="3%">
                                             合同金额
                                         </th>
 
 
-                                        <th width="5%">
+                                        <th width="3%">
                                             押金
+                                        </th>
+
+                                        <th width="5%">
+                                            已收/付款
                                         </th>
 
                                         <th width="5%">
@@ -99,7 +108,7 @@
                                             <!--支付类型-->
                                         <!--</th>-->
 
-                                        <th width="5%">
+                                        <th width="3%">
                                             合同附件
                                         </th>
 
@@ -114,12 +123,12 @@
                                             合同终止时间
                                         </th>
 
-                                        <th width="8%">
+                                        <th width="5%">
                                             添加时间
                                         </th>
 
                                         <th width="5%">
-                                            admin_id
+                                            添加者
                                         </th>
 
                                         <th width="5%">
@@ -137,7 +146,7 @@
                                         </td>
 
                                         <td>
-                                            <select name="status" class="table-group-action-input form-control input-inline input-small input-sm">
+                                            <select name="status" class="table-group-action-input form-control input-inline input-sm">
                                                 <option value="">选择</option>
                                                 {$getTypeOptions}
                                             </select>
@@ -145,7 +154,23 @@
 
                                         <td>
 
+                                            <select name="status" class="table-group-action-input form-control input-inline input-sm">
+                                                <option value="">选择</option>
+                                                {$getStatusOptions}
+                                            </select>
                                         </td>
+
+
+                                        <td>
+
+                                            <select name="status" class="table-group-action-input form-control input-inline input-sm">
+                                                <option value="">选择</option>
+                                                {$getFinishTypeOptions}
+                                            </select>
+                                        </td>
+
+                                        <td></td>
+
                                         <td>
                                         </td>
 
@@ -156,14 +181,14 @@
 
 
                                         <td>
-                                            <select name="tenancy_pay_mode" class="table-group-action-input form-control input-inline input-small input-sm">
+                                            <select name="tenancy_pay_mode" class="table-group-action-input form-control input-inline  input-sm">
                                                 <option value="">选择</option>
                                                 {$getPayTypeOptions}
                                             </select>
 
                                         </td>
                                         <td>
-                                            <select name="master_pay_mode" class="table-group-action-input form-control input-inline input-small input-sm">
+                                            <select name="master_pay_mode" class="table-group-action-input form-control input-inline  input-sm">
                                                 <option value="">选择</option>
                                                 {$getCateTypeOptions}
                                             </select>

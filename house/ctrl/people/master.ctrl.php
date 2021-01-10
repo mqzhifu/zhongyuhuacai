@@ -82,8 +82,7 @@ class MasterCtrl extends BaseCtrl{
                     $adminUserName,
                     get_default_date($v['a_time']),
 
-                    '',
-//                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
+                    '<a href="/people/no/master/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
 //                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );
@@ -124,6 +123,7 @@ class MasterCtrl extends BaseCtrl{
                 'wx'=> _g('wx'),
                 'ali'=> _g('ali'),
                 'a_time'=>time(),
+                'admin_id'=>$this->_adminid,
             );
 //            if(_g("a_time")){
 //                $data['a_time'] = strtotime( _g("a_time"));

@@ -235,7 +235,8 @@
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            年/半年/季/月付单元金额:
+<!--                                                                            年/半年/季/月付单元金额:-->
+                                                                            月付金额:
                                                                         </div>
                                                                         <div class="col-md-7 value">
                                                                             {$order['price_unit']}
@@ -267,6 +268,13 @@
                                                                         </div>
                                                                     </div>
 
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">{$person}共计{$typeDesc}款</div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$totalPrice}
+                                                                        </div>
+                                                                    </div>
+
 <!--                                                                    <div class="row static-info">-->
 <!--                                                                        <div class="col-md-5 name">收付款类型</div>-->
 <!--                                                                        <div class="col-md-7 value">-->
@@ -287,6 +295,8 @@
                                                                             {$everyDayPrice}
                                                                         </div>
                                                                     </div>
+
+
 
                                                                 </div>
                                                             </div>

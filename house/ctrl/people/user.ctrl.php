@@ -82,8 +82,7 @@ class UserCtrl extends BaseCtrl{
                     $v['ali'],
                     $adminUserName,
                     get_default_date($v['a_time']),
-'',
-//                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
+                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
 //                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );
@@ -204,7 +203,13 @@ class UserCtrl extends BaseCtrl{
         $ordersPayTotalNum = 0;
 
         if($orders){
-            $payArrStatus = array(OrderModel::STATUS_PAYED ,OrderModel::STATUS_TRANSPORT,OrderModel::STATUS_SIGN_IN ,OrderModel::STATUS_FINISH ,OrderModel::STATUS_REFUND_REJECT);
+            $payArrStatus = array(
+                OrderModel::STATUS_PAYED ,
+                OrderModel::STATUS_TRANSPORT,
+                OrderModel::STATUS_SIGN_IN ,
+                OrderModel::STATUS_FINISH ,
+                OrderModel::STATUS_REFUND_REJECT)
+            ;
             $ordersTotalNum = count($orders);
             foreach ($orders as $k=>$v){
                 $ordersConsumeTotalPrice += $v['total_price'];

@@ -62,6 +62,13 @@ class OrderModel {
         self::STATUS_FINISH=>"已完结",
     ];
 
+    const FINISH_NORMAL = 1;
+    const FINISH_FORCE = 2;
+    const FINISH_DESC = [
+        self::FINISH_NORMAL=>"正常结算",
+        self::FINISH_FORCE=>"强制结算",
+    ];
+
 
 //    const NOTIFY_WX = 1;
 //    const NOTIFY_SMS = 2;
@@ -134,6 +141,14 @@ class OrderModel {
         return $html;
     }
 
+    static function getFinishTypeOptions(){
+        $html = "";
+        foreach (self::FINISH_DESC as $k=>$v) {
+            $html .= "<option value={$k}>{$v}</option>";
+        }
+        return $html;
+    }
+
     static function getFinanceDescOption(){
         $html = "";
         foreach (self::FINANCE_DESC as $k=>$v) {
@@ -180,6 +195,15 @@ class OrderModel {
             $rs[$v] = self::PAY_TYPE_DESC[$v];
         }
         return $rs;
+    }
+    //获取一个房源的付款信息
+    static function getPayListByStatus($oid,$status){
+        return OrderPayListModel::db()->getAll(" status = $status and oid = $oid ");
+    }
+
+    //获取一个房源的付款信息 - 汇总金额
+    static function totalPayListByTypeStatus($oid,$status){
+        return OrderPayListModel::db()->getRow(" status = $status and oid = $oid ",null," sum(price) as total ");
     }
 
 }

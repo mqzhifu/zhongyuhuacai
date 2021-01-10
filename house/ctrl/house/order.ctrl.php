@@ -4,13 +4,20 @@ class OrderCtrl extends BaseCtrl{
         if(_g("getlist")){
             $this->getList();
         }
-
+        $this->assign("getStatusOptions",OrderModel::getStatusOptions());
+        //付款类型
         $this->assign("getPayTypeOptions",OrderModel::getPayTypeOptions());
+        //租赁/出卖
         $this->assign("getTypeOptions",OrderModel::getTypeOptions());
+        //房主/租户
         $this->assign("getCateTypeOptions",OrderModel::getCateTypeOptions());
+        //结算类型
+        $this->assign("getFinishTypeOptions",OrderModel::getFinishTypeOptions());
+
 
         $this->display("/house/order_list.html");
     }
+    //删除一个订单 - 状态必须为：未生成付款记录
     function delone(){
         $id = _g("id");
         if(!$id){
@@ -101,7 +108,7 @@ class OrderCtrl extends BaseCtrl{
         if(!$order){
             $this->notice("oid not in db");
         }
-
+        //一个订单，只能生成一次付款列表
         $orderPayListExist = OrderPayListModel::db()->getRow(" oid = {$order['id']} and category = {$order['category']}");
         if($orderPayListExist){
             $this->notice("该订单已生成过支付记录，请不要重复操作");
@@ -111,19 +118,20 @@ class OrderCtrl extends BaseCtrl{
         $master = MasterModel::db()->getById($house['master_id']);
         $this->assign("house",$house);
         $this->assign("master",$master);
-
+        //房主类型的订单
         if($order['category'] == OrderModel::CATE_MASTER){
             $type = OrderModel::FINANCE_EXPENSE;
             $typeDesc = "付";
             $person = "我方";
-        }else{
+        }else{//租户类型的订单
             $type = OrderModel::FINANCE_INCOME;
             $typeDesc = "收";
             $person = "对方";
         }
+        //用于方案显示
         $this->assign("person",$person);
 
-        //检查 - 合同 开始时间  与  结束时间   是否正确
+        //检查 ： 合同 开始时间  与  结束时间   是否正确
         $this->checkContractTimePeriodPay($order['contract_start_time'] , $order['contract_end_time'],$order['pay_mode']);
         //结束时间  - 开始时间  = 合同周期 (秒)
         $distance = $order['contract_end_time'] - $order['contract_start_time'] + 1;//最后一天是 23:59:59，有1秒误差
@@ -141,25 +149,58 @@ class OrderCtrl extends BaseCtrl{
         $e_time = $order['contract_end_time'] ;//最后一天是 23:59:59，有1秒误差
 //        echo "s_time:".date("Y-m-d H:i:s",$s_time)." , e_time: ".date("Y-m-d H:i:s",$e_time)." <br/>";
         $calcPayList = [];
+        $price_unit = $order['price_unit'];//付款周期 单价
+        $isBreak = 0;
+        $totalPrice = 0;
+        //生成付款列表-记录
         while(1){
+            //每次-付款的周期，最后转换成最小单位：月
             $monthUnit = OrderModel::PAY_TYPE_TURN_MONTH[$order['pay_mode']];
-            //当时时间加一个月，1月1号就是2月2号
+            //合同开始时间 + 每次-付款的周期（N个月） = 一次付款周期的记录
             $unitTime =  strtotime("+$monthUnit month",$s_time) ;
             //但 实际上是多计算了一天,因为是用开始时间（00:00:00） + 一个月，等于多加了一秒
+            //也就是，如：开始时间 是  2020-01-02（00:00:00）    结果时间 应该是 2021-01-01 23:59:59
             $unitTime = $unitTime - 1 ;
+            $distanceMonthUnit = 0;//一个周期的(N个月)
+            $price = $monthUnit * $price_unit;
             if($unitTime > $e_time){
+                //这种就是特殊情况 ，按说，合同 都应该是正常的周期，一天都不应该差
+                //实际情况是：多出来那么几天
+
+                //先计算出，多出来一共几天，再把这几天 * 单价
                 $distanceMonthUnit = ( $e_time - $s_time    ) /$this->getOneDayTurnSecond() ;
-                $calcPayList[] = array("s_time"=>$s_time,'e_time'=>$e_time  , "distance"=>$distanceMonthUnit,'price'=>$distanceMonthUnit * $everyDayPrice,"status"=>OrderPayListModel::STATUS_WAIT);
-                break;
+                $unitTime = $e_time;
+//                $calcPayList[] = array(
+//                    'price'=>$distanceMonthUnit * $everyDayPrice,
+//                );
+                $price = $distanceMonthUnit * $everyDayPrice;
+                $isBreak = 1;
             }elseif($unitTime == $e_time){//这种是最好的情况，时间刚刚好，没有余数
                 $distanceMonthUnit = ( $unitTime - $s_time + 1  ) /$this->getOneDayTurnSecond() ;
-                $calcPayList[] = array("s_time"=>$s_time,'e_time'=>$unitTime, "distance"=>$distanceMonthUnit,'price'=>$monthUnit * $order['price_unit'],"status"=>OrderPayListModel::STATUS_WAIT);
+//                $calcPayList[] = array(
+//                    'price'=>$monthUnit * $price_unit,
+                $isBreak = 1;
+            }
+            $totalPrice += $price;
+            $row = array(
+                "s_time"=>$s_time,
+                'e_time'=>$unitTime  ,
+                "status"=>OrderPayListModel::STATUS_WAIT,
+                "distance"=>$distanceMonthUnit,
+                "price"=>$price,
+            );
+
+
+            if($isBreak){
+                $calcPayList[] = $row;
                 break;
             }
-            $distanceMonthUnit = ( $unitTime - $s_time + 1 ) /$this->getOneDayTurnSecond() ;
 
-            $calcPayList[] = array("s_time"=>$s_time,'e_time'=>$unitTime  , "distance"=>$distanceMonthUnit,'price'=>$monthUnit * $order['price_unit'],"status"=>OrderPayListModel::STATUS_WAIT);
+            $distanceMonthUnit = ( $unitTime - $s_time + 1 ) /$this->getOneDayTurnSecond() ;
+            $row['distance'] = $distanceMonthUnit;
             $s_time = $unitTime + 1;
+
+            $calcPayList[] = $row;
         }
 
         $payList = $this->makePayListData($calcPayList,$order);
@@ -208,6 +249,7 @@ class OrderCtrl extends BaseCtrl{
             $this->ok("生成记录成功!");
         }
 
+        $this->assign("totalPrice",$totalPrice);
         $this->assign("typeDesc",$typeDesc);
         $this->assign("distance",$distance);
         $this->assign("days",$days);
@@ -596,6 +638,8 @@ class OrderCtrl extends BaseCtrl{
             $data = OrderModel::db()->getAll($where . $order .$limit);
 
             foreach($data as $k=>$v){
+                $adminUserName = AdminUserModel::getFieldById( $v['admin_id'],'nickname');
+
                 $contract_attachment = "";
                 if($v['contract_attachment']){
                     $url = get_contract_url($v['contract_attachment']);
@@ -609,19 +653,33 @@ class OrderCtrl extends BaseCtrl{
                     $createPayListBnt = '<a href="/house/no/order/createPayRecord/oid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 生成收/付款 </a>';
                     $delBnt = '<a  class="btn red btn-xs margin-bottom-5 delone"  data-id="'.$v['id'].'"><i class="fa fa-trash-o"></i>删除 </a>';
                 }
-                if($v['status'] != OrderModel::STATUS_FINISH){
+                if($v['status'] == OrderModel::STATUS_OK){
                     $finishBnt = '<a href="/house/no/order/finish/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5 delone"  data-id="'.$v['id'].'"><i class="fa fa-trash-o"></i>结算 </a>';
                 }
+                $hasPay = 0;
+                if($v['status'] == OrderModel::STATUS_OK || $v['status'] == OrderModel::STATUS_FINISH){
+                    $hasPay = OrderModel::totalPayListByTypeStatus($v['id'],OrderPayListModel::STATUS_OK);
+                    $hasPay = $hasPay['total'];
+                    if(!$hasPay){
+                        $hasPay = 0;
+                    }
+                }
 
+                $finishTypeDesc= "---";
+                if($v['finish_type']){
+                    $finishTypeDesc = OrderModel::FINISH_DESC[$v['finish_type']];
+                }
 
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
                     $v['house_id'],
                     OrderModel::TYPE_DESC[$v['type']],
-                    $v['status'],
+                    OrderModel::STATUS_DESC[$v['status']],
+                    $finishTypeDesc,
                     $v['price'],
                     $v['deposit_price'],
+                    $hasPay,
                     OrderModel::PAY_TYPE_DESC[$v['pay_mode']],
                     OrderModel::CATE_DESC[$v['category']],
                     $v['uid'],
@@ -629,7 +687,7 @@ class OrderCtrl extends BaseCtrl{
                     get_default_date($v['contract_start_time']),
                     get_default_date($v['contract_end_time']),
                     get_default_date($v['a_time']),
-                    $v['admin_id'],
+                    $adminUserName,
                     $createPayListBnt . $delBnt . " ".$finishBnt,
                     );
 
