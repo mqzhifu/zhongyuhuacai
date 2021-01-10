@@ -142,7 +142,7 @@ class AgentCtrl extends BaseCtrl{
                 'real_name',
                 'status',
                 'province_code',
-                'address',
+//                'address',
                 'sex',
                 '',
                 'mobile',
@@ -177,6 +177,7 @@ class AgentCtrl extends BaseCtrl{
 
             $userService = new UserService();
 
+            $AgentService = new AgentService();
             foreach($data as $k=>$v){
                 $addressStr = $agentService->getAreaStr($v['id']);
                 $subAgent = $agentService->getSubAgentList($v['id']);
@@ -187,6 +188,14 @@ class AgentCtrl extends BaseCtrl{
                 $auditBnt = "";
                 if($v['status'] == AgentService::STATUS_WAIT ){
                     $auditBnt = '<button class="btn btn-xs default red upstatus margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 审核</button>';
+                }
+
+                $myLead = "";
+                if($v['type'] == AgentModel::ROLE_LEVEL_TWO && arrKeyIssetAndExist($v,'invite_agent_uid')){
+                    $maserAgent = AgentModel::db()->getRow(" id = " . $v['invite_agent_uid']);
+                    if($maserAgent ){
+                        $myLead = $maserAgent['real_name'];
+                    }
                 }
 
                 $userName = $userService->getUserNameByUid($v['uid']);
@@ -203,7 +212,7 @@ class AgentCtrl extends BaseCtrl{
 //                    AreaCountyModel::db()->getOneByOneField('code',$v['county_code'])['short_name'],
 //                    AreaTownModel::db()->getOneByOneField('code',$v['towns_code'])['short_name'],
                     $addressStr,
-                    $v['address'],
+//                    $v['address'],
                     UserModel::getSexDescByKey($v['sex']),
                     '<img height="30" width="30" src="'.get_agent_url($v['pic']).'" />',
                     $v['mobile'],
@@ -213,6 +222,7 @@ class AgentCtrl extends BaseCtrl{
                     $v['invite_code'],
                     $subAgentNum,
                     $v['type'],
+                    $myLead,
                     '<a target="_blank" href="/people/no/agent/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
                     $auditBnt . "&nbsp;"
 //                    '<a href="" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
