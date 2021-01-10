@@ -470,7 +470,7 @@ class AgentService{
 
 
         $lib = new VerifierCodeLib();
-        $rs = $lib->authCode(VerifiercodeModel::TYPE_SMS,$userMobile,$smsCode,2);
+        $rs = $lib->authCode(VerifiercodeModel::TYPE_SMS,$userMobile,$smsCode,3);
         if($rs['code'] != 200){
             return out_pc($rs['code'],$rs['msg']);
         }
