@@ -338,23 +338,29 @@
 
 <script>
 
-    // $("#datatable_products").on("click",".delone",function(){
-    //     var id = $(this).attr("data-id");
-    //     bootbox.confirm("Are you sure?", function(result) {
-    //         if(result == true){
-    //             $.ajax({
-    //                 type: 'GET',
-    //                 url: "/people/no/agent/delOne/id="+id ,
-    //                 dataType: 'json',
-    //                 success: function(data){
-    //                     location.reload();
-    //                 }
-    //
-    //             });
-    //         }
-    //     });
-    //
-    // });
+    $("#datatable_products").on("click",".delone",function(){
+        var id = $(this).attr("data-id");
+        bootbox.confirm("Are you sure?", function(result) {
+            if(result == true){
+                $.ajax({
+                    type: 'GET',
+                    url: "/people/no/agent/delOne/id="+id ,
+                    dataType: 'json',
+                    success: function(data){
+                        if(data.code == 200){
+                            alert("成功");
+                            location.reload();
+                        }else{
+                            alert(data.msg);
+                        }
+                        // location.reload();
+                    }
+
+                });
+            }
+        });
+
+    });
 
 
     $("#datatable_products").on("click",".upstatus",function(){

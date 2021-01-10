@@ -36,7 +36,23 @@ class AgentCtrl extends BaseCtrl{
 
     function delOne(){
         $id = _g("id");
+        if(!$id){
+            out_ajax(4002);
+        }
+        $agent = AgentModel::db()->getById($id);
+        if(!$agent){
+            out_ajax(4003);
+        }
+        if(arrKeyIssetAndExist($agent,"uid")){
+            out_ajax(4000);
+        }
+//        $orderService = new OrderService();
+        $order = OrderModel::db()->getRow(" agent_id = $id");
+        if($order){
+            out_ajax(4001);
+        }
         AgentModel::db()->delById($id);
+        out_ajax(200);
     }
 
     function detail(){
@@ -224,9 +240,9 @@ class AgentCtrl extends BaseCtrl{
                     $v['type'],
                     $myLead,
                     '<a target="_blank" href="/people/no/agent/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'.
-                    $auditBnt . "&nbsp;"
+                    $auditBnt . "&nbsp;".
 //                    '<a href="" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
-//                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
+                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );
 
                 $records["data"][] = $row;
