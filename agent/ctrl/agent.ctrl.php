@@ -71,7 +71,7 @@ class AgentCtrl extends BaseCtrl  {
         $srcImg = imagecreatefromjpeg($src);
         $qrCodeImg = imagecreatefrompng($qrCode);
 
-        imagecopymerge($srcImg, $qrCodeImg, 190,697, 0,0, imagesx($qrCodeImg), imagesy($qrCodeImg), 100);
+        imagecopymerge($srcImg, $qrCodeImg, 190,640, 0,0, imagesx($qrCodeImg), imagesy($qrCodeImg), 100);
         imagejpeg($srcImg);
         exit;
 //        $merge = 'merge.png';
