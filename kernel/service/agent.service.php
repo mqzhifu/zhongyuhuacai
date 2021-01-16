@@ -434,7 +434,7 @@ class AgentService{
         $sess = new SessionLib();
         $sess->setValue('uinfo',$agent);
 
-        $rs =  AgentModel::db()->upById($aid,array("uid"=>""));
+        $rs =  AgentModel::db()->upById($aid,array("uid"=>0));
         return out_pc(200);
     }
     //普通用户绑定一个代理
