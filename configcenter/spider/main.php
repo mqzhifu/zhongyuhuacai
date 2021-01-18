@@ -28,11 +28,18 @@ $main = array(
                 ),
                 "forum"=>array(
                     OUMEI=>array(
-                        "name"=>"欧美无码原创",
+                        "name"=>"欧美原创",
                         "link_id"=> 229,
                         "loop_start"=>1,
                         "loop_end"=>2342,
                         "db_model_class"=>"Sis001OumeiModel"
+                    ),
+                    OUMEI_TURN=>array(
+                        "name"=>"欧美转贴",
+                        "link_id"=> 77,
+                        "loop_start"=>1,
+                        "loop_end"=>2647,
+                        "db_model_class"=>"Sis001OumeiTurnModel"
                     ),
                     JAPAN_ORI_UNCODE=>array(
                         "name"=>"亚洲无码原创",
@@ -41,6 +48,14 @@ $main = array(
                         "loop_end"=>2696,
                         "db_model_class"=>"Sis001JapanModel"
                     ),
+                    JAPAN_TURN_UNCODE=>array(
+                        "name"=>"亚洲无码转贴",
+                        "link_id"=> 25,
+                        "loop_start"=>1,
+                        "loop_end"=>4425,
+                        "db_model_class"=>"Sis001JapanTurnModel"
+                    ),
+
                 )
             ),
         TAOHUA=>
@@ -71,7 +86,7 @@ $main = array(
     'mysql'=>array(
         "create database spider charset=utf8mb4;",
         "
-CREATE TABLE `sis001_oumei` (
+CREATE TABLE `sis001_japan_turn` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `category` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '分类',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '标题',
