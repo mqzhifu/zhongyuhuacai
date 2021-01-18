@@ -2,7 +2,7 @@
 define("DEBUG",1);
 
 define ('BASE_DIR' , dirname (   dirname(__FILE__) ) )  ;
-define('APP_NAME', 'api');
+define('APP_NAME', 'spider');
 define("RUN_ENV","WEB");
 
 define("IS_ADMIN",0);

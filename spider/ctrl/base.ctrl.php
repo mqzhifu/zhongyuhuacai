@@ -20,87 +20,23 @@ class BaseCtrl {
     public $cartService = null;
     public $shareService = null;
 
+    public $_config = null;
     function __construct($request){
         $prefix = "BaseCtrl->__construct";
         LogLib::inc()->debug([$prefix,$request]);
         $this->request = $request;
-//        $this->checkSign();
-
-        //加载 配置文件 信息
-        ConfigCenter::get(APP_NAME,"api");
-        ConfigCenter::get(APP_NAME,"err_code");
-        ConfigCenter::get(APP_NAME,"main");
-        ConfigCenter::get(APP_NAME,"rediskey");
-
 //        //实例化 用户 服务 控制器
         $this->initService();
 //        $this->tracing();
 
-        $tokenRs = $this->initUserLoginInfoByToken();
-        if($tokenRs['code'] != 200){
-            out_ajax ($tokenRs['code'],$tokenRs['msg']);
-        }
+//        ConfigCenter::get(APP_NAME,"constant");
+        $config = ConfigCenter::get(APP_NAME,"main");
+        $this->_config = $config['common'];
 
-        LogLib::inc()->debug(['uinfo', $this->uinfo]);
-
-//        if($this->uinfo['status'] != UserService::STATUS_NORMAL ){
-//            return out_ajax(4009);
-//        }
-//        if($this->uid){
-//            $this->userService->setDayActiveUser($this->uid);
-//        }
-
-        //有些接口必须，得登陆后，才能访问
-        $isLogin = $this->loginAPIExcept($request['ctrl'],$request['ac']);
-        if($isLogin){
-            if(!$this->uinfo){
-                return out_ajax(5001);
-            }
-        }
-
-        $ipBaiduParserAddress = $this->initArea();
-        $data = array(
-            'a_time'=>time(),
-            'ctrl'=>$request['ctrl'],
-            'ac'=>$request['ac'],
-            'uid'=>$this->uid,
-            'client_info'=>json_encode(get_client_info()),
-            'ip_parser'=>json_encode($ipBaiduParserAddress,JSON_UNESCAPED_UNICODE),
-            'request_id'=>$request['request_id'],
-            'trace_id'=>$request['trace_id'],
-        );
-        UserLogModel::db()->add($data);
-//        //每日 任务初始化
-//        $this->taskService->addUserDailyTask($this->uid);
     }
 
     function tracing($localEndpoint = 'baseService',$remoteEndpoint = 'userService'){
         TraceLib::getInc()->tracing($localEndpoint,$remoteEndpoint);
-    }
-
-//    function checkSign(){
-//        $sign = _g('sign');
-//        if(!$sign){
-//            return $this->out(3000);
-//        }
-//
-//        $checkSign = TokenLib::checkSign($request , $sign,$this->app['apiSecret']);
-//        if(!$checkSign){
-//            return $this->out(3001);
-//        }
-//
-//    }
-
-    function initArea(){
-        $ip = get_client_ip();
-        $ipBaiduParserAddress = RedisOptLib::getBaiduIpParser($ip);
-        LogLib::inc()->debug(["initArea","ip",$ip,"getBaiduIpParser",$ipBaiduParserAddress]);
-        if(!$ipBaiduParserAddress){
-            $ipBaiduParserAddress = AreaLib::getByIp($ip);
-            LogLib::inc()->debug($ipBaiduParserAddress);
-            RedisOptLib::setBaiduIpParser($ip,$ipBaiduParserAddress);
-        }
-        return $ipBaiduParserAddress;
     }
 
     function initService(){
@@ -121,136 +57,6 @@ class BaseCtrl {
         $this->goodsService = new GoodsService();
         $this->cartService = new CartService();
         $this->shareService = new ShareService();
-    }
-
-    //返回的数据，1检查格式2如果弱类型要转移成前端想要的类型
-    function checkDataAndFormat($data){
-        $api = ConfigCenter::get(APP_NAME,"api");
-        if(!arrKeyIssetAndExist($api,$this->request['ctrl'])){
-            return $this->out(7060);
-        }
-
-        if(!arrKeyIssetAndExist($api[$this->request['ctrl']],$this->request['ac'])){
-            return $this->out(7061);
-        }
-        if(!arrKeyIssetAndExist($api[$this->request['ctrl']][$this->request['ac']],'return')){
-            return $this->out(7062);
-        }
-
-        $apiMethodReturn = $api[$this->request['ctrl']][$this->request['ac']]['return'];
-        $data = FilterLib::apiReturnDataCheckInit($apiMethodReturn,$data);
-        return $data;
-    }
-
-
-    function out($code,$msg = ""){
-        if($code == 200){
-//            if(!$msg){
-//                if($msg === ""){
-//                    $msg = $GLOBALS['code'][$code];
-//                }elseif($msg === 0){
-//                    $msg = 0;
-//                }else{
-//                    $msg = [];
-//                }
-//            }
-//
-//            if(is_string($msg) && $msg == 'space_string'){
-//                $msg = "";
-//            }
-//
-//            $apiMethod = null;
-//            if(isset($GLOBALS[APP_NAME]['api'][$this->request['ctrl']][$this->request['ac']])){
-//                $apiMethod =$GLOBALS[APP_NAME]['api'][$this->request['ctrl']][$this->request['ac']];
-//            }
-            $msg = $this->checkDataAndFormat($msg);
-            if(arrKeyIssetAndExist($msg,'code')){
-                $data = $msg;
-            }else{
-                $data = array('code'=>$code,"msg"=>$msg);
-            }
-
-            return $data;
-        }else{
-            $data = array('code'=>$code,"msg"=>$msg);
-            return $data;
-        }
-    }
-
-    //有些接口，必须是登陆后，才能访问~有些不需要
-    function loginAPIExcept($ctrl ,$ac ){
-        $arr =  ConfigCenter::get(APP_NAME,"main")['loginAPIExcept'];
-        if(!$arr){
-            return 1;
-        }
-        foreach($arr as $k=>$v){
-            if($v[0] == $ctrl && $v[1] == $ac){
-                return 0;
-            }
-        }
-
-        return 1;
-    }
-    //判断登陆，初始化用户信息
-    function initUserLoginInfoByToken(){
-        LogLib::inc()->debug(["initUserLoginInfoByToken"]);
-//        if(RUN_ENV == "WEB"){
-            $token = _g('token');
-            if(!$token)
-                return out_pc(200,'no token');
-
-            $rs = $this->authToken($token);
-            if($rs['code'] != 200){
-                return $rs;
-            }
-
-            $this->uinfo = $rs['msg'];
-            $this->uid =  $rs['msg']['id'];
-
-//        }
-//        elseif(RUN_ENV == "WEBSOCKET"){
-//            if($GLOBALS['uid_fd_table']->exist($this->clientFrame->fd)){
-//                $this->uid = $GLOBALS['uid_fd_table']->get($this->clientFrame->fd)['uid'];
-//            }
-//            if($GLOBALS['fd_uid_table']->exist($this->clientFrame)){
-//                $this->uid = $GLOBALS['fd_uid_table']->get($this->clientFrame,'uid');
-//                LogLib::wsWriteFileHash(["fd_uid_table get uid=",$this->uid]);
-//            }else{
-//                LogLib::wsWriteFileHash(["fd_uid_table no exist",$this->clientFrame]);
-//            }
-//        }
-
-
-        return out_pc(200);
-    }
-
-    function authToken($token){
-        $decodeData = TokenLib::getDecode($token);
-        if($decodeData['expire'] < time()){
-            return out_pc(8230);
-        }
-        if(!$decodeData['uid']){
-            return out_pc(8109);
-        }
-        $uid = (int) $decodeData['uid'];
-        //防止黑客伪造非整形UID,这样后面所有程度在读取的时候，都会错
-        if(!$uid || $uid < 0 ){
-            return out_pc(8105);
-        }
-        $redisToken = RedisOptLib::getToken($uid);
-        if(!$redisToken){
-            return out_pc(8231);
-        }
-
-        if($redisToken != $token){
-            return out_pc(8232);
-        }
-        $uinfoRs = $this->userService->getUinfoById($uid);
-        if($uinfoRs['code'] != 200){
-            return out_pc($uinfoRs['code'],$uinfoRs['msg']);
-        }
-
-        return out_pc(200,$uinfoRs['msg']);
     }
 
 }

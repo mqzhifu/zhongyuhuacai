@@ -22,7 +22,6 @@ class CurlLib{
             }else{
                 curl_setopt($curl, CURLOPT_POSTFIELDS, ($postData) );
             }
-
         }
 
 

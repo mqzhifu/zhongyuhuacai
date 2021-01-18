@@ -1,46 +1,46 @@
 <?php
 class spiderWebside{
-    const TANG_98 ="tang_98";
-    const SIS001 ="sis_001";
-    const JAPAN_ORI_UNCODE ="japan";
-    const OUMEI ="oumei";
+//    const TANG_98 ="tang_98";
+//    const SIS001 ="sis_001";
+//    const JAPAN_ORI_UNCODE ="japan";
+//    const OUMEI ="oumei";
 
     public $config = array(
-        self::TANG_98=>
-            array(
-                "host"=>array(
-                    "98skdjseq2wshop.xyz",
-                    "98wsaweassd.xyz",
-                    "98asedwwq.xyz"
-                ),
-                "forum"=>array(
-                    self::OUMEI=>"forum-229-3.html",
-                    self::JAPAN_ORI_UNCODE=>"forum-36-1.html",
-                )
-            ),
-        self::SIS001=>
-            array(
-                "host"=>array(
-                    "38.103.161.16/bbs",
-                    "666.diyihuisuo.com/bbs",
-                    "cn.1huisuo.com/forum",
-                    "666.1huisuo.net/bbs"
-                ),
-                "forum"=>array(
-                    self::OUMEI=>array(
-                        "link_id"=> "229",
-                        "loop_start"=>1,
-                        "loop_end"=>2341,
-                        "db_model_class"=>"Sis001OumeiModel"
-                    ),
-                    self::JAPAN_ORI_UNCODE=>array(
-                        "link_id"=> "143",
-                        "loop_start"=>1,
-                        "loop_end"=>2696,
-                        "db_model_class"=>"Sis001JapanModel"
-                    ),
-                )
-            )
+//        self::TANG_98=>
+//            array(
+//                "host"=>array(
+//                    "98skdjseq2wshop.xyz",
+//                    "98wsaweassd.xyz",
+//                    "98asedwwq.xyz"
+//                ),
+//                "forum"=>array(
+//                    self::OUMEI=>"forum-229-3.html",
+//                    self::JAPAN_ORI_UNCODE=>"forum-36-1.html",
+//                )
+//            ),
+//        self::SIS001=>
+//            array(
+//                "host"=>array(
+//                    "38.103.161.16/bbs",
+//                    "666.diyihuisuo.com/bbs",
+//                    "cn.1huisuo.com/forum",
+//                    "666.1huisuo.net/bbs"
+//                ),
+//                "forum"=>array(
+//                    self::OUMEI=>array(
+//                        "link_id"=> 229,
+//                        "loop_start"=>2147,
+//                        "loop_end"=>2342,
+//                        "db_model_class"=>"Sis001OumeiModel"
+//                    ),
+//                    self::JAPAN_ORI_UNCODE=>array(
+//                        "link_id"=> 143,
+//                        "loop_start"=>1,
+//                        "loop_end"=>2696,
+//                        "db_model_class"=>"Sis001JapanModel"
+//                    ),
+//                )
+//            )
 
     );
 
@@ -48,14 +48,11 @@ class spiderWebside{
     public $mysql = array(
         "create database spider charset=utf8mb4;",
     );
-    public $table = array(
-        self::TANG_98=>array(
-            self::JAPAN_ORI_UNCODE=>self::TANG_98 ."_japan"
-        )
-    );
 
     public function __construct($c){
         $this->commands = $c;
+        $config = ConfigCenter::get(APP_NAME,"main");
+        $this->config = $config['common'];
     }
 
     function out($str,$ln = 1){
@@ -76,10 +73,13 @@ class spiderWebside{
 
 
     function parseOneSis001CommentViews($content){
-        preg_match_all('/<strong>(.*)<\/strong>/isU',$content,$match);
-        $comment = $match[1][0];
-        preg_match_all('/<em>(.*)<\/em>/isU',$content,$match);
-        $view = $match[1][0];
+//        preg_match_all('/<strong>(.*)<\/strong>/isU',$content,$match);
+//        $comment = $match[1][0];
+//        preg_match_all('/<em>(.*)<\/em>/isU',$content,$match);
+//        $view = $match[1][0];
+
+        $comment = $this->myPregMatchAll('/<strong>(.*)<\/strong>/isU',$content,1,0);
+        $view = $this->myPregMatchAll('/<em>(.*)<\/em>/isU',$content,1,0);
 
         $data = array('comment'=>$comment,'view'=>$view );
         return $data;
@@ -88,41 +88,79 @@ class spiderWebside{
 
     function parseOneSis001VideoSizeType($content){
         $l = stripos($content,">");
-        $str = trim( substr($content,$l+1));
-        $arr = explode("/",$str);
-        $data = array('size'=>trim($arr[0]),'type'=>trim($arr[1]) );
+        if ($l === false){
+            $data = array('size'=>0,'type'=>0 );
+        }else{
+            $str = trim( substr($content,$l+1));
+            $arr = explode("/",$str);
+            $data = array('size'=>trim($arr[0]),'type'=>trim($arr[1]) );
+        }
+
         return $data;
 
     }
 
     function parseOneSis001AuthorUpTime($content){
-        preg_match_all('/<cite(.*)<\/cite>/isU',$content,$match);
+//        preg_match_all('/<cite(.*)<\/cite>/isU',$content,$match);
+//
+//        preg_match_all('/<a href="(.*)">(.*)<\/a>/isU',$match[1][0],$matchAuthor);
+//        $author = $matchAuthor[2][0];
+//
+//        preg_match_all('/<img(.*)>(.*)/',$match[1][0],$matchUp);
+//        $up = trim($matchUp[2][0]);
+//
+//        preg_match_all('/<em>(.*)<\/em>/isU',$content,$match);
+//        $date = $match[1][0];
 
-//        var_dump($match[1][0]);
-        preg_match_all('/<a href="(.*)">(.*)<\/a>/isU',$match[1][0],$matchAuthor);
-        $author = $matchAuthor[2][0];
+        $myPregRs = $this->myPregMatchAll('/<cite(.*)<\/cite>/isU',$content,1,0);
+        if($myPregRs){
+            $author = $this->myPregMatchAll('/<a href="(.*)">(.*)<\/a>/isU',$myPregRs,2,0);
+            $up = trim( $this->myPregMatchAll('/<img(.*)>(.*)/',$myPregRs,2,0));
+        }else{
+            $author = "";
+            $up = "";
+        }
 
-        preg_match_all('/<img(.*)>(.*)/',$match[1][0],$matchUp);
-        $up = trim($matchUp[2][0]);
+        $date = $this->myPregMatchAll('/<em>(.*)<\/em>/isU',$content,1,0);
 
-        preg_match_all('/<em>(.*)<\/em>/isU',$content,$match);
-        $date = $match[1][0];
 
         $data = array('author'=>$author,'up'=>$up,'date'=>$date);
         return $data;
     }
 
+
+    function myPregMatchAll($eg,$str,$indexOne,$index2){
+        preg_match_all($eg,$str,$match);
+        if(isset($match[$indexOne]) && $match[$indexOne]){
+            if(isset($match[$indexOne][$index2]) && $match[$indexOne][$index2]){
+                return $match[$indexOne][$index2];
+            }
+        }
+        return "";
+    }
+
     function parseOneSis001TitleCategoryLink($content){
-        preg_match_all('/<em>(.*)<\/em>/isU',$content,$match);
-        preg_match_all('/>(.*)<\/a>/isU',$match[1][0],$match);
-        $category = $match[1][0];
 
-        preg_match_all('/<span(.*)<\/span>/isU',$content,$match);
-        preg_match_all('/<a href="(.*)"(.*)>(.*)<\/a>/isU',$match[1][0],$match);
-//        var_dump($match);
+//        preg_match_all('/<em>(.*)<\/em>/isU',$content,$match);
+//        preg_match_all('/>(.*)<\/a>/isU',$match[1][0],$match);
+//        $category = $match[1][0];
+        $myPregRs = $this->myPregMatchAll('/<em>(.*)<\/em>/isU',$content,1,0);
+        if($myPregRs){
+            $myPregRs = $this->myPregMatchAll('/>(.*)<\/a>/isU',$myPregRs,1,0);
+        }
+        $category = $myPregRs;
 
-        $link = $match[1][0];
-        $title = $match[3][0];
+//        preg_match_all('/<span(.*)<\/span>/isU',$content,$match);
+        $myPregRs = $this->myPregMatchAll('/<span(.*)<\/span>/isU',$content,1,0);
+        if($myPregRs){
+            preg_match_all('/<a href="(.*)"(.*)>(.*)<\/a>/isU',$myPregRs,$match);
+            $link = $match[1][0];
+            $title = $match[3][0];
+        }else{
+            $link = "";
+            $title = "";
+        }
+
         $data = array('category'=>$category,'link'=>$link,'title'=>$title);
         return $data;
     }
@@ -170,6 +208,7 @@ class spiderWebside{
             );
             $id = $this->dbOptByAdd($forumConfig['db_model_class'],$data);
 //            $id = Sis001JapanModel::db()->add($data);
+//            $id =0 ;
             $this->out("k: ".$k ." , id: ".$id);
         }
     }
@@ -192,19 +231,19 @@ class spiderWebside{
     public function run($argc){
         $s_time = time();
 
-        $webside = $argc['webside'];
+        $website = $argc['website'];
         $forum = $argc['forum'];
-        if (!$webside){
-            exit("webside is null");
+        if (!$website){
+            exit("website is null");
         }
-        if (!arrKeyIssetAndExist($this->config,$webside)){
-            exit("webside not in arr");
+        if (!arrKeyIssetAndExist($this->config,$website)){
+            exit("website not in arr");
         }
 
         if (!$forum){
             exit("forum is null");
         }
-        if (!arrKeyIssetAndExist($this->config[$webside]['forum'],$forum)){
+        if (!arrKeyIssetAndExist($this->config[$website]['forum'],$forum)){
             exit("forum not in arr");
         }
 
@@ -213,9 +252,8 @@ class spiderWebside{
 //        $forumKey = self::JAPAN_ORI_UNCODE;
 
 
-        $config = $this->config[$webside];
+        $config = $this->config[$website];
         $forumConfig = $config["forum"][$forum];
-
 
         $host = "http://". $config['host'][0]. "/";
 
@@ -227,9 +265,11 @@ class spiderWebside{
             $url = $hostForum . "-$page.html";
             $this->out("page: $page , url: $url");
             $httpContent = CurlLib::sis001($url,$host,0);
+
 //        $fileName = $key ."_" . $forumKey .".txt";
 //        $this->putContentFile($fileName,$httpContent['body']);
 //        $this->parseOneSis001("test");
+
             $this->parseOneSis001($httpContent['body'],$forumConfig);
         }
 
@@ -238,6 +278,7 @@ class spiderWebside{
     }
 
     function dbOptByAdd($model,$data){
+//        var_dump($model);exit;
         if($model == 'Sis001OumeiModel'){
             $id = Sis001OumeiModel::db()->add($data);
         }elseif($model == 'Sis001JapanModel'){

@@ -1,6 +1,6 @@
 <?php
 //网站域名
-define('DOMAIN_URL', "local.house.com");
+define('DOMAIN_URL', "local.spider.com");
 //静态文件域名
 define ('STATIC_URL', "local.static.com");
 //http协议
