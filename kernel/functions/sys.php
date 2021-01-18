@@ -17,7 +17,14 @@ function autoload($class){
         $class = lcfirst($class);
         $file = APP_DIR .DS .C_DIR_NAME .DS . $class .C_EXT;
         include_once $file ;
-    }elseif( strpos($class,S_CLASS) !== false){
+    }elseif( strpos($class,"Shell") !== false){
+
+        $l = strpos($class,"Shell");
+        $class = substr($class, 0,$l);
+        $class = lcfirst($class);
+        $file = APP_DIR .DS ."shell" .DS . $class .".shell.php";
+        include_once $file ;
+    } elseif( strpos($class,S_CLASS) !== false){
 
         $l = strpos($class,S_CLASS);
         $class = substr($class, 0,$l);
