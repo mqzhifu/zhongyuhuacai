@@ -30,4 +30,10 @@ return array(
         'desc'=>'房租中介',
         'apiSecret'=>'e10adc3949ba59abbe56e057f20f883e',
     ),
+    'spider'=>array(
+        'id'=>5,
+        'status'=>'open',
+        'desc'=>'抓取机器人',
+        'apiSecret'=>'e10adc3949ba59abbe56e057f20f883e',
+    ),
 );
