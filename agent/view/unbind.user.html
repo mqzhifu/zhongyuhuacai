@@ -27,10 +27,11 @@
 
     function submitData(){
         $.ajax({
-            url:'/agent/apply/opt=1',
+            url:'/agent/unbindUser/opt=1',
             type:'POST',
             success:function(data){
-                //var backData = eval( data);
+                //var backData = data;
+                var backData = eval( "("+data+")");
                 // alert(backData.code);
                 if(backData.code != 200){
                     toastFail(backData.msg);
