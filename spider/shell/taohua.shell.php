@@ -1,7 +1,7 @@
 <?php
 class TaohuaShell{
-    function curlGetHtmlContent ($url,$host,$isSSl = 0){
-        return CurlLib::taohua($url,$host,$isSSl);
+    function curlGetHtmlContent ($url,$host,$isSSl = 0,$cookid = "",$isFd = 0){
+        return CurlLib::taohua($url,$host,$isSSl,$cookid,$isFd);
     }
 
     function parseTitleCategoryLink($content){
@@ -85,9 +85,9 @@ class TaohuaShell{
                 'view'=>$commentViews['view'],
                 'ori_time'=>$authorDate['date'],
                 'category'=>$titleCategoryLink['category'],
-//                'video_size'=>$videoSizeType['size'],
-//                'video_type'=>$videoSizeType['type'],
-//                'up'=>$authorUpTime['up'],
+                'video_size'=>'',
+                'video_type'=>'',
+                'up'=>0,
                 'a_time'=>time(),
                 "link"=>$titleCategoryLink['link'],
             );
@@ -95,4 +95,107 @@ class TaohuaShell{
         }
         return $list;
     }
+
+    function getDescValue($value){
+        //全角 冒号
+        $descWord = explode("：",$value);
+        if(count($descWord) == 2){
+            return $descWord[1];
+        }
+        $descWord = explode(":",$value);
+        if(count($descWord) == 2){
+            return $descWord[1];
+        }elseif(count($descWord) > 2){
+            $val = "";
+            foreach ($descWord as $k=>$v){
+                if(!$k)
+                    continue;
+                $val .= ":".$v;
+            }
+            return $val;
+        }
+        out(" getDescValue err: ".$value);
+        return "";
+    }
+
+    function parseDetail($content){
+
+        preg_match_all('/postmessage(.*)<\/table>/isU',$content,$match);
+        if(!isset($match[1][0]) || !$match[1][0]){
+            out(parseDetailErr("118"));
+            exit;
+        }
+
+        $isOldPage = 0;
+        if(strpos($match[1][0],'ignore_js_op') !== false){
+            preg_match_all('/【(.*)<ignore_js_op/isU',$match[1][0],$descTmp);
+        }else{
+            $isOldPage = 1;
+            $descTmp[1][0] = $match[1][0];
+        }
+
+//        var_dump($descTmp[1][0]);exit;
+//        if(!isset($descTmp[1][0]) || !$descTmp[1][0]){
+//            out(parseDetailErr("124"));
+//            return rt(500);
+//        }
+//        var_dump($descTmp[1][0]);
+        $descArr = explode("<br />",$descTmp[1][0]);
+//        var_dump($descArr);
+        $videoType = "";
+        $video_duration = "";
+        $videoSize = "";
+        $actor = "";
+        foreach ($descArr as $k=>$v){
+            $v = trim($v);
+            if(strpos($v,'格式') !== false){
+                $videoType =  $this->getDescValue($v);
+            }elseif(strpos($v,'大小') !== false){
+                $videoSize = $this->getDescValue($v);
+            }elseif(strpos($v,'時長') !== false){
+                $video_duration = $this->getDescValue($v);
+            }elseif(strpos($v,'演') !== false){
+                $actor = $this->getDescValue($v);
+            }
+        }
+
+        $data = array('video_duration'=>$video_duration,'video_type'=>$videoType,'video_size'=>$videoSize,'actor'=>$actor,);
+        if(!$isOldPage){
+            preg_match_all('/file="(.*)"/isU',$match[1][0],$imgs);
+        }else{
+            preg_match_all('/file="(.*)"/isU',$content,$imgs);
+        }
+
+
+        $imgsParse = "";
+        foreach ($imgs[1] as $k=>$v){
+            $imgsParse .= $v . ",";
+        }
+        $imgsParse = substr($imgsParse,0,strlen($imgsParse)-1);
+        $data['imgs'] = $imgsParse;
+        return rt(200,$data);
+    }
+
+    function getLinkUrl($host,$link){
+        $link = explode("-",$link);
+        $tid = $link[1];
+        $url = $host . "forum.php?mod=viewthread&tid=" .$tid;
+        return $url;
+    }
+
+    function getTid($link){
+        $link = explode("-",$link);
+        $tid = $link[1];
+        return $tid;
+    }
+}
+
+function rt($code,$data = []){
+    return $data = array(
+        'code'=>$code,'data'=>$data,
+    );
+}
+
+function parseDetailErr($msg){
+    return "parseDetail err: in line ".$msg;
 }

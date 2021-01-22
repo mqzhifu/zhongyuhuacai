@@ -51,6 +51,7 @@ class spiderWebsite{
             $this->out("parseOnePage return data cnt:".count($pageDataList));
             $totalDataRecords += count($pageDataList);
             foreach ($pageDataList as $k=>$data){
+                $data['status'] = 0;
                 $id =$forumConfig['db_model_class']::db()->add($data);
                 $this->out("k: ".$k ." , id: ".$id);
             }
@@ -82,7 +83,6 @@ class spiderWebsite{
         $fd = fopen($fileName,"w+");
         fwrite($fd,$content);
     }
-
 }
 
 function myPregMatchAll($eg,$str,$indexOne,$index2){

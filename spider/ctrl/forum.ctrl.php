@@ -4,6 +4,8 @@ class ForumCtrl extends BaseCtrl {
     function index($request){
         $host = $this->_config[$request['website']]['host'][0];
         $config = $this->_config[$request['website']]['forum'][$request['category']];
+
+        echo $this->_config[$request['website']]['name']."<br/>";
         echo $config['name']."<br/>";
 
         $keywordName = "无";
@@ -12,7 +14,7 @@ class ForumCtrl extends BaseCtrl {
         if(arrKeyIssetAndExist($request,'keyword')){
             $keyword = $request['keyword'];
             $keywordName = $keyword;
-            $where = " title like '%$keyword%' ";
+            $where = " title like '%$keyword%' or author like '%$keyword%' ";
         }
 
         echo "搜索关键字：".$keywordName ."<br/>";

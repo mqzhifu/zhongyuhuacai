@@ -97,48 +97,85 @@ class CurlLib{
     }
 
 
-    static function taohua($url,$REFERER , $ssl = null ){
-        $stime = time();
-        $curl = curl_init();
+    static $_taohua_curl_fd = null;
+    static function getTaohuaCurlFd(){
+        if (self::$_taohua_curl_fd){
+            out("curl fd has exist ...");
+            return self::$_taohua_curl_fd;
+        }
+        self::$_taohua_curl_fd = curl_init();
+        return self::$_taohua_curl_fd;
+    }
+    static function taohua($url,$REFERER , $ssl = null ,$cookie = 0,$useFd = 0){
+        $stime = microtime(true);
         out("curl sis001 url : $url stime:".date("Y-m-d H:i:s",$stime));
+
+        if($useFd){
+            $curl = self::getTaohuaCurlFd();
+        }else{
+            out(" new curl_init");
+            $curl = curl_init();
+//            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+//                'Connection: Keep-Alive',
+//                'Keep-Alive: 300',
+//            ));
+        }
+
         //设置URL
         curl_setopt($curl, CURLOPT_URL, $url);
-        $ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36";
+        $r1 = rand(1,10);
+        $r2 = rand(1,10);
+        $r3 = rand(1,10);
+//        $ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36";
+        $ua = randUa();
         curl_setopt($curl, CURLOPT_USERAGENT, $ua);
         curl_setopt($curl, CURLOPT_REFERER, $REFERER);
         //设置获取的信息以文件流的形式返回，而不是直接输出。
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        //response header
+        curl_setopt($curl, CURLOPT_HEADER, 1);
 
         if($ssl == 1){
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         }
 
-        //response header
-        curl_setopt($curl, CURLOPT_HEADER, 1);
+        if($useFd){
+            curl_setopt($curl, CURLOPT_FORBID_REUSE, false);
+        }
 
-//        echo $url."\n";
+//        out("set cookie:".$cookie);
+//        curl_setopt ($curl, CURLOPT_COOKIE , $cookie );
+//        WMwh_2132_viewid=tid_1310474; path=/
+
+        $rip1 = Rand_IP();
+        $rip2 = Rand_IP();
+        out("rip1 : $rip1 , rip2 : $rip2 ， REFERER : $REFERER");
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-FORWARDED-FOR:'.$rip1, 'CLIENT-IP:'.$rip2));
 
         $content = curl_exec($curl);
         if (curl_errno($curl)) {
             out("curl err : ".curl_errno($curl).":".curl_error($curl));
         }
-        curl_close($curl);
-
+        if(!$useFd){
+            curl_close($curl);
+            out("close : curl");
+        }
 
         $l = stripos($content,"\r\n\r\n");
         $body = substr($content,$l+ 4);
         $header = substr($content,0,$l);
         $header = self::parseSrtHeaderToArr($header);
+//        var_dump($header);
         $data = array(
             'error'=>"",
             'body'=>$body,
             "header"=>$header,
         );
 
-        $execTime = time() - $stime;
+        $execTime = microtime(true) - $stime;
+        echo number_format($execTime, 4, '.', '')." seconds \n";
 
-        out("curl sis001 exec time:".$execTime);
         return $data;
     }
 
@@ -220,3 +257,44 @@ class CurlLib{
     }
 }
 
+//随机IP
+function Rand_IP(){
+
+    $ip2id= round(rand(600000, 2550000) / 10000); //第一种方法，直接生成
+    $ip3id= round(rand(600000, 2550000) / 10000);
+    $ip4id= round(rand(600000, 2550000) / 10000);
+    //下面是第二种方法，在以下数据中随机抽取
+    $arr_1 = array("218","218","66","66","218","218","60","60","202","204","66","66","66","59","61","60","222","221","66","59","60","60","66","218","218","62","63","64","66","66","122","211");
+    $randarr= mt_rand(0,count($arr_1)-1);
+    $ip1id = $arr_1[$randarr];
+    return $ip1id.".".$ip2id.".".$ip3id.".".$ip4id;
+}
+
+function randUa(){
+    $arr = array(
+    "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
+    "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50",
+    "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Firefox/38.0",
+    "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; .NET4.0C; .NET4.0E; .NET CLR 2.0.50727; .NET CLR 3.0.30729; .NET CLR 3.5.30729; InfoPath.3; rv:11.0) like Gecko",
+    "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0",
+    "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)",
+    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
+    "Mozilla/5.0 (Windows NT 6.1; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
+    "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; en) Presto/2.8.131 Version/11.11",
+    "Opera/9.80 (Windows NT 6.1; U; en) Presto/2.8.131 Version/11.11",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Maxthon 2.0)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; TencentTraveler 4.0)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; The World)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; 360SE)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Trident/4.0; SE 2.X MetaSr 1.0; SE 2.X MetaSr 1.0; .NET CLR 2.0.50727; SE 2.X MetaSr 1.0)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Avant Browser)",
+    "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
+    );
+    $r = rand(0,count($arr ) - 1);
+    return $arr[$r];
+}
