@@ -1,6 +1,6 @@
 <?php
 $db_config =  array(
-    'instantplay'=>array(
+    'house'=>array(
         'master'=>array(
             'type'=>'mysql',
             'host'=>'127.0.0.1',
