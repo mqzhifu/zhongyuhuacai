@@ -2,7 +2,7 @@
 
 class ForumCtrl extends BaseCtrl {
     function index($request){
-        $host = $this->_config[$request['website']]['host'][0];
+        $host = $this->_config[$request['website']]['host'][1];
         $config = $this->_config[$request['website']]['forum'][$request['category']];
 
         echo $this->_config[$request['website']]['name']."<br/>";
@@ -34,7 +34,7 @@ class ForumCtrl extends BaseCtrl {
                 $html .= "<table>";
                 $html .=  "<tr><td>id</td><td>分类</td><td>标题</td><td>作者</td><td>评论</td><td>阅读数</td><td>添加时间</td><td>原始时间</td><td>视频大小</td><td>视频类型</td><td>点赞</td></tr>";
                 foreach ($data as $k=>$v){
-                    $url = "http://".$host . "/".$v['link'];
+                    $url = "https://".$host . "/".$v['link'];
                     $html .=  "<tr>";
                     $html .= "<td>{$v['id']}</td>";
                     $html .= "<td>{$v['category']}</td>";

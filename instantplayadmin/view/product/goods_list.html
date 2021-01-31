@@ -338,18 +338,30 @@
             if(result == true){
                 $.ajax({
                     type: 'GET',
-                    url: "/user/delOne/uid="+id ,
+                    url: "/product/no/goods/delOne/id="+id ,
                     dataType: 'json',
                     success: function(data){
-                        location.reload();
+                        if(data.code == 200){
+                            alert("成功");
+                            location.reload();
+                        }else{
+                            alert(data.msg);
+                        }
+                        // location.reload();
                     }
 
                 });
             }
         });
+    });
 
-
-
+    $("#datatable_products").on("click",".upprice",function(){
+        //alert($(this).attr("data-id"));
+        UTHING.ajax({
+            url:"/product/no/goods/upprice/",
+            data:{id:$(this).attr("data-id")},
+            title:"编辑商品价格"
+        });
     });
 
     $("#datatable_products").on("click",".qrcode",function(){

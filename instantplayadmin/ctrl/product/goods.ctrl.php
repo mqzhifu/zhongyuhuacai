@@ -16,7 +16,44 @@ class GoodsCtrl extends BaseCtrl{
         $url = "http://www.baidu.com";
         QRcode::png($url,false,"L",10);
     }
+    function upprice(){
+        $aid = _g("id");
+        $goods = GoodsModel::db()->getById($aid);
+        if(!$goods){
+            exit(" gid not in db.");
+        }
+        if(_g('opt')){
+            $original_price = _g("original_price");
+            if(!$original_price){
+                out_ajax(5001);
+            }
 
+            $sale_price = _g("sale_price");
+            if(!$sale_price){
+                out_ajax(5002);
+            }
+            $data = array('original_price'=>$original_price,'u_time'=>time(),'sale_price'=>$sale_price);
+            $rs = GoodsModel::db()->upById($aid,$data);
+            out_ajax(200,"ok-" .$rs);
+        }
+//        $statusDesc = AgentModel::STATUS;
+//        $statusDescRadioHtml = "";
+//        foreach ($statusDesc as $k=>$v) {
+//            $statusDescRadioHtml .= "<input name='status' type='radio' value={$k} />".$v;
+//        }
+
+        $data = array(
+            'original_price'=>$goods['original_price'],
+            'sale_price'=>$goods['sale_price'],
+            "id"=>$aid,
+        );
+//        $this->assign("agent",$agent);
+//        $this->assign("statusDescRadioHtml",$statusDescRadioHtml);
+
+        $html = $this->_st->compile("/product/goods_upprice.html",$data);
+        $html = file_get_contents($html);
+        echo_json($html);
+    }
     function add(){
         $pid = _g("pid");
         if(!$pid){
@@ -239,7 +276,10 @@ class GoodsCtrl extends BaseCtrl{
                     $v['haulage'],
                     $v['order_total'],
                     get_default_date($v['a_time']),
-                    "",
+                    '<button class="btn btn-xs default dark delone margin-bottom-5" data-id="'.$v['id'].'" ><i class="fa fa-scissors"></i>  删除</button>'.
+                    '<button class="btn btn-xs default red upprice margin-bottom-5"  data-id="'.$v['id'].'" ><i class="fa fa-female"></i> 改价</button>'
+
+                ,
 
                 );
 
@@ -332,5 +372,23 @@ class GoodsCtrl extends BaseCtrl{
         return $where;
     }
 
+
+    function delOne(){
+        $id = _g("id");
+        if(!$id){
+            out_ajax(4002);
+        }
+        $agent = GoodsModel::db()->getById($id);
+        if(!$agent){
+            out_ajax(4003);
+        }
+        $orderGoods = OrderGoodsModel::db()->getRow(" gid = $id");
+        if($orderGoods){
+            out_ajax(5000);
+        }
+        GoodsModel::db()->delById($id);
+        out_ajax(200);
+
+    }
 
 }
