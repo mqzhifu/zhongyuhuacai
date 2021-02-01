@@ -168,7 +168,7 @@ class OrderCtrl extends BaseCtrl{
                     $v['pids'],
 //                    ProductModel::db()->getOneFieldValueById($v['pid'],'title'),
                     $v['gids'],
-                    yuanToFen($v['total_price']),
+                    fenToYuan($v['total_price']),
                     $payType,
                     OrderModel::STATUS_DESC[$v['status']],
                     UserModel::db()->getOneFieldValueById($v['uid'],'nickname',"--"),
