@@ -43,8 +43,18 @@ class GoodsCtrl extends BaseCtrl{
                 out_ajax(5004);
             }
 
+            $stock = _g("stock");
+            if(!$stock){
+                out_ajax(5005);
+            }
 
-            $data = array('original_price'=>$original_price,'u_time'=>time(),'sale_price'=>$sale_price);
+            $stock = (int)$stock;
+            if(!$stock){
+                out_ajax(5006);
+            }
+
+
+            $data = array('original_price'=>$original_price,'u_time'=>time(),'sale_price'=>$sale_price,'stock'=>$stock);
             $rs = GoodsModel::db()->upById($aid,$data);
             out_ajax(200,"ok-" .$rs);
         }
@@ -57,6 +67,7 @@ class GoodsCtrl extends BaseCtrl{
         $data = array(
             'original_price'=>fenToYuan($goods['original_price']),
             'sale_price'=>fenToYuan($goods['sale_price']),
+            'stock'=>$goods['stock'],
             "id"=>$aid,
         );
 //        $this->assign("agent",$agent);
