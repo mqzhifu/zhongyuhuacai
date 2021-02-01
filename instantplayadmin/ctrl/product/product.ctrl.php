@@ -36,6 +36,9 @@ class ProductCtrl extends BaseCtrl{
 
         $factory = FactoryModel::db()->getById($product['factory_uid']);
 
+
+        $product['lowest_price'] = fenToYuan($product['lowest_price']);
+
         $product['factory'] = $factory['title'];
         if(arrKeyIssetAndExist($product,'pic')){
             $pics = explode(",",$product['pic']);
@@ -45,6 +48,12 @@ class ProductCtrl extends BaseCtrl{
         }
 
         $goodsList = GoodsModel::getListByPid($id);
+        if ($goodsList) {
+            foreach ($goodsList as $k=>$v){
+                $goodsList[$k]['sale_price'] = fenToYuan($v['sale_price']);
+                $goodsList[$k]['original_price'] = fenToYuan($v['original_price']);
+            }
+        }
         $product['goods_num'] = 0;
         if($goodsList){
             $product['goods_num'] = count($goodsList);
@@ -324,7 +333,7 @@ class ProductCtrl extends BaseCtrl{
                     $title,
 //                    $v['subtitle'],
                     $v['goods_total'],
-                    $v['lowest_price'],
+                    fenToYuan($v['lowest_price']),
                     $payTypeStr,
 //                    json_encode($attributeArr,JSON_UNESCAPED_UNICODE),
                     count($attributeArr),

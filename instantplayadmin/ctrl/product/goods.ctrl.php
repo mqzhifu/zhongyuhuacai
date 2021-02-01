@@ -32,6 +32,18 @@ class GoodsCtrl extends BaseCtrl{
             if(!$sale_price){
                 out_ajax(5002);
             }
+
+            $sale_price = yuanToFen($sale_price);
+            $original_price = yuanToFen($original_price);
+            if(!$sale_price){
+                out_ajax(5003);
+            }
+
+            if(!$original_price){
+                out_ajax(5004);
+            }
+
+
             $data = array('original_price'=>$original_price,'u_time'=>time(),'sale_price'=>$sale_price);
             $rs = GoodsModel::db()->upById($aid,$data);
             out_ajax(200,"ok-" .$rs);
@@ -43,8 +55,8 @@ class GoodsCtrl extends BaseCtrl{
 //        }
 
         $data = array(
-            'original_price'=>$goods['original_price'],
-            'sale_price'=>$goods['sale_price'],
+            'original_price'=>fenToYuan($goods['original_price']),
+            'sale_price'=>fenToYuan($goods['sale_price']),
             "id"=>$aid,
         );
 //        $this->assign("agent",$agent);
@@ -268,8 +280,8 @@ class GoodsCtrl extends BaseCtrl{
                     GoodsModel::STATUS[$v['status']],
                     $paraStr,
                     $v['stock'],
-                    $v['sale_price'],
-                    $v['original_price'],
+                    fenToYuan($v['sale_price']),
+                    fenToYuan($v['original_price']),
 //                    json_encode($payTypeArr,JSON_UNESCAPED_UNICODE),
                     AdminUserModel::db()->getOneFieldValueById($v['admin_id'],'uname'),
 //                    $v['is_search'],
