@@ -26,28 +26,41 @@ class spiderWebsite{
         if (!arrKeyIssetAndExist($this->config[$website]['forum'],$forum)){
             exit("forum not in arr");
         }
-
         $this->out("website : $website , forum : $forum");
 
         $config = $this->config[$website];
         $forumConfig = $config["forum"][$forum];
 
-        $host = "http://". $config['host'][0]. "/";
+        $host = "https://". $config['host'][0]. "/";
 
-        $hostForum = $host . "forum-".$forumConfig['link_id'];
+        if ($website == HEJIDI){
+            $hostForum = $host . "thread.php?fid-".$forumConfig['link_id'];
+//            thread.php?fid-13-page-2.html
+        }elseif ($website == "caoliu"){
+            $hostForum = $host . "thread0806.php?fid=".$forumConfig['link_id'] . "&";
+        }
+        else{
+            $hostForum = $host . "forum-".$forumConfig['link_id'];
+        }
+
         out($hostForum);
 
         $provider = new $config['provider_class']();
         $totalPages = $forumConfig['loop_end'] - $forumConfig['loop_start'];
         $totalDataRecords = 0;
         for($page = $forumConfig['loop_start'];$page <= $forumConfig['loop_end'];$page++){
-            $url = $hostForum . "-$page.html";
+//            https://hjd2048.com/2048/thread.php?fid-13-page-2.html
+            if ($website == "hejidi"){
+                $url = $hostForum . "-page-$page.html";
+            }else if ($website == "caoliu"){
+                $url = $hostForum . "page=$page";
+            } else{
+                $url = $hostForum . "-$page.html";
+            }
             $this->out("page: $page , url: $url");
             $httpContent = $provider->curlGetHtmlContent($url,$host,0);
-
 //            $this->testHtmlContentPutFile($httpContent['body'],$website,$forum,$page);
-
-            $pageDataList = $provider->parseOnePage($httpContent['body'],$forumConfig);
+            $pageDataList = $provider->parseOnePage($httpContent['body'],$forumConfig,$page);
             $this->out("parseOnePage return data cnt:".count($pageDataList));
             $totalDataRecords += count($pageDataList);
             foreach ($pageDataList as $k=>$data){
@@ -55,6 +68,9 @@ class spiderWebsite{
                 $id =$forumConfig['db_model_class']::db()->add($data);
                 $this->out("k: ".$k ." , id: ".$id);
             }
+//            if ($page > 5 ){
+//                exit(111);
+//            }
         }
 
         $e_time = time() - $s_time;

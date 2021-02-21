@@ -2,6 +2,62 @@
 $main = array(
     "common"=>
     array(
+        "kankan"=>array(
+                "name"=>"草榴",
+                "provider_class"=>"KankanShell",
+                "host"=>array(
+                    "www.kan224.com",
+                    "www.kan224.com",
+                ),
+                "forum"=>array(
+                    OUMEI=>array(
+                        "name"=>"欧美原创",
+                            "link_id"=> "54",
+                            "loop_start"=>1,
+                            "loop_end"=>466,
+                            "db_model_class"=>"KankanOumeiModel"
+                    ),
+
+                )
+        ),
+
+        "caoliu"=>array(
+                "name"=>"草榴",
+                "provider_class"=>"CaoliuShell",
+                "host"=>array(
+                    "t66y.com",
+                    "t66y.com",
+                ),
+                "forum"=>array(
+                    OUMEI=>array(
+                        "name"=>"欧美原创",
+                        "link_id"=> 4,
+                        "loop_start"=>101,
+                        "loop_end"=>1153,
+                        "db_model_class"=>"CaoliuOumeiModel"
+                    ),
+
+                )
+            ),
+
+        HEJIDI=>
+            array(
+                "name"=>"2048核基地",
+                "provider_class"=>"HejidiShell",
+                "host"=>array(
+                    "hjd2048.com/2048",
+                ),
+                "forum"=>array(
+                    OUMEI=>array(
+                        "name"=>"欧美原创",
+                        "link_id"=> "13",
+                        "loop_start"=>944,
+                        "loop_end"=>1255,
+                        "db_model_class"=>"HejidiOumeiModel"
+                    ),
+
+                )
+            ),
         TANG_98=>
             array(
                 "name"=>"98堂",
@@ -64,6 +120,8 @@ $main = array(
                 "provider_class"=>"TaohuaShell",
                 "host"=>array(
                     "taohuazu4.com",
+                    "taohuazu3.com",
+                    "taohuazu6.com",
                 ),
                 "forum"=>array(
                     OUMEI=>array(
@@ -86,7 +144,7 @@ $main = array(
     'mysql'=>array(
         "create database spider charset=utf8mb4;",
         "
-CREATE TABLE `sis001_japan_turn` (
+CREATE TABLE `kankan_oumei` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `category` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '分类',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '标题',
@@ -102,6 +160,7 @@ CREATE TABLE `sis001_japan_turn` (
   `vedio_ duration` varchar(50) DEFAULT NULL COMMENT '视频时长',
   `actor` varchar(255) DEFAULT NULL COMMENT '演员',
   `img` mediumtext COMMENT '图片地址',
+  `status` int DEFAULT NULL COMMENT '状态 ',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 "

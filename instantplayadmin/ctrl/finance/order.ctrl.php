@@ -258,6 +258,7 @@ class OrderCtrl extends BaseCtrl{
         $order['agent_two_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['agent_two_withdraw']];
         $order['factory_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['factory_withdraw']];
 
+
         $address = array("area"=>"","detail"=>"");
         if(arrKeyIssetAndExist($order,'address_id')){
             $addressService =  new UserAddressService();

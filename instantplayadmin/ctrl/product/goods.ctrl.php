@@ -57,6 +57,8 @@ class GoodsCtrl extends BaseCtrl{
             $data = array('original_price'=>$original_price,'u_time'=>time(),'sale_price'=>$sale_price,'stock'=>$stock);
             $rs = GoodsModel::db()->upById($aid,$data);
             out_ajax(200,"ok-" .$rs);
+
+
         }
 //        $statusDesc = AgentModel::STATUS;
 //        $statusDescRadioHtml = "";
@@ -97,6 +99,7 @@ class GoodsCtrl extends BaseCtrl{
             $data = array(
                 'pid'=>$pid,
                 'stock'=>_g('stock'),
+                'type'=>0,
                 'status'=>_g('status'),
                 'sale_price'=>_g('sale_price'),
                 'original_price'=>_g('original_price'),
@@ -140,7 +143,11 @@ class GoodsCtrl extends BaseCtrl{
                 if(!is_numeric($data['haulage'])){
                     $this->notice("运费价格只能是 整数+小数");
                 }
+            }else{
+                $data['haulage'] = 0;
             }
+
+
 
 
 

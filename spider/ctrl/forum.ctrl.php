@@ -2,7 +2,12 @@
 
 class ForumCtrl extends BaseCtrl {
     function index($request){
-        $host = $this->_config[$request['website']]['host'][1];
+        if($request['website']  == 'taohua' || $request['website']  == 'hejidi'){
+            $host = $this->_config[$request['website']]['host'][0];
+        }else{
+            $host = $this->_config[$request['website']]['host'][1];
+        }
+
         $config = $this->_config[$request['website']]['forum'][$request['category']];
 
         echo $this->_config[$request['website']]['name']."<br/>";

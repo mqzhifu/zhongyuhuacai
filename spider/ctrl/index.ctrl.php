@@ -1,6 +1,7 @@
 <?php
 class IndexCtrl extends BaseCtrl  {
     function index(){
+        echo "https://www.c000.me/forum.php?mod=forumdisplay&fid=167<br/>";
         $html = "<table>";
         foreach ($this->_config as $k=>$v){
             $html .= "<tr><td>$k</td></tr>";

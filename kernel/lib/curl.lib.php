@@ -96,6 +96,96 @@ class CurlLib{
         return $data;
     }
 
+    static function hejidi($url,$REFERER , $ssl = null ){
+        $stime = time();
+        $curl = curl_init();
+        out("curl sis001 url : $url stime:".date("Y-m-d H:i:s",$stime));
+        //设置URL
+        curl_setopt($curl, CURLOPT_URL, $url);
+        $ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36";
+        curl_setopt($curl, CURLOPT_USERAGENT, $ua);
+        curl_setopt($curl, CURLOPT_REFERER, $REFERER);
+        //设置获取的信息以文件流的形式返回，而不是直接输出。
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+        if($ssl == 1){
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+
+        //response header
+        curl_setopt($curl, CURLOPT_HEADER, 1);
+
+//        echo $url."\n";
+
+        $content = curl_exec($curl);
+        if (curl_errno($curl)) {
+            out("curl err : ".curl_errno($curl).":".curl_error($curl));
+        }
+        curl_close($curl);
+
+
+        $l = stripos($content,"\r\n\r\n");
+        $body = substr($content,$l+ 4);
+        $header = substr($content,0,$l);
+        $header = self::parseSrtHeaderToArr($header);
+        $data = array(
+            'error'=>"",
+            'body'=>$body,
+            "header"=>$header,
+        );
+
+        $execTime = time() - $stime;
+
+        out("curl sis001 exec time:".$execTime);
+        return $data;
+    }
+
+    static function kankan($url,$REFERER , $ssl = null ){
+        $stime = time();
+        $curl = curl_init();
+        out("curl sis001 url : $url stime:".date("Y-m-d H:i:s",$stime));
+        //设置URL
+        curl_setopt($curl, CURLOPT_URL, $url);
+        $ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36";
+        curl_setopt($curl, CURLOPT_USERAGENT, $ua);
+        curl_setopt($curl, CURLOPT_REFERER, $REFERER);
+        //设置获取的信息以文件流的形式返回，而不是直接输出。
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+        if($ssl == 1){
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        }
+
+        //response header
+        curl_setopt($curl, CURLOPT_HEADER, 1);
+
+//        echo $url."\n";
+
+        $content = curl_exec($curl);
+        if (curl_errno($curl)) {
+            out("curl err : ".curl_errno($curl).":".curl_error($curl));
+        }
+        curl_close($curl);
+
+
+        $l = stripos($content,"\r\n\r\n");
+        $body = substr($content,$l+ 4);
+        $header = substr($content,0,$l);
+        $header = self::parseSrtHeaderToArr($header);
+        $data = array(
+            'error'=>"",
+            'body'=>$body,
+            "header"=>$header,
+        );
+
+        $execTime = time() - $stime;
+
+        out("curl sis001 exec time:".$execTime);
+        return $data;
+    }
+
 
     static $_taohua_curl_fd = null;
     static function getTaohuaCurlFd(){
