@@ -16,7 +16,7 @@ class HouseCtrl extends BaseCtrl{
 
         $this->display("/house/house_list.html");
     }
-
+    //详情里，获取一个订单list
     function getOrderListByHouseId($hid){
         $orderList = OrderModel::db()->getAll(" house_id = $hid");
         if (!$orderList)
@@ -41,7 +41,7 @@ class HouseCtrl extends BaseCtrl{
         }
         return $orderList;
     }
-
+    //房源详情
     function detail(){
         $id = _g("id");
         if(!$id){
@@ -90,7 +90,7 @@ class HouseCtrl extends BaseCtrl{
 
         $this->display("/house/house_detail.html");
     }
-
+    //添加一条房源
     function add(){
         if(_g('opt')){
 
@@ -110,19 +110,11 @@ class HouseCtrl extends BaseCtrl{
             $data['build_fitment'] = _g("build_fitment",0);
             $data['a_time'] = time();
             $data['admin_id']  = $this->_adminid;
-//            $data['master_id'] = _g('master_id');
-//            $data['uid']= _g("uid");
 //            $data['province_code'] = _g("province");
 //            $data['city_code'] = _g("city");
 //            $data['county_code'] = _g("county");
 //            $data['town_code'] = _g("town");
 
-//            if(ProductModel::db()->getOneByOneField("title",_g('title'))){
-//                $this->notice("标题重复:"._g('title'));
-//            }
-//            if(!$data['uid']){
-//                $this->notice("uid is null ");
-//            }
 //            if(!$data['province_code']){
 //                $this->notice("province_code is null ");
 //            }
@@ -140,11 +132,6 @@ class HouseCtrl extends BaseCtrl{
 //            }
 //            if(!$data['master_id']){
 //                $this->notice("master_id 为空 ");
-//            }
-//            $this->checkRequestDataInt($data['master_id'],"master_id 只允许为正整数 ");
-//            $master = MasterModel::db()->getById($data['master_id']);
-//            if(!$master){
-//                $this->notice("master_id 错误，不在DB中 ");
 //            }
 
             if(!$data['saler_id']){
@@ -265,59 +252,6 @@ class HouseCtrl extends BaseCtrl{
         }
     }
 
-    function getProductCategoryRelation(){
-        if(!arrKeyIssetAndExist($this->_request,'categoryId')){
-            echo false;
-            exit;
-        }
-        $list = CategoryModel::getProductRelationByCid($this->_request['categoryId']);
-        $paraMax = 0;
-        foreach ($list as $k=>$v) {
-            if(arrKeyIssetAndExist($v,'para')){
-                if(count($v['para']) > $paraMax){
-                    $paraMax = count($v['para']);
-                }
-            }
-        }
-
-        $arr = array('list'=>$list,'paraMax'=>$paraMax);
-        echo json_encode($arr);
-        exit;
-    }
-
-    function makeQrcode(){
-//        $id = _g("id");
-//        if(!$id){
-//            $this->notice("id is null");
-//        }
-//
-//        $product = ProductModel::db()->getById($id);
-//        if(!$product){
-//            $this->notice("id not in db");
-//        }
-//
-//        $tmpPath = "$id.jpg";
-//        $path = get_wx_little_product_path($tmpPath);
-//        if(file_exists($path)){
-//            $url = get_wx_product_qr_code_url($tmpPath);
-//            var_dump($url);exit;
-//        }
-//
-//        $lib = new WxLittleLib();
-//        $binaryImg = $lib->getProductQrCode($id);
-//        var_dump($binaryImg);
-//        if(!$binaryImg){
-//            out_ajax(8367);
-//        }
-//
-//        $imService = new UploadService();
-//        $imService->saveProductQrCode($binaryImg,$id);
-//
-//        $url = get_wx_product_qr_code_url($tmpPath);
-//        out_ajax(200,$url);
-
-    }
-
     function getList(){
         //初始化返回数据格式
         $records = array('data'=>[],'draw'=>$_REQUEST['draw']);
@@ -371,41 +305,11 @@ class HouseCtrl extends BaseCtrl{
             $data = HouseModel::db()->getAll($where . $order . $limit);
 
             foreach($data as $k=>$v){
-//                $statusBnt = "上架";
-//                $type = 2;
-//                $statusCssColor = "green";
-//                if($v['status'] == HouseModel::STATUS_ON){
-//                    $statusBnt = "下架";
-//                    $type = 1;
-//                    $statusCssColor = 'red';
-//                }
-
-
                 $pic = "";
                 if(arrKeyIssetAndExist($v,'pic')){
                     $pics = explode(",",$v['pic']);
                     $pic = get_house_url($pics[0]);
                 }
-
-//                $sort = array(
-//                    'id',
-//                    'id',
-//                    'master_id',
-//                    'uid',
-//                    'status',
-//                    'pics',
-//                    'province_code',
-//                    'city_code',
-//                    'county_code',
-//                    'town_code',
-//                    'community',
-//                    'build_floor',
-//                    'build_direction',
-//                    'build_area',
-//                    'build_room_num',
-//                    'build_fitment',
-//                    'add_time',
-//                );
 
                 $adminUserName = AdminUserModel::getFieldById( $v['admin_id'],'nickname');
                 $masterName = MasterModel::getFieldById( $v['master_id'],'name');
@@ -505,45 +409,6 @@ class HouseCtrl extends BaseCtrl{
 
             HouseModel::upStatus($id,$status);
         }
-    }
-
-    function recommendOne(){
-        $id = _g("id");
-        $product = ProductModel::db()->getById($id);
-        if(!$product){
-            return false;
-        }
-
-        if($product['recommend'] == ProductModel::RECOMMEND_TRUE){
-            ProductModel::db()->upById($id,array('recommend'=>ProductModel::RECOMMEND_FALSE));
-        }else{
-            ProductModel::db()->upById($id,array('recommend'=>ProductModel::RECOMMEND_TRUE));
-        }
-    }
-
-    function recommendDetailOne(){
-        $id = _g("id");
-        $product = ProductModel::db()->getById($id);
-        if(!$product){
-            return false;
-        }
-
-        if($product['recommend'] == ProductModel::RECOMMEND_DETAIL_TRUE){
-            ProductModel::db()->upById($id,array('recommend_detail'=>ProductModel::RECOMMEND_FALSE));
-        }else{
-            ProductModel::db()->upById($id,array('recommend_detail'=>ProductModel::RECOMMEND_TRUE));
-        }
-    }
-
-
-
-
-    function delOne(){
-        $id = _g("id");
-
-        ProductModel::db()->delById($id);
-        GoodsModel::db()->delete(" pid = $id limit 1000");
-        OrderModel::db()->delete("goods_id = $id");
     }
 
     function getDataListTableWhere(){

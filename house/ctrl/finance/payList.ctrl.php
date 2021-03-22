@@ -22,35 +22,9 @@ class PayListCtrl extends BaseCtrl{
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->display("/finance/order_list.html");
+        $this->display("/finance/pay_list.html");
     }
 
-//    function add(){
-//        if(_g("opt")){
-//
-//            $gidsNums =_g("gidsNums");
-////            $couponId = _g("couponId");
-//            $memo = _g("memo");
-//            $uid = _g("uid");
-//            $share_uid = _g("share_uid");
-//            $userSelAddressId = _g("userSelAddressId");
-//
-//
-//            $rs = $this->orderService->doing($uid,$gidsNums,0 , $memo,$share_uid , $userSelAddressId);
-//            if($rs['code'] == 200){
-//                $this->ok("成功");
-//            }else{
-//                $this->notice($rs['code'] . "-".$rs['msg']);
-//            }
-//
-//        }
-//
-//        $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
-//        $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
-//
-//        $this->addHookJS("/finance/order_add_hook.html");
-//        $this->display("/finance/order_add.html");
-//    }
     function payListRecord(){
         $id = _g("id");
         if(!$id){
@@ -92,28 +66,9 @@ class PayListCtrl extends BaseCtrl{
         if(!$OrderPay){
             exit("id 不在 db中");
         }
-//        $order = OrderModel::db()->getById($record['oid']);
-//        if(!$order){
-//            exit("pay_list oid not in db");
-//        }
         if(_g('opt')){
-
-//            $no = _g("pay_third_no");
-//            $payType = _g("pay_type");
-//            $real_price = _g("real_price");
             $price = _g("price");
             $memo = _g("memo");
-//            if(!$no){
-//                out_ajax(600,"三方流水号为空");
-//            }
-//
-//            if(!$payType){
-//                out_ajax(601,"支付类型为空");
-//            }
-//
-//            if(!$real_price){
-//                out_ajax(601,"实际收支为空");
-//            }
 
             if(!$price){
                 out_ajax(601,"金额不能为空");
@@ -136,11 +91,6 @@ class PayListCtrl extends BaseCtrl{
 
             );
             OrderPayListRecordModel::db()->add($data);
-//            $upRs = OrderPayListModel::db()->upById($id,$data);
-//            $list = OrderPayListModel::db()->getRow("oid = {$record['oid']} and status = ".OrderPayListModel::STATUS_OK);
-//            if(!$list){//证明所有的支付记录均已完成，可以更新<上级>状态了
-//                OrderModel::upStatus($real_price['oid'],OrderModel::STATUS_FINISH);
-//            }
             out_ajax(200);
         }
 
@@ -168,10 +118,6 @@ class PayListCtrl extends BaseCtrl{
         if(!$record){
             exit("id 不在 db中");
         }
-//        $order = OrderModel::db()->getById($record['oid']);
-//        if(!$order){
-//            exit("pay_list oid not in db");
-//        }
         if(_g('opt')){
 
 //            $no = _g("pay_third_no");
@@ -341,137 +287,6 @@ class PayListCtrl extends BaseCtrl{
         exit;
     }
 
-
-    function edit(){
-        $id = _g("id");
-        if(!$id){
-            $this->notice("id is null");
-        }
-
-        $order = OrderModel::db()->getById($id);
-
-
-        if(_g("opt")){
-            $data = array(
-                'express_no'=>_g("express_no"),
-            );
-
-            OrderModel::db()->upById($id,$data);
-            $this->ok("成功");
-        }
-
-
-        $this->assign("order",$order);
-
-        $this->addHookJS("/finance/order_edit_hook.html");
-        $this->display("/finance/order_edit.html");
-
-
-    }
-
-    function detail(){
-        $id = _g("id");
-        if(!$id){
-            $this->notice("id is null");
-        }
-
-        $order = OrderModel::db()->getById($id);
-        if(!$order){
-            $this->notice("id  not in db");
-        }
-        $orderService =  new OrderService();
-        //产品/商品列表
-        $order['goods_list'] = $orderService->getOneDetail($id)['msg'];
-        //添加时间
-        $order['dt'] = get_default_date($order['a_time']);
-        //支付时间
-        $order['pay_time_dt'] = get_default_date($order['pay_time']);
-        $order['u_time_dt'] = get_default_date($order['u_time']);
-        //签收时间
-        $order['signin_time_dt'] = get_default_date($order['signin_time']);
-        //发货时间
-        $order['expire_time_dt'] = get_default_date($order['expire_time']);
-        $order['status_desc'] = OrderModel::STATUS_DESC[$order['status']];
-        //订单包括总商品数
-        $order['goods_total_num'] = count(explode(",",$order['gids']));
-
-
-        $order['agent_one_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['agent_one_withdraw']];
-        $order['agent_two_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['agent_two_withdraw']];
-        $order['factory_withdraw_desc'] = WithdrawMoneyService::WITHDRAW_ORDER_STATUS_DESC[$order['factory_withdraw']];
-
-        $address = array("area"=>"","detail"=>"");
-        if(arrKeyIssetAndExist($order,'address_id')){
-            $addressService =  new UserAddressService();
-            $addressRow = $addressService->getById($order['address_id']);
-            if($addressRow['code'] != 200){
-                $this->notice($addressRow['msg']);
-            }
-            $addressRow = $addressRow['msg'];
-            $address['area'] = $addressRow['province_cn'] . "-" .   $addressRow['city_cn'] . "-" .  $addressRow['county_cn']  . "-" .  $addressRow['town_cn'];
-            $address['detail'] = $addressRow['address'];
-        }
-
-        $agent = null;
-        $agentFather = null;
-        $shareUser = null;
-
-        if(arrKeyIssetAndExist($order,'share_uid')){
-            $shareUser = UserModel::db()->getById($order['share_uid']);
-        }
-
-        if(arrKeyIssetAndExist($order,'agent_id')){
-            $agent = AgentModel::db()->getById($order['agent_id']);
-            if($agent['type'] == AgentModel::ROLE_LEVEL_TWO){
-                $agentFather = AgentModel::db()->getById($agent['invite_agent_uid']);
-            }
-        }
-
-        $this->assign("address",$address);
-
-        $this->assign("shareUser",$shareUser);
-        $this->assign("agentFather",$agentFather);
-        $this->assign("agent",$agent);
-        $this->assign("orderDetail",$order);
-
-        $this->display("/finance/order_detail.html");
-
-
-//        $category = ProductCategoryModel::db()->getById($product['category_id']);
-//        $product['category_name'] = $category['name'];
-//
-//        $admin = AdminUserModel::db()->getById($product['admin_id']);
-//        $product['admin_name'] = $admin['uname'];
-//
-//        $product['status_desc'] = ProductModel::STATUS[$product['status']];
-//
-//        $product['desc_attr_arr'] = "";
-//        if(arrKeyIssetAndExist($product,'desc_attr')){
-//            $product['desc_attr_arr'] = json_decode($product['desc_attr'],true);
-//        }
-//
-//        $factory = FactoryModel::db()->getById($product['factory_uid']);
-//
-//        $product['factory'] = $factory['title'];
-//        if(arrKeyIssetAndExist($product,'pic')){
-//            $pics = explode(",",$product['pic']);
-//            foreach ($pics as $k=>$v) {
-//                $product['pics'][] = get_product_url($v);
-//            }
-//        }
-//
-//        $goodsList = GoodsModel::getListByPid($id);
-//        $product['goods_num'] = 0;
-//        if($goodsList){
-//            $product['goods_num'] = count($goodsList);
-//        }
-//
-//        $attributeArr = ProductModel::attrParaParserToName($product['attribute']);
-
-//        $this->assign("goodsList",$goodsList);
-//        $this->assign("product",$product);
-
-    }
 
     function getDataListTableWhere(){
         $where = 1;

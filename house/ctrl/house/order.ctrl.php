@@ -241,19 +241,10 @@ class OrderCtrl extends BaseCtrl{
         //如果房主 用户 订单都完结，证明该房屋状态 要变更为：可出租状态
         if ($order['category'] == OrderModel::CATE_USER) {
             $rs = HouseModel::upStatus($order['house_id'], HouseModel::STATUS_WAIT);
-//            $hasCreatePayList = OrderModel::db()->getRow(" house_id = {$order['house_id']} and category =  " . OrderModel::CATE_MASTER . " and status = " . OrderModel::STATUS_OK);
         } else {
             //如果是房主：结算订单，即：该房源上的用户订单肯定已结束完成了~那：状态改为  等待招租
             $rs = HouseModel::upStatus($order['house_id'], HouseModel::STATUS_INIT);
-//            $hasCreatePayList = OrderModel::db()->getRow(" house_id = {$order['house_id']} and category =  " . OrderModel::CATE_USER . " and status = " . OrderModel::STATUS_OK);
         }
-//            var_dump($hasCreatePayList);
-//            exit();
-        //证明两端都生成了付款记录，也就是都开始履行合同了。所以，要把房源状态变更为已使用状态
-//        if ($hasCreatePayList) {
-//            $rs = HouseModel::upStatus($order['house_id'], HouseModel::STATUS_USED);
-//                var_dump($rs);exit;
-//        }
     }
 
     function createPayRecord(){
@@ -269,49 +260,23 @@ class OrderCtrl extends BaseCtrl{
 
         $calcData = $this->calcAll($order);
         $payList = $this->getCreatePayList($order,$calcData);
-//        if (_g("opt")) {
-            foreach ($payList as $k => $v) {
-//                var_dump($k);
-                unset($v['id']);
-                unset($v['start_time_dt']);
-                unset($v['end_time_dt']);
-                unset($v['warn_trigger_time_dt']);
-                unset($v['distance_day']);
-                unset($v['status_desc']);
-                unset($v['category_desc']);
-                unset($v['advance_time_dt']);
-                unset($v['type_desc']);
-                unset($v['category_desc']);
+        foreach ($payList as $k => $v) {
+            unset($v['id']);
+            unset($v['start_time_dt']);
+            unset($v['end_time_dt']);
+            unset($v['warn_trigger_time_dt']);
+            unset($v['distance_day']);
+            unset($v['status_desc']);
+            unset($v['category_desc']);
+            unset($v['advance_time_dt']);
+            unset($v['type_desc']);
+            unset($v['category_desc']);
 
-                OrderPayListModel::db()->add($v);
-            }
+            OrderPayListModel::db()->add($v);
+        }
 
-            $rs = OrderModel::upStatus($oid, OrderModel::STATUS_OK);
-            //判断下，是否需要变更 house 状态
-            //这里因为，已经确定可以 生成 一方的付款记录，只需要判断另一方有没有生成付款记录-即可
-//            if ($order['category'] == OrderModel::CATE_USER) {
-//                $hasCreatePayList = OrderModel::db()->getRow(" house_id = {$order['house_id']} and category =  " . OrderModel::CATE_MASTER . " and status = " . OrderModel::STATUS_OK);
-//            } else {
-//                $hasCreatePayList = OrderModel::db()->getRow(" house_id = {$order['house_id']} and category =  " . OrderModel::CATE_USER . " and status = " . OrderModel::STATUS_OK);
-//            }
-//            var_dump($hasCreatePayList);
-//            exit();
-            //证明两端都生成了付款记录，也就是都开始履行合同了。所以，要把房源状态变更为已使用状态
-//            if ($hasCreatePayList) {
-//                $rs = HouseModel::upStatus($order['house_id'], HouseModel::STATUS_USED);
-//                var_dump($rs);exit;
-//            }
-//            var_dump($hasCreatePayList);exit;
-
-            $this->ok("生成记录成功!");
-//        }
-//        $this->assign("finalPrice",$calcData['finalPrice']);
-//        $this->assign("totalPrice",$totalPrice);
-//        $this->assign("typeDesc",$typeDesc);
-//        $this->assign("distance",$calcData['distanceSecond']);
-//        $this->assign("days",$calcData['distanceDays']);
-//        $this->assign("everyDayPrice",$everyDayPrice);
-//        $this->assign("mod","");
+        $rs = OrderModel::upStatus($oid, OrderModel::STATUS_OK);
+        $this->ok("生成记录成功!");
     }
     //一个订单，生成-付款记录
 //    function createPayRecord(){
@@ -360,18 +325,6 @@ class OrderCtrl extends BaseCtrl{
                 $row['e_time'] = $v['end_time'];
                 $row['distance'] = $v['end_time'] - $v['start_time'];
                 $payListPre[] = $row;
-//                $payList[$k]['distance'] = $v['end_time'] - $v['start_time'];
-//                $payList[$k]['distance_day'] = ($v['end_time'] - $v['start_time'] + 1) / getOneDayTurnSecond();
-//                $payList[$k]['type_desc'] = OrderModel::FINANCE_DESC[$v['type']];
-//
-//                $payList[$k]['start_time_dt'] =get_default_date($v['start_time']);
-//                $payList[$k]['end_time_dt'] = get_default_date($v['end_time']);
-//                $payList[$k]['warn_trigger_time_dt'] = get_default_date($v['warn_trigger_time']);
-//                $payList[$k]['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
-//                $payList[$k]['advance_time_dt'] =get_default_date($v['advance_time']);
-//                $payList[$k]['memo'] = $v['memo'];
-//                $payList[$k]['price_desc'] = $v['price_desc'];
-//                $payList[$k]['final_price'] = $v['final_price'];
             }
 
             $payList = $this->makePayListData($payListPre,$order);
@@ -390,7 +343,7 @@ class OrderCtrl extends BaseCtrl{
         $this->assign("payList",$payList);
         $this->assign("user",$user);
 
-        $this->display("/house/create_pay_record.html");
+        $this->display("/house/order_detail.html");
     }
 
     function makePayListData($calcPayList,$order){
@@ -796,115 +749,6 @@ class OrderCtrl extends BaseCtrl{
         $this->display("/house/order_add.html");
     }
 
-//    /*
-//        房主
-//        内置：每月金额 X 月数-首次空置金额=合同总金额
-//        用户
-//        水 + 电 + 垃圾 + 维修 + 押金 = 合同总金额
-//    */
-//    function calcOneOrderTotalPrice($data){
-//        if($data['category'] == OrderModel::CATE_USER){
-//            $data['water_price'] + $data['elec_price'] +$data['garbage_price'] +$data['repair_fund_price'] +$data['deposit_price']
-//        }else{
-//
-//        }
-//    }
-//
-//
-//    function finish(){
-//        $id = _g("id");
-//        if(!$id){
-//            $this->notice("d 为空");
-//        }
-//        $order = OrderModel::getById($id);
-//        if(!$order){
-//            $this->notice("id 不在DB中");
-//        }
-//
-//        if($order['status'] == OrderModel::STATUS_FINISH){
-//            $this->notice("该订单已结束");
-//        }
-//
-//        $payList = OrderPayListModel::db()->getAll("oid = {$id}");
-//        if(!$payList){
-//            $this->notice("pay list is null");
-//        }
-//
-//        foreach ($payList as $k=>$v){
-//            $payList[$k]['s_time'] = $v['start_time'];
-//            $payList[$k]['e_time'] = $v['end_time'];
-//            $payList[$k]['distance'] = $v['end_time'] - $v['start_time'];
-//            $payList[$k]['distance_day'] = ($v['end_time'] - $v['start_time'] + 1) / getOneDayTurnSecond();
-//            $payList[$k]['type_desc'] = OrderModel::FINANCE_DESC[$v['type']];
-//
-//            $payList[$k]['start_time_dt'] =get_default_date($v['start_time']);
-//            $payList[$k]['end_time_dt'] = get_default_date($v['end_time']);
-//            $payList[$k]['warn_trigger_time_dt'] = get_default_date($v['warn_trigger_time']);
-//            $payList[$k]['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
-//            $payList[$k]['advance_time_dt'] =get_default_date($v['advance_time']);
-//            $payList[$k]['memo'] = $v['memo'];
-//            $payList[$k]['price_desc'] = $v['price_desc'];
-//            $payList[$k]['final_price'] = $v['final_price'];
-//        }
-////        $payList = $this->makePayListData($payList,$order);
-//
-//        $house = HouseModel::db()->getById($order['house_id']);
-//        $master = MasterModel::db()->getById($house['master_id']);
-//
-//        $this->assign("house",$house);
-//        $this->assign("master",$master);
-//
-////        if($order['category'] == OrderModel::CATE_MASTER){
-////            $type = OrderModel::FINANCE_EXPENSE;
-////            $typeDesc = "付";
-////            $person = "我方";
-////        }else{
-////            $type = OrderModel::FINANCE_INCOME;
-////            $typeDesc = "收";
-////            $person = "对方";
-////        }
-////        $this->assign("person",$person);
-//
-//        //检查 - 合同 开始时间  与  结束时间   是否正确
-//        $this->checkContractTimePeriodPay($order['contract_start_time'] , $order['contract_end_time'],$order['pay_mode']);
-//        $calcData = $this->calcAll($order);
-//        //房租金额 = 合同金额 - 押金
-////        $finalPrice = $order['price'];
-////        if($order['category'] == OrderModel::CATE_USER){
-////            $finalPrice = $finalPrice - $order['deposit_price'];
-////        }
-//        //每天的金额
-////        $everyDayPrice = $finalPrice / $days;
-//
-//
-////        $this->assign("typeDesc",$typeDesc);
-////        $this->assign("distance",$calcData['distance']);
-////        $this->assign("days",$calcData['days']);
-////        $this->assign("num",count($payList));
-////        $this->assign("mod","");
-////        $this->assign("finalPrice",$calcData['finalPrice']);
-////        $this->assign("everyDayPrice",$calcData['everyDayPrice']);
-////
-////        $this->assign("payList",$payList);
-////        $this->assign("order",$order);
-////
-////        $this->assign("order",$info);
-//
-//        $this->assign("order",$order);
-//        $this->assign("house",$house);
-//        $this->assign("master",$master);
-//
-//        $this->assign("calcData",$calcData );
-//        $this->assign("num",count($payList));
-//
-//
-//        $this->assign("payList",$payList);
-//        $this->assign("user",$user);
-//
-//        $this->display("/house/order_finish.html");
-//
-//    }
-    //检查 合同的 时间周期  与付款方式
     function checkContractTimePeriodPay($s_time,$e_time,$payType){
         $distance = $e_time - $s_time + 1;//最后一天是 23:59:59，有1秒误差
         if($payType == OrderModel::PAY_TYPE_YEAR){

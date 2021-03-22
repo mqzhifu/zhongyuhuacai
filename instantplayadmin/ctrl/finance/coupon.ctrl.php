@@ -8,7 +8,7 @@
 //        $this->assign("statusOptions", CouponModel::getStatusOptions());
 //        $this->assign("payTypeOptions", CouponModel::getPayTypeOptions());
 //
-//        $this->display("/finance/order_list.html");
+//        $this->display("/finance/pay_list.html");
 //    }
 //
 //
