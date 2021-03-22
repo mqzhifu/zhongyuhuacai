@@ -46,7 +46,7 @@
                                 <div class="portlet">
                                     <div class="portlet-title">
                                         <div class="caption">
-                                            <i class="fa fa-shopping-cart"></i>生成收付款记录 预览
+                                            <i class="fa fa-shopping-cart"></i>订单详情-预览
                                             <!--<span class="hidden-480">| Dec 27, 2013 7:16:25 </span>-->
                                         </div>
                                         <div class="actions">
@@ -56,18 +56,18 @@
 <!--								Back </span>-->
 <!--                                            </a>-->
                                             <div class="btn-group">
-                                                {if ($action == )}
+                                                {if ($action == 'createPayRecord')}
 <!--                                                <a href="/house/no/order/createPayRecord/opt=1&oid={$order['id']}" class="btn default yellow-stripe">-->
 <!--                                                    确认生成-->
 <!--                                                </a>-->
-                                                    <a href="/house/no/order/detail/opt=1&action=createPayRecord&oid={$order['id']}" class="btn default yellow-stripe">
+                                                    <a href="/house/no/order/createPayRecord/opt=1&action=createPayRecord&oid={$order['id']}" class="btn default yellow-stripe">
                                                         确认生成
                                                     </a>
                                                 {else}
-                                                    <a href="/house/no/order/finish/opt=1&oid={$order['id']}" class="btn default yellow-stripe">
+                                                    <a href="/house/no/order/finish/force=1&oid={$order['id']}" class="btn default yellow-stripe">
                                                         确认结算
                                                     </a>
-                                                    <a href="/house/no/order/forceFinish/opt=1&oid={$order['id']}" class="btn default yellow-stripe">
+                                                    <a href="/house/no/order/finish/force=1&oid={$order['id']}" class="btn default yellow-stripe">
                                                         强制结算
                                                     </a>
                                                 {/if}
@@ -184,6 +184,19 @@
                                                                         </div>
                                                                         <div class="col-md-7 value">
                                                                             {$order['admin_name']}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            附件:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {if ($order['contract_attachment_link'])}
+                                                                                <a href='$url' target='_blank'><i class="fa fa-file-text"></i></a>
+                                                                            {else}
+                                                                            无
+                                                                            {/if}
                                                                         </div>
                                                                     </div>
 

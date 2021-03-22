@@ -988,7 +988,7 @@ class OrderCtrl extends BaseCtrl{
 
             foreach($data as $k=>$v){
                 $adminUserName = AdminUserModel::getFieldById( $v['admin_id'],'nickname');
-
+                //附件
                 $contract_attachment = "";
                 if($v['contract_attachment']){
                     $url = get_contract_url($v['contract_attachment']);
@@ -1021,6 +1021,19 @@ class OrderCtrl extends BaseCtrl{
                     $finishTypeDesc = OrderModel::FINISH_DESC[$v['finish_type']];
                 }
 
+                $userName = "无";
+                if($v['uid']){
+                    $user = UserModel::db()->getById($v['uid']);
+                    if($user){
+                        $userName = $user['name']."-".$v['uid'];
+                    }
+                }
+
+                if($v['category'] == OrderModel::CATE_MASTER){
+                    $otherPrice = "首月空置:".$v['vacancy_price'];
+                }else{
+                    $otherPrice = "水费:".$v['water_price']."<br/>"."电费:".$v['elec_price']."<br/>"."垃圾费:".$v['garbage_price']."<br/>"."维修基金:".$v['repair_fund_price']."<br/>"."押金:".$v['deposit_price'];
+                }
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -1029,12 +1042,13 @@ class OrderCtrl extends BaseCtrl{
                     OrderModel::STATUS_DESC[$v['status']],
                     $finishTypeDesc,
                     $v['price'],
-                    $v['deposit_price'],
+                    $v['price_unit'],
+                    $v['advance_day'],
                     $hasPay,
                     OrderModel::PAY_TYPE_DESC[$v['pay_mode']],
                     OrderModel::CATE_DESC[$v['category']],
-                    $v['uid'],
-                    $contract_attachment,
+                    $userName,
+                    $otherPrice,
                     get_default_date($v['contract_start_time']),
                     get_default_date($v['contract_end_time']),
                     get_default_date($v['a_time']),

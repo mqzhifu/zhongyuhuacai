@@ -289,8 +289,8 @@ class PayListCtrl extends BaseCtrl{
                 $payListRecordBnt = "";
                 if($v['status'] == OrderPayListModel::STATUS_WAIT){
                     $upStatusBnt =  '<a class="btn red btn-xs margin-bottom-5 upStatus" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 完结 </a>';
-                    $addPayListRecordBnt = '<a class="btn blue btn-xs margin-bottom-5 addPayListRecord" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 添加收付款记录 </a>';
-                    $payListRecordBnt =  '<a class="btn yellow btn-xs margin-bottom-5 payListRecord" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 查看收付款记录 </a>';
+//                    $addPayListRecordBnt = '<a class="btn blue btn-xs margin-bottom-5 addPayListRecord" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 添加收付款记录 </a>';
+//                    $payListRecordBnt =  '<a class="btn yellow btn-xs margin-bottom-5 payListRecord" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 查看收付款记录 </a>';
                 }
 //                $shareUserName = "";
 //                if(arrKeyIssetAndExist($v,'share_uid')){

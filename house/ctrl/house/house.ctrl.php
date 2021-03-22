@@ -59,6 +59,9 @@ class HouseCtrl extends BaseCtrl{
         $house['admin_name'] = $admin['uname'];
         $house['saler_name'] = get_admin_name($house['saler_id']);
 
+//        $house['build_fitment_desc'] = HouseModel::DIRECTION_DESC[$house['build_fitment']];
+//        $house['build_direction_desc'] = HouseModel::DIRECTION_DESC[$house['build_direction']];
+
         $house['status_desc'] = HouseModel::STATUS[$house['status']];
 
         $user = null;
@@ -181,7 +184,10 @@ class HouseCtrl extends BaseCtrl{
 
             //mysql8 验证有点难，这种INT 类型，不给默认值会出错
             if(!$data['build_fitment']){
-                $data['build_fitment'] = 0;
+                $data['build_fitment'] = HouseModel::FITMENT_UNKNOW;
+            }
+            if(!$data['build_direction']){
+                $data['build_direction'] = HouseModel::DIRECTION_UNKNOW;
             }
 
             $data['province_code'] = 130000;
@@ -420,8 +426,7 @@ class HouseCtrl extends BaseCtrl{
                 if($v['status'] == HouseModel::STATUS_INIT){
                 $closeBnt =
                     '<button class="btn red upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
-
-                }ASDFASDF
+                }
                $pics= "";
                 if($v['pics']){
                     $p = explode(",",$v['pics']);
@@ -471,28 +476,31 @@ class HouseCtrl extends BaseCtrl{
 
     function upStatus($id,$status){
         if(!$id)
-            out_ajax(500);
+            out_ajax(500,"id is null");
 
         $house = HouseModel::db()->getById($id);
         if(!$house)
-            out_ajax(500);
+            out_ajax(500,"id not in db");
 
         if(!$status)
-            out_ajax(500);
+            out_ajax(500,"status is null");
 
         if($house['status'] == $status){
             out_ajax(500);
         }
 
         if($status == HouseModel::STATUS_CLOSE){
+            if($house['status'] != HouseModel::STATUS_INIT){
+                out_ajax(500,"状态不为：STATUS_INIT");
+            }
             $masterOrder = OrderModel::db()->getRow("house_id = $id and status = ".OrderModel::STATUS_OK ." and category = ".OrderModel::CATE_MASTER );
             if($masterOrder){
-                out_ajax(500);
+                out_ajax(500,"还有未完结的：房主 订单~");
             }
 
             $userOrder = OrderModel::db()->getRow("house_id = $id and status = ".OrderModel::STATUS_OK ." and category = ".OrderModel::CATE_USER );
             if($userOrder){
-                out_ajax(500);
+                out_ajax(500,"还有未完结的：用户 订单~");
             }
 
             HouseModel::upStatus($id,$status);

@@ -10,11 +10,13 @@ class HouseModel {
     const FITMENT_SIMPLE = 2;
     const FITMENT_DELICACY = 3;
     const FITMENT_LUXURY = 4;
+    const FITMENT_UNKNOW = 5;
     const FITMENT_DESC = [
         self::FITMENT_ROUGH => "毛坯",
         self::FITMENT_SIMPLE => "简装",
         self::FITMENT_DELICACY => "精装",
         self::FITMENT_LUXURY => "豪华",
+        self::FITMENT_UNKNOW => "未知",
     ];
 
     const STATUS_INIT = 4;
@@ -33,12 +35,13 @@ class HouseModel {
     const DIRECTION_SOUTH = 2;
     const DIRECTION_WEST  = 3;
     const DIRECTION_NORTH = 4;
-
+    const DIRECTION_UNKNOW = 5;
     const DIRECTION_DESC = [
         self::DIRECTION_EAST => "东",
         self::DIRECTION_SOUTH => "南",
         self::DIRECTION_WEST => "西",
         self::DIRECTION_NORTH => "北",
+        self::DIRECTION_UNKNOW => "未知",
     ];
 
     static function upStatus($oid,$status,$data = []){

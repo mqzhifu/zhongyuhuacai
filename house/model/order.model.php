@@ -164,6 +164,15 @@ class OrderModel {
             $row['time_cycle_desc'] = OrderModel::Time_Cycle_DESC[$row['time_cycle']];
         }
 
+        //附件
+        $contract_attachment_link = "";
+        if($row['contract_attachment']){
+            $url = get_contract_url($row['contract_attachment'] );
+            $contract_attachment_link =  $url;
+//                "<a href='$url' target='_blank'>".'<i class="fa fa-file-text"></i></a>';
+        }
+        $row['contract_attachment_link'] = $contract_attachment_link;
+
         return $row;
     }
 
