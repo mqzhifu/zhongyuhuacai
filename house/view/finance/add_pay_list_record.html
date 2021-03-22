@@ -4,12 +4,12 @@
         <div class="portlet box green">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-reorder"></i>快递物流
+                    <i class="fa fa-reorder"></i>添加支付记录
                 </div>
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-                <form action="?opt=1" id="addaccount_form" class="form-horizontal">
+                <form action="/finance/no/payList/addPayListRecord/?opt=1" id="addaccount_form" class="form-horizontal">
                     <input type="hidden" name="doings" value="1"/>
                     <input type="hidden" name="id" value="{$id}"/>
                     <div class="form-body">
@@ -21,6 +21,7 @@
                             <button class="close" data-close="alert"></button>
                             成功!
                         </div>
+
 
                         <div class="form-group">
                             <label class="control-label col-md-3">pay_list_id
@@ -52,12 +53,23 @@
                             </div>
                         </div>
 
+
                         <div class="form-group">
-                            <label class="control-label col-md-3">应收金额
+                            <label class="control-label col-md-3">预计金额
                             </label>
                             <div class="col-md-4">
 
-                                <input name="final_price" class="form-control" readonly="readonly" value="{$final_price}" />
+                                <input name="oid" class="form-control" readonly="readonly" value="{$price}" />
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">最终金额
+                            </label>
+                            <div class="col-md-4">
+
+                                <input name="oid" class="form-control" readonly="readonly" value="{$final_price}" />
 
                             </div>
                         </div>
@@ -65,11 +77,11 @@
 
 
                         <div class="form-group">
-                            <label class="control-label col-md-3">金额
+                            <label class="control-label col-md-3">本次收/付金额
                             </label>
                             <div class="col-md-4">
 
-                                <input name="price" class="form-control" />
+                               <input name="price" class="form-control" />
 
                             </div>
                         </div>
@@ -177,7 +189,9 @@
                     type: "post",
                     dataType: "json",
                     success: function (ret) {
-                        if (ret.error_code === 0) {
+                        // ret = eval ( "(" + ret + ")")
+                        // alert(ret.code);
+                        if (ret.code == 0) {
                             bootbox.hideAll();
 
                             var UTbox = UTHING.bootbox({
@@ -192,7 +206,7 @@
                             }, 2000);
                         } else {
                             var UTbox = UTHING.bootbox({
-                                message: ret.data.msg,
+                                message: ret.msg,
                                 type: "alert",
                                 status: "error"
                             });

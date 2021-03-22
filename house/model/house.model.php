@@ -17,14 +17,16 @@ class HouseModel {
         self::FITMENT_LUXURY => "豪华",
     ];
 
-
+    const STATUS_INIT = 4;
     const STATUS_WAIT = 1;
     const STATUS_USED = 2;
     const STATUS_CLOSE = 3;
+
     const STATUS = [
         self::STATUS_WAIT => "待租/售",
         self::STATUS_USED => "出租中",
         self::STATUS_CLOSE => "关闭",
+        self::STATUS_INIT => "等待房主订单",
     ];
 
     const DIRECTION_EAST  = 1;
@@ -38,6 +40,14 @@ class HouseModel {
         self::DIRECTION_WEST => "西",
         self::DIRECTION_NORTH => "北",
     ];
+
+    static function upStatus($oid,$status,$data = []){
+        $upData = array("status"=>$status,'u_time'=>time());
+        if ($data){
+            $upData = array_merge($upData,$data);
+        }
+        return self::db()->upById($oid,$upData);
+    }
 
     static function getStatusSelectOptionHtml(){
         $html = "";
@@ -106,9 +116,4 @@ class HouseModel {
         return "默认昵称";
     }
 
-    static function upStatus($oid,$status,$data = []){
-        $upData = array("status"=>$status);
-        return self::db()->upById($oid,$upData);
-    }
-	
 }

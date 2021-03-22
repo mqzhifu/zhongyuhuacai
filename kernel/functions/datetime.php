@@ -32,6 +32,11 @@ function get_year_list_range($start,$end){
     return $list;
 }
 
+
+function getOneDayTurnSecond(){
+    return 24 * 60 * 60;
+}
+
 function get_month_list($zero = 0){
     $list = null;
     for ($i=1;$i<=12;$i++){

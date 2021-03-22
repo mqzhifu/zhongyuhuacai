@@ -17,77 +17,102 @@ class HouseCtrl extends BaseCtrl{
         $this->display("/house/house_list.html");
     }
 
+    function getOrderListByHouseId($hid){
+        $orderList = OrderModel::db()->getAll(" house_id = $hid");
+        if (!$orderList)
+            return null;
+
+        foreach ($orderList as $k=>$v){
+            $adminUserName = AdminUserModel::getFieldById( $v['admin_id'],'uname');
+
+            $row =$v;
+            $row['type_desc'] =       OrderModel::TYPE_DESC[$v['type']];
+            $row['status_desc'] =        OrderModel::STATUS_DESC[$v['status']];
+            $row['price'] =        $v['price'];
+            $row['deposit_price'] =        $v['deposit_price'];
+            $row['pay_mode_desc'] =        OrderModel::PAY_TYPE_DESC[$v['pay_mode']];
+            $row['category_desc'] =        OrderModel::CATE_DESC[$v['category']];
+            $row['uid'] =        $v['uid'];
+            $row['contract_start_time_dt'] =        get_default_date($v['contract_start_time']);
+            $row['contract_end_time_dt'] =        get_default_date($v['contract_end_time']);
+            $row['dt'] =        get_default_date($v['a_time']);
+            $row['admin_name'] =       $adminUserName;
+            $orderList[$k] = $row;
+        }
+        return $orderList;
+    }
+
     function detail(){
         $id = _g("id");
         if(!$id){
             $this->notice("id is null");
         }
 
-        $product = ProductModel::db()->getById($id);
-        $product['dt'] = get_default_date($product['a_time']);
+        $house = HouseModel::db()->getById($id);
+        if (!$house){
+            $this->notice("id not in db");
+        }
+        $house['dt'] = get_default_date($house['a_time']);
+        $house['udt'] = get_default_date($house['u_time']);
 
-        $category = ProductCategoryModel::db()->getById($product['category_id']);
-        $product['category_name'] = $category['name'];
+        $admin = AdminUserModel::db()->getById($house['admin_id']);
+        $house['admin_name'] = $admin['uname'];
+        $house['saler_name'] = get_admin_name($house['saler_id']);
 
-        $admin = AdminUserModel::db()->getById($product['admin_id']);
-        $product['admin_name'] = $admin['uname'];
+        $house['status_desc'] = HouseModel::STATUS[$house['status']];
 
-        $product['status_desc'] = ProductModel::STATUS[$product['status']];
-
-        $product['desc_attr_arr'] = "";
-        if(arrKeyIssetAndExist($product,'desc_attr')){
-            $product['desc_attr_arr'] = json_decode($product['desc_attr'],true);
+        $user = null;
+        if($house['uid']){
+            $user = UserModel::db()->getById($house['uid']);
         }
 
-        $factory = FactoryModel::db()->getById($product['factory_uid']);
-
-        $product['factory'] = $factory['title'];
-        if(arrKeyIssetAndExist($product,'pic')){
-            $pics = explode(",",$product['pic']);
-            foreach ($pics as $k=>$v) {
-                $product['pics'][] = get_product_url($v);
+        $picsList = array();
+        if(arrKeyIssetAndExist($house,"pics")){
+            $pics = explode(",",$house['pics']);
+            foreach ($pics as $k=>$v){
+                $picsList[] = get_house_url($v);
             }
         }
 
-        $goodsList = GoodsModel::getListByPid($id);
-        $product['goods_num'] = 0;
-        if($goodsList){
-            $product['goods_num'] = count($goodsList);
-        }
+        $master = MasterModel::db()->getById($house['master_id']);
+        $orderList = $this->getOrderListByHouseId($house['id']);
 
-        $attributeArr = ProductModel::attrParaParserToName($product['attribute']);
+//        $this->assign("order",array());
+        $this->assign("user",$user);
+        $this->assign("master",$master);
+        $this->assign("house",$house);
+        $this->assign("orderList",$orderList);
+        $this->assign("picsList",$picsList);
 
-
-        $this->assign("attributeArr",$attributeArr);
-        $this->assign("goodsList",$goodsList);
-        $this->assign("product",$product);
 
         $this->display("/house/house_detail.html");
     }
 
     function add(){
         if(_g('opt')){
-            $data['status'] = HouseModel::STATUS_WAIT;
-            $data['master_id'] = _g('master_id');
-//            $data['uid']= _g("uid");
+
+            $data['saler_id']  = _g("saler_id");
+            $data['status'] = HouseModel::STATUS_INIT;
             $data['pics'] = _g("pics");
             $data['desc']  = _g("desc");
             $data['community'] = _g("community");
-//            $data['province_code'] = _g("province");
-//            $data['city_code'] = _g("city");
-//            $data['county_code'] = _g("county");
-//            $data['town_code'] = _g("town");
             //房屋信息
             $data['build_no'] = _g("build_no");
             $data['build_unit'] = _g("build_unit");
             $data['build_detail_no'] = _g("build_detail_no");
             $data['build_floor'] = _g("build_floor");
-            $data['build_direction'] = _g("build_direction");
             $data['build_area'] = _g("build_area");
-            $data['build_room_num'] = _g("build_room_num");
-            $data['build_fitment'] = _g("build_fitment");
+            $data['build_direction'] = _g("build_direction",0);
+            $data['build_room_num'] = _g("build_room_num",0);
+            $data['build_fitment'] = _g("build_fitment",0);
             $data['a_time'] = time();
             $data['admin_id']  = $this->_adminid;
+//            $data['master_id'] = _g('master_id');
+//            $data['uid']= _g("uid");
+//            $data['province_code'] = _g("province");
+//            $data['city_code'] = _g("city");
+//            $data['county_code'] = _g("county");
+//            $data['town_code'] = _g("town");
 
 //            if(ProductModel::db()->getOneByOneField("title",_g('title'))){
 //                $this->notice("标题重复:"._g('title'));
@@ -110,16 +135,22 @@ class HouseCtrl extends BaseCtrl{
 //            if(!$data['town_code']){
 //                $this->notice("town_code is null ");
 //            }
-            if(!$data['master_id']){
-                $this->notice("master_id 为空 ");
-            }
-            $this->checkRequestDataInt($data['master_id'],"master_id 只允许为正整数 ");
+//            if(!$data['master_id']){
+//                $this->notice("master_id 为空 ");
+//            }
+//            $this->checkRequestDataInt($data['master_id'],"master_id 只允许为正整数 ");
+//            $master = MasterModel::db()->getById($data['master_id']);
+//            if(!$master){
+//                $this->notice("master_id 错误，不在DB中 ");
+//            }
 
-            $master = MasterModel::db()->getById($data['master_id']);
-            if(!$master){
-                $this->notice("master_id 错误，不在DB中 ");
+            if(!$data['saler_id']){
+                $this->notice("业务员ID不能为空");
             }
-
+            $saler = AdminUserModel::db()->getById($data['saler_id']);
+            if(!$saler){
+                $this->notice("业务员ID错误，不存在DB中");
+            }
             if(!$data['community']){
                 $this->notice("community is null ");
             }
@@ -148,11 +179,19 @@ class HouseCtrl extends BaseCtrl{
                 $this->notice("build_area is null ");
             }
 
+            //mysql8 验证有点难，这种INT 类型，不给默认值会出错
+            if(!$data['build_fitment']){
+                $data['build_fitment'] = 0;
+            }
+
             $data['province_code'] = 130000;
             $data['city_code'] = 131000;
             $data['county_code'] = 131082;
             $data['town_code'] = 131082450;
 
+            if (!$data['build_direction']){
+                $data['build_direction'] = 1;
+            }
             $pics = _g("pics");
             $pic = "";
             if($pics){
@@ -163,6 +202,27 @@ class HouseCtrl extends BaseCtrl{
                 $pic = substr($pic,0,strlen($pic)-1);
             }
             $data['pics'] = $pic;
+            //房主信息--------start
+            $dataMaster =array(
+                'name'=> _g('master_name'),
+                'bank_account_no'=> _g('master_bank_account'),
+                'bank_name'=>_g('master_bank'),
+                'bank_account_name'=>_g('master_bank_account_name'),
+                'a_time'=>time(),
+                'admin_id'=>$this->_adminid,
+            );
+
+            $mobile =  _g('master_mobile');
+            if(!FilterLib::regex($mobile,"phone")){
+                $this->notice("房主-手机号格式错误 ");
+            }
+
+            $dataMaster['mobile'] = $mobile ;
+            $newUserId = MasterModel::db()->add($dataMaster);
+            $data['master_id'] = $newUserId;
+//            $this->ok("成功-$newId");
+            //房主信息--------start
+
 
             $newId = HouseModel::db()->add($data);
 
@@ -357,13 +417,22 @@ class HouseCtrl extends BaseCtrl{
                         '<a href="/house/no/order/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>';
                 }
                 $closeBnt = "";
-//                $closeBnt =
-//                    '<button class="btn red upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
-                $pics= "";
+                if($v['status'] == HouseModel::STATUS_INIT){
+                $closeBnt =
+                    '<button class="btn red upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
+
+                }ASDFASDF
+               $pics= "";
                 if($v['pics']){
                     $p = explode(",",$v['pics']);
                     $pics = '<img height="30" width="30" src="'.get_house_url($p[0]).'" />';
                 }
+
+                $build_fitment = "";
+                if($v['build_fitment']){
+                    $build_fitment = HouseModel::FITMENT_DESC[$v['build_fitment']];
+                }
+
                 $row = array(
                     '<input type="checkbox" name="id[]" value="'.$v['id'].'">',
                     $v['id'],
@@ -373,6 +442,7 @@ class HouseCtrl extends BaseCtrl{
                     $pics,
 //                    $v['province_code'] ."-".$v['city_code'].$v['county_code'].$v['town_code'],
                     $v['province_cn'] ." ".$v['city_cn']." ".$v['county_cn']." ".$v['town_cn'],
+                    get_admin_name($v['saler_id']),
                     $v['community'],
                     $v['build_floor'],
 
@@ -380,7 +450,7 @@ class HouseCtrl extends BaseCtrl{
 
                     $v['build_area'],
                     $v['build_room_num'],
-                    HouseModel::FITMENT_DESC[$v['build_fitment']],
+                    $build_fitment,
 
                     get_default_date($v['a_time']),
                     get_default_date($v['u_time']),

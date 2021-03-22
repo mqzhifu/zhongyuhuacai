@@ -387,7 +387,7 @@ function ajax_stop($msg){
 
 
 //GET POST REQUEST
-function _g( $name ) {
+function _g( $name , $default = "" ) {
     $ret = false;
 	if (isset($_POST[$name])) {
         $ret = $_POST[$name];
@@ -403,6 +403,13 @@ function _g( $name ) {
 // 		$ret = htmlspecialchars($ret); 	//将文本中的内容转换为HTML实体
  		// $ret = addslashes($ret);      	//加入字符转义
 	}
+
+	if(!$ret){
+        if ($default === 0){
+            return 0;
+        }
+    }
+
 
 	return $ret;
 }
@@ -522,54 +529,54 @@ function showtime() {
 	return $showTime;
 }
 
-function get_mac($os_type) {
-	switch (strtolower ( $os_type )) {
-		case "linux" :
-			forLinux ();
-		case "darwin" : // 苹果系统
-			forLinux ();
-			break;
-		case "solaris" :
-			break;
-		case "unix" :
-			break;
-		case "aix" :
-			break;
-		default :
-			forWindows ();
-			break;
-	}
-	
-	$temp_array = array ();
-	foreach ( $this->return_array as $value ) {
-		
-		if (preg_match ( "/[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f]/i", $value, $temp_array )) {
-			$this->mac_addr = $temp_array [0];
-			break;
-		}
-	}
-	unset ( $temp_array );
-	return $this->mac_addr;
-}
-
-function forWindows() {
-	exec ( "ipconfig /all", $this->return_array );
-	if ($this->return_array)
-		return $this->return_array;
-	else {
-		$ipconfig = $_SERVER ["WINDIR"] . "\system32\ipconfig.exe";
-		if (is_file ( $ipconfig ))
-			@exec ( $ipconfig . " /all", $this->return_array );
-		else
-			@exec ( $_SERVER ["WINDIR"] . "\system\ipconfig.exe /all", $this->return_array );
-		return $this->return_array;
-	}
-}
-function forLinux() {
-	//Ether——由ARP使用的以太网地址（MAC）
-	exec ( "/sbin/ifconfig", $this->return_array, $r );
-	return $this->return_array;
-}
+//function get_mac($os_type) {
+//	switch (strtolower ( $os_type )) {
+//		case "linux" :
+//			forLinux ();
+//		case "darwin" : // 苹果系统
+//			forLinux ();
+//			break;
+//		case "solaris" :
+//			break;
+//		case "unix" :
+//			break;
+//		case "aix" :
+//			break;
+//		default :
+//			forWindows ();
+//			break;
+//	}
+//
+//	$temp_array = array ();
+//	foreach ( $this->return_array as $value ) {
+//
+//		if (preg_match ( "/[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f][:-]" . "[0-9a-f][0-9a-f]/i", $value, $temp_array )) {
+//			$this->mac_addr = $temp_array [0];
+//			break;
+//		}
+//	}
+//	unset ( $temp_array );
+//	return $this->mac_addr;
+//}
+//
+//function forWindows() {
+//	exec ( "ipconfig /all", $this->return_array );
+//	if ($this->return_array)
+//		return $this->return_array;
+//	else {
+//		$ipconfig = $_SERVER ["WINDIR"] . "\system32\ipconfig.exe";
+//		if (is_file ( $ipconfig ))
+//			@exec ( $ipconfig . " /all", $this->return_array );
+//		else
+//			@exec ( $_SERVER ["WINDIR"] . "\system\ipconfig.exe /all", $this->return_array );
+//		return $this->return_array;
+//	}
+//}
+//function forLinux() {
+//	//Ether——由ARP使用的以太网地址（MAC）
+//	exec ( "/sbin/ifconfig", $this->return_array, $r );
+//	return $this->return_array;
+//}
 
 function getDbConst($key){
 	static  $globalDb = array();
@@ -728,19 +735,19 @@ function get_app_download_info($andriod_download_url,$log_download_url){
 //    return "usr_msg_part_".$uid;
 //}
 
-//function getAdminUnameByid($id){
-//	if(!$id)
-//		return "客服1";
-//	$uinfo = adminUserModel::db()->getById($id);
-//	if(!$uinfo)
-//		return "客服2";
-//
-//	$uname = "客服3";
+function get_admin_name($id,$default = '--'){
+	if(!$id)
+		return $default;
+	$uinfo = adminUserModel::db()->getById($id);
+	if(!$uinfo)
+		return $default;
+
+//	$uname = $default;
 //	if( isset($uinfo['nickname']) && $uinfo['nickname'])
 //		$uname = $uinfo['nickname'];
-//
-//	return $uname;
-//}
+
+	return $uinfo['uname'];
+}
 
 //单实例模式
 // function Singleton ($className){

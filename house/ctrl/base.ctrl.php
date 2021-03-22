@@ -273,6 +273,7 @@ class BaseCtrl{
         include $header_html;
         include $index_html;
         include $footer_html;
+
         exit;
 
     }

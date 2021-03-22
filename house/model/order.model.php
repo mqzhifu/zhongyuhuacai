@@ -7,22 +7,22 @@ class OrderModel {
 
     const TYPE_SALE = 1;
     const TYPE_TENANCY = 2;
-
     const TYPE_DESC = [
-        self::TYPE_SALE=>"租赁",
-        self::TYPE_TENANCY=>"售卖",
+        self::TYPE_SALE=>"售卖",
+        self::TYPE_TENANCY=>"租赁",
     ];
+
     const PAY_TYPE_MONTH = 1;
     const PAY_TYPE_QUARTER = 2;
     const PAY_TYPE_HALF_YEAR = 3;
     const PAY_TYPE_YEAR = 4;
-
     const PAY_TYPE_DESC = [
         self::PAY_TYPE_MONTH=>"月",
         self::PAY_TYPE_QUARTER=>"季",
         self::PAY_TYPE_HALF_YEAR=>"半年",
         self::PAY_TYPE_YEAR=>"整年",
     ];
+
     //支付类型 - 转换成具体的 天
     const PAY_TYPE_TURN_DAY = [
         self::PAY_TYPE_MONTH=>31,
@@ -57,8 +57,8 @@ class OrderModel {
     const STATUS_OK = 2;
     const STATUS_FINISH = 3;
     const STATUS_DESC = [
-        self::FINANCE_INCOME=>"未处理",
-        self::FINANCE_EXPENSE=>"已确认",
+        self::STATUS_WAIT=>"未处理",
+        self::STATUS_OK=>"已确认",//已生成支付列表记录
         self::STATUS_FINISH=>"已完结",
     ];
 
@@ -67,6 +67,23 @@ class OrderModel {
     const FINISH_DESC = [
         self::FINISH_NORMAL=>"正常结算",
         self::FINISH_FORCE=>"强制结算",
+    ];
+
+
+    const Property_Heat_Type_All = 1;
+    const Property_Heat_Type_Half = 2;
+    const Property_Heat_Type_No = 3;
+    const Property_Heat_Type_Desc = [
+        self::Property_Heat_Type_All=>"全包",
+        self::Property_Heat_Type_Half=>"半包",
+        self::Property_Heat_Type_No=>"双包",
+    ];
+
+    const Time_Cycle_IN = 1;
+    const Time_Cycle_OUT = 2;
+    const Time_Cycle_DESC = [
+        self::Time_Cycle_IN=>"内置",
+        self::Time_Cycle_OUT=>"外置",
     ];
 
 
@@ -130,6 +147,23 @@ class OrderModel {
         $row['category_desc'] = OrderModel::CATE_DESC[$row['category']];
         $row['admin_name'] = AdminUserModel::getFieldById($row['admin_id'],'uname');
 
+        if (arrKeyIssetAndExist($row,"saler_id")){
+            $saler = AdminUserModel::db()->getById($row['saler_id']);
+            if($saler){
+                $row['saler_name'] = $saler['uname'];
+            }
+        }else{
+            $row['saler_name'] = "";
+        }
+
+        if(arrKeyIssetAndExist($row,"property_heat_type")){
+            $row['property_heat_type_desc'] = OrderModel::Property_Heat_Type_Desc[$row['property_heat_type']];
+        }
+
+        if(arrKeyIssetAndExist($row,"time_cycle")){
+            $row['time_cycle_desc'] = OrderModel::Time_Cycle_DESC[$row['time_cycle']];
+        }
+
         return $row;
     }
 
@@ -181,7 +215,10 @@ class OrderModel {
         return $html;
     }
     static function upStatus($oid,$status,$data = []){
-	    $upData = array("status"=>$status);
+	    $upData = array("status"=>$status,'u_time'=>time());
+	    if ($data){
+            $upData = array_merge($upData,$data);
+        }
 	    return self::db()->upById($oid,$upData);
     }
 
@@ -204,6 +241,11 @@ class OrderModel {
     //获取一个房源的付款信息 - 汇总金额
     static function totalPayListByTypeStatus($oid,$status){
         return OrderPayListModel::db()->getRow(" status = $status and oid = $oid ",null," sum(price) as total ");
+    }
+
+    static function getListByUid($uid){
+        $list = self::db()->getAll(" uid = $uid");
+        return $list;
     }
 
 }

@@ -45,6 +45,17 @@
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">业务员ID<span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+
+                                            <input type="text" name="saler_id" data-required="1"   class="form-control" value="" />
+                                        </div>
+                                        <span class="help-inline">请去管理员列表查找</span>
+                                    </div>
+
                                     <div class="form-group" id="categoryAttr" >
                                         <label class="control-label col-md-3">类型<span class="required">
 										* </span>
@@ -59,7 +70,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">用户类型<span class="required">
+                                        <label class="control-label col-md-3">受众人<span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
@@ -70,6 +81,8 @@
 
                                         </div>
                                     </div>
+
+
 
                                     <div id="user_type_block">
 
@@ -90,17 +103,39 @@
                                         </div>
                                     </div>
 
+<!--                                    <div class="form-group">-->
+<!--                                        <label class="control-label col-md-3">付款提醒(秒)-->
+<!--                                        </label>-->
+<!--                                        <div class="col-md-4">-->
+
+<!--                                            <input type="text" name="warn_trigger_time" data-required="1" class="form-control" value="" />-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">付款提醒(秒)
+                                        <label class="control-label col-md-3">每次付款提前时间(天)
+                                            <span class="required">
+										* </span>
                                         </label>
                                         <div class="col-md-4">
-
-                                            <input type="text" name="warn_trigger_time" data-required="1" class="form-control" value="" />
+                                            <input type="text" class="form-control" name="advance_day" value="" />
                                         </div>
                                     </div>
 
 
                                     <hr/>
+
+
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">合同编号
+                                            <span class="required">
+										* </span>
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" name="contract_no" value="" />
+                                        </div>
+                                    </div>
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3">合同金额
@@ -111,6 +146,7 @@
                                             <input type="text" class="form-control" name="price" value="" />
                                         </div>
                                     </div>
+
 
                                     <div class="form-group">
                                         <label class="control-label col-md-3">月付金额
@@ -169,14 +205,25 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">合同附件<span class="required">
-										* </span>
+                                        <label class="control-label col-md-3">合同附件
+<!--                                            <span class="required">-->
+<!--										* </span>-->
                                         </label>
                                         <div class="col-md-4">
                                             <input type="file" name="contract_attachment" data-required="1" class="form-control" value="" />
                                         </div>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">合同金额计算公式
+                                        </label>
+                                        <div class="col-md-4">
+                                            房主<br/>
+                                            内置：每月金额 X 月数-首次空置金额=合同总金额<br/>
+                                            用户<br/>
+                                            水 + 电 + 垃圾 + 维修 + 押金 = 合同总金额<br/>
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div class="form-actions">

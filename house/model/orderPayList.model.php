@@ -16,7 +16,6 @@ class OrderPayListModel {
     const PAY_ALI_APP_ANDROID = 24;
     const PAY_BANK = 3;
 
-
     const PAY_TYPE_DESC = [
         self::PAY_WX_H5=>"微信-H5-普通浏览器",
         self::PAY_WX_H5_NATIVE=>"微信-H5-内部浏览器",
@@ -66,6 +65,14 @@ class OrderPayListModel {
             $html .= "<option value={$k}>{$v}</option>";
         }
         return $html;
+    }
+
+    static function upStatus($oid,$status,$data = []){
+        $upData = array("status"=>$status,'u_time'=>time());
+        if ($data){
+            $upData = array_merge($upData,$data);
+        }
+        return self::db()->upById($oid,$upData);
     }
 
 }

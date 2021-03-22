@@ -82,7 +82,8 @@ class UserCtrl extends BaseCtrl{
                     $v['ali'],
                     $adminUserName,
                     get_default_date($v['a_time']),
-                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
+'',
+//                    '<a href="/people/no/user/detail/id='.$v['id'].'" target="_blank" class="btn blue btn-xs margin-bottom-5"><i class="fa fa-file-o"></i> 详情 </a>'
 //                    '<a href="" target="_blank" class="btn yellow btn-xs margin-bottom-5 editone" data-id="'.$v['id'].'"><i class="fa fa-edit"></i> 编辑 </a>',
 //                    '<button class="btn btn-xs default yellow delone" data-id="'.$v['id'].'" ><i class="fa fa-trash-o"></i>  删除</button>',
                 );
@@ -172,97 +173,97 @@ class UserCtrl extends BaseCtrl{
         $this->display("/people/user_add.html");
     }
 
-    function detail(){
-        $uid = _g("id");
-        if(!$uid){
-            exit("uid null");
-        }
-        $user = UserModel::db()->getById($uid);
-        if(!$user){
-            exit("uid not in db");
-        }
-        $user['dt'] = get_default_date($user['a_time']);
-        $user['status_desc'] = UserModel::STATUS_DESC[$user['status']];
-        $user['avatar_url'] = get_avatar_url($user['avatar']);
-        $user['birthday_dt'] =  get_default_date($user['birthday']);
-        $user['type_desc'] = UserModel::getTypeDescByKey($user['type']);
-        $user['inner_type_desc'] = UserModel::INNER_TYPE_DESC[$user['inner_type']];
-        $orders = OrderModel::getListByUid($uid);
-        $userLog = UserLogModel::getListByUid($uid);
-        if($userLog){
-            foreach ($userLog as $k=>$v){
-                $userLog[$k]['dt'] = get_default_date($v['a_time']);
-            }
-        }
-
-
-        $ordersConsumeTotalPrice = 0;
-        $ordersTotalNum = 0;
-
-        $ordersPayConsumeTotalPrice = 0;
-        $ordersPayTotalNum = 0;
-
-        if($orders){
-            $payArrStatus = array(
-                OrderModel::STATUS_PAYED ,
-                OrderModel::STATUS_TRANSPORT,
-                OrderModel::STATUS_SIGN_IN ,
-                OrderModel::STATUS_FINISH ,
-                OrderModel::STATUS_REFUND_REJECT)
-            ;
-            $ordersTotalNum = count($orders);
-            foreach ($orders as $k=>$v){
-                $ordersConsumeTotalPrice += $v['total_price'];
-                $ordersConsumeTotalPrice = fenToYuan($ordersConsumeTotalPrice);
-
-                if(in_array($v['status'],$payArrStatus)){
-                    $ordersPayTotalNum++;
-                    $ordersPayConsumeTotalPrice += $v['total_price'];
-                }
-
-                $orders[$k]['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
-                $orders[$k]['dt'] = get_default_date($v['a_time']);
-                $orders[$k]['total_yuan_price'] = fenToYuan( $v['total_price']);
-            }
-        }
-
-        $ordersPayConsumeTotalPrice = fenToYuan($ordersPayConsumeTotalPrice);
-
-        $this->assign("ordersTotal",$ordersTotalNum);
-        $this->assign("ordersConsumeTotalPrice",$ordersConsumeTotalPrice);
-
-
-        $this->assign("ordersPayConsumeTotalPrice",$ordersPayConsumeTotalPrice);
-        $this->assign("ordersPayTotalNum",$ordersPayTotalNum);
-
-
-        $UpService = new UpService();
-        $upTotal = $UpService->getUserCnt($user['id']);
-
-        $CollectService = new CollectService();
-        $collectTotal = $CollectService->getUserCnt($user['id']);
-
-        $CommentService = new CommentService();
-        $commentTotal = $CommentService->getUserCnt($user['id']);
-
-        $productService = new ProductService();
-        $viewProductTotalCnt = $productService->getUserViewProductTotalCnt($user['id']);
-
-        $this->assign("upTotal",$upTotal);
-        $this->assign("collectTotal",$collectTotal);
-        $this->assign("commentTotal",$commentTotal);
-        $this->assign("viewProductTotalCnt",$viewProductTotalCnt);
-
-        $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
-        $user['last_active_record_dt'] = $lastActiveRecord;
-        $user['active_day_cnt'] = $this->userService->getActiveDayCnt($user['id']);
-
-        $this->assign("user",$user);
-        $this->assign("orders",$orders);
-        $this->assign("userLog",$userLog);
-
-        $this->display("/people/user_detail.html");
-    }
+//    function detail(){
+//        $uid = _g("id");
+//        if(!$uid){
+//            exit("uid null");
+//        }
+//        $user = UserModel::db()->getById($uid);
+//        if(!$user){
+//            exit("uid not in db");
+//        }
+//        $user['dt'] = get_default_date($user['a_time']);
+//        $user['status_desc'] = UserModel::STATUS_DESC[$user['status']];
+////        $user['avatar_url'] = get_avatar_url($user['avatar']);
+////        $user['birthday_dt'] =  get_default_date($user['birthday']);
+//        $user['type_desc'] = UserModel::getTypeDescByKey($user['type']);
+////        $user['inner_type_desc'] = UserModel::INNER_TYPE_DESC[$user['inner_type']];
+//        $orders = OrderModel::getListByUid($uid);
+////        $userLog = UserLogModel::getListByUid($uid);
+////        if($userLog){
+////            foreach ($userLog as $k=>$v){
+////                $userLog[$k]['dt'] = get_default_date($v['a_time']);
+////            }
+////        }
+//
+//
+//        $ordersConsumeTotalPrice = 0;
+//        $ordersTotalNum = 0;
+//
+//        $ordersPayConsumeTotalPrice = 0;
+//        $ordersPayTotalNum = 0;
+//
+//        if($orders){
+//            $payArrStatus = array(
+//                OrderModel::STATUS_PAYED ,
+//                OrderModel::STATUS_TRANSPORT,
+//                OrderModel::STATUS_SIGN_IN ,
+//                OrderModel::STATUS_FINISH ,
+//                OrderModel::STATUS_REFUND_REJECT)
+//            ;
+//            $ordersTotalNum = count($orders);
+//            foreach ($orders as $k=>$v){
+//                $ordersConsumeTotalPrice += $v['total_price'];
+//                $ordersConsumeTotalPrice = fenToYuan($ordersConsumeTotalPrice);
+//
+//                if(in_array($v['status'],$payArrStatus)){
+//                    $ordersPayTotalNum++;
+//                    $ordersPayConsumeTotalPrice += $v['total_price'];
+//                }
+//
+//                $orders[$k]['status_desc'] = OrderModel::STATUS_DESC[$v['status']];
+//                $orders[$k]['dt'] = get_default_date($v['a_time']);
+//                $orders[$k]['total_yuan_price'] = fenToYuan( $v['total_price']);
+//            }
+//        }
+//
+//        $ordersPayConsumeTotalPrice = fenToYuan($ordersPayConsumeTotalPrice);
+//
+//        $this->assign("ordersTotal",$ordersTotalNum);
+//        $this->assign("ordersConsumeTotalPrice",$ordersConsumeTotalPrice);
+//
+//
+//        $this->assign("ordersPayConsumeTotalPrice",$ordersPayConsumeTotalPrice);
+//        $this->assign("ordersPayTotalNum",$ordersPayTotalNum);
+//
+//
+//        $UpService = new UpService();
+//        $upTotal = $UpService->getUserCnt($user['id']);
+//
+//        $CollectService = new CollectService();
+//        $collectTotal = $CollectService->getUserCnt($user['id']);
+//
+//        $CommentService = new CommentService();
+//        $commentTotal = $CommentService->getUserCnt($user['id']);
+//
+//        $productService = new ProductService();
+//        $viewProductTotalCnt = $productService->getUserViewProductTotalCnt($user['id']);
+//
+//        $this->assign("upTotal",$upTotal);
+//        $this->assign("collectTotal",$collectTotal);
+//        $this->assign("commentTotal",$commentTotal);
+//        $this->assign("viewProductTotalCnt",$viewProductTotalCnt);
+//
+//        $lastActiveRecord = $this->userService->getLastActiveRecordTime($user['id']);
+//        $user['last_active_record_dt'] = $lastActiveRecord;
+//        $user['active_day_cnt'] = $this->userService->getActiveDayCnt($user['id']);
+//
+//        $this->assign("user",$user);
+//        $this->assign("orders",$orders);
+//        $this->assign("userLog",$userLog);
+//
+//        $this->display("/people/user_detail.html");
+//    }
 
     function getDataListTableWhere(){
         $where = 1;

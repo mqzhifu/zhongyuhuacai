@@ -107,6 +107,11 @@ class GoodsCtrl extends BaseCtrl{
                 'admin_id'=>$this->_adminid,
                 'a_time'=>time(),
                 "sort"=>_g('sort'),
+                'third_id'=>"",
+
+"pay_type"=>"",
+
+
 //                'pay_type'=>implode(",",_g('payType')),
             );
 
