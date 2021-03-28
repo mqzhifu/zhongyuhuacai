@@ -44,9 +44,19 @@
                                             <input type="text" disabled class="form-control" value="{$house['id']}" />
                                         </div>
                                     </div>
-
+                                    <div class="form-group" id="categoryAttr" >
+                                        <label class="control-label col-md-3">类型
+                                        </label>
+                                        <div class="col-md-4">
+                                            <!--                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="type">-->
+                                            <!--                                                <option value="">请选择</option>-->
+                                            <!--                                                {$getTypeOptions}-->
+                                            <!--                                            </select>-->
+                                            <input type="text" disabled class="form-control" value="租赁" />
+                                        </div>
+                                    </div>
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">业务员ID<span class="required">
+                                        <label class="control-label col-md-3">{CONST|SALE_MAN}ID<span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
@@ -56,21 +66,10 @@
                                         <span class="help-inline">请去管理员列表查找</span>
                                     </div>
 
-                                    <div class="form-group" id="categoryAttr" >
-                                        <label class="control-label col-md-3">类型<span class="required">
-										* </span>
-                                        </label>
-                                        <div class="col-md-4">
-                                            <select class="table-group-action-input form-control input-inline input-small input-sm" name="type">
-                                                <option value="">请选择</option>
-                                                {$getTypeOptions}
-                                            </select>
 
-                                        </div>
-                                    </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">受众人<span class="required">
+                                        <label class="control-label col-md-3">分类<span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
@@ -80,6 +79,7 @@
                                             </select>
 
                                         </div>
+                                        <span class="help-inline">先创建<{CONST|ORDER_M}>,再创建<{CONST|ORDER_U}></span>
                                     </div>
 
 
@@ -91,7 +91,7 @@
                                     <hr/>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">付款模式 <span class="required">
+                                        <label class="control-label col-md-3">{CONST|PAY_MODE} <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
@@ -113,13 +113,14 @@
 <!--                                    </div>-->
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">每次付款提前时间(天)
+                                        <label class="control-label col-md-3"> {CONST|ADVANCE_DAY}
                                             <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control" name="advance_day" value="" />
                                         </div>
+                                        <span class="help-inline">提前几天收付款</span>
                                     </div>
 
 
@@ -138,7 +139,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">合同金额
+                                        <label class="control-label col-md-3">{CONST|CONTRACT_PRICE}
                                             <span class="required">
 										* </span>
                                         </label>
@@ -149,20 +150,20 @@
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">月付金额
-<!--                                            年/半年/季/月付单元金额-->
+                                        <label class="control-label col-md-3">{CONST| PRICE_UNIT}
                                             <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control" name="price_unit" value="" />
                                         </div>
+                                        <span class="help-inline">月付金额</span>
                                     </div>
 
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">合同开始时间 <span class="required">
+                                        <label class="control-label col-md-3">{CONST| CONTRACT_START} <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
@@ -184,7 +185,7 @@
 
 
                                     <div class="form-group">
-                                        <label class="control-label col-md-3">合同结束时间 <span class="required">
+                                        <label class="control-label col-md-3">{CONST| CONTRACT_END} <span class="required">
 										* </span>
                                         </label>
                                         <div class="col-md-4">
@@ -219,9 +220,11 @@
                                         </label>
                                         <div class="col-md-4">
                                             房主<br/>
-                                            内置：每月金额 X 月数-首次空置金额=合同总金额<br/>
+                                            (暂不支持:外置、违约)<br/>
+                                            内置：{CONST| PRICE_UNIT}(月租金) X 月数-{CONST| FIRST_PAY_FREE_PRICE}={CONST| CONTRACT_PRICE}<br/>
                                             用户<br/>
-                                            水 + 电 + 垃圾 + 维修 + 押金 = 合同总金额<br/>
+                                            (暂不支持:违约)<br/>
+                                            水 + 电 + 垃圾 + 维修 + 押金 = {CONST| CONTRACT_PRICE}<br/>
                                         </div>
                                     </div>
 

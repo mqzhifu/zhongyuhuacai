@@ -55,6 +55,13 @@ $main = array(
                         "loop_end"=>1255,
                         "db_model_class"=>"HejidiOumeiModel"
                     ),
+                    "cn"=>array(
+                        "name"=>"国产原创",
+                        "link_id"=> "15",
+                        "loop_start"=>926,
+                        "loop_end"=>2346,
+                        "db_model_class"=>"HejidiCnModel"
+                    ),
 
                 )
             ),
@@ -144,7 +151,7 @@ $main = array(
     'mysql'=>array(
         "create database spider charset=utf8mb4;",
         "
-CREATE TABLE `kankan_oumei` (
+CREATE TABLE `hejidi_cn` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `category` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '分类',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '标题',

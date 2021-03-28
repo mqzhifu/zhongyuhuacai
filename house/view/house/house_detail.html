@@ -76,7 +76,7 @@
                                                             <div class="portlet yellow-crusta box">
                                                                 <div class="portlet-title">
                                                                     <div class="caption">
-                                                                        <i class="fa fa-cogs"></i>属性
+                                                                        <i class="fa fa-cogs"></i>基础属性
                                                                     </div>
                                                                 </div>
                                                                 <div class="portlet-body">
@@ -108,7 +108,7 @@
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            业务员:
+                                                                            {CONST|SALE_MAN}:
                                                                         </div>
                                                                         <div class="col-md-7 value">
                                                                             {$house['saler_name']}
@@ -128,7 +128,7 @@
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">
-                                                                            添加者:
+                                                                            {CONST|ADD_MAN}:
                                                                         </div>
                                                                         <div class="col-md-7 value">
                                                                             {$house['admin_name']}
@@ -187,7 +187,7 @@
                                                                             朝向:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$house['build_direction']}
+                                                                            {$house['build_direction_desc']}
                                                                         </div>
                                                                     </div>
 
@@ -215,7 +215,7 @@
                                                                             装修:
                                                                         </div>
                                                                         <div class="col-md-7 value">
-                                                                            {$house['build_fitment']}
+                                                                            {$house['build_fitment_desc']}
                                                                         </div>
                                                                     </div>
 
@@ -268,11 +268,20 @@
                                                                 <div class="portlet blue-hoki box">
                                                                     <div class="portlet-title">
                                                                         <div class="caption">
-                                                                            <i class="fa fa-cogs"></i>用户信息#{$user['id']}
+                                                                            <i class="fa fa-cogs"></i>用户信息
                                                                         </div>
                                                                     </div>
                                                                     <div class="portlet-body">
 
+
+                                                                        <div class="row static-info">
+                                                                            <div class="col-md-5 name">
+                                                                                id #:
+                                                                            </div>
+                                                                            <div class="col-md-7 value">
+                                                                                {$user['id']}
+                                                                            </div>
+                                                                        </div>
 
 
                                                                             <div class="row static-info">
@@ -300,10 +309,18 @@
 
                                                                 <div class="portlet-title">
                                                                     <div class="caption">
-                                                                        <i class="fa fa-cogs"></i>房主信息#{$master['id']}
+                                                                        <i class="fa fa-cogs"></i>房主信息
                                                                     </div>
                                                                 </div>
                                                                 <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            id #:
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$master['id']}
+                                                                        </div>
+                                                                    </div>
 
                                                                     <div class="row static-info">
                                                                         <div class="col-md-5 name">姓名</div>
@@ -346,6 +363,60 @@
 
                                                     </div>
                                                     <div class="row">
+                                                        <div class="col-md-6 col-sm-12">
+                                                            <div class="portlet blue box">
+
+                                                                <div class="portlet-title">
+                                                                    <div class="caption">
+                                                                        <i class="fa fa-cogs"></i>汇总
+                                                                    </div>
+                                                                </div>
+                                                                <div class="portlet-body">
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            {CONST| ORDER_U}
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$userOrderInfo}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">
+                                                                            {CONST| ORDER_M}
+                                                                        </div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$masterOrderInfo}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name"> {CONST| ORDER_U}预计盈亏</div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$userRoi}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">{CONST| ORDER_M}预计盈亏</div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$masterRoi}
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row static-info">
+                                                                        <div class="col-md-5 name">预计最终盈亏</div>
+                                                                        <div class="col-md-7 value">
+                                                                            {$roi}
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
                                                         <div class="col-md-12 col-sm-12">
                                                             <div class="portlet green-meadow box">
                                                                 <div class="portlet-title">
@@ -366,25 +437,28 @@
                                                                                     类型
                                                                                 </th>
                                                                                 <th width="15%">
-                                                                                    开始时间
+                                                                                    {CONST|CYCLE_START}
                                                                                 </th>
                                                                                 <th width="15%">
-                                                                                    结束时间
+                                                                                    {CONST|CYCLE_END}
                                                                                 </th>
                                                                                 <th width="10%">
-                                                                                    金额
+                                                                                    {CONST|CONTRACT_PRICE}
                                                                                 </th>
                                                                                 <th width="10%">
-                                                                                    支付方式
+                                                                                    {CONST|PAY_MODE}
                                                                                 </th>
                                                                                 <th width="10%">
                                                                                     状态
                                                                                 </th>
                                                                                 <th width="10%">
-                                                                                    添加时间
+                                                                                    {CONST|ADD_TIME}
                                                                                 </th>
                                                                                 <th width="10%">
-                                                                                    管理员名称
+                                                                                    {CONST|ADD_MAN}
+                                                                                </th>
+                                                                                <th width="10%">
+                                                                                    操作
                                                                                 </th>
                                                                             </tr>
                                                                             </thead>
@@ -404,6 +478,7 @@
                                                                                 <td>{$v['status_desc']}</td>
                                                                                 <td>{$v['dt']}</td>
                                                                                 <td>{$v['admin_name']}</td>
+                                                                                <td><a href="/house/no/order/detail/action=view&oid={$v['id']}" target="_blank">详情</a> </td>
                                                                             </tr>
                                                                             {/foreach}
 
@@ -436,10 +511,10 @@
                                                                     id
                                                                 </th>
                                                                 <th width="15%">
-                                                                    开始时间
+                                                                    {CONST|CYCLE_START}
                                                                 </th>
                                                                 <th width="15%">
-                                                                    结束时间
+                                                                    {CONST|CYCLE_END}
                                                                 </th>
                                                                 <th width="10%">
                                                                     金额
@@ -495,7 +570,7 @@
 
 
                 </div>
-            </div>
+            </div>   <!-- row end -->
             <!-- END PAGE CONTENT-->
         </div>
     </div>

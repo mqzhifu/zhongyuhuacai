@@ -4,7 +4,7 @@ class ImageUpLoadLib{
 	//文件大小：2MB
     public $fileSize = 10;
 //    public $fileType = array('pjpeg','gif','bmp','png','jpeg','jpg','x-png');
-    public $fileType = array('pjpeg','gif','bmp','png','jpeg','jpg','x-png','mp4','avi','flv',"mkv",'rmvb','wmv','rm',"txt","word",'doc','docx','msword');//权宜之计
+    public $fileType = array('pjpeg','gif','bmp','png','jpeg','jpg','x-png','mp4','avi','flv',"mkv",'rmvb','wmv','rm',"txt","word",'doc','docx','msword','xlsx');//权宜之计
     //文件上传路径
     public $path = APP_FILE_UPLOAD_DIR;
     //是否开始HASH随机文件名

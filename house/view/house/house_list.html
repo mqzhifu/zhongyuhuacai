@@ -47,10 +47,10 @@
                                             ID
                                         </th>
                                         <th width="5%">
-                                            房主
+                                            {CONST|MASTER}
                                         </th>
                                         <th width="5%">
-                                            用户
+                                            {CONST|USER}
                                         </th>
 
                                         <th width="5%">
@@ -80,7 +80,7 @@
                                         <!--</th>-->
 
                                         <th width="5%">
-                                            业务员
+                                            {CONST|SALE_MAN}
                                         </th>
 
                                         <th width="5%">
@@ -107,11 +107,11 @@
                                         </th>
 
                                         <th width="10%">
-                                            添加时间
+                                            {CONST|ADD_TIME}
                                         </th>
 
                                         <th width="10%">
-                                            更新时间
+                                            {CONST|UP_TIME}
                                         </th>
 
                                         <th width="3%">
@@ -195,22 +195,22 @@
                                         </td>
 
                                         <td>
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="up_time_from" id="up_time_from" placeholder="From">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
+<!--                                            <div class="input-group date form_datetime margin-bottom-5">-->
+<!--                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="up_time_from" id="up_time_from" placeholder="From">-->
+<!--                                                <span class="input-group-btn">-->
+<!--                                                    &lt;!&ndash;<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>&ndash;&gt;-->
+<!--                                                    <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>-->
+<!--                                                </span>-->
+<!--                                            </div>-->
 
 
-                                            <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="up_time_to" id="up_time_to" placeholder="to">
-                                                <span class="input-group-btn">
-                                                    <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
-                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
-                                                </span>
-                                            </div>
+<!--                                            <div class="input-group date form_datetime margin-bottom-5">-->
+<!--                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="up_time_to" id="up_time_to" placeholder="to">-->
+<!--                                                <span class="input-group-btn">-->
+<!--                                                    &lt;!&ndash;<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>&ndash;&gt;-->
+<!--                                                    <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>-->
+<!--                                                </span>-->
+<!--                                            </div>-->
                                         </td>
 
 
@@ -415,22 +415,18 @@
 
 
 
-    $("#datatable_products").on("click",".upstatus",function(){
+    $("#datatable_products").on("click",".closeHouse",function(){
         var id = $(this).attr("data-id");
-        var type = $(this).attr("data-type");
-        // UTHING.ajax({
-        //     url:"/product/no/product/upstatus/",
-        //     data:"id="+id+"&type="+type,
-        //     title:"产品"
-        // });
+        // var type = $(this).attr("data-type");
         bootbox.confirm("Are you sure?", function(result) {
             if(result == true){
                 $.ajax({
                     type: 'GET',
-                    url:"/product/no/product/upstatus/",
-                    data:"id="+id+"&type="+type,
+                    url:"/house/no/house/upStatus/",
+                    data:"id="+id+"&status=3",
                     success: function(data){
-                        location.reload();
+                        alert(data);
+                        // location.reload();
                     }
 
                 });

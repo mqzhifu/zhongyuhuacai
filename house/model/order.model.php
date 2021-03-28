@@ -175,7 +175,14 @@ class OrderModel {
 
         return $row;
     }
-
+    static function getHouseCategoryRowByStatus($houseId,$category,$status){
+        $where = "house_id = ".$houseId ." and category = ".$category . "  and status = ".$status ;
+        return  OrderModel::db()->getRow($where);
+    }
+    static function getHouseCategoryRowByInStatus($houseId,$category,$status){
+        $where = "house_id = ".$houseId ." and category = ".$category . "  and status in ( ".$status ." )" ;
+        return  OrderModel::db()->getRow($where);
+    }
 	static function getStatusOptions(){
 	    $html = "";
 	    foreach (self::STATUS_DESC as $k=>$v) {
@@ -249,7 +256,8 @@ class OrderModel {
 
     //获取一个房源的付款信息 - 汇总金额
     static function totalPayListByTypeStatus($oid,$status){
-        return OrderPayListModel::db()->getRow(" status = $status and oid = $oid ",null," sum(price) as total ");
+        $total =  OrderPayListModel::db()->getRow(" status = $status and oid = $oid ",null," sum(real_price) as total ");
+        return $total;
     }
 
     static function getListByUid($uid){

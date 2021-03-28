@@ -57,11 +57,15 @@
                                         </th>
 
                                         <th width="5%">
-                                            应收金额
+                                            {CONST|PRE_PAY_PRICE}
                                         </th>
 
                                         <th width="5%">
                                             实际金额
+                                        </th>
+
+                                        <th width="5%">
+                                            实收金额
                                         </th>
 
 <!--                                        <th width="5%">-->
@@ -69,7 +73,7 @@
 <!--                                        </th>-->
 
                                         <th width="5%">
-                                            开始时间
+                                            {CONST|CYCLE_START}
                                         </th>
 
 <!--                                        <th width="5%">-->
@@ -77,7 +81,7 @@
 <!--                                        </th>-->
 
                                         <th width="5%">
-                                            结束时间
+                                            {CONST|CYCLE_END}
                                         </th>
 
 
@@ -86,7 +90,7 @@
                                         </th>
 
                                         <th width="5%">
-                                            支付时间
+                                            价格备注
                                         </th>
 
 <!--                                        <th width="5%">-->
@@ -94,13 +98,16 @@
 <!--                                        </th>-->
 
                                         <th width="5%">
-                                            应收时间
+                                            {CONST|PAY_ADVANCE_TIME}
                                         </th>
 
                                         <th width="5%">
-                                            添加时间
+                                            {CONST|ADD_TIME}
                                         </th>
 
+                                        <th width="5%">
+                                            更新时间
+                                        </th>
                                         <th width="5%">
                                             操作
                                         </th>
@@ -112,14 +119,14 @@
                                             <input type="text" class="form-control form-filter input-sm" name="id" >
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="id" >
+                                            <input type="text" class="form-control form-filter input-sm" name="house_id" >
                                         </td>
                                         <td>
 
-                                            <input type="text" class="form-control form-filter input-sm" name="id" >
+                                            <input type="text" class="form-control form-filter input-sm" name="oid" >
                                         </td>
                                         <td>
-                                            <select name="type"  class="form-control form-filter">
+                                            <select name="category"  class="form-control form-filter">
                                                 <option value="">请选择</option>
                                                 {$getFinanceDescOption}
                                             </select>
@@ -134,8 +141,8 @@
                                         </td>
 
                                         <td>
-                                            <input type="text" class="form-control form-filter input-sm" name="total_price_from" >
-                                            <input type="text" class="form-control form-filter input-sm" name="total_price_to" >
+                                            <input type="text" class="form-control form-filter input-sm" name="price_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="price_to" >
                                         </td>
 
 
@@ -144,6 +151,10 @@
                                         <td>
 
 
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control form-filter input-sm" name="real_price_from" >
+                                            <input type="text" class="form-control form-filter input-sm" name="real_price_to" >
 
                                         </td>
                                         <td>
@@ -169,8 +180,15 @@
                                             </select>
                                         </td>
                                         <td>
+
+                                            <input type="text" class="form-control form-filter input-sm" name="price_memo" >
+                                        </td>
+
+
+
+                                        <td>
                                             <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from" id="" placeholder="From">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="advance_time_from"  placeholder="From">
                                                 <span class="input-group-btn">
                                                     <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
                                                     <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
@@ -179,20 +197,17 @@
 
 
                                             <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to" id="" placeholder="to">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="advance_time_to"  placeholder="to">
                                                 <span class="input-group-btn">
                                                     <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
                                                     <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
                                                 </span>
                                             </div>
-
                                         </td>
-
-
 
                                         <td>
                                             <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="pay_from" id="" placeholder="From">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px" readonly name="from"  placeholder="From">
                                                 <span class="input-group-btn">
                                                     <!--<button class="btn default date-reset" type="button" style="margin-right: 0"><i class="fa fa-times"></i></button>-->
                                                     <button class="btn default date-set" type="button" style="margin-right: 0"><i class="fa fa-calendar"></i></button>
@@ -201,7 +216,7 @@
 
 
                                             <div class="input-group date form_datetime margin-bottom-5">
-                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="pay_to" id="" placeholder="to">
+                                                <input type="text" class="form-control form-filter input-sm" style="height: 34px"  readonly name="to"  placeholder="to">
                                                 <span class="input-group-btn">
                                                     <!--<button class="btn default date-reset" type="button"  style="margin-right: 0"><i class="fa fa-times"></i></button>-->
                                                     <button class="btn default date-set" type="button"  style="margin-right: 0"><i class="fa fa-calendar"></i></button>
@@ -209,9 +224,7 @@
                                             </div>
                                         </td>
 
-                                        <td>
-
-                                        </td>
+                                        <td></td>
 
                                         <td>
                                             <div class="margin-bottom-5">

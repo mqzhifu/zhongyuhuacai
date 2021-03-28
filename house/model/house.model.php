@@ -44,12 +44,12 @@ class HouseModel {
         self::DIRECTION_UNKNOW => "未知",
     ];
 
-    static function upStatus($oid,$status,$data = []){
+    static function upStatus($hid,$status,$data = []){
         $upData = array("status"=>$status,'u_time'=>time());
         if ($data){
             $upData = array_merge($upData,$data);
         }
-        return self::db()->upById($oid,$upData);
+        return self::db()->upById($hid,$upData);
     }
 
     static function getStatusSelectOptionHtml(){

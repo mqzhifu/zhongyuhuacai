@@ -25,7 +25,7 @@ class TemplateLib{
         array('preg'=>'{\$(.*)}',        'replace'=>' echo $\\1;',               ),
         array('preg'=>'{eval (.*)}',    'replace'=>' \\1; ',                    ),
         //常量 与 函数
-        array('preg'=>'{CONST\|(.*)}/',  'replace'=>' echo \\1; ',               ),
+        array('preg'=>'{CONST\|(.*)}',  'replace'=>' echo \\1; ',               ),
         array('preg'=>'{FUNC\| (.*)}',    'replace'=>' \\1; ',                    ),
         //文件包含
         array('preg'=>'{include (.*)}','replace'=>' include $this->_st->compile("\\1");',),

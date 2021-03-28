@@ -158,7 +158,7 @@ class PayListCtrl extends BaseCtrl{
             if(!$list){//证明所有的支付记录均已完成，可以更新<上级>状态了
                 OrderModel::upStatus($record['oid'],OrderModel::STATUS_FINISH);
             }
-            out_ajax(200);
+            out_ajax(200,"ok");
         }
 
         $data = array(
@@ -252,6 +252,7 @@ class PayListCtrl extends BaseCtrl{
                     OrderModel::CATE_DESC[$v['category']],
                     $v['price'],
                     $v['final_price'],
+                    $v['real_price'],
                     get_default_date($v['start_time']),
                     get_default_date($v['end_time']),
 //                    $v['pay_third_no'],
@@ -262,10 +263,11 @@ class PayListCtrl extends BaseCtrl{
 //                    $shareUserName,
 //                    $v['agent_id']."-".$v['address_agent'],
                     OrderPayListModel::STATUS_DESC[$v['status']],
-                    get_default_date($v['pay_time']),
+//                    get_default_date($v['pay_time']),
+                    $v['price_desc'],
                     get_default_date($v['advance_time']),
                     get_default_date($v['a_time']),
-
+                    get_default_date($v['u_time']),
                     $upStatusBnt ."<br/>".$addPayListRecordBnt ."<br/>".$payListRecordBnt,
 //                    '<a target="_blank"  href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
 //                    '<a target="_blank"  href="/finance/no/order/edit/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 编辑 </a>'.
@@ -291,78 +293,80 @@ class PayListCtrl extends BaseCtrl{
     function getDataListTableWhere(){
         $where = 1;
 
-
-        $no = _g("no");
-        $total_price_from = _g("total_price_from");
-        $total_price_to = _g("total_price_to");
-        $payType = _g('payType');
-        $status = _g("status");
-
-
-        $username = _g('username');
-        $share_username = _g('share_username');
-        $address = _g('address');
-
-        $from = _g("from");
-        $to = _g("to");
-
-        $pay_from = _g("pay_from");
-        $pay_to = _g("pay_to");
-
-
-        $num = _g("num");
-        $haulage = _g("haulage");
-
-
         $id = _g("id");
+        $house_id = _g("house_id");
+        $oid = _g("oid");
+        $type = _g("type");
+        $category = _g('category');
+        $price_from = _g("price_from");
+        $price_to = _g("price_to");
+        $real_price_from = _g("real_price_from");
+        $real_price_to = _g("real_price_to");
+        $status = _g("status");
+        $from = _g("advance_time_from");
+        $to = _g("advance_time_to");
+        $price_memo = _g("price_memo");
+
         if($id)
             $where .=" and id = '$id' ";
 
-        if($no)
-            $where .=" and no = '$no' ";
+        if($house_id)
+            $where .=" and house_id = '$house_id' ";
 
-        if($total_price_from)
-            $where .=" and total_price >= '$total_price_from' ";
+        if($oid)
+            $where .=" and oid = '$oid' ";
 
-        if($total_price_to)
-            $where .=" and total_price <= '$total_price_to' ";
+        if($type)
+            $where .=" and type = '$type' ";
+
+        if($category)
+            $where .=" and category = '$category' ";
+
+
+        if($price_from)
+            $where .=" and price >= '$price_from' ";
+
+        if($price_to)
+            $where .=" and price <= '$price_to' ";
+
+        if($real_price_from)
+            $where .=" and real_price >= '$real_price_from' ";
+
+        if($real_price_to)
+            $where .=" and real_price <= '$real_price_to' ";
 
         if($status)
             $where .=" and status = '$status' ";
 
-        if($payType)
-            $where .=" and pay_type = '$payType' ";
+        if($price_memo)
+            $where .=" and price_memo like '%$price_memo%' ";
 
-        if($share_username){
-            $userService = new UserService();
-            $where .= $userService->searchUidsByKeywordUseDbWhere($share_username);
-        }
 
-        if($address)
-            $where .=" and address like '%$address%' ";
+//        if($payType)
+//            $where .=" and pay_type = '$payType' ";
+//        if($share_username){
+//            $userService = new UserService();
+//            $where .= $userService->searchUidsByKeywordUseDbWhere($share_username);
+//        }
+//
 
-        if($num)
-            $where .=" and num = '$num' ";
+//
+//        if($from)
+//            $where .=" and a_time >=  ".strtotime($from);
+//
+//        if($to)
+//            $where .=" and a_time <= ".strtotime($to);
 
-        if($haulage)
-            $where .=" and haulage = '$haulage' ";
-
-        if($from)
-            $where .=" and a_time >=  ".strtotime($from);
-
-        if($to)
-            $where .=" and a_time <= ".strtotime($to);
-
-        if($pay_from)
-            $where .=" and a_time >=  ".strtotime($from);
-
-        if($pay_to)
-            $where .=" and a_time <= ".strtotime($to);
-
-        if($username){
-            $userService = new UserService();
-            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
-        }
+//        if($pay_from)
+//            $where .=" and a_time >=  ".strtotime($from);
+//
+//        if($pay_to)
+//            $where .=" and a_time <= ".strtotime($to);
+//
+//        if($username){
+//            $userService = new UserService();
+//            $where .= $userService->searchUidsByKeywordUseDbWhere($username);
+//        }
 
         return $where;
     }

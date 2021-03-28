@@ -91,9 +91,9 @@
                         required: true,
                         price:true
                     },
-                    type: {
-                        required: true,
-                    } ,
+                    // type: {
+                    //     required: true,
+                    // } ,
                     pay_mode: {
                         required: true
                     },
@@ -248,7 +248,7 @@
         // '                                                <input type="radio" class="md-radiobtn" name="time_cycle" value="2">外置\n'+
         var html = '<hr/>\n'+
             '<div class="form-group">\n' +
-            '                                            <label class="control-label col-md-3">首次付款空置费<span class="required">\n' +
+            '                                            <label class="control-label col-md-3">{CONST| FIRST_PAY_FREE_PRICE}<span class="required">\n' +
             '                                            * </span>\n' +
             '                                            </label>\n' +
             '                                            <div class="col-md-4">\n' +

@@ -7,10 +7,10 @@ class HouseCtrl extends BaseCtrl{
 
         $statusSelectOptionHtml = HouseModel::getStatusSelectOptionHtml();
         $this->assign("statusSelectOptionHtml",$statusSelectOptionHtml);
-
+        //装修
         $getFitmentSelectOptionHtml = HouseModel::getFitmentSelectOptionHtml();
         $this->assign("getFitmentSelectOptionHtml",$getFitmentSelectOptionHtml);
-
+        //朝向
         $getDirectionSelectOptionHtml = HouseModel::getDirectionSelectOptionHtml();
         $this->assign("getDirectionSelectOptionHtml",$getDirectionSelectOptionHtml);
 
@@ -59,8 +59,8 @@ class HouseCtrl extends BaseCtrl{
         $house['admin_name'] = $admin['uname'];
         $house['saler_name'] = get_admin_name($house['saler_id']);
 
-//        $house['build_fitment_desc'] = HouseModel::DIRECTION_DESC[$house['build_fitment']];
-//        $house['build_direction_desc'] = HouseModel::DIRECTION_DESC[$house['build_direction']];
+        $house['build_fitment_desc'] = HouseModel::DIRECTION_DESC[$house['build_fitment']];
+        $house['build_direction_desc'] = HouseModel::FITMENT_DESC[$house['build_direction']];
 
         $house['status_desc'] = HouseModel::STATUS[$house['status']];
 
@@ -80,7 +80,40 @@ class HouseCtrl extends BaseCtrl{
         $master = MasterModel::db()->getById($house['master_id']);
         $orderList = $this->getOrderListByHouseId($house['id']);
 
-//        $this->assign("order",array());
+        $userOrder = OrderModel::getHouseCategoryRowByInStatus($id,OrderModel::CATE_USER,OrderModel::STATUS_WAIT . "," .OrderModel::STATUS_OK);
+        $masterOrder = OrderModel::getHouseCategoryRowByInStatus($id,OrderModel::CATE_MASTER,OrderModel::STATUS_WAIT . "," .OrderModel::STATUS_OK);
+
+        $userRoi = 0;
+        if($userOrder){
+            $userOrderInfo = "已生成";
+            if($userOrder['status'] == OrderModel::STATUS_WAIT){
+                $userOrderInfo .= "，但未生成支付记录";
+            }else{
+                $userOrderInfo .= "，已未生成支付记录";
+            }
+        }else{
+            $userOrderInfo = "未生成";
+        }
+
+        $masterRoi = 0;
+        if($masterOrder){
+            $masterOrderInfo = "已生成";
+            if($masterOrder['status'] == OrderModel::STATUS_WAIT){
+                $masterOrderInfo .= "，但未生成支付记录";
+            }else{
+                $masterOrderInfo .= "，已未生成支付记录";
+            }
+        }else{
+            $masterOrderInfo = "未生成";
+        }
+
+        $roi = $userRoi + $masterRoi;
+        $this->assign("roi",$roi);
+        $this->assign("userRoi",$userRoi);
+        $this->assign("masterRoi",$masterRoi);
+
+        $this->assign("userOrderInfo",$userOrderInfo);
+        $this->assign("masterOrderInfo",$masterOrderInfo);
         $this->assign("user",$user);
         $this->assign("master",$master);
         $this->assign("house",$house);
@@ -110,6 +143,7 @@ class HouseCtrl extends BaseCtrl{
             $data['build_fitment'] = _g("build_fitment",0);
             $data['a_time'] = time();
             $data['admin_id']  = $this->_adminid;
+            $data['u_time'] = time();
 //            $data['province_code'] = _g("province");
 //            $data['city_code'] = _g("city");
 //            $data['county_code'] = _g("county");
@@ -135,11 +169,11 @@ class HouseCtrl extends BaseCtrl{
 //            }
 
             if(!$data['saler_id']){
-                $this->notice("业务员ID不能为空");
+                $this->notice(SALE_MAN."ID不能为空");
             }
             $saler = AdminUserModel::db()->getById($data['saler_id']);
             if(!$saler){
-                $this->notice("业务员ID错误，不存在DB中");
+                $this->notice(SALE_MAN."ID错误，不存在DB中");
             }
             if(!$data['community']){
                 $this->notice("community is null ");
@@ -207,7 +241,7 @@ class HouseCtrl extends BaseCtrl{
 
             $mobile =  _g('master_mobile');
             if(!FilterLib::regex($mobile,"phone")){
-                $this->notice("房主-手机号格式错误 ");
+                $this->notice(MASTER."-手机号格式错误 ");
             }
 
             $dataMaster['mobile'] = $mobile ;
@@ -322,14 +356,14 @@ class HouseCtrl extends BaseCtrl{
                 $v = $HouseService->formatRow($v);
 
                 $addOrderBnt = "";
-                if($v['status'] == HouseModel::STATUS_WAIT){
+                if($v['status'] == HouseModel::STATUS_WAIT || $v['status'] == HouseModel::STATUS_INIT){
                     $addOrderBnt =
                         '<a href="/house/no/order/add/hid='.$v['id'].'" class="btn purple btn-xs btn blue btn-xs margin-bottom-5"><i class="fa fa-plus"></i>   </i> 添加订单 </a>';
                 }
                 $closeBnt = "";
                 if($v['status'] == HouseModel::STATUS_INIT){
                 $closeBnt =
-                    '<button class="btn red upstatus btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
+                    '<button class="btn red closeHouse btn-xs margin-bottom-5" data-id="'.$v['id'].'" data-status="'.HouseModel::STATUS_CLOSE.'"><i class="fa fa-minus-square"></i>'."关闭".'</button>';
                 }
                $pics= "";
                 if($v['pics']){
@@ -378,7 +412,9 @@ class HouseCtrl extends BaseCtrl{
         exit;
     }
 
-    function upStatus($id,$status){
+    function upStatus(){
+        $id = _g("id");
+        $status = _g("status");
         if(!$id)
             out_ajax(500,"id is null");
 
@@ -397,15 +433,15 @@ class HouseCtrl extends BaseCtrl{
             if($house['status'] != HouseModel::STATUS_INIT){
                 out_ajax(500,"状态不为：STATUS_INIT");
             }
-            $masterOrder = OrderModel::db()->getRow("house_id = $id and status = ".OrderModel::STATUS_OK ." and category = ".OrderModel::CATE_MASTER );
+            $masterOrder = OrderModel::db()->getRow("house_id = $id and status != ".OrderModel::STATUS_FINISH ." and category = ".OrderModel::CATE_MASTER );
             if($masterOrder){
-                out_ajax(500,"还有未完结的：房主 订单~");
+                out_ajax(500,"还有未完结的：订单~");
             }
 
-            $userOrder = OrderModel::db()->getRow("house_id = $id and status = ".OrderModel::STATUS_OK ." and category = ".OrderModel::CATE_USER );
-            if($userOrder){
-                out_ajax(500,"还有未完结的：用户 订单~");
-            }
+//            $userOrder = OrderModel::db()->getRow("house_id = $id and status = ".OrderModel::STATUS_OK ." and category = ".OrderModel::CATE_USER );
+//            if($userOrder){
+//                out_ajax(500,"还有未完结的：用户 订单~");
+//            }
 
             HouseModel::upStatus($id,$status);
         }
@@ -418,15 +454,17 @@ class HouseCtrl extends BaseCtrl{
         $master = _g("master");
         $user = _g('user');
         $status = _g('status');
-        $community = _g('community');
+//        $community = _g('community');
         $build_floor_from = _g('build_floor_from');
         $build_floor_to = _g('build_floor_to');
 
         $build_direction = _g("build_direction");
+        //面积
         $build_area_from = _g("build_area_from");
         $build_area_to = _g('build_area_to');
-
+        //几居室
         $build_room_num = _g('build_room_num');
+        //装修
         $build_fitment = _g('build_fitment');
 
         $from = _g('from');
@@ -444,8 +482,8 @@ class HouseCtrl extends BaseCtrl{
         if($status)
             $where .=" and status = '$status' ";
 
-        if($community)
-            $where .=" and community like '%$community%' ";
+//        if($community)
+//            $where .=" and community like '%$community%' ";
 
         if($build_floor_from)
             $where .=" and build_floor >= '$build_floor_from' ";
