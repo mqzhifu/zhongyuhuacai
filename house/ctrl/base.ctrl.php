@@ -16,6 +16,8 @@ class BaseCtrl{
     public $_addPostUrl = null;
     public $_addUrl = null;
 
+    public  $_houseService = null;
+
     function __construct($request){
         $this->_request = $request;
         //接口配置信息
@@ -87,7 +89,7 @@ class BaseCtrl{
 //        $this->fansService = new FansService();
 //        $this->gamesService = new GamesService();
 //        $this->imSevice = new ImService();
-//        $this->advertiseService = new AdvertiseService();
+        $this->_houseService = new HouseService();
 //        $this->systemService = new SystemService();
     }
 

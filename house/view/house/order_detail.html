@@ -65,7 +65,7 @@
                                                             确认生成
                                                         </a>
                                                     {else}
-                                                        <a href="/house/no/order/finish/force=1&oid={$order['id']}" class="btn default yellow-stripe">
+                                                        <a href="/house/no/order/finish/force=0&oid={$order['id']}" class="btn default yellow-stripe">
                                                             确认结算
                                                         </a>
                                                         <a href="/house/no/order/finish/force=1&oid={$order['id']}" class="btn default yellow-stripe">
@@ -186,7 +186,7 @@
                                                                         </div>
                                                                         <div class="col-md-7 value">
                                                                             {if ($order['contract_attachment_link'])}
-                                                                                <a href='$url' target='_blank'><i class="fa fa-file-text"></i></a>
+                                                                                <a href='{$order['contract_attachment_link']}' target='_blank'><i class="fa fa-file-text"></i></a>
                                                                             {else}
                                                                             无
                                                                             {/if}

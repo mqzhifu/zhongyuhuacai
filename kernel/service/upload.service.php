@@ -25,9 +25,9 @@ class UploadService
     }
 
     function contract($postInputName){
-        $lib = new ImageUpLoadLib();
+        $lib = new FileUpLoadLib();
         $lib->path = $this->getHouseProjectDir();
-        $rs = $lib->upLoadOneFile($postInputName,'contract',array('png','jpg','bmp',"word","txt",'doc','docx','xlsx'),0,"",1);
+        $rs = $lib->upLoadOneFile($postInputName,'contract',FileUpLoadLib::fileTypeCategoryDoc);
         return $rs;
     }
 

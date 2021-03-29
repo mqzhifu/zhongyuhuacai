@@ -363,7 +363,7 @@ class OrderCtrl extends BaseCtrl{
         }
 
 
-        $guessRoi = $this->getGuessRoi($payList);
+        $guessRoi = $this->_houseService->getGuessRoi($payList);
 
         $this->assign("guessRoi",$guessRoi);
 

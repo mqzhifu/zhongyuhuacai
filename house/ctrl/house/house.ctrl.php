@@ -83,28 +83,39 @@ class HouseCtrl extends BaseCtrl{
         $userOrder = OrderModel::getHouseCategoryRowByInStatus($id,OrderModel::CATE_USER,OrderModel::STATUS_WAIT . "," .OrderModel::STATUS_OK);
         $masterOrder = OrderModel::getHouseCategoryRowByInStatus($id,OrderModel::CATE_MASTER,OrderModel::STATUS_WAIT . "," .OrderModel::STATUS_OK);
 
+
         $userRoi = 0;
         if($userOrder){
-            $userOrderInfo = "已生成";
+            $userOrderInfo = "已创建";
             if($userOrder['status'] == OrderModel::STATUS_WAIT){
-                $userOrderInfo .= "，但未生成支付记录";
+                $userOrderInfo .= "，未生成支付记录";
             }else{
-                $userOrderInfo .= "，已未生成支付记录";
+                $userOrderInfo .= "，已生成支付记录";
+                $payList = OrderPayListModel::db()->getAll(" oid = ".$userOrder['id']);
+                $userRoi = $this->_houseService->getGuessRoi($payList);
+                if($userOrder['status'] == OrderModel::STATUS_FINISH){
+                    $userOrderInfo .= ",已结算";
+                }
             }
         }else{
-            $userOrderInfo = "未生成";
+            $userOrderInfo = "未创建";
         }
 
         $masterRoi = 0;
         if($masterOrder){
-            $masterOrderInfo = "已生成";
+            $masterOrderInfo = "已创建";
             if($masterOrder['status'] == OrderModel::STATUS_WAIT){
-                $masterOrderInfo .= "，但未生成支付记录";
+                $masterOrderInfo .= "，未生成支付记录";
             }else{
-                $masterOrderInfo .= "，已未生成支付记录";
+                $masterOrderInfo .= "，已生成支付记录";
+                $payList = OrderPayListModel::db()->getAll(" oid = ".$masterOrder['id']);
+                $masterRoi = $this->_houseService->getGuessRoi($payList);
+                if($masterOrder['status'] == OrderModel::STATUS_FINISH){
+                    $masterOrderInfo .= ",已结算";
+                }
             }
         }else{
-            $masterOrderInfo = "未生成";
+            $masterOrderInfo = "未创建";
         }
 
         $roi = $userRoi + $masterRoi;

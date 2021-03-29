@@ -75,4 +75,16 @@ Class HouseService {
     }
 //
 
+    function getGuessRoi($payList){
+        $guessRoi = 0;
+        foreach ($payList as $k=>$v){
+            if($v['type'] == OrderModel::FINANCE_INCOME){
+                $guessRoi += $v['price'];
+            }else{
+                $guessRoi -= $v['price'];
+            }
+        }
+        return $guessRoi;
+    }
+
 }
