@@ -88,15 +88,16 @@ class BaseCtrl {
             LogLib::inc()->debug($ipBaiduParserAddress);
             RedisOptLib::setBaiduIpParser($ip, $ipBaiduParserAddress);
         }
-
         $data = array(
             'a_time' => time(),
             'ctrl' => $request['ctrl'],
             'ac' => $request['ac'],
-            'uid' => $this->uinfo['id'],
             'client_info' => json_encode(get_client_info()),
             'ip_parser' => json_encode($ipBaiduParserAddress, JSON_UNESCAPED_UNICODE),
         );
+        if ($this->uinfo) {
+            $data['uid'] = $this->uinfo['id'];
+        }
         UserLogModel::db()->add($data);
 
         $this->session = new SessionLib();

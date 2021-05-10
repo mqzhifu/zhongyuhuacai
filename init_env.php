@@ -10,7 +10,7 @@ $env = $argv[1];
 
 $content = str_replace("#ENV#",$env,$content);
 
-$arr = array("api",'instantplayadmin','agent');
+$arr = array("api",'instantplayadmin','agent','house');
 foreach ($arr as $k=>$v) {
     $appDir = $dir . "/$v/env.php";
     echo "append <pre> to $appDir\n";
