@@ -449,7 +449,7 @@ function somearr_to_onearr($somearr){
 function return_bytes($val) {
     return 1;
     $val = trim($val);
-    $last = strtolower($val{strlen($val)-1});
+    $last = strtolower($val[strlen($val)-1] );
     switch($last) {
         case 'g': $val *= 1024;
         case 'm': $val *= 1024;

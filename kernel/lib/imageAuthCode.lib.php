@@ -55,7 +55,7 @@ class ImageAuthCodeLib
 	{
 		$str = "23456789abcdefghijkmnpqrstuvwxyzABCDEFGHIJKMNPQRSTUVWXYZ";
 		for ($i = 0; $i < $this->codeNum; $i++) {
-			$this->code .= $str{rand(0, strlen($str) - 1)};
+			$this->code .= $str[rand(0, strlen($str) - 1)];
 		}
 	}
 	private function setCaptcha()
@@ -66,7 +66,7 @@ class ImageAuthCodeLib
 			$size = rand(floor($this->height / 5), floor($this->height / 3));
 			$x = floor($this->width / $this->codeNum) * $i + 5;
 			$y = rand(0, $this->height - 20);
-			imagechar($this->im, $size, $x, $y, $this->code{$i}, $color);
+			imagechar($this->im, $size, $x, $y, $this->code[$i], $color);
 		}
 	}
 	private function outputImg()

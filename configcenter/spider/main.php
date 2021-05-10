@@ -51,8 +51,8 @@ $main = array(
                     OUMEI=>array(
                         "name"=>"欧美原创",
                         "link_id"=> "13",
-                        "loop_start"=>944,
-                        "loop_end"=>1255,
+                        "loop_start"=>131,
+                        "loop_end"=>158,
                         "db_model_class"=>"HejidiOumeiModel"
                     ),
                     "cn"=>array(

@@ -59,7 +59,7 @@ class HejidiShell{
             echo $i ." \n";
             $i++;
             if($page == 1 ){
-                if ($i < 11 ){
+                if ($i < 12 ){
                     continue;
                 }
             }
@@ -69,6 +69,7 @@ class HejidiShell{
             if(strpos($tbody,'威尼斯人') !== false){
                 break;
             }
+
 //            var_dump($tbody);exit;
 //            if ($i> 4){
 //                break;
