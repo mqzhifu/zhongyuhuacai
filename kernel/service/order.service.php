@@ -222,6 +222,12 @@ class OrderService{
             $agentAddress = AgentModel::getAddrStrById($agentShare['id']);
         }
 
+
+        $agentShareId = 0;
+        if($agentShare){
+            $agentShareId = $agentShare['id'];
+        }
+
         //优惠卷
         $couponPrice = 0;
         $couponId = 0;
@@ -251,7 +257,7 @@ class OrderService{
             'express_no'=>"",
             'haulage'=>$goods['haulage'],
             'share_uid'=>$share_uid,
-            'agent_id'=>$agentShare['id'],
+            'agent_id'=>$agentShareId,
             'coupon_id'=>$couponId,
             'address_agent'=>$agentAddress,
             'agent_one_withdraw'=>WithdrawMoneyService::WITHDRAW_ORDER_STATUS_WAIT,
