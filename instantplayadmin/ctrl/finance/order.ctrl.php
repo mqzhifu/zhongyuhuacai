@@ -21,7 +21,7 @@ class OrderCtrl extends BaseCtrl{
         $this->addJs('/assets/global/plugins/jquery-validation/js/jquery.validate.min.js');
         $this->addJs('/assets/global/plugins/jquery-validation/js/additional-methods.min.js');
 
-        $this->display("/finance/pay_list.html");
+        $this->display("/finance/order_list.html");
     }
 
     function add(){
