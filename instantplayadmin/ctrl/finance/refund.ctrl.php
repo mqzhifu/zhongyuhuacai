@@ -55,7 +55,7 @@ class RefundCtrl extends BaseCtrl{
             $payService = new PayService();
 //            $order = OrderModel::db()->getById($info['oid']);
             if($status == 2){//通过
-                $wxPayRefundBack = $payService->wxPayRefund($id);
+                $wxPayRefundBack = $payService->wxPayRefund($info['oid']);
                 if($wxPayRefundBack['code'] != 200){
                     $this->notice("微信接口请求退款异常,".$wxPayRefundBack['msg']);
                 }
