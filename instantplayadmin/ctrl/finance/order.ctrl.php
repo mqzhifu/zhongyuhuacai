@@ -151,10 +151,13 @@ class OrderCtrl extends BaseCtrl{
                 }
 
                 $refundBnt = "";
-//                if($v['status'] == OrderModel::STATUS_REFUND){
-//                    $refundBnt =  '<a href="/finance/no/order/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
-//                }
-
+                if($v['status'] == OrderModel::STATUS_REFUND){
+                    $refundBnt =  '<a href="/finance/no/order/refund/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 退款审批 </a>';
+                }
+                $helpUserRefundBnt = "";
+                if($v['status'] == OrderModel::STATUS_PAYED){
+                    $helpUserRefundBnt =  '<a href="/finance/no/refund/apply/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 帮用户退款 </a>';
+                }
 
                 $shareUserName = "";
                 if(arrKeyIssetAndExist($v,'share_uid')){
@@ -178,7 +181,7 @@ class OrderCtrl extends BaseCtrl{
                     get_default_date($v['pay_time']),
                     $v['nums'],
                     $v['haulage'],
-                    $refundBnt.
+                    $refundBnt.$helpUserRefundBnt.
                     '<a target="_blank"  href="/finance/no/order/detail/id='.$v['id'].'" class="btn blue btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 详情 </a>'.
                     '<a target="_blank"  href="/finance/no/order/edit/id='.$v['id'].'" class="btn green btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 编辑 </a>'.
                     '<a target="_blank"  href="/finance/no/withdraw/add/role='.AgentModel::ROLE_LEVEL_ONE.'&oids='.$v['id'].'&uid=1" class="btn red btn-xs margin-bottom-5" data-id="'.$v['id'].'"><i class="fa fa-file-o"></i> 一级代理提现 </a>'.
