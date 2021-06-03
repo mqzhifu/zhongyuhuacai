@@ -45,6 +45,7 @@ $main = array(
                 "name"=>"2048核基地",
                 "provider_class"=>"HejidiShell",
                 "host"=>array(
+                    "bbs6.l0nq.xyz/2048",
                     "hjd2048.com/2048",
                 ),
                 "forum"=>array(
@@ -84,6 +85,7 @@ $main = array(
                 "name"=>"第一会所",
                 "provider_class"=>"Sis001Shell",
                 "host"=>array(
+                    "user.diyihuisuo.com/bbs",
                     "38.103.161.16/bbs",
                     "666.diyihuisuo.com/bbs",
                     "cn.1huisuo.com/forum",
@@ -94,7 +96,7 @@ $main = array(
                         "name"=>"欧美原创",
                         "link_id"=> 229,
                         "loop_start"=>1,
-                        "loop_end"=>2342,
+                        "loop_end"=>51,
                         "db_model_class"=>"Sis001OumeiModel"
                     ),
                     OUMEI_TURN=>array(

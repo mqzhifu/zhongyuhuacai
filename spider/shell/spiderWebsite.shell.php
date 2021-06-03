@@ -31,7 +31,11 @@ class spiderWebsite{
         $config = $this->config[$website];
         $forumConfig = $config["forum"][$forum];
 
-        $host = "https://". $config['host'][0]. "/";
+        $protocol = "https";
+//        if ($website == "sis_001"){
+//            $protocol = "http";
+//        }
+        $host = $protocol."://". $config['host'][0]. "/";
 
         if ($website == HEJIDI){
             $hostForum = $host . "thread.php?fid-".$forumConfig['link_id'];
@@ -49,7 +53,6 @@ class spiderWebsite{
         $totalPages = $forumConfig['loop_end'] - $forumConfig['loop_start'];
         $totalDataRecords = 0;
         for($page = $forumConfig['loop_start'];$page <= $forumConfig['loop_end'];$page++){
-//            https://hjd2048.com/2048/thread.php?fid-13-page-2.html
             if ($website == "hejidi"){
                 $url = $hostForum . "-page-$page.html";
             }else if ($website == "caoliu"){
@@ -59,7 +62,7 @@ class spiderWebsite{
             }
             $this->out("page: $page , url: $url");
             $httpContent = $provider->curlGetHtmlContent($url,$host,0);
-//            $this->testHtmlContentPutFile($httpContent['body'],$website,$forum,$page);
+//            var_dump($httpContent);exit;
             $pageDataList = $provider->parseOnePage($httpContent['body'],$forumConfig,$page);
             $this->out("parseOnePage return data cnt:".count($pageDataList));
             $totalDataRecords += count($pageDataList);

@@ -20,7 +20,7 @@ class PayService{
 
         $totalPrice = $order['total_price'];
         //测试使用的金额
-        $totalPrice = 1;
+//        $totalPrice = 1;
 
         $config = ConfigCenter::get(APP_NAME,"wx")['pay'];
         $notifyUrl  = get_domain_url() . $config['notify_url'];
@@ -88,10 +88,9 @@ class PayService{
             $fee = $order['total_price'];
         }
 
-
         $totalPrice = $order["total_price"];
-        $fee = 1;
-        $totalPrice = 1;
+//        $fee = 1;
+//        $totalPrice = 1;
 
         if(!arrKeyIssetAndExist($order,'out_trade_no')){
             return out_pc(8354);
@@ -111,7 +110,7 @@ class PayService{
             LogLib::inc()->debug([" WxPayApi::refund back:",$backInfo,]);
 //            $backInfo = json_decode($backInfo,true);
 //            var_dump($backInfo);
-            if(array($backInfo,'err_code')){
+            if(arrKeyIssetAndExist($backInfo,'err_code')){
                 return out_pc(8355,json_encode($backInfo));
             }
             return out_pc(200);
