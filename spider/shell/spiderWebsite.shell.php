@@ -37,6 +37,7 @@ class spiderWebsite{
 //        }
         $host = $protocol."://". $config['host'][0]. "/";
 
+
         if ($website == HEJIDI){
             $hostForum = $host . "thread.php?fid-".$forumConfig['link_id'];
 //            thread.php?fid-13-page-2.html
@@ -62,7 +63,7 @@ class spiderWebsite{
             }
             $this->out("page: $page , url: $url");
             $httpContent = $provider->curlGetHtmlContent($url,$host,0);
-//            var_dump($httpContent);exit;
+            var_dump($httpContent);exit;
             $pageDataList = $provider->parseOnePage($httpContent['body'],$forumConfig,$page);
             $this->out("parseOnePage return data cnt:".count($pageDataList));
             $totalDataRecords += count($pageDataList);

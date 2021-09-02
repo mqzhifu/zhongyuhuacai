@@ -52,8 +52,8 @@ $main = array(
                     OUMEI=>array(
                         "name"=>"欧美原创",
                         "link_id"=> "13",
-                        "loop_start"=>131,
-                        "loop_end"=>158,
+                        "loop_start"=>1,
+                        "loop_end"=>188,
                         "db_model_class"=>"HejidiOumeiModel"
                     ),
                     "cn"=>array(
@@ -62,6 +62,13 @@ $main = array(
                         "loop_start"=>926,
                         "loop_end"=>2346,
                         "db_model_class"=>"HejidiCnModel"
+                    ),
+                    "japan"=>array(
+                        "name"=>"亚洲无码",
+                        "link_id"=> 4,
+                        "loop_start"=>1,
+                        "loop_end"=>2140,
+                        "db_model_class"=>"HejidiJapanModel"
                     ),
 
                 )
@@ -85,11 +92,14 @@ $main = array(
                 "name"=>"第一会所",
                 "provider_class"=>"Sis001Shell",
                 "host"=>array(
-                    "user.diyihuisuo.com/bbs",
-                    "38.103.161.16/bbs",
-                    "666.diyihuisuo.com/bbs",
-                    "cn.1huisuo.com/forum",
-                    "666.1huisuo.net/bbs"
+                    //"user.diyihuisuo.com/bbs",
+                    //"38.103.161.16/bbs",
+                    //"666.diyihuisuo.com/bbs",
+                    //"cn.1huisuo.com/forum",
+                    //"666.1huisuo.net/bbs"
+                    "666.sis001.us/forum/",
+                    "23.225.172.68/bbs/",
+                    "cn.diyihuisuo.com/bbs/",
                 ),
                 "forum"=>array(
                     OUMEI=>array(
