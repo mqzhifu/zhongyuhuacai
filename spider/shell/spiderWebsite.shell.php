@@ -31,7 +31,7 @@ class spiderWebsite{
         $config = $this->config[$website];
         $forumConfig = $config["forum"][$forum];
 
-        $protocol = "https";
+        $protocol = "http";
 //        if ($website == "sis_001"){
 //            $protocol = "http";
 //        }
@@ -63,7 +63,6 @@ class spiderWebsite{
             }
             $this->out("page: $page , url: $url");
             $httpContent = $provider->curlGetHtmlContent($url,$host,0);
-            var_dump($httpContent);exit;
             $pageDataList = $provider->parseOnePage($httpContent['body'],$forumConfig,$page);
             $this->out("parseOnePage return data cnt:".count($pageDataList));
             $totalDataRecords += count($pageDataList);
@@ -72,6 +71,9 @@ class spiderWebsite{
                 $id =$forumConfig['db_model_class']::db()->add($data);
                 $this->out("k: ".$k ." , id: ".$id);
             }
+            $sleepTime = 100000;
+            echo "echo $sleepTime\n";
+            usleep($sleepTime);
 //            if ($page > 5 ){
 //                exit(111);
 //            }

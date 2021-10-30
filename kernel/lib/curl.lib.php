@@ -102,9 +102,14 @@ class CurlLib{
         out("curl sis001 url : $url stime:".date("Y-m-d H:i:s",$stime));
         //设置URL
         curl_setopt($curl, CURLOPT_URL, $url);
-        $ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36";
+        $r = rand(0,9);
+        //$ua = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36";
+//        $ua = "Mozilla/$r.0 (Macintosh; Intel Mac OS X 10_15_$r) AppleWebKit/537.3$r (KHTML, like Gecko) Chrome/87.0.4280.14$r Safari/537.3$r";
+        $ua = randUa();
         curl_setopt($curl, CURLOPT_USERAGENT, $ua);
         curl_setopt($curl, CURLOPT_REFERER, $REFERER);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('X-FORWARDED-FOR:'.Rand_IP(), 'CLIENT-IP:'.Rand_IP()));
+//追踪返回302状态码，继续抓取
         //设置获取的信息以文件流的形式返回，而不是直接输出。
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 

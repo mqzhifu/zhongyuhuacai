@@ -66,7 +66,7 @@ $main = array(
                     "japan"=>array(
                         "name"=>"亚洲无码",
                         "link_id"=> 4,
-                        "loop_start"=>1,
+                        "loop_start"=>306,
                         "loop_end"=>2140,
                         "db_model_class"=>"HejidiJapanModel"
                     ),

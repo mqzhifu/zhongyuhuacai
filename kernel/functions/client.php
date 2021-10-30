@@ -803,3 +803,35 @@ function get_useragent_OS(){
     $info = array('os'=>$os,'version'=>$version);
     return $info;
 }
+
+//function getRandUa(){
+//    $r = rand(0,9);
+//    $ua = array(
+//         "Mozilla/$r.0 (Macintosh; Intel Mac OS X 10_15_$r) AppleWebKit/537.3$r (KHTML, like Gecko) Chrome/87.0.4280.14$r Safari/537.3$r",
+//         "Mozilla/$r.0 (Windows NT 6.1; WOW64) AppleWebKit/537.3$r (KHTML, like Gecko) Chrome/76.0.3809.13$r Safari/537.3$r",
+//        "Mozilla/5.0 (Linux; Android 10; HarmonyOS; EVR-AL00; HMSCore 6.0.1.306; GMSCore 20.15.16) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.93 HuaweiBrowser/11.1.4.301 Mobile Safari/537.36",
+//        "Mozilla/5.0 (Linux; Android 9; MHA-AL00 Build/HUAWEIMHA-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045713 Mobile Safari/537.36 MMWEBID/6206 MicroMessenger/8.0.10.1960(0x28000A3D) Process/tools WeChat/arm64 Weixin NetType/4G Language/zh_CN ABI/arm64",
+//        "Mozilla/5.0 (Linux; Android 9; MHA-AL00 Build/HUAWEIMHA-AL00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/77.0.3865.120 MQQBrowser/6.2 TBS/045713 Mobile Safari/537.36 MMWEBID/6206 MicroMessenger/8.0.10.1960(0x28000A3D) Process/tools WeChat/arm64 Weixin NetType/WIFI Language/zh_CN ABI/arm64",
+//        "Mozilla/5.0 (Linux; Android 9; SM-N9500) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Mobile Safari/537.36",
+//        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50",
+//        "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 2.0.50727; SLCC2; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; Tablet PC 2.0; .NET4.0E)",
+//        "Mozilla/5.0 (Windows; U; Windows NT 6.1; ) AppleWebKit/534.12 (KHTML, like Gecko) Maxthon/3.0 Safari/534.12",
+//        "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.3; .NET4.0C; .NET4.0E; SE 2.X MetaSr 1.0)",
+//    );
+//
+//    return $ua[$r];
+//
+//
+//}
+//
+//function Rand_IP(){
+//
+//    $ip2id= round(rand(600000, 2550000) / 10000); //第一种方法，直接生成
+//    $ip3id= round(rand(600000, 2550000) / 10000);
+//    $ip4id= round(rand(600000, 2550000) / 10000);
+//    //下面是第二种方法，在以下数据中随机抽取
+//    $arr_1 = array("218","218","66","66","218","218","60","60","202","204","66","66","66","59","61","60","222","221","66","59","60","60","66","218","218","62","63","64","66","66","122","211");
+//    $randarr= mt_rand(0,count($arr_1)-1);
+//    $ip1id = $arr_1[$randarr];
+//    return $ip1id.".".$ip2id.".".$ip3id.".".$ip4id;
+//}
