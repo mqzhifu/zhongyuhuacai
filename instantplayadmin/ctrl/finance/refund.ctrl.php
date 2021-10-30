@@ -81,7 +81,7 @@ class RefundCtrl extends BaseCtrl{
         if(!$id)
             $this->notice("id null");
 
-        $info = OrderRefundModel::db()->getById($id);
+        $info = OrderModel::db()->getById($id);
         if(!$info){
             $this->notice("id not in db");
         }
@@ -90,14 +90,13 @@ class RefundCtrl extends BaseCtrl{
             $this->notice("状态错误：只有状态为：已支付，才可进入此页面!!!");
         }
 
-        $rs = $this->orderService->applyRefund($id,1,"管理员后台帮忙申请",1,"","");
+        $rs = $this->orderService->applyRefund($id,$info['uid'],1,"管理员后台帮忙申请",1,"","");
         var_dump($rs);
         if($rs['code'] == 200){
             $this->ok("成功");
         }else{
             $this->notice("失败:".$rs['msg']);
         }
-
     }
 
     function add(){
