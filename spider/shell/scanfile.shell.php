@@ -86,6 +86,8 @@ class scanfile{
 
         }
 
+        $infoList[] = array("name" =>"MXGS-888",'佐野あおい','dpi'=>0,"size"=>0,'duration'=>"02:00:00",'fps'=>29,'payload'=>"del");
+
         foreach( $infoList as $k=>$v){
             $nameInfo = explode("_",$v['name']);
             $noInfo = explode( "-", trim($nameInfo[0]));
