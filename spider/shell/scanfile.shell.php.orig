@@ -37,7 +37,6 @@ class scanfile{
             if (substr($v,0,9) == 'MX3DS-006'){//MX3DS-006_ましろ杏_3D.mpeg
                 continue;
             }
-
 //             var_dump($v);
             $fileName = $baseDir . $v;
             $shellCommand = "ffmpeg -i '$fileName'  2>&1 |grep Duration";
