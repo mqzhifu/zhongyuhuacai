@@ -53,7 +53,7 @@ $main = array(
                         "name"=>"欧美原创",
                         "link_id"=> "13",
                         "loop_start"=>1,
-                        "loop_end"=>188,
+                        "loop_end"=>345,
                         "db_model_class"=>"HejidiOumeiModel"
                     ),
                     "cn"=>array(

@@ -17,11 +17,12 @@ class scanfile{
     public function run($argc){
         $s_time = time();
         //mac 硬盘
-        $baseDir = "/Volumes/My Passport/新流出/";
+//         $baseDir = "/Volumes/My Passport/新流出/";
         //mac 本地
 //         $baseDir = "/Users/wangdongyan/Downloads/film/流出/";
         //win硬盘
 //         $baseDir = "/Volumes/新加卷/流出/";
+        $baseDir = "/Volumes/Elements/新流出/";
         $fileList = my_dir($baseDir);
 //         var_dump($fileList);
         $infoList = array();
@@ -30,8 +31,11 @@ class scanfile{
                 continue;
             }
             if (substr($v,0,1) == '.'){
-                            continue;
-                        }
+                continue;
+            }
+            if (substr($v,0,9) == 'MX3DS-006'){//MX3DS-006_ましろ杏_3D.mpeg
+                continue;
+            }
 
 //             var_dump($v);
             $fileName = $baseDir . $v;
@@ -50,16 +54,22 @@ class scanfile{
 
 
             $shellCommand = "ffmpeg -i '$fileName'  2>&1 |grep Stream|head -1";
+//             echo $shellCommand . "\n";
             $rs = exec($shellCommand);
             $stream = explode(",",$rs);
-            $tmpStr = substr($stream[1],-1,1);
-//             var_dump($tmpStr);
-            if ( $tmpStr  == 'v'){
-                $dpi = trim($stream [3]);
-                $fps = trim($stream[5]);
+            if (count($stream) < 2 ){
+            //avi 格式有点问题
+                $dpi = 0;
+                $fps = 0;
             }else{
-                $dpi = trim($stream [2]);
-                $fps = trim($stream[4]);
+                 $tmpStr = substr($stream[1],-1,1);
+                 if ( $tmpStr  == 'v'){
+                     $dpi = trim($stream [3]);
+                     $fps = trim($stream[5]);
+                 }else{
+                     $dpi = trim($stream [2]);
+                     $fps = trim($stream[4]);
+                 }
             }
 
             echo " " . $dpi . " ". $fps;
@@ -86,7 +96,21 @@ class scanfile{
 
         }
 
+
+
         $infoList[] = array("name" =>"MXGS-888",'佐野あおい','dpi'=>0,"size"=>0,'duration'=>"02:00:00",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"MXGS-791",'香純ゆい','dpi'=>0,"size"=>"6.02G",'duration'=>"02:20:25",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"STKO-004",'紺野ひかる','dpi'=>0,"size"=>"2.22G",'duration'=>"00:59:09",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"SDNT-008",'加瀬ななほ','dpi'=>0,"size"=>"5.69G",'duration'=>"02:20:37",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"STKO-005",'加藤ももか','dpi'=>0,"size"=>"2.53G",'duration'=>"01:01:07",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"SVDVD-794",'一條みお&悠月リアナ&東條蒼&月宮ねね','dpi'=>0,"size"=>"402.5+47.5",'duration'=>"00:10:50",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"STKO-013",'南梨央奈','dpi'=>0,"size"=>"2.81G",'duration'=>"01:07:56",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"STARS-573",'松岡ちな','dpi'=>0,"size"=>"4.22G",'duration'=>" ",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"TIGR-007",'君色花音','dpi'=>0,"size"=>"2.58G",'duration'=>"01:03:47",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"SDAM-046",'広瀬結香&小鳥遊ももえ&鈴木真夕','dpi'=>0,"size"=>"5.7G",'duration'=>"02:20:47",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"STARS-173",'西野翔','dpi'=>0,"size"=>"6.6G",'duration'=>"00:00:00",'fps'=>29,'payload'=>"del");
+        $infoList[] = array("name" =>"MX3DS-006",'ましろ杏','dpi'=>0,"size"=>"15.6G",'duration'=>"00:00:00",'fps'=>29,'payload'=>"del");
+
 
         foreach( $infoList as $k=>$v){
             $nameInfo = explode("_",$v['name']);
@@ -99,12 +123,16 @@ class scanfile{
             if (!$row){
                 exit("no search : $where");
             }
+            $payload = "local";
+            if (isset($v['payload'])){
+                $payload = $v['payload'];
+            }
             $data = array(
                 'dpi' =>$v['dpi'],
                 'size' =>$v['size'],
                 'duration' =>$v['duration'],
                 'fps' =>$v['fps'],
-                'payload'=>"local",
+                'payload'=>$payload,
             );
             $rs = LeakedListModel::db()->upById($row['id'],$data);
             $upRs = "fail";
