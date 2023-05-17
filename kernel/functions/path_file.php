@@ -58,8 +58,11 @@ function get_dir($directory){
     return $rs;
 }
 //取出一个文件夹及子文件夹下的所有文件，但不包括子文件夹的路径信息
-function scan_file($path) {
+function scan_file($path,$first = 0 ) {
     global $result;
+    if($first){
+        $result = null;
+    }
     $files = scandir($path);
     foreach ($files as $file) {
         if ($file != '.' && $file != '..') {
