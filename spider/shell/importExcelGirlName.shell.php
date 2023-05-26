@@ -12,19 +12,20 @@ class ImportExcelGirlName
     public function run($argc){
         $excelData = $this->importExcelGirlsName();
         $diskData = $this->scanDiskFileName();
-//        foreach ($diskData as $k1=>$v1){
-//            $search = 0;
-//            foreach ($excelData as $k2=>$v2){
-//                if($k1 == $v2[0]){
-//                    $search = 1;
-//                    break;
-//                }
-//            }
-//
-//            if(!$search){
-//                out($k1);
-//            }
-//        }
+        out("//============ compare ==========");
+        foreach ($diskData as $k1=>$v1){
+            $search = 0;
+            foreach ($excelData as $k2=>$v2){
+                if($k1 == $v2[0]){
+                    $search = 1;
+                    break;
+                }
+            }
+
+            if(!$search){
+                out($k1);
+            }
+        }
     }
 
     function importExcelGirlsName(){
@@ -95,18 +96,18 @@ class ImportExcelGirlName
     //扫描硬件文件名，对文件名进行统一格式化处理
     function scanDiskFileName(){
         $hard_disk1_path = "/Volumes/Elements/欧美";
-        $hard_disk2_path = "/Users/xiaoz/Desktop/a-x/欧美";
+//        $hard_disk2_path = "/Users/xiaoz/Desktop/a-x/欧美";
 
         $girlNameList_disk1 = $this->processOneDir($hard_disk1_path);
         ksort($girlNameList_disk1);
         $this->girlListIteratorShow($girlNameList_disk1);
-        return null;
+        return $girlNameList_disk1;
         out("//==============================");
-        $girlNameList_disk2 = $this->processOneDir($hard_disk2_path);
-        ksort($girlNameList_disk2);
+//        $girlNameList_disk2 = $this->processOneDir($hard_disk2_path);
+//        ksort($girlNameList_disk2);
 //        $this->girlListIteratorShow($girlNameList_disk2);
 //        out("//==============================");
-        $total = $this->mergerTotalGirls($girlNameList_disk1,$girlNameList_disk1);
+//        $total = $this->mergerTotalGirls($girlNameList_disk1,$girlNameList_disk1);
 //        $this->girlListIteratorShow($total);
 
         return $total;
