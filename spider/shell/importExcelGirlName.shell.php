@@ -10,8 +10,16 @@ class ImportExcelGirlName
         $this->config = $config['common'];
     }
     public function run($argc){
+        //从excel 中 读取 girlName
         $excelData = $this->importExcelGirlsName();
         $diskData = $this->scanDiskFileName();
+
+
+
+//        $this->compareDiff($diskData,$excelData);
+    }
+
+    function compareDiff($diskData,$excelData){
         out("//============ compare ==========");
         foreach ($diskData as $k1=>$v1){
             $search = 0;
@@ -28,6 +36,7 @@ class ImportExcelGirlName
         }
     }
 
+    //从excel 中 读取 girlName
     function importExcelGirlsName(){
         include PLUGIN ."phpexcel/PHPExcel.php";
         $objRead = new PHPExcel_Reader_Excel2007();
@@ -112,7 +121,7 @@ class ImportExcelGirlName
 
         return $total;
     }
-
+    //从磁盘的两个位置读取 girlName ，但是得合并了
     function mergerTotalGirls($list1,$list2){
         $total = [];
         foreach ($list1 as $k1=>$v1){
@@ -143,6 +152,7 @@ class ImportExcelGirlName
         }
         return $total;
     }
+    //从磁盘中扫描文件，根据文件名，拿到 girlName ，进行格式化输出
     function girlListIteratorShow($girlNameList){
         $girlNameStrMaxLen = 0;
         foreach ($girlNameList as $k=>$v){
