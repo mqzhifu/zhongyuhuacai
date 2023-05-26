@@ -11,6 +11,10 @@ class GirlName
     }
     public function run($argc){
         $hard_disk1_path = "/Volumes/Elements/欧美";
+        $girlNameList_disk1 = $this->processOneDir($hard_disk1_path);
+    }
+    public function compareSameGirlName(){
+        $hard_disk1_path = "/Volumes/Elements/欧美";
         $hard_disk2_path = "/Volumes/My Passport/欧美";
 
         $girlNameList_disk1 = $this->processOneDir($hard_disk1_path);
