@@ -273,6 +273,7 @@ function out_pc($code = 200,$msg = '',$appKey = APP_NAME){
             }
         }
     }
+
     return array('code'=>$code,'msg'=>$msg);
 }
 function out_ajax($code = 500,$msg = ""){

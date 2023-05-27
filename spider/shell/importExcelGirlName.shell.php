@@ -11,13 +11,86 @@ class ImportExcelGirlName
     }
     public function run($argc){
         //从excel 中 读取 girlName
-        $excelData = $this->importExcelGirlsName();
+//        $excelData = $this->importExcelGirlsName();
         $diskData = $this->scanDiskFileName();
-
-
-
+        $this->curlGetGirlInfo($diskData);
 //        $this->compareDiff($diskData,$excelData);
     }
+
+    function curlGetGirlInfo($girlNameList){
+        $domain = "https://www.babepedia.com/babe/";
+        $cnt = 0;
+        foreach ($girlNameList as $k=>$v){
+            if($cnt > 10){
+                break;
+            }
+            $curlLib = new CurlLib();
+            $girlName = str_replace(" ","_",$k);
+            $url = $domain . $girlName;
+            out($url);
+            $html = $curlLib->send($url,1,null,1);
+            if(!$html || $html['code'] != 200 || !$html['msg']){
+                out("err===================== :".$k);
+                return false;
+            }
+            $this->parserHtml($html["msg"],$k);
+//            var_dump($html);exit;
+            sleep(500);//睡眠 500 毫秒，避免被对方给拉黑
+            $cnt++;
+        }
+    }
+
+    function parserHtml($html,$girlName){
+
+        if (stripos($html,"sorry") !== false){
+            out("err===================== sorry not found:".$girlName);
+            return false;
+        }
+
+        $row = array("Alias"=>"","Age"=>"","Height"=>"","Weight"=>"","Born"=>"","Birthplace"=>"","Nationality"=>"","Ethnicity"=>"","Measurements"=>"","BraCupSize"=>"","BodyType"=>"");
+
+        $myPregRs = $this->myPregMatchAll('/<h2 id=\'aka\'>(.*)<img/isU',$html,1,0);
+        if($myPregRs){
+            $row["Alias"] = str_replace("&nbsp;"," ",$myPregRs);
+//            out("$girlAlias:".$girlAlias);
+        }
+                                               //<ul id="biolist">
+        $ulLi = $this->myPregMatchAll('/<ul id=\"biolist\">(.*)<\/ul>/isU',$html,1,0);
+
+        if($ulLi){
+            $row["Age"] = $this->myPregMatchAll('/<span class=\"label\">Age:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["Height"] = $this->myPregMatchAll('/<span class=\"label\">Height:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["Weight"] = $this->myPregMatchAll('/<span class=\"label\">Weight:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["Born"] = $this->myPregMatchAll('/<span class=\"label\">Born:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["Birthplace"] = $this->myPregMatchAll('/<span class=\"label\">Birthplace<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["Nationality"] = $this->myPregMatchAll('/<span class=\"label\">Nationality:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["Ethnicity"] = $this->myPregMatchAll('/<span class=\"label\">Ethnicity:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+
+            $row["Measurements"] = $this->myPregMatchAll('/<span class=\"label\">Measurements:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["BraCupSize"] = $this->myPregMatchAll('/<span class=\"label\">Bra\/cup size:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["BodyType"] = $this->myPregMatchAll('/<span class=\"label\">Body type:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+
+            var_dump($row);exit;
+        }
+
+
+
+
+        var_dump("finish");exit;
+
+    }
+
+    function myPregMatchAll($eg,$str,$indexOne,$index2){
+        preg_match_all($eg,$str,$match);
+//        var_dump($match);
+        if(isset($match[$indexOne]) && $match[$indexOne]){
+            if(isset($match[$indexOne][$index2]) && $match[$indexOne][$index2]){
+                return $match[$indexOne][$index2];
+            }
+        }
+        return "";
+    }
+
 
     function compareDiff($diskData,$excelData){
         out("//============ compare ==========");
@@ -34,13 +107,14 @@ class ImportExcelGirlName
                 out($k1);
             }
         }
+
     }
 
     //从excel 中 读取 girlName
     function importExcelGirlsName(){
         include PLUGIN ."phpexcel/PHPExcel.php";
         $objRead = new PHPExcel_Reader_Excel2007();
-        $obj = $objRead->load("/Users/xiaoz/Documents/欧美.xlsx");
+        $obj = $objRead->load("/Volumes/Elements/欧美.xlsx");
 
         $cellName = array('A', 'B', 'C', 'D', 'E',"H");
 
@@ -106,6 +180,7 @@ class ImportExcelGirlName
     function scanDiskFileName(){
         $hard_disk1_path = "/Volumes/Elements/欧美";
 //        $hard_disk2_path = "/Users/xiaoz/Desktop/a-x/欧美";
+//        $hard_disk1_path = "/Users/mayanyan/Desktop/x-a";
 
         $girlNameList_disk1 = $this->processOneDir($hard_disk1_path);
         ksort($girlNameList_disk1);

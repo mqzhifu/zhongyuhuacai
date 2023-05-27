@@ -29,7 +29,10 @@ class CurlLib{
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         }
-
+        //输出 响应头信息
+//        curl_setopt($curl, CURLOPT_HEADER, 1);
+        //如出现 301自动 跳转
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 
         if($isJson){
             curl_setopt($curl, CURLOPT_HEADER, 0);
