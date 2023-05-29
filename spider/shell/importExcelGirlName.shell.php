@@ -13,71 +13,192 @@ class ImportExcelGirlName
         //从excel 中 读取 girlName
 //        $excelData = $this->importExcelGirlsName();
         $diskData = $this->scanDiskFileName();
-        $this->curlGetGirlInfo($diskData);
+        out("girls cnt:".count($diskData));
+//        $this->filterDbField();
+        $this->checkGirlInDb($diskData);
+//        $this->curlGetGirlInfo($diskData);
 //        $this->compareDiff($diskData,$excelData);
+    }
+    function parserField($row){
+        $v = $row;
+
+        $updateData = array("alias"=>$v["alias"],"age"=>$v["age"],"height"=>$v["height"],"weight"=>$v["weight"],"born"=>$v["born"]);
+        if($v["alias"]){
+            $newAlias = $v["alias"];
+            if(substr($v["alias"],0,3) == "aka"){
+                $newAlias = trim(substr($v["alias"],3));
+            }
+            $grepAlias = $this->myPregMatchAll('/(.*)<img(.*)/isU', $newAlias, 1, 0);
+            if(!$grepAlias){
+                $updateData['alias'] = $newAlias;
+//                    out("err=======6:alias not grep.".$v["alias"]);
+            }else{
+                $updateData['alias'] = $grepAlias;
+            }
+        }
+
+        if($v["age"]){
+            $newAge = trim(str_replace("years young","",$v["age"]));
+            if(!$newAge){
+                out("err=======6:age not grep.".$v["age"]);
+            }else{
+                $updateData['age'] = $newAge;
+            }
+
+        }
+
+        if($v["height"]){
+            $grepHeight = $this->myPregMatchAll('/\(or (.*) cm\)/isU', $v["height"], 1, 0);
+            if(!$grepHeight){
+                out("err=======4:height not grep.".$v["height"]);
+            }else{
+                $updateData['height'] = $grepHeight;
+            }
+        }
+
+        if($v["weight"]){
+            $grepWeight = $this->myPregMatchAll('/\(or (.*) kg\)/isU', $v["weight"], 1, 0);
+            if(!$grepWeight){
+                out("err=======5:weight not grep.".$v["weight"]);
+            }else{
+                $updateData['weight'] = $grepWeight;
+            }
+        }
+
+        if($v["born"]){
+            $grepBirthdaysMonth = $this->myPregMatchAll('/\/birthdays\/(.*)\'/isU', $v["born"], 1, 0);
+            if(!$grepBirthdaysMonth){
+                out("err=======7:grepBirthdaysMonth not grep.".$v["born"]);
+            }
+
+            $grepBirthdaysYeah = $this->myPregMatchAll('/\/born-in-the-year\/(.*)\'/isU', $v["born"], 1, 0);
+            if(!$grepBirthdaysYeah){
+                out("err=======8:grepBirthdaysYeah not grep.".$v["born"]);
+            }
+
+            if($grepBirthdaysMonth && $grepBirthdaysYeah){
+                $arr  = explode("-",$grepBirthdaysMonth);
+                $Birthday = $grepBirthdaysYeah ."-".$arr[1] ."-".$arr[1];
+                $updateData['born'] = $Birthday;
+            }
+        }
+//            array("alias"=>$v["alias"],"age"=>$v["age"],"height"=>$v["height"],"weight"=>$v["weight"],"born"=>$v["born"]);
+        out("updateData alias:".$updateData['alias']." ".$updateData['age']." ".$updateData['height']." ".$updateData['weight']." ".$updateData['born']);
+        return $updateData;
+
+    }
+    function filterDbField(){
+        $list = GirlOumeiModel::db()->getAll();
+        foreach ($list as $k=>$v){
+            $updateData = $this->parserField($v);
+           $rs = GirlOumeiModel::db()->upById($v['id'],$updateData);
+            if(!$rs){
+                out("err10=======update failed....");
+            }
+        }
+    }
+
+    function checkGirlInDb($girlList){
+        $diffList = array();
+        foreach ($girlList as $k=>$v){
+            $row = GirlOumeiModel::db()->getRow("name = '$k'");
+            if(!$row){
+                $diffList[$k] = $v;
+            }
+        }
+        if(!count($diffList)){
+            out("checkGirlInDb: cnt = 0");
+            return 0;
+        }
+        var_dump($diffList);exit;
+        $this->curlGetGirlInfo($diffList);
     }
 
     function curlGetGirlInfo($girlNameList){
         $domain = "https://www.babepedia.com/babe/";
-        $cnt = 0;
+//        $cnt = 0;
+//        return 0;
         foreach ($girlNameList as $k=>$v){
-            if($cnt > 10){
-                break;
-            }
+//            if($cnt > 10){
+//                break;
+//            }
             $curlLib = new CurlLib();
             $girlName = str_replace(" ","_",$k);
             $url = $domain . $girlName;
             out($url);
             $html = $curlLib->send($url,1,null,1);
             if(!$html || $html['code'] != 200 || !$html['msg']){
-                out("err===================== :".$k);
+                out("err=====================1 :".$k);
                 return false;
             }
             $this->parserHtml($html["msg"],$k);
 //            var_dump($html);exit;
-            sleep(500);//睡眠 500 毫秒，避免被对方给拉黑
-            $cnt++;
+            usleep(50);//睡眠 500 毫秒，避免被对方给拉黑
+//            $cnt++;
         }
     }
 
     function parserHtml($html,$girlName){
 
-        if (stripos($html,"sorry") !== false){
-            out("err===================== sorry not found:".$girlName);
+        if (stripos($html,"No results") !== false){
+            out("err=====================2 sorry not found:".$girlName);
             return false;
         }
 
-        $row = array("Alias"=>"","Age"=>"","Height"=>"","Weight"=>"","Born"=>"","Birthplace"=>"","Nationality"=>"","Ethnicity"=>"","Measurements"=>"","BraCupSize"=>"","BodyType"=>"");
+        $row = array(
+            "name"=>$girlName,"file_num"=>0,"add_time"=>time(),"up_time"=>0,
+            "alias"=>"","age"=>"","height"=>"","weight"=>"","born"=>"","birthplace"=>"",
+            "nationality"=>"","ethnicity"=>"","measurements"=>"","bra_cup_size"=>"","body_type"=>"");
 
-        $myPregRs = $this->myPregMatchAll('/<h2 id=\'aka\'>(.*)<img/isU',$html,1,0);
+        $myPregRs = $this->myPregMatchAll('/<h2 id=\'aka\'>(.*)<\/h2>/isU',$html,1,0);
         if($myPregRs){
-            $row["Alias"] = str_replace("&nbsp;"," ",$myPregRs);
+            $row["alias"] = str_replace("&nbsp;"," ",$myPregRs);
 //            out("$girlAlias:".$girlAlias);
         }
                                                //<ul id="biolist">
         $ulLi = $this->myPregMatchAll('/<ul id=\"biolist\">(.*)<\/ul>/isU',$html,1,0);
 
-        if($ulLi){
-            $row["Age"] = $this->myPregMatchAll('/<span class=\"label\">Age:<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["Height"] = $this->myPregMatchAll('/<span class=\"label\">Height:<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["Weight"] = $this->myPregMatchAll('/<span class=\"label\">Weight:<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["Born"] = $this->myPregMatchAll('/<span class=\"label\">Born:<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["Birthplace"] = $this->myPregMatchAll('/<span class=\"label\">Birthplace<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["Nationality"] = $this->myPregMatchAll('/<span class=\"label\">Nationality:<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["Ethnicity"] = $this->myPregMatchAll('/<span class=\"label\">Ethnicity:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+        if($ulLi) {
+            $row["age"] = $this->myPregMatchAll('/<span class=\"label\">Age:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["height"] = $this->myPregMatchAll('/<span class=\"label\">Height:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["weight"] = $this->myPregMatchAll('/<span class=\"label\">Weight:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["born"] = $this->myPregMatchAll('/<span class=\"label\">Born:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["birthplace"] = $this->myPregMatchAll('/<span class=\"label\">Birthplace<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["nationality"] = $this->myPregMatchAll('/<span class=\"label\">Nationality:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["ethnicity"] = $this->myPregMatchAll('/<span class=\"label\">Ethnicity:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
 
-            $row["Measurements"] = $this->myPregMatchAll('/<span class=\"label\">Measurements:<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["BraCupSize"] = $this->myPregMatchAll('/<span class=\"label\">Bra\/cup size:<\/span>(.*)<\/li/isU',$ulLi,1,0);
-            $row["BodyType"] = $this->myPregMatchAll('/<span class=\"label\">Body type:<\/span>(.*)<\/li/isU',$ulLi,1,0);
+            $row["measurements"] = $this->myPregMatchAll('/<span class=\"label\">Measurements:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["bra_cup_size"] = $this->myPregMatchAll('/<span class=\"label\">Bra\/cup size:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+            $row["body_type"] = $this->myPregMatchAll('/<span class=\"label\">Body type:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
+        }
+        $row = $this->trimRow($row);
+//        var_dump($row);
+        //$updateData = array("alias"=>$v["alias"],"age"=>$v["age"],"height"=>$v["height"],"weight"=>$v["weight"],"born"=>$v["born"]);
+        $processField = $this->parserField($row);
+        $row['age'] = $processField["age"];
+        $row['alias'] = $processField["alias"];
+        $row['weight'] = $processField["weight"];
+        $row['height'] = $processField["height"];
+        $row['born'] = $processField["born"];
 
-            var_dump($row);exit;
+
+
+        var_dump($row);
+        $id = GirlOumeiModel::db()->add($row);
+        var_dump($id);
+
+
+
+//        var_dump("finish");exit;
+
+    }
+    function trimRow($row){
+        $newRow = array();
+        foreach ($row as $k=>$v){
+            $newRow[$k] = trim($v);
         }
 
-
-
-
-        var_dump("finish");exit;
-
+        return $newRow;
     }
 
     function myPregMatchAll($eg,$str,$indexOne,$index2){
@@ -248,10 +369,11 @@ class ImportExcelGirlName
             var_dump("file_list empty....");exit;
         }
 
-        out("processOneDir $path , count:".count($file_list));
+        out("processOneDir $path , file count:".count($file_list));
 
 
         $girlNameList = array();
+        $realFileCnt = 0;
         foreach ($file_list as $k=>$v){
 
             if(substr($v,0,1) == "."){
@@ -259,10 +381,11 @@ class ImportExcelGirlName
                 continue;
             }
 //            out($v);
+            $realFileCnt++;
             $fileNameArr = explode("-",$v);
 //            var_dump($fileNameArr);
             if(count($fileNameArr) > 2 || count($fileNameArr) < 2){
-                out("============ err1:".$v);
+                out("============ err3:".$v);
                 continue;
             }
             $girlName = strtolower(trim($fileNameArr[0]));
@@ -278,6 +401,9 @@ class ImportExcelGirlName
             }else{
                 $girlGroup = explode(" and ",$girlName);
                 foreach ($girlGroup as $k2=>$v2){
+//                    if($v2 == 'alice'){
+//                        var_dump($v);exit;
+//                    }
                     $v2 = trim($v2);
                     if(!isset($girlNameList[$v2] ) ){
                         $girlNameList[$v2] = 1;
@@ -287,6 +413,7 @@ class ImportExcelGirlName
                 }
             }
         }
+        out("realFileCnt: ".$realFileCnt);
 
         return $girlNameList;
     }

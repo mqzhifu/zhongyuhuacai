@@ -1,6 +1,6 @@
 <?php
 class GirlOumeiModel {
-	static $_table = 'girl_oumei';
+	static $_table = 'girl';
     static $_pk = 'id';
     static $_db = null;
     static $_db_key = "spider";
