@@ -15,7 +15,7 @@ class ImportExcelGirlName
         $diskData = $this->scanDiskFileName();
         out("girls cnt:".count($diskData));
 //        $this->filterDbField();
-        $this->checkGirlInDb($diskData);
+//        $this->checkGirlInDb($diskData);
 //        $this->curlGetGirlInfo($diskData);
 //        $this->compareDiff($diskData,$excelData);
     }
@@ -299,7 +299,7 @@ class ImportExcelGirlName
 
     //扫描硬件文件名，对文件名进行统一格式化处理
     function scanDiskFileName(){
-        $hard_disk1_path = "/Volumes/Elements/欧美";
+        $hard_disk1_path = "/Volumes/Elements/A/欧美";
 //        $hard_disk2_path = "/Users/xiaoz/Desktop/a-x/欧美";
 //        $hard_disk1_path = "/Users/mayanyan/Desktop/x-a";
 
