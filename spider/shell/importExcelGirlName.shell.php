@@ -10,13 +10,23 @@ class ImportExcelGirlName
         $this->config = $config['common'];
     }
     public function run($argc){
+        $hard_disk_path = "/Volumes/Elements/A/欧美";
+//        $hard_disk_path = "/Volumes/Elements/A/欧美待处理";
+//        $hard_disk_path = "/Users/xiaoz/Desktop/a-x/欧美";
+//        $hard_disk_path = "/Users/mayanyan/Desktop/x-a";
+
         //从excel 中 读取 girlName
 //        $excelData = $this->importExcelGirlsName();
-        $diskData = $this->scanDiskFileName();
+        //扫描硬盘上的文件，并根据文件名分析出 girlName
+        $diskData = $this->scanDiskFileName($hard_disk_path);
         out("girls cnt:".count($diskData));
+        //修复文件名
+//        $this->fixFileName($hard_disk_path);
 //        $this->filterDbField();
+        //更新已有文件的总数
+        $this->upRecordFileName($diskData);
 //        $this->checkGirlInDb($diskData);
-//        $this->curlGetGirlInfo($diskData);
+//        $this->curlGetGirlInfo($diskData);//抓取全部数据
 //        $this->compareDiff($diskData,$excelData);
     }
     function parserField($row){
@@ -82,10 +92,51 @@ class ImportExcelGirlName
                 $updateData['born'] = $Birthday;
             }
         }
+
+        if(!$updateData['age']){
+            $updateData['age'] = 0;
+        }
+
+        if(!$updateData['height']){
+            $updateData['height'] = 0;
+        }
+
+        if(!$updateData['weight']){
+            $updateData['weight'] = 0;
+        }
+
 //            array("alias"=>$v["alias"],"age"=>$v["age"],"height"=>$v["height"],"weight"=>$v["weight"],"born"=>$v["born"]);
         out("updateData alias:".$updateData['alias']." ".$updateData['age']." ".$updateData['height']." ".$updateData['weight']." ".$updateData['born']);
         return $updateData;
 
+    }
+    function upRecordFileName($girlInfoList){
+        $list = GirlOumeiModel::db()->getAll();
+        if(!count($list)){
+            var_dump("GirlOumeiModel get all list is empty ");exit;
+        }
+        foreach ($list as $k=>$record){
+            $flag = 0;
+            foreach ($girlInfoList as $girlName=>$fileNum){
+//                var_dump($girlName);
+                if($record['name'] == $girlName){
+                    out("$girlName:".$fileNum);
+                    $flag = 1;
+                    break;
+                }
+            }
+            if(!$flag){
+               out("err:"."no search girlName:".$record['name']);
+            }else{
+                $updateData = array("up_time"=>time(),"file_num"=>$fileNum);
+                GirlOumeiModel::db()->upById($record['id'],$updateData);
+            }
+
+
+//            if(!$rs){
+//                out("err10=======update failed....");
+//            }
+        }
     }
     function filterDbField(){
         $list = GirlOumeiModel::db()->getAll();
@@ -113,10 +164,10 @@ class ImportExcelGirlName
         var_dump($diffList);exit;
         $this->curlGetGirlInfo($diffList);
     }
-
+    //抓取全部数据
     function curlGetGirlInfo($girlNameList){
         $domain = "https://www.babepedia.com/babe/";
-//        $cnt = 0;
+        $cnt = 0;
 //        return 0;
         foreach ($girlNameList as $k=>$v){
 //            if($cnt > 10){
@@ -133,8 +184,10 @@ class ImportExcelGirlName
             }
             $this->parserHtml($html["msg"],$k);
 //            var_dump($html);exit;
-            usleep(50);//睡眠 500 毫秒，避免被对方给拉黑
-//            $cnt++;
+            usleep(50);//睡眠 50 毫秒，避免被对方给拉黑
+            $cnt++;
+
+            out("total num:".count($girlNameList) . " process cnt:".$cnt);
         }
     }
 
@@ -146,9 +199,10 @@ class ImportExcelGirlName
         }
 
         $row = array(
-            "name"=>$girlName,"file_num"=>0,"add_time"=>time(),"up_time"=>0,
+            "type"=>1,"name"=>$girlName,"file_num"=>0,"add_time"=>time(),"up_time"=>0,
             "alias"=>"","age"=>"","height"=>"","weight"=>"","born"=>"","birthplace"=>"",
-            "nationality"=>"","ethnicity"=>"","measurements"=>"","bra_cup_size"=>"","body_type"=>"");
+            "nationality"=>"","ethnicity"=>"","measurements"=>"","bra_cup_size"=>"","body_type"=>""
+        );
 
         $myPregRs = $this->myPregMatchAll('/<h2 id=\'aka\'>(.*)<\/h2>/isU',$html,1,0);
         if($myPregRs){
@@ -172,6 +226,7 @@ class ImportExcelGirlName
             $row["body_type"] = $this->myPregMatchAll('/<span class=\"label\">Body type:<\/span>(.*)<\/li/isU', $ulLi, 1, 0);
         }
         $row = $this->trimRow($row);
+//        var_dump($row);exit;
 //        var_dump($row);
         //$updateData = array("alias"=>$v["alias"],"age"=>$v["age"],"height"=>$v["height"],"weight"=>$v["weight"],"born"=>$v["born"]);
         $processField = $this->parserField($row);
@@ -185,10 +240,11 @@ class ImportExcelGirlName
 
         var_dump($row);
         $id = GirlOumeiModel::db()->add($row);
-        var_dump($id);
-
-
-
+        if(!$id){
+            out("insert db failed.");
+        }else{
+            out("success db id:".$id);
+        }
 //        var_dump("finish");exit;
 
     }
@@ -298,15 +354,12 @@ class ImportExcelGirlName
     }
 
     //扫描硬件文件名，对文件名进行统一格式化处理
-    function scanDiskFileName(){
-        $hard_disk1_path = "/Volumes/Elements/A/欧美";
-//        $hard_disk2_path = "/Users/xiaoz/Desktop/a-x/欧美";
-//        $hard_disk1_path = "/Users/mayanyan/Desktop/x-a";
+    function scanDiskFileName($hard_disk_path){
 
-        $girlNameList_disk1 = $this->processOneDir($hard_disk1_path);
-        ksort($girlNameList_disk1);
-        $this->girlListIteratorShow($girlNameList_disk1);
-        return $girlNameList_disk1;
+        $girlNameList_disk = $this->processOneDir($hard_disk_path);
+        ksort($girlNameList_disk);
+        $this->girlListIteratorShow($girlNameList_disk);
+//        return $girlNameList_disk1;
         out("//==============================");
 //        $girlNameList_disk2 = $this->processOneDir($hard_disk2_path);
 //        ksort($girlNameList_disk2);
@@ -314,8 +367,8 @@ class ImportExcelGirlName
 //        out("//==============================");
 //        $total = $this->mergerTotalGirls($girlNameList_disk1,$girlNameList_disk1);
 //        $this->girlListIteratorShow($total);
-
-        return $total;
+        return $girlNameList_disk;
+//        return $total;
     }
     //从磁盘的两个位置读取 girlName ，但是得合并了
     function mergerTotalGirls($list1,$list2){
@@ -362,6 +415,47 @@ class ImportExcelGirlName
             out($this->outAddSpace($k,$girlNameStrMaxLen) ." : ".$v);
         }
     }
+    //修正文件名前半部分，主要是将女名统一化处理
+    function fixFileName($hard_disk_path){
+
+        $file_list = scan_file($hard_disk_path,1);
+        if(!$file_list || count($file_list) <= 0){
+            var_dump("scan_dir_file list empty....");exit;
+        }
+
+        out("processOneDir $hard_disk_path , file count:".count($file_list));
+        $realFileCnt = 0;//真实的文件，需要处理的文件总数
+        $noNeedCnt = 0;
+        foreach ($file_list as $k=>$fileName){
+            if(substr($fileName,0,1) == "."){
+                $noNeedCnt++;
+//                out("ignore file:".$v);
+                continue;
+            }
+
+            $realFileCnt++;
+            $fileNameArr = explode("-",$fileName);
+            if(count($fileNameArr) > 2 || count($fileNameArr) < 2){
+                out("============ err3:".$fileName);
+                continue;
+            }
+
+            $girlName = strtolower(str_replace("."," ",strtolower(trim($fileNameArr[0])) ));
+            $index = strpos($fileName,"-");
+            $newFileName = $girlName ."-". substr($fileName,$index+1);
+            out("oldFileName:".$fileName . " *__________________* newFileName:".$newFileName);
+            if($fileName == $newFileName){
+                out("fileName == newFileName ,no need process.");
+                continue;
+            }
+            rename($hard_disk_path."/".$fileName,$hard_disk_path."/".$newFileName);
+//            var_dump(333);exit;
+        }
+        out("realFileCnt:".$realFileCnt . " no need file count:".$noNeedCnt);
+        exit();
+    }
+
+
 
     function processOneDir($path){
         $file_list = scan_file($path,1);
