@@ -111,6 +111,7 @@ class ImportExcelGirlName
 
     }
     function upRecordFileName($girlInfoList){
+        out_ajax();
         $list = GirlOumeiModel::db()->getAll();
         if(!count($list)){
             var_dump("GirlOumeiModel get all list is empty ");exit;
