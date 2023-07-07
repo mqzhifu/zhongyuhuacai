@@ -6,6 +6,7 @@ storage/product_tb/*
 storage/deploy/*
 storage/img_resize/*
 storage/tb_product/*
+storage/*.js
 
 /vendor
 /doc
