@@ -294,6 +294,7 @@ function out($info ,$br = 1){
         $os = getOs();
         if (preg_match("/cli/i", php_sapi_name())){
             if($os == "WIN"){
+                $msg = iconv("UTF-8","GBK",$msg);
                 $msg .= "\r\n";
             }else{
                 $msg .= "\n";
@@ -304,6 +305,16 @@ function out($info ,$br = 1){
     }
     echo $msg;
 }
+
+function outNoBr($info){
+    $msg = $info;
+    $os = getOs();
+    if (preg_match("/cli/i", php_sapi_name()) && $os == "WIN"){
+        $msg = iconv("UTF-8","GBK",$msg);
+    }
+    echo $msg;
+}
+
 
 function getEmailHref($email){
     $a_email = array(

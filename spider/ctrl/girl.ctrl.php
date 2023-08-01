@@ -52,6 +52,4 @@ class GirlCtrl extends BaseCtrl  {
         $html = $this->_st->compile("girl.html");
         include $html;
     }
-
-
 }
