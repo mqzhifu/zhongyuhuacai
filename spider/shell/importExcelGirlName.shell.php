@@ -10,29 +10,35 @@ class ImportExcelGirlName
         $this->config = $config['common'];
         $this->spider = new SpiderData();
     }
-    public function run($argc){
-        $hard_disk_path = "/Volumes/Elements/A/欧美";
+    function GetDiskPath(){
+        $hard_disk_path = "/Volumes/Elements/film/欧美";
+//        $hard_disk_path = "/Users/clarissechamley/Desktop/a";
 //        $hard_disk_path = "/Volumes/Elements/A/欧美待处理";
 //        $hard_disk_path = "/Volumes/Elements/A/欧美待处理2";
 //        $hard_disk_path = "/Users/xiaoz/Desktop/a-x/欧美";
 //        $hard_disk_path = "/Users/mayanyan/Desktop/x-a";
-
-//        $this->compareTwoDiskFile();
-
-
+        return $hard_disk_path;
+//
+    }
+    public function run($argc){
+//        $this->filterDbField();
         //从excel 中 读取 girlName
 //        $excelData = $this->importExcelGirlsName();
+
+        $hard_disk_path = $this->GetDiskPath();
+//        $this->compareTwoDiskFile();
+        //先检查文件名正确性
+        //文件名规则：只能出现一个：中划线，前面是名字
+        //所有文件名均变成小写字母,名字中的点会被替换成空格
+        $this->fixFileName($hard_disk_path);
         //扫描硬盘上的文件，并根据文件名分析出 girlName
         $diskData = $this->scanDiskFileName($hard_disk_path);
         out("girls cnt:".count($diskData));
-        //修复文件名
-//        $this->fixFileName($hard_disk_path);
-//        $this->filterDbField();
         //更新已有文件的总数
         $this->upRecordFileName($diskData);
 //        $this->checkGirlInDb($diskData);
-//        $this->curlGetGirlInfo($diskData);//抓取全部数据
-//        $this->compareDiff($diskData,$excelData);
+        //抓取全部数据
+//        $this->spider->curlGetGirlInfo($diskData);
     }
     //比较两个目录，是否有重复的文件女名
     function compareTwoDiskFile(){
@@ -51,12 +57,13 @@ class ImportExcelGirlName
     function upRecordFileName($girlInfoList){
         $list = GirlOumeiModel::db()->getAll();
         if(!count($list)){
-            var_dump("GirlOumeiModel get all list is empty ");exit;
+            out("GirlOumeiModel get all list is empty ");
+            exit;
         }
         foreach ($list as $k=>$record){
             $flag = 0;
             foreach ($girlInfoList as $girlName=>$fileNum){
-//                var_dump($girlName);
+//                out($girlName);
                 if($record['name'] == $girlName){
                     out("$girlName:".$fileNum);
                     $flag = 1;
@@ -64,7 +71,7 @@ class ImportExcelGirlName
                 }
             }
             if(!$flag){
-               out("err:"."no search girlName:".$record['name']);
+               out("err:"."upRecordFileName 没有找到 girlName:".$record['name']);
             }else{
                 $updateData = array("up_time"=>time(),"file_num"=>$fileNum);
                 GirlOumeiModel::db()->upById($record['id'],$updateData);
@@ -99,7 +106,6 @@ class ImportExcelGirlName
             out("checkGirlInDb: cnt = 0");
             return 0;
         }
-        var_dump($diffList);exit;
         $this->spider->curlGetGirlInfo($diffList);
     }
     function compareDiff($diskData,$excelData){
@@ -194,10 +200,6 @@ class ImportExcelGirlName
         $this->girlListIteratorShow($girlNameList_disk);
 //        return $girlNameList_disk1;
         out("//==============================");
-//        $girlNameList_disk2 = $this->processOneDir($hard_disk2_path);
-//        ksort($girlNameList_disk2);
-//        $this->girlListIteratorShow($girlNameList_disk2);
-//        out("//==============================");
 //        $total = $this->mergerTotalGirls($girlNameList_disk1,$girlNameList_disk1);
 //        $this->girlListIteratorShow($total);
         return $girlNameList_disk;
@@ -250,7 +252,6 @@ class ImportExcelGirlName
     }
     //修正文件名前半部分，主要是将女名统一化处理
     function fixFileName($hard_disk_path){
-
         $file_list = scan_file($hard_disk_path,1);
         if(!$file_list || count($file_list) <= 0){
             var_dump("scan_dir_file list empty....");exit;
@@ -259,33 +260,35 @@ class ImportExcelGirlName
         out("processOneDir $hard_disk_path , file count:".count($file_list));
         $realFileCnt = 0;//真实的文件，需要处理的文件总数
         $noNeedCnt = 0;
+        $ignoreCnt = 0;
         foreach ($file_list as $k=>$fileName){
+            //一些临时文件以.开头的，不用处理
             if(substr($fileName,0,1) == "."){
-                $noNeedCnt++;
-//                out("ignore file:".$v);
+                $ignoreCnt++;
+                out("ignore file:".$fileName);
                 continue;
             }
 
             $realFileCnt++;
             $fileNameArr = explode("-",$fileName);
             if(count($fileNameArr) > 2 || count($fileNameArr) < 2){
-                out("============ err3:".$fileName);
-                var_dump("err err err");exit;
+                out("文件名错误：只允许出来一个中划线(-) ,fileName:".$fileName);
+                exit;
             }
-
+            //名字中的点会被替换成空格
             $girlName = strtolower(str_replace("."," ",strtolower(trim($fileNameArr[0])) ));
             $index = strpos($fileName,"-");
             $newFileName = $girlName ."-". substr($fileName,$index+1);
-            out("oldFileName:".$fileName . " *__________________* newFileName:".$newFileName);
+//            out("oldFileName:".$fileName . " *__________________* newFileName:".$newFileName);
             if($fileName == $newFileName){
-                out("fileName == newFileName ,no need process.");
+                out("文件名正常，不需要处理($fileName)");
+                $noNeedCnt++;
                 continue;
             }
             rename($hard_disk_path."/".$fileName,$hard_disk_path."/".$newFileName);
 //            var_dump(333);exit;
         }
-        out("realFileCnt:".$realFileCnt . " no need file count:".$noNeedCnt);
-        exit();
+        out("realFileCnt:".$realFileCnt . " no need file count:".$noNeedCnt . " , ignoreCnt:".$ignoreCnt);
     }
 
 
@@ -293,7 +296,8 @@ class ImportExcelGirlName
     function processOneDir($path){
         $file_list = scan_file($path,1);
         if(!$file_list){
-            var_dump("file_list empty....");exit;
+            out("file_list empty....");
+            exit;
         }
 
         out("processOneDir $path , file count:".count($file_list));
@@ -304,15 +308,15 @@ class ImportExcelGirlName
         foreach ($file_list as $k=>$v){
 
             if(substr($v,0,1) == "."){
-//                out("ignore file:".$v);
+                out("ignore file:".$v);
                 continue;
             }
 //            out($v);
             $realFileCnt++;
             $fileNameArr = explode("-",$v);
-//            var_dump($fileNameArr);
             if(count($fileNameArr) > 2 || count($fileNameArr) < 2){
-                out("============ err3:".$v);
+                out("文件名错误：只允许出来一个中划线(-) , filName:".$v);
+                exit(33);
                 continue;
             }
             $girlName = strtolower(trim($fileNameArr[0]));
@@ -351,17 +355,35 @@ class SpiderData{
     function curlGetGirlInfo($girlNameList){
         $domain = "https://www.babepedia.com/babe/";
         $cnt = 0;
-        foreach ($girlNameList as $k=>$v){
+        foreach ($girlNameList as $girlName=>$v){
+            $exist =GirlOumeiModel::db()->getRow("name = '$girlName'");
+            if($exist){
+                out("err=====================11 :".$girlName);
+                continue;
+            }
+
             $curlLib = new CurlLib();
-            $girlName = str_replace(" ","_",$k);
-            $url = $domain . $girlName;
+            $girlNameReplace = str_replace(" ","_",$girlName);
+            $url = $domain . $girlNameReplace;
             out($url);
             $html = $curlLib->send($url,1,null,1);
             if(!$html || $html['code'] != 200 || !$html['msg']){
-                out("err=====================1 :".$k);
+                out("err=====================1 :".$girlName);
                 return false;
             }
-            $this->parserHtml($html["msg"],$k);
+            $row = $this->parserHtml($html["msg"],$girlName);
+            if (!$row){
+                out("parserHtml err");
+                continue;
+            }
+            $id = GirlOumeiModel::db()->add($row);
+            if(!$id){
+                out("insert db failed.");
+                exit("err========21");
+            }else{
+                out("success db id:".$id);
+            }
+
             usleep(50);//睡眠 50 毫秒，避免被对方给拉黑
             $cnt++;
 
@@ -414,16 +436,7 @@ class SpiderData{
         $row['height'] = $processField["height"];
         $row['born'] = $processField["born"];
 
-
-
-        var_dump($row);
-        $id = GirlOumeiModel::db()->add($row);
-        if(!$id){
-            out("insert db failed.");
-        }else{
-            out("success db id:".$id);
-        }
-//        var_dump("finish");exit;
+        return $row;
 
     }
 
@@ -524,7 +537,11 @@ class SpiderData{
         }
 
 //            array("alias"=>$v["alias"],"age"=>$v["age"],"height"=>$v["height"],"weight"=>$v["weight"],"born"=>$v["born"]);
-        out("updateData alias:".$updateData['alias']." ".$updateData['age']." ".$updateData['height']." ".$updateData['weight']." ".$updateData['born']);
+//        out("updateData alias:".$updateData['alias']." ".$updateData['age']." ".$updateData['height']." ".$updateData['weight']." ".$updateData['born']);
+        out("updateData alias:");
+        foreach ($updateData as $k=>$v){
+            out($k."=>".$v);
+        }
         return $updateData;
 
     }
