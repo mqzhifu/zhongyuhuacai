@@ -11,12 +11,13 @@ class ImportExcelGirlName
         $this->spider = new SpiderData();
     }
     function GetDiskPath(){
-        $hard_disk_path = "/Volumes/Elements/film/欧美";
+//        $hard_disk_path = "/Volumes/Elements/film/欧美";
+//        $hard_disk_path = "/Volumes/Elements/film/欧美旧";
 //        $hard_disk_path = "/Users/clarissechamley/Desktop/a";
-//        $hard_disk_path = "/Volumes/Elements/A/欧美待处理";
+        $hard_disk_path = "/Volumes/Elements/film/欧美复制";
 //        $hard_disk_path = "/Volumes/Elements/A/欧美待处理2";
 //        $hard_disk_path = "/Users/xiaoz/Desktop/a-x/欧美";
-//        $hard_disk_path = "/Users/mayanyan/Desktop/x-a";
+//        $hard_disk_path = "/Users/clarissechamley/Desktop/源";
         return $hard_disk_path;
 //
     }
@@ -35,10 +36,10 @@ class ImportExcelGirlName
         $diskData = $this->scanDiskFileName($hard_disk_path);
         out("girls cnt:".count($diskData));
         //更新已有文件的总数
-        $this->upRecordFileName($diskData);
+//        $this->upRecordFileName($diskData);
 //        $this->checkGirlInDb($diskData);
         //抓取全部数据
-//        $this->spider->curlGetGirlInfo($diskData);
+        $this->spider->curlGetGirlInfo($diskData);
     }
     //比较两个目录，是否有重复的文件女名
     function compareTwoDiskFile(){
@@ -358,7 +359,7 @@ class SpiderData{
         foreach ($girlNameList as $girlName=>$v){
             $exist =GirlOumeiModel::db()->getRow("name = '$girlName'");
             if($exist){
-                out("err=====================11 :".$girlName);
+                out("数据已存在:".$girlName);
                 continue;
             }
 
@@ -368,7 +369,7 @@ class SpiderData{
             out($url);
             $html = $curlLib->send($url,1,null,1);
             if(!$html || $html['code'] != 200 || !$html['msg']){
-                out("err=====================1 :".$girlName);
+                out("请求http错误 {$html['code']}:".$girlName);
                 return false;
             }
             $row = $this->parserHtml($html["msg"],$girlName);
