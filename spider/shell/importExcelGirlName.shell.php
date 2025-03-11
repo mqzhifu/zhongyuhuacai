@@ -3,19 +3,34 @@ class ImportExcelGirlName
 {
     public $config = null;
     public $spider = null;
+    public $cate = array();
     public function __construct($c)
     {
         $this->commands = $c;
         $config = ConfigCenter::get(APP_NAME, "main");
         $this->config = $config['common'];
         $this->spider = new SpiderData();
+        $this->cate = array(
+            "pornforce","pornfidelity",
+            "private","zoliboy","beauty4k","darkx","nubilef","babes","karupspc","naughtyoffice","officeobsession",
+            "hornydoctor","DoctorAdventures",
+            "czechsexcasting",
+            "frolicme","newsensations","bex","penthousegold","LegalPorno","analvids","TonightsGirlfriend",
+            "clubseventeen","clubsweethearts",
+            "danejones","wicked",
+            "HookupHotshot",
+            "roccosiffredi","roccosiffredi",
+            "woodmancastingx","wakeupnfuck",
+            "harmony","hardcore","analbeauty","brazzersexxtra","hotlegsandfeet",
+            "blacked","blackedraw","brothalovers",
+        );
     }
     function GetDiskPath(){
 //        $hard_disk_path = "/Volumes/Elements/film/欧美";
 //        $hard_disk_path = "/Volumes/Elements/film/欧美旧";
 //        $hard_disk_path = "/Users/clarissechamley/Desktop/a";
         $hard_disk_path = "/Volumes/Elements/film/欧美复制";
-//        $hard_disk_path = "/Volumes/Elements/A/欧美待处理2";
+//        $hard_disk_path = "/Volumes/Elements/film/无法复制";
 //        $hard_disk_path = "/Users/xiaoz/Desktop/a-x/欧美";
 //        $hard_disk_path = "/Users/clarissechamley/Desktop/源";
         return $hard_disk_path;
@@ -84,6 +99,7 @@ class ImportExcelGirlName
 //            }
         }
     }
+    //修复数据，有时候攫取的字段值，对不上，需要二次修复一下
     function filterDbField(){
         $list = GirlOumeiModel::db()->getAll();
         foreach ($list as $k=>$v){
